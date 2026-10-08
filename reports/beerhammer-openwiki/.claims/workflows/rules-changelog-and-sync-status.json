@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:03298f7bc0feb2fd022d66aa3ecc1d2733d70e3aac234867074e71771f03dbd8",
+  "claims": [
+    {
+      "id": "claim_898749461c6c47e58b56f67680bbf57a",
+      "statement": "GET /api/changelog derives its dynamic fields from exactly one query — the ten newest SyncMetadata rows ordered by syncedAt desc — using the newest row's rulesetVersionId for currentRulesetVersion (else the literal '11.1.0-2026-Q3-MFM'), its syncedAt for lastSyncedAt (else new Date()), and the mapped rows for syncRecords.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L151",
+          "version": "repo-lines-v1:sha256:a8a24a999e3081a01cd2ba47ade72fd4c223b37ec7f009d577ef55cfaa30e134:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNDFhOTBlNGZhMGZlNDFhNWRiZjM3NWQ1YmE5MmNlMTc5OWYxYjQ3YzdhZmM4YTZkMDNmNzE2MzM4YmVjMGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_72d9bbca6a584eb6bab4876a05955563",
+      "statement": "The changelog's balance-change feed is not data: totalChanges and recentChanges are the hardcoded module-level CURATED_BALANCE_CHANGES array of seven RulesChangeItems (five Space Marines, one Necrons, one Tyranids, all effective 2026-09-15), which no database table populates, so changing it requires a source edit.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L143-L144",
+          "version": "repo-lines-v1:sha256:5687ed6af2592de651e85e51236e769b8221a5a076582f80d2a20bf3d0900f2e:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDkxOGQyMGRmODM2OTFkZjc0MjBkYThmYzk1MmNjNmNhNmI0MTUxNDVjNGJkY2U0ZDgxYjRiZmUwNGVlMGVhYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjFjZmMwNTRjYjRmMDkzYWRkOGIyZDgwZDZjMzI5NDg4ZTc0MDliYzAxZmIxY2E3YmQ1ZGJkN2IxN2EwZmJjNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmIzODEyMWEwYTE1ZGQzYjMzZWJlNzI1MDgzOWNhNzk4NzZiNDA2ZDk3ZWQ3OWI0ZjYyYzZjZTE4NTQyZWUyMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTNmY2VkYzAwMzFhYzcwZmZhNTJjNWFjODdiOWI3MDdjNmIxNTE5ZmZiMjFiZjlkNzM4MzdlODkxY2MyODRkNyJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L38-L115",
+          "version": "repo-lines-v1:sha256:d27e20cd63d885bc79e91aafd7145769eb0d4310a28c4054ffb5e82b4818278b:eyJzZWxlY3RlZExpbmVDb3VudCI6NzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3ODIxMDI0NWY5OGVmM2NmMDUyOGRkMjVmMDE1ZmRkOWE0OGQxZTUxZmI2NTVlYjExY2FhZmU5YmIwZjRlMDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NjJlNzQ1NmQ1OWI2YTA2NTYwOGFmNjdkZjEyNTg5OGEwYTBmZGQ2ZDcxMTg3OWM5MTZjYjkxMTNjMzE5NzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlYWU2YTZlOWY3ZmVhZDRiNzJlYjE0ZjEyMjRkN2FlMjI1OGQzNDhhOTZmNDQ1NzYwZmI5YTVmYmQ5OWFjY2QifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b82da3af631144cdbc4c7d7a7bd622a0",
+      "statement": "Known quirk: the success path computes syncStatus as `syncLogs.length > 0 ? 'SYNCHRONIZED' : 'SYNCHRONIZED'`, so both branches return the same string; the only reachable values are 'SYNCHRONIZED' (any successful query, including zero rows) and 'OFFLINE' from the catch handler, and 'PENDING' — though allowed by the ChangelogResponse type — is never produced.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L142-L142",
+          "version": "repo-lines-v1:sha256:1fbdd5890bd142955858c45b39039085ba028f3cb878ce8a77eba2aebabe867b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWZiZGQ1ODkwYmQxNDI5NTU4NThjNDViMzkwMzkwODViYTAyOGYzY2I4NzhjZThhNzdlYmEyYWViYWJlODY3YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWZiZGQ1ODkwYmQxNDI5NTU4NThjNDViMzkwMzkwODViYTAyOGYzY2I4NzhjZThhNzdlYmEyYWViYWJlODY3YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWRiN2JiMzM1N2Y0MGMwZjdiOTFmNWIyY2M1NWQ5MjdmZDM5MjBmNDY5MTQzNTE4NzAyYzFmYzc0MDhkYzczZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjc2OGU2NmQzOTdlZDkyOGVjMTljNTkxZGQyY2EzOWQ3ZTJlNTcxYmQxMmE1MDE5N2E5ZGM0MGM5YTgyMDc4YyJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L154-L168",
+          "version": "repo-lines-v1:sha256:1c204fd7da5af7ffbb5b94949305712089fcb3cf07ec461997552f9bbbf49046:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwYzkzNGY1Y2Y1OGMwZmI3NjgwNDhlNTk1MGRmNWI2ZGUyNWY5OTNlNzkzYTNkMWFhOWM3MzZmMzQ1ZmRjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEyYjljYzAzMWU1MTQyYjIzMGFhM2FkNmExOGZiM2E5MTJmODE5MjUxYWY4ZGRkZmUxMzExZjM5NjI1NDI3ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4NDU5Mjk5YWE1NjkxMmY1OTcxMTk5YjJmMmNhMWM5OGM5NTExMjc5Y2NiMzMxNDM1MTc4ZjllZmI0MTc3YmIifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L27-L27",
+          "version": "repo-lines-v1:sha256:753bdf69b55cfbee37a5827c2a2bd89c775466aa46e42c6c1154af1302ed037c:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzUzYmRmNjliNTVjZmJlZTM3YTU4MjdjMmEyYmQ4OWM3NzU0NjZhYTQ2ZTQyYzZjMTE1NGFmMTMwMmVkMDM3YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzUzYmRmNjliNTVjZmJlZTM3YTU4MjdjMmEyYmQ4OWM3NzU0NjZhYTQ2ZTQyYzZjMTE1NGFmMTMwMmVkMDM3YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTMzNzIxNDIxNzEzN2E1MTJkY2Y0YjY0MzRjZGI3OGQxMTVkNGM1OTg0MmMxNTVmZWU1MThkNmZjYzEzMzIzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjYzZTQ1N2IzMGQ1YjNjNTZmYzY1Y2M2YzUzODAxMGVmN2M2MGY2MjFlOTBkM2RiZDE4NGQxMjExN2ZiZTA4NyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_40caa54db43443ee82e2e9d2f6093af3",
+      "statement": "On a Prisma failure the route logs and returns HTTP 200 with success: true, the same curated array, syncStatus 'OFFLINE', empty syncRecords and a fresh lastSyncedAt; it never emits success: false, so a database outage cannot drive the client's apiFetch into its error branch.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L154-L168",
+          "version": "repo-lines-v1:sha256:1c204fd7da5af7ffbb5b94949305712089fcb3cf07ec461997552f9bbbf49046:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwYzkzNGY1Y2Y1OGMwZmI3NjgwNDhlNTk1MGRmNWI2ZGUyNWY5OTNlNzkzYTNkMWFhOWM3MzZmMzQ1ZmRjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEyYjljYzAzMWU1MTQyYjIzMGFhM2FkNmExOGZiM2E5MTJmODE5MjUxYWY4ZGRkZmUxMzExZjM5NjI1NDI3ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4NDU5Mjk5YWE1NjkxMmY1OTcxMTk5YjJmMmNhMWM5OGM5NTExMjc5Y2NiMzMxNDM1MTc4ZjllZmI0MTc3YmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7b59daf77c04428890e0850afa1aa2fe",
+      "statement": "The ruleset version the changelog headlines is a date stamp, not upstream data: the worker's generateRulesetVersionId() formats '11.1.0-YYYY-QN-MFM' from the run's wall clock and writes it into every SyncMetadata row, and the route surfaces that column as currentRulesetVersion.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L136-L136",
+          "version": "repo-lines-v1:sha256:37cd4af22922f4fb29b3d01626a6ceb5e7312958c6e473f9c3be2d3ec811ef67:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzdjZDRhZjIyOTIyZjRmYjI5YjNkMDE2MjZhNmNlYjVlNzMxMjk1OGM2ZTQ3M2Y5YzNiZTJkM2VjODExZWY2NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzdjZDRhZjIyOTIyZjRmYjI5YjNkMDE2MjZhNmNlYjVlNzMxMjk1OGM2ZTQ3M2Y5YzNiZTJkM2VjODExZWY2NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTY1Njc1YzhiYWU5YmEyZjIwMjgyNjA2M2ZiNjBhMmIxZjA0MzAwMGNjYmVkMzU3N2Y1MjFlODY1ZjNiZjhlMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmQxNDM1MDIyNGIzMjQ5MWI5NDI5NjMzNmZjODJmOTY1Yzg0OGU2OGZjOGFkMWIyYWE0OGQ3YzFjYWU0NDc0ZCJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L24-L28",
+          "version": "repo-lines-v1:sha256:b3f2f2d506ab9163fb34644d74975556d2c988f00eda27fc055ce235e9a00a42:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWM5ZjE0MWM4MDZlZjQxMzVmZWI4MDZiOTllZjdiMWM1YzQ0Y2U5MzY0MzU4MzQxMGJhMzNiYmZmN2Y4MDE4ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmFiYjkzZTJmNTY0NTBhZDI4MjgxNjc4ODJhNTlmMThjZTQ3ZTI4MDY0ZThlMGZiNTk4OGVjYTVjYWJhYWJlNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTRjMWIxMDFhM2ZhZGI0M2E2Y2Q5ZjUxZWFjYzBhNDExYWRjNmU5MGRmM2FkZjYyZDEwMjZhMjE1ZDU1ZGViZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8bd6d791cbdb4ec78f191f0b20ec5726",
+      "statement": "changelogRoutes is mounted last of the five routers flat on /api with no auth middleware, making the changelog a public read that still consumes the shared /api rate-limit budget (300 requests per 15 minutes per IP).",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L27-L41",
+          "version": "repo-lines-v1:sha256:67b3fff37353e3508798d26f849b66611a369ea17b27d69981713587d201ffbf:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzZjFkODQxYjBlNjJlNTllNzYzODJiZjc4OWU1ZDI5MDdhZmE5MDI1YTk0NWNjOWUzZWM3ZWQ4MjA4OWQxNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlNWNiMTY3NDE4YjYzNzAxNTE2YmJjNGI0MTRiNGQ3YzMwMzhmZmU0ZWI4YjU3MGJjNzYzYTUwMDg4Zjc2M2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmMDBlYjUwYWVmNjUwNDNiYmQ0MTlhYjY3YjFjMzgyYjYyNjhmY2YxZDBiMDFjM2Q4OTAzMzU0NzBhMmYyYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1Y2VmYzI0MDE4NzBjYjE5NDBmNTIxOWM3OGFiZmU0YjM0OTg1YjBkNDM3MTQ5ZmQyM2VkMTNkNTgwMzM5NDYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/index.ts#L55-L60",
+          "version": "repo-lines-v1:sha256:60e68e83d35ba9b7af78100cc1c54a0ad5ab33fe6649a6476c8414ae0fc9e5f3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGUxYzcyNjQ3M2QxMTJjMWY1MzljMjRhYjQwYjc2ODgyNzNhZDM4MDM5MjA2MGEzNDI4YmU1MzI3NDgzMzBkMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTNmZGZhOTU4MjlmNzZiNWQ0ODI1OTk1MDAxOTA4ZWExNGU5YWU5YzYzNzg1ZWQyMWQxZThiNzI5YTUxZTU1NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjc3OWQxMThkNmUzY2JmNDUwNTM5NzQ4ZGVlN2E0MzA3YWNiZTY0NDZjYmEyOTdmMjc2MGZhNWQwYmJhMWJjMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjk3ZjQ5Mzg5ODc3NzE0NGYwMzk1Nzg5OWMzZGZlYzUwYTFjZDQ3YWM0NWNmOTRkOGU4MjI0MzZiZGQwMDY0MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_90ce5c142a2a4d988b639772e58a6778",
+      "statement": "fetchChangelog() is a bare apiFetch call with no try/catch, so unlike fetchDatasheets (fixture catalog) and the roster helpers (localStorage), it propagates ApiError, network TypeErrors and parse failures to the caller; fallback ownership for the changelog is inverted into the page.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L154-L211",
+          "version": "repo-lines-v1:sha256:0805f66947d9e8e7b96f78f5abd68722b39dea883ea9d063a3bf8074fc6f26c5:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3ZDVmOTQ4MWM4ZTVkMGFhOTI5MmE4ZGE2MGE4MzQ0MWU0NDBlYTUzMjkyNWI1NGM0YjhlNzUxYzk3NWUzZTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhMWMwZjBhYWI4ODMwYmQwZjQ2MTBlNDMwOGY3NTQ3M2RkNDk5ZmQyZWM3YjQ2YzYyMDQ3ZmUyZDEzZjJmNjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcyYzEwZDRlOGU5NGY5ODFhOGY5Yzk0NDdlNzQzM2IyZDU2NzhmMDk5YjdhZjAwZGJlZDc2Y2ZjODk4MDE3YzMifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L490-L494",
+          "version": "repo-lines-v1:sha256:3c47cfffa383fb29aca28ef665e6817723de4a0bd55364cd2bb5a6c246039109:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGU2ZWY0ZWQ3M2RhNzk5NzMyMzNmMmE2Njc3YzRjYzMyMjJiNzc0MDFmNzE1Y2FlYWIyYmUxMTE4ZTNjM2M1MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQzY2I3MTRkMTBjMmNhZWQ4OGRiZGRmNmNkOWZhOGE0NmFjNjNiYzAwYzViMWI2MzFlMTAzZDk0ODY0YjJmNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWU2ZjJiNDcwMDRmN2M3N2RmYjE0OWM5MjZjY2U4MjU1ZmU5MmJlZWMzOGQ2OTdmMzdlZjdiMWYzNDhiNGJjNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_580143b0875848e797571fc44e0e1914",
+      "statement": "The /changelog page seeds its state with FALLBACK_CHANGELOG — a second hardcoded copy of the same seven balance items plus three synthetic sync records — and its mount effect replaces state only on a successful fetch that returns recentChanges, logging a console.warn otherwise; the balance data is thus maintained independently in the API array, the page fallback and the E2E assertions.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L122-L143",
+          "version": "repo-lines-v1:sha256:e17aae8b2c35f8c7da16b13b0e5a69a438a5c84e509f66195841ca3903993b14:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzM2EzYzlhZTM0ZWVhMDZiNzVmOTY3ZDZhMGMwZTc5Y2YzNGUzNzBkZWYwN2U4ZDBjYzUxYjQ2YjA2MTkwMzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhMGRiN2M2YmE4MzllN2ZhOTUzOTAzMmQ0YjY0ODkzNmE1ODE3OWI4YjBlMzBhN2I5ZjQ4OTQxYjBmMGM5ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NGZkOWU2NWUzYzIzNTUyZjFjNTA0NWEzNjAwZDRmNmRjZTUyN2Y4YWFjODdhYWUzZjkzZTJlNTk4NWJkMzIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L16-L118",
+          "version": "repo-lines-v1:sha256:0f439ab23a9719ae595df0c2ef9698006393488fcc464138a351ce95a96c42fa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiY2Q3NTFmMjUwZGRjZTcwMTgyZjVmNjEwMWY1ZDFhMGJlNzg3MTU1NzljZDI4NmNiMDlmMTViMmEyZTIzZTQ4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJhYTFkMWE2MzM5MDIyOWM3OTgzNDdlODNhMDQwNTQ0MWM5NDAwMDM1Mjg0YWQxNjhjMWJmNmNkZjFkNzBhMzcwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzMDQ5OWIxNWIyYWZhNTcwOTNlZDNiZDEzMzhjZWFkNjQ1MDgwYzY0YTZiMDg1MzhhYjFjMzA4YTA2NTQzZWEzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3YTBkYjdjNmJhODM5ZTdmYTk1MzkwMzJkNGI2NDg5MzZhNTgxNzliOGIwZTMwYTdiOWY0ODk0MWIwZjBjOWU3In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_7824c8ac5e1f4a68b4eeac3adc43db47",
+      "statement": "RulesChangeItem and the changelog response shape are declared twice — in apps/api/src/routes/changelog.ts and in apps/web/src/lib/api.ts — and neither is exported from @forceorg/types, so client/server contract drift produces no compile error.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L12-L36",
+          "version": "repo-lines-v1:sha256:c0f0224b85c820ee574f5be081e050e6409ebcddb9da7a6ac82335c6be4967ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3YmM3ZGVlNDA2NzdhZGM0YTgzYjg4MzA0OTRlMmQ2ODJhMDZiZGI2MTBmZDFmYTNhZWY2ZTg0ZTg5MGYwYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNDYyMmQ4MjU0YTJkZWE0MTYyYzBmYTc1MzJmZTUxOThiYWRjZWFkNmFjMjk0ZjBmMTBmODUzMjdlNjdhOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1NjkyZDAxNjNkNWExY2E1OWI3ZTcxMmU1Y2U2ZmNhYWJiYzVkNzBlZjc1OTQ0N2Y2YzAyNWZhZWQ5OWQ3MmQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L421-L445",
+          "version": "repo-lines-v1:sha256:9b21fe5728e158c91c858036888bc266e6757e6054b724bc85475fe11d2e1065:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3YmM3ZGVlNDA2NzdhZGM0YTgzYjg4MzA0OTRlMmQ2ODJhMDZiZGI2MTBmZDFmYTNhZWY2ZTg0ZTg5MGYwYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmMWU3ZWQxNWQzYTEzMmMxMWVmYTkwNTJiZDI4YWI1ZjRlYTkxNDU5ZGIyMmE2Y2E2OTk5NDkyYmExYzU3YjMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_519ef5a347564aec8ec605aa8bf85dcc",
+      "statement": "The page renders everything from recentChanges and ignores the payload's authoritative status fields: the '● Synchronized' pill is statically styled rather than derived from syncStatus, the four stat tiles are useMemo counts over recentChanges (folding ERRATA with KEYWORD_UPDATE) rather than totalChanges, and each sync-log row prints an unconditional green check without reading sync.status, so ERROR and NO_DELTA rows look identical to SUCCESS.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L166-L177",
+          "version": "repo-lines-v1:sha256:cb645fa39338c6f1fa83a7251439368fb30db483bf87c78820ecca18f72a531f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMzZWEzZWY0OTFiZDhjMzc2ZTI3NjMzNzRiYjBjODUzZjAzNmU1YjIyOThjYmQyYmRiMmUwODVhYmFiMzEwOGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmYWZmODI2OTI3YjE2NDQ4MjE0NmFhYjJhNzM5Yzk5MzNlOTZkNWUyYmY3ODk4NjU4OWQxYWUxYWM4ZTg2Y2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM2MDU3ZjNmOTA0MjI4ZDQwMDdhYjQzZDgxZTBhYjFjZGU2YjlhMTRkNjZmNjg0MGZmMDAwNjgwNDExYzlmNjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUyZTBhNmIzZmI5NWMyZGFmNDY0ZDczODE2M2VlYTU5MDI2YmVkMzU5ODRjYjk5NmJhMjgxYmJmZmRmYTA3ODcifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L253-L299",
+          "version": "repo-lines-v1:sha256:d76aa0d1b9a499530c19d6a722daad558c6b8d0f67cd0a6e6e5f024b14c01bc9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMWVhMWYwOGZmYTU5NjEyZGExZDNkOTk3MDlmNDMyZWFhZmQ5ODBhNjk3NDc2MmZkYmVlOTI0ZmYwNDEwZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwMjZkZGE3MDY2YTU2ZjdmOGZiMDZlZWQyZTQyMDkxOTY4YWQ0MDZhMmZjYmZkZjU2MTUzZTczZTc4ZDE2ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMjk2ZGRiZjVlYmE2NzQ4ODdkZWRiOGI5YmI5NGYzYTVhOWEyOWI4NjRmYjJhOTc3YmZmZDFjMDkzMmZiMTgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L552-L576",
+          "version": "repo-lines-v1:sha256:32c1becea92353e878a3517b529845db7f56d1bbb0bc1472ec1bf8447a006a46:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyOTQyMzk1ZjRkMjEyYTk4MDZkNjgyN2Q2NzkwYzNiNjU5NDI4ZDFkMDRkYzFlYjY1ODI5MWI0ZTBhMDBjMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlMDA2Mzk5NzZmYTc2MzFhNWRiZDI3ZTNlNGNjMjI3YmI0YzM3MWM3NTVlNjVlNzlkNDlkZDMwMGVkOGY0M2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1MWU5ZmRkNTA4MDQ1ZWFmYjdkOTZlYjRkZmYwYWIzOWRmNTcwYzBmZGQwZmMwNjY1MTAyOTg4YjhkMjc0ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjNjUyZDc3NDQzMzFkOTdlMWRmMWMxM2UxMDBkMjVmOTNjMzc1OGMwZDE4Yjg5YzQ0YTA5NmE0MTM1NWZjNWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_82f1f6264193420780215355e1616450",
+      "statement": "The changelog page offers no loading or error affordance: isLoading is set but never read in the render, and because the initial state is the curated fallback, a total API outage is visually indistinguishable from a populated sync; /changelog is also in the service worker precache list.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/public/sw.js#L10-L18",
+          "version": "repo-lines-v1:sha256:a0ec50fa2e2d3e0ba7561034475abafc0f4a99f4d234d240b41b4b21f1bf2472:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzliNDI5ZjcxNjNmYWFlOTc3YjllYzZmNWQ1MmMxMDRmYTI5MWUxNDk5NjdjNjRmYmVhOTI1NWFkMGJlMWRkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjAyZDJjMGQ2ZGM1ZTc0ZDkyZmExNGI5MWRiZWEyNjQwOTBiZWIzNWZkYjkxODhkOWIzNDExODFkY2U5ZjRjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzA3MDI4ZDU5ODdmMTgzN2RlNDFkN2NiMDIwYzNlZGM2YjQ1ZjJmNDY3NGMxODIzZjE4ODRjYjM5ODUwNmZkNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGMzYjZiYmFiMTI1ZWYzNmU0YmY5OGI1OGE0M2QyNWE5Y2Q3ZjZkNmQyYWY2YzExMjVlNGQ0MjMxODkwNDNlNyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L122-L143",
+          "version": "repo-lines-v1:sha256:e17aae8b2c35f8c7da16b13b0e5a69a438a5c84e509f66195841ca3903993b14:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzM2EzYzlhZTM0ZWVhMDZiNzVmOTY3ZDZhMGMwZTc5Y2YzNGUzNzBkZWYwN2U4ZDBjYzUxYjQ2YjA2MTkwMzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhMGRiN2M2YmE4MzllN2ZhOTUzOTAzMmQ0YjY0ODkzNmE1ODE3OWI4YjBlMzBhN2I5ZjQ4OTQxYjBmMGM5ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NGZkOWU2NWUzYzIzNTUyZjFjNTA0NWEzNjAwZDRmNmRjZTUyN2Y4YWFjODdhYWUzZjkzZTJlNTk4NWJkMzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_48d830c1e917413c8f48d72fcf434e40",
+      "statement": "The intended producer for real change items exists but is disconnected: etl-pipeline.ts imports analyzeDiff and formatChangelogSummary from diff-analyzer.ts yet never calls either, and processEndpoint parses the fetched body only to count records before discarding it, so SyncDelta (defined in @forceorg/types) has no producer or consumer and no RulesChangeItem mapping exists anywhere.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/diff-analyzer.ts#L18-L104",
+          "version": "repo-lines-v1:sha256:d84c6ac586f21b297278bcbe8383e1dd046eeb16cbc6cf6ecfb9b267bc5934b4:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyZTk2ZjMxZDM5ZjJiNWQ0NDUyZjdhNDJmMmIzNjVhZDU2MzZiZGZkMGRhNWMzZjFjOTMzMjI1MmRiMDU0NzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkOTVjYTEzZjY5MDBmYTZmMzc1YjY0ZmI3M2Y3NjUwMDg4MWY5ZGRiMzcyYjk4YjRiYWJlZjliZmRlM2RjZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L122-L148",
+          "version": "repo-lines-v1:sha256:d095da0351b39a6a88a8d2dadc0bc8fa9d761ef35364149b091e745ee16ee6f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjZGNjNWM1MjA2MGM1YTc5NjQ0ODk4YTVhMGJlMjY1ODhiYjcxYmUwMzIxNDVlZDE5MzZiMGRlODgwNjJmZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNTM3YmMzMThlMDVjYzQyMzAxZjQzNmFjMDBkYmRlNTNlMjcyNWI5Y2Q4YWUzZmE0ZjhmMzNlZjEzM2ExNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzNGJiMjA5ZTYzZjFhZjcyMWVlYTU5YWJlMzhkN2YwZGVlMTE1NDU4OGIzMWZmNGY3NTE4MjZjZTZhNTc4MWEifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L8-L8",
+          "version": "repo-lines-v1:sha256:f7fd92b0bf19ec338f80419495be72568ec20b6c8aa14fe99b20390e4f3766d7:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjdmZDkyYjBiZjE5ZWMzMzhmODA0MTk0OTViZTcyNTY4ZWMyMGI2YzhhYTE0ZmU5OWIyMDM5MGU0ZjM3NjZkNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjdmZDkyYjBiZjE5ZWMzMzhmODA0MTk0OTViZTcyNTY4ZWMyMGI2YzhhYTE0ZmU5OWIyMDM5MGU0ZjM3NjZkNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQ5M2FmOWU1MGI5YmI5Mzg0YjZiZDNlNjMyMWJkMzU1ODZkMGJkNzM5NDE4NGUwNGIwZDBiY2I3OTJlOTExZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzhmYmJiNGFlY2YwYWNmNzY0ZjVjZmQ3ZWUzMGExMWQwZTFkNTRiMWNmNDAyNmNjOGVlYTVjNzFhMzU2ZGNjNyJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L294-L303",
+          "version": "repo-lines-v1:sha256:03de6aa724016554aea72cf2866a72931b9a957565f3cc5fb3c39dacc288ce46:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0Y2Q1YjZlYjEwNGZhNjk2YzgzMmE2ZDdjMzk1MWI4YmVjYTg0ZjI1YzQzMjdhZjg5YTM5ODIyMzI0NzkxODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2Njk1N2UyMTQyYmY2OTM0ZDE4ZjI4NzU4ZjU4Zjc0ZTAxNmEwN2E1NGFmZTJiN2UzYmViZTEzOWZkYjkxYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI0NWE0NDU3ZTBiMjc5NmI1YzAxMjNhYmNiOWZhMDlmMzc4MmEwNDVmNmUxZmY3MGY0YzY2ZDFlMGI4ZTI2ZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_743b575fa6c0404799b5904ac14606fd",
+      "statement": "Playwright test 03 on /changelog asserts curated content (Active Ruleset badge, Terminator Squad, Points Reductions), and since the e2e workflow builds the web app without starting the API, Postgres or S3, that test always validates FALLBACK_CHANGELOG rather than the endpoint.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L32-L42",
+          "version": "repo-lines-v1:sha256:bba5211b4e12a2c5b052067840b801b9b8afe12781b2a65fdb60b37a314613ee:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5ZmNmYzZmOTg5OWRhOWNjYmIxNDkyOGJjZWE0ZjY2NDZkYzI5Zjc3ZjQ1OWRiMmMwM2EzNmE3MzhiZTQ1ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3YzA1YmJiNzI0NzY5MGY5NTQ3MTU3ZTNmMGE1YzJlNjhiMGFhNDRlMzVlNTA3NzZmZjVlNTBiY2Y2YzExMmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE4MGI0OGYxNDliZDA4ZGI0ZDhmN2M1OGIwZGZiOGVkMDQ0MzUxOWVhNmM4MzQ1M2ZhZWM5MGI0NzRlYmQxZDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFkNjBkNzg2MzZmNmU2Nzc5NjQ1YzM1MThkNmU3YmViMWU0M2NkYTNkNTA0NGExMTNjNzdlMjcyZTQyODNmYjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L46-L54",
+          "version": "repo-lines-v1:sha256:dbca53d9e62c717df52fa4c04569b2bb336a1a20aea77d8f3570e51a41c4ba76:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzcxYjM4MjczM2E5ODMyMTQyZTVjMWRmZDBkNmY1NDc5ODc3NjliNTcxMDE2MDhiMzdkMTIxMDI3MjYyOTVmOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2EzZTQ2Zjk0Mjc2YjZmNmY0ZWQxZjAyYWY3OGJlZjZhMmVlMWM0MzlkZDU1ODRiOTczOTQ4MzEzMjE0ZDJiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzJlODhhNzFkODMzZmZlOTBhMjAxMzU5ODk5MzIwMDE1MWFjNTM5YTcyMWQ3M2Q2OTYyYWUwODExYTdjMzBlNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmJmZDhkMTZlZWZhMWNmMWQyNWFlZWU3ZWJkMjM0Y2Q0Njg2YWFjMzMzMTk4ODIwZDljYTAxNjdiNzU4YWU4YyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4aa5dce4e9ed4827b9753b25433cb143",
+      "statement": "The ETL sync log panel caps at ten entries because the route takes only the ten newest rows, and its subtitle describing the 02:00 UTC cron with 304 conditional headers and content hashing is JSX prose that matches wahapedia-sync.yml's cron '0 2 * * *' only by convention, not by any runtime link.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L8-L11",
+          "version": "repo-lines-v1:sha256:3c8ab2339f10e263c473787ba1e50f9438c17d338e9ff9863057b0905bbec782:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTk2ZGM0ODE0OWY1YTgzZDFlZDZkYmIzOWJiYzdlMmI5MDJhYTNkMzRkNmJkNWFlNGIyOTFiNjhkZjBjYTc5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGQ0YzQ5NTA3NzdmZGUxOWJjM2VhMTJkYTk1ZmMwMzQwNGVjNTQ4M2JiNmI4ODYzYWViY2ZkZTQwYjcxODRiMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2RjY2I3OTZkYmZjNThiMjE0ODdhZGFkODMzM2FmZDg4MTI0OTA0MWViODkwZTFmYzdlNzBmMzE4ZmU4NmEyYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGY3N2IxYWEwMGQ1NTllMjgwNWIyODkwNzIyYmE4MzNmY2VkNzE4N2JiYzRhMTg3Yzk2NmI5NjM5YzkzYjFkZSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L123-L133",
+          "version": "repo-lines-v1:sha256:b4c7d3524247f256f47335737fc18516f81c09d59032f99d40340a8b6edc3a2a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjZjI0ZmU0OWI1YzY0ZGExZTg1ZWU5Yjk2OWVlNjI1NTIwNWRiZTY0YTg2MDMyNGZmMDY5NThiM2JkYWJmZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE3MjkxYzk0YjNkMDU1ZDY2OTQ1ZjIzMjY1MTM1MmU0ZDkxZGVjZWY5ZWUxNDNmYzQ1NjA0NjZiOGY4ZjBmZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNzI2ZTQ5Mjc5ZmE1MzY1M2ZiZTMzYjMwY2ZiNTNlNTg2MWJmY2ExYzc5YjBiYWNjZmQ0OGFmYTRiOGIyMGYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L533-L576",
+          "version": "repo-lines-v1:sha256:bfda838484229a0c30936f5e7acb67f8e3473a63bb0240fce96e91e239701c0a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwNzQwMDBjMzBlZWU0ZjkwZGVhNjg2NjZhYWI0N2RiZmRkMmNhOWYxYzY5YjY5ODEyZDRlNDVhOTk0Yjc3YmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlMDA2Mzk5NzZmYTc2MzFhNWRiZDI3ZTNlNGNjMjI3YmI0YzM3MWM3NTVlNjVlNzlkNDlkZDMwMGVkOGY0M2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc0OWU5M2I1MzcxNTc4NzkwMTZjYTdiZmUwYTM2ZjBlYWFhZjBkODI3MzQyODYwOGYxNDYwYTI0OTY3Y2UwMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjNjUyZDc3NDQzMzFkOTdlMWRmMWMxM2UxMDBkMjVmOTNjMzc1OGMwZDE4Yjg5YzQ0YTA5NmE0MTM1NWZjNWQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

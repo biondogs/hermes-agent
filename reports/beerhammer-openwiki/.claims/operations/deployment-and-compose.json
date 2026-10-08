@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:47d1a2af639d81674e5baf68e2d251ce033b7f9e08911f979b81ef4f78f20ec2",
+  "claims": [
+    {
+      "id": "claim_7d74f30706cb412399adbc008953de7a",
+      "statement": "The repository ships three compose files for distinct jobs: docker-compose.yml builds the full stack from source, docker-compose.prod.yml pulls GHCR images for pull-based production hosting (host needs only Docker), and docker-compose.dev.yml provides the shared hot-reload development environment driven by ./scripts/dev.sh.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L1-L20",
+          "version": "repo-lines-v1:sha256:9fee4ff358e10176c21582625e962ce920e2d100e68c69765255e60071c3db68:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlZTNjNjBkYjI1M2NiY2VhNzI0YWFkZDkxOGViOTQ2NjRmN2M2N2U3ODRmNzk2Zjc4NGNmMTAyMjA3ZDI2YmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhYmYzYWIwODgxYzVhMDYyMGNiODE4Y2QzNmUxMWM4ZTUxMTFmMGIzNWRkZWY1MGRkNTkxYWQ3ZmRjMzU1OTIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L1-L19",
+          "version": "repo-lines-v1:sha256:e0135822dc14d6a4da36847007fc792441abc1abbaa3d21e9f7bd006d7027fcd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0YzQyZTJjMGUwMjYzZWZiZGE2ZDQ4NDVkYTE1MzllMjlmYTI4YTQ2YTdjYzMxMjRkN2U2NGEzNDFiNTc4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L1-L104",
+          "version": "repo-lines-v1:sha256:fda16ab81dfa2a49239e5597b9fa9c42a568bdb725022ca20079568b71417f60:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3YTQ5OTdkMjIyNGI3OGU0ZWM4MjI3ZjZjMzdjY2E0YmNhZTY4NjkyYjJjYThlNzU2YTNhZjc3MmFiNWUzOGUzIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODUxZTcwODI5MjYxYzljZGJkZjFjN2EwYmRlYjkzNTcwZmY5YzZmNTJlOGJhZjBjMWQwODljMTQxMTlmMzE2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlMmEzNzM3MTJmNjFhMjRhNTAwYzdlNGQ3MTVlYTQ2ZmYxN2M1YTZkOTUxYzk3NTc1NjQ5NjkyYmMyMDBkY2MwIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_5793440161194afe8893d25fda9fd439",
+      "statement": "In every composition Postgres runs as postgres:16-alpine with a pg_isready healthcheck, and the api service declares depends_on postgres with condition: service_healthy, so migrations and the Express server never start against a database that cannot accept connections.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L44-L87",
+          "version": "repo-lines-v1:sha256:a09c9071d6b6ea7cfe03dc03776c177038560ff7cbf0ab919407508e766efacf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwZjhkYzgzYTlkMTA3NzQxZTUzNjRhZTBjZjZmNDg1OTU3MDIyMDkwMzExMjIwYWFmOTAxOGI4NzcwZmUxNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTYxNmRkNDBkZGIyNjg1NjM5OGY2Yzk1NThiODIyNjJkMjhjMzk0YzkwNTQwMGU2OWQ5OTMxODYzOGVlZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3M2RjZjFmYWIxYjBhMTg2Zjc5ZWI3ZWY2NDc3OGI4ZWM1YjM5MjI1N2VhNGYwYWQ5NmVlZTE0NThlYmQxNmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3MmIzNzAzYmI1YzIyNTAyZDdjMmJhZGIzODYzZjIwNmIyYTA5NzM5ODY4OTIwZTZmOGUwODczM2E2OTk2ZGQifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L22-L52",
+          "version": "repo-lines-v1:sha256:d07f55ed587be215516260279bff20c25f958911dc4fb44ead40b83f71c68599:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwZjhkYzgzYTlkMTA3NzQxZTUzNjRhZTBjZjZmNDg1OTU3MDIyMDkwMzExMjIwYWFmOTAxOGI4NzcwZmUxNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTYxNmRkNDBkZGIyNjg1NjM5OGY2Yzk1NThiODIyNjJkMjhjMzk0YzkwNTQwMGU2OWQ5OTMxODYzOGVlZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU5OTk5NDRiOGVjM2JkZDJlOWVhYzg3MzY2NGFlNGIzNGUwOGRhODcyNWFkY2EyYzQ4NjE3Y2EzZTViZjc1YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1ZDY0MGVhMzc5YWY5ZGQ5MzkyZGYzZjhhMzdlZjRiZTU1ZWI1YWI2NzM1NDgzOTJiNmM4OTllOGEyYWZiYzIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L10-L51",
+          "version": "repo-lines-v1:sha256:e7d24ef5a9f3f365d5aa3c17269f581e2fa1ee2bef094996c70ce47409783004:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwZjhkYzgzYTlkMTA3NzQxZTUzNjRhZTBjZjZmNDg1OTU3MDIyMDkwMzExMjIwYWFmOTAxOGI4NzcwZmUxNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTYxNmRkNDBkZGIyNjg1NjM5OGY2Yzk1NThiODIyNjJkMjhjMzk0YzkwNTQwMGU2OWQ5OTMxODYzOGVlZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5MjhhYjg2NTYyZDA5NTU0MjU5MTNjNzUzN2YyZjdjNTM3ZDMxMjllNDEyZWQxNjk1MzFiYzNhYzFjOGFhODAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmYTJhYzBkYWZmZmYwM2FhYzIwMjBiOTUxYWI4NDY2M2NmNGY0OGFkMzNlMjMzMjdlMGFkYjM4M2ZjNzhhMGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1392ec25daa143168f00b6e4c7dad9f2",
+      "statement": "Object storage is SeaweedFS running 'server -dir=/data -s3 -s3.port=9000' in the s3_data volume, a drop-in replacement after MinIO removed its public images; the production composition pins chrislusf/seaweedfs:3.80 and publishes no S3 ports, while the source-build and dev compositions track :latest and expose 9000 (S3) and 9333 (master UI).",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L61-L69",
+          "version": "repo-lines-v1:sha256:53f854585b1d985d71e03d37d4c9b1660a9b24de49a3335c0960575d3fc5679a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTA0YzkzMzlkNDZlNmJlNWM4NTQwNzc4OTI2ZDAxYzY5YTFlNzVmZmRlM2U3ZTIzZDMyMGQ4MDVmOTk0MWVmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2EwZDU1MjgyMWRjZDI2ZTg4ODBjMzZkYThhOTk2MzUzYmU4NzJjOTczNDA2ODVkYjJmN2QzMmUyYzQxYTNmNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2JmNTA1MDJhNzEwM2I2ZDk5NzgwMDQ4ZmI4NGMwZmYxZjg4YWNjNmYxNjFiZjJmYjFlZDY3MDUxMDI3ZmMxMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2ZhNGQ0Yjg3ZTViZDU3M2ZiMjE0NjYxNDU2YzQ5MTJmOTYyOTVkYzFiOTYxN2YxNmUwNjZkNjEzMTQ4MDllZSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L38-L44",
+          "version": "repo-lines-v1:sha256:a742e2c8d2ca856025ee11bfdafdcfc02e54f715ee028e2940fed199dc448f64:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTA0YzkzMzlkNDZlNmJlNWM4NTQwNzc4OTI2ZDAxYzY5YTFlNzVmZmRlM2U3ZTIzZDMyMGQ4MDVmOTk0MWVmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmI3NzNhOWY2MGUwNGJkYTY3YTU0YTJjMWE4ZmE1Y2E5YzI2NWIzNzJmZGU1OTI3MWJiYTIwNjQ1MzYyMzIxMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWE1Y2RmZTFlYWYzMTVmNTU1YTQxYWRjY2FmODVlMjkwYTE1NzA1M2I2NjkzMGM4OTZjYjZiZmJkZjRmNjZlNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjZmMzc2MzczZGJiMTc5MmZlMWUwZjBhMmVjYTFlNjJhNzYwMmI0NWJkMmI3ZjkwM2FmNDlkN2VkNWNlN2ZkMiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L28-L40",
+          "version": "repo-lines-v1:sha256:660fada294c6fa52e1105bc4f1197d51ffd1dad4b62c4c1b17e18cb3b3e5343b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlNzdkOTU4YzUzMjNiZDdlOWU3NDkwZTA2YzY0Mzk0OWQwMGQ1NTY3YzUyZGE0ZDI3NDA5MWQzZjgzZmJmNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiNzczYTlmNjBlMDRiZGE2N2E1NGEyYzFhOGZhNWNhOWMyNjViMzcyZmRlNTkyNzFiYmEyMDY0NTM2MjMyMTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNWNkZmUxZWFmMzE1ZjU1NWE0MWFkY2NhZjg1ZTI5MGExNTcwNTNiNjY5MzBjODk2Y2I2YmZiZGY0ZjY2ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0ZjBhYzgyOGNkNzVhOGY5OTJlZGM0NDVhOWRjNjhhODc1NmQ3NDE0N2UyN2VkNDllNGFlMjAzYjY1NWNjZTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f532803b8c134d1790bc6b71512fdf6e",
+      "statement": "The Wahapedia sync-worker sits behind profiles: ['tools'] with depends_on postgres: service_healthy in both the source-build and production compositions, so 'docker compose up' never starts it; operators run one-shot ETL passes with 'docker compose run --rm sync-worker' or schedule them on the host, and the image is published to GHCR so no checkout or build is needed.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L80-L89",
+          "version": "repo-lines-v1:sha256:0c5c0ea2566abd7e6a31edf3ebfcb60963840347608317f3d244fd732eefaff0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmNzFiOTllYzYyZDZhYjI0ZmMwZTMxZjM5MDE0YjdiNGI5NjNhNDA1Yjg0ODZlMGI1NGUxNDY1M2VkOThiZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0MDVkNDFhN2UxOWU2MzY4ZTQwNjI5ZjJkMjhiZTFkZDM1NzA0ZTEzNTg5NTYzODgzYzEwMmFjYWQ0ZTZiOWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L1-L5",
+          "version": "repo-lines-v1:sha256:ad31cf3de8bee8fc54a04490d9960ba5d773bfa6dc58bcaa72e49c289491e640:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E0OTk3ZDIyMjRiNzhlNGVjODIyN2Y2YzM3Y2NhNGJjYWU2ODY5MmIyY2E4ZTc1NmEzYWY3NzJhYjVlMzhlMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2I1ODFkMjcwMTIwNGUwNTE0MWNkNTk4NTdmZDQ4YTQ2MmVhMjdmYmZhZTRmYjA5NDgyOTcwMDZjZDg2MGFmYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjA3NTgxZGE1MjBmM2Y3YmY5OTIyMDc1YzA5NTBkYWRmNjVlOTQ4NWYxOGM4MDZlNDM4YTg2OWIxNGVjNWZiYSJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L55-L56",
+          "version": "repo-lines-v1:sha256:fc2a9d78c4819e0fb12818fdf44be5b1b823f9c675dc56acad302e4973d4513d:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDU4ZjYxNDc2MDIxOTE0MjY0NWYxMzM4ZTA3NjM4YWIxODQ4OWRkYzk5YTYwNjRhZjI3M2I0ODBiMjE3NmFkNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWZiYjYwNTc4YTgxMTk5MWU5NjM0ZTU4ZDI5YTI0OWI1ZTgyZDlhYWFiOGQ4OWMwOGY2MDE1OWEzYThkZTc4MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZiMTMyOTYzMWEzNGMwZTMxNjczZmY2ODY3YmNmYjRmOWRkYmJkNzBhNzI2ZWM5NWZlNDEzM2MxZjI2ODEzMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L84-L95",
+          "version": "repo-lines-v1:sha256:a382fac2cdcd42daa28b4fb8db3de3fc5d4effb0348375a9bd28acc2cac27352:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYmEyOGVmZmY5ZGFiNjkxMjhlYzU0MWM2OWM2YTlkZjdhNTBkYWQ3MjlhODFlMzIzMDIzYzA2NzViNjc0ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc4MWQ4MzI3MTA3NTU3NDllMjNlNjkwZDZkYzgxNDRlZDBmZTgyZjFlYjU5NDcyOTg5ODU0MTM3YjBlMGJkNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L84-L101",
+          "version": "repo-lines-v1:sha256:834fd747e8e091dcc0bfd3d687d3425b12e8580fab3c62bc8d49a45df649c6d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4NzNjMjI3NjdkMjRlMTNjNWE0ZTA1ZTk3MWI0YjRmN2JkNWExMTU0Yzc3YWIyMThmMmM2NGRmZWMyYjI4NmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMTY3ZDg5OGUzNjRhNjQyZWQwNjRiNWI2ZjJiYjExZTQ4OTkxMjdjZTg2NDAwODQyZDhiYmM3NjFkZmI4YmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_18c121f663ea49e290775c56f8768402",
+      "statement": "apps/api/entrypoint.sh is the API container's ENTRYPOINT: with set -e it defaults DIRECT_URL to DATABASE_URL, runs 'npx prisma migrate deploy --schema=packages/db-client/prisma/schema.prisma', then 'exec node apps/api/dist/index.js' — applying pending migrations before the server listens. Because docker-compose.prod.yml sets no DIRECT_URL for api, this default is what makes prod Prisma schema validation work (both compositions do set DIRECT_URL explicitly for sync-worker).",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L63-L66",
+          "version": "repo-lines-v1:sha256:9a9fb4f6ed4a43a9fe00a6503ab89ec4c7ed90238b7c0a6801738687fdcbbf07:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmVkZWM5NWFhNDhlNWM3MTAxNTJlMTE3MzA4MzczMjBhN2MzYWM4NmY2NWYzNmIxYjBmZGJmNmY3YjVlNDNjYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjgxY2Q3NTkwYTM1ZDdkYzFiOTcwY2FmYzNjZjdiZDdhNmRhMDRlODlkMjVjOWRmNTFmNzczMjg0NWQ5MzIyYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWI1NmZiNTc4ZTZmODQ4ZWQ3M2U3NjViMmUyNjM4OGE0YTViYTIyNTc1NTA3ZjA5MTg2MjcxZGU0ZGYwMjlmNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L8-L20",
+          "version": "repo-lines-v1:sha256:6ff9088d8e6f1bb075f90132e8ad8e887b153d4a71038e427cbb0d0a9b599149:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhOTBhZmQ4ZjE2M2ZlMGJhODY1MTFlYjRhODA4OWMxNzIzNjk4ZGNhZGE4YTExMjc0N2UwZDdmNmQyNWUzYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmN2I5YzQ5YzYyMmE3MzA3MzE1YmYxMGY1ODVlOTM1NmFhMmU4MmU3YzEyMjFmMGQ5YTU3MDcyMWVmZDJmYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L54-L69",
+          "version": "repo-lines-v1:sha256:ebaf9563ff11a79a8a250a8b341db3d39bf350d210573d7d925c09cbbeddbf03:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNGQ3NzBiMzY2NmQ5Y2M0OTdhMDM3YWZiZGU1MGMxYmJmZDQyZGQwMzkxM2Q5YzBmMzAzMDljZWE2MjcxYTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxZmJkYmM2ZDhiMzVlZmY2NTY3OTg3YjM4N2M0MDI2MTEyNGQ1ZmJmNmNmYzAwNjI2NTBlNDJiNjU4ZTY0ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5NmNlODMwNjExNmYxYTJjODBjNjVmNjg2NjEyZjkxZTYzNGUwMzg2M2FjZThjNDQxNTgxMzA5MmJmMDY1ZGIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L98-L100",
+          "version": "repo-lines-v1:sha256:0b5ed0e4d51b1e9f712c055edd93dfafa007395f3986f8335900ff93b127bc6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjcwZmMxMjBmOGNhY2Q5N2M4NWM3NWE0OTkzNTdiZjViNWQ5ZTNjOTJlNDliM2U3MDE4ZWI2NWUwN2QxODExZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2I2YzI4ZTFmZjZiMzEzYjBiMTViMzkyYTRkZjRhZjIzMTExYjI2NjU4NTg0MmFlYTYzNDNiZjgyOWQxYTY4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDAxOGUyODUxOWMzMWE0MDI3ZWY3NjRmNzUzZTY1YTc5ZjgzNmQwMDZhZDc1NjAyNjExYTZhZWJiYjc4YjA5OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e53fa8b0d05b4275a6b0bb18ff98210b",
+      "statement": "When DATABASE_URL is unset the API entrypoint skips migrations entirely, logs 'catalog-only mode', and still execs the server, so the image boots without a database.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L16-L20",
+          "version": "repo-lines-v1:sha256:df9e8b78ed39c611595ef6814a272594582e7ac8141b2b512b1ce49d259e2150:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjM1ZGYzZjcyOWRmYTdlZWU2ZjkxNzY3ZDA0NWI5NmI2ZDNhYTNjMjgzYTE4NGNjMzg5ZGJhNDY5NmRlMTRlMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQ5ODM5NmM4NzA1ZGQ5NTZmMzYzNTViYWE2MDRmYzIyM2JmOTVlNjE0ZmI4ZDk3MjE3ZGFlZmQ1OGVlMTcxMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTIxMDQwZGFlM2FmMTg3ZDA2OTNjZGFlMzIzZDE1YzNhNjliODY5NzFlOGIyZWViNDdmNjA1YmJlNTg4NTU1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a4f75dd8d33e40fda927d6c23f20b6f2",
+      "statement": "Dockerfile.api's runner stage copies the Prisma schema plus migrations and the Prisma CLI into the image and installs libvips42 for Sharp, making the published image self-contained: 'docker run' against a fresh database self-migrates at boot with no host tooling or compose command override.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L32-L66",
+          "version": "repo-lines-v1:sha256:d3a3ce41b7026e0e6d2771f46c3497efc8de370a69b4f7f3da495fb9e40d5bdd:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjMzgxZWQyYzUyNjkwZjUyYjhiYWJlNjY4YjAxODUxMjIzMTZmYjY5NzYwNTU3ZDJlZmIwMWFkMmZhOTFhYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4MWNkNzU5MGEzNWQ3ZGMxYjk3MGNhZmMzY2Y3YmQ3YTZkYTA0ZTg5ZDI1YzlkZjUxZjc3MzI4NDVkOTMyMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQxMjRlMmE3OGUzOTg5OTYxYWQyMzViM2I2ZDkwOGZkMWU5ZGE2YmZjNjBiZTBmYTViMjA4M2Y1OTc5YTJlYWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7b347b393ee64b77865a5212b06935d8",
+      "statement": "Dockerfile.web is a multi-stage Next.js build that bakes a build-time fallback NEXT_PUBLIC_API_URL=http://localhost:4000/api for SSG prerendering and runs as the non-root nextjs user (uid 1001) exposing port 3000.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.web#L32-L66",
+          "version": "repo-lines-v1:sha256:4a6fa3ce6a89a122c3db8bcbefe1636121df22f1a7b8a8ecce29bd3d6e41d3af:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiNzA0ZWRiMTRhZDdmYmViYWU3ZTNmNTZiZTEzODRjZjhlMjYwMmMwN2VhZGVlMWQ3ZTQ5NGZkOTM0ZGRkYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3Yjg2NzdhMjhiNmIzZjQ5ZmJhMmEwNjVhNDE3ZTMyOWMyMzZlOWRlNzVhN2EwZTFhMDY5Yjk5NThiZWM5OTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU4ODRhN2E4Y2E2NDk1N2Q5MGQ0YjFiNDY1OTM4OTk1MGM0YmM1YjZiOThkM2Q4YzcyNjA0ZDFkNzdlM2MzMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_76695980a4224f03a3f5847966d2491b",
+      "statement": "Dockerfile.dev bakes only the toolchain (Node 20, npm ci from the lockfile, generated Prisma client, Chromium libraries for Playwright) and a node_modules/.deps-stamp lockfile checksum; source is bind-mounted by docker-compose.dev.yml with container-owned dev_node_modules/dev_web_next/dev_turbo_cache volumes so host edits hot-reload without shadowing dependencies.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.dev#L1-L42",
+          "version": "repo-lines-v1:sha256:cb3c437666dfaa32bfd64bd5d64db89ba01e578875196c9cba2948bf4081c805:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyNzBkZDMyMDM1ZTRkOWQ2YjNiNGNhMTMxZTNhODRhMTRkZjQwNGUwMWE5NTAzZTg4MDUzY2E3MzRjNjNhZDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.dev.yml#L33-L37",
+          "version": "repo-lines-v1:sha256:3344766e0670a6fb5ae86144fc9182f602c5a263ce8aa85b11abe50ca7606851:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGZlMWY5NWJiMTdjMWU4YTA4ZjFjZDE2NjA5OWZiNWU5NjliZTdmOGZjZGJjZGI2MmRiMDZiMzVkNjFmNjNiYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmQyZjFlZDNhYWUzZWUzNjdkODQ1MmUxMjEyZTZjZjAwMGFiMzM0MGI2ZmM2Mzc2MTg3ZTRmMWZlZDJiMjI0ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDRkZDIxNTkwMmNmZDMzMGU2YTE0NmE2N2IxZDdjYjc3ZDliYWMxNjMxZDEzNzUyMTBlNGI0MzBjMTdlNTkxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTk0OGZhNjhhMjZjMjhlYzNlZTAxMmM4NTFiNDY4NmM5MGUzMmE1Y2YyOGI5NDUyMjc1NWYyNzc3ZWEzYmVmOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_9ff788ae99074eb58917b28ea3c5527d",
+      "statement": "Post-deploy verification per docs/DEPLOYMENT.md §3.2 is web login gate on :3000, GET /api/health on :4000 returning success:true, 13 tables in Postgres on :5432 after auto-migration, and HTTP 200 from SeaweedFS on :9000/:9333; the production composition parameterizes API/web ports as ${API_PORT:-4000}/${WEB_PORT:-3000} and publishes no Postgres or S3 ports.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L44-L53",
+          "version": "repo-lines-v1:sha256:8a519acd0decc9b55723b77a85b6075d590ee4962ee1bb99727e781e33ed3eda:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxM2M1YjQ5OTBhMTVjZDFlY2RkOGU2OTAxMmZiYjFmMDM3MGQ3MTU1M2IyODEzNjU2ZGQ0MDA1Y2U0MDYzYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEzYzY2ZGM4ZDEzMmQwNzgwNGJjODcxZmU2MDEzN2M3OWJiOGFjNGJjZDM2MTM0NDhhOGE2MzNmYWI3ZThkNTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZmZGJhZWI3NGY0ZmU3YmM4NDM4YTJiMjhjNzQzZGI5YmRhMTc1ZmY0MWZlMDIxMTVkY2YwMzQ2NDM4ZTM2ZTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L68-L82",
+          "version": "repo-lines-v1:sha256:52b6945150c7b87d8fa3a3672879768996887d7813221feebd2debc2918063b1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMTZlZDIzOWEzNjUxYjUwNzljMGU0ZTdmMDc4NDRlYTMyOWM4NzYyOGJmOWZjYzQ2MzY3NzMzZjVlMWU5M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNDBiY2QyODY2M2JkNDAxNjc0YzI4NTljZjdlZWE0N2M5YWMzZDBmNTUwM2QzZTBiOTg4MWEzZjM1NDQ2MzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzOGQ1MGE3ZmE1MDBiZGQ1N2FjMmEyNmYxZjc2NDAyMDcwNjg4MWQ1NjNlMzY2ZTRkZjZiNDQ5N2RjZGJkYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3ZDQ2MzM0M2E3YjMxN2QyNTc0NTFiMjQ2NGNjZDc5YzI3YmZmYWEzNjczYWRlMjFkN2Y2ZDA3NDU2NTMwMTkifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L141-L146",
+          "version": "repo-lines-v1:sha256:a520ea9cc791696f7cea72ce929423709fce0f84c16cdaefe8c1b6529138508e:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDMwM2M2MjExMDQ0OWZjMjVhYjUwY2M5MTA2YzhhMzEyYzZmMmZiOTM3MzVkOTc3NTAzOWIwNTU3YmQwYzBhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDNkNTFkMmIzMWQwODEzODFiMzZlOTA0ZWI4YzZjNGFhNmYzZmQwYTk2ZGZmMTk4OTgzMTgzZTM5NGFjYjljZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDEwOWU0ODVhMjQzNGUxNmM0MzkyYjQxMTU1ZTE3YWExN2Q0N2FiOWJlMWJjZDAyMjZlNDIxYWU3YzE5M2I2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjU4NmU4OTViNDUyZGRlZGIyNWY3OGM1NTU4ZWNmNDhiMGU0MzllZTRkZTU3N2EwNDJlZWYxNjRlYTgzMmQ2NiJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L170-L179",
+          "version": "repo-lines-v1:sha256:d2d69ddcdddb76eb001800b0766569f6ea917f56c05793c989bb78d6732e893e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlODAwZTg5MTMzMDJkMzM0MWFhNGY3NDI0MjhlZDVkYTY5YzgzNzQyYzY3NDk2MmMyNDM2NDhlYmFhZmQ3MDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkMzhhOGMyZDk3Y2FlMDk5YTI1MWNjYzFiNDFiMWY0NDdkOWEyZWFmNGQwYThiNDVmMzY1NDEyODg4ZmQ1ZmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE3OTczNTVhNzcyYmJmNzM1NmUyODYwOGE2OWExMzVlNmE4MTJiNDMyN2RhNDdhMGI5NzcxMDVkNTg4ODQ0OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxZDNlYjg2ZjJjMmZkOTExMTc4ODJiZjUwN2IzZjQ1YmY1NTI4YmE5MWYyN2M1MDk2YjFjZDc4ZDEzNTM4OWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6cb6601c8acb4479a2761d9d36613b75",
+      "statement": "A freshly migrated database is empty; 'npx tsx packages/db-client/prisma/seed.ts' populates core stratagems, datasheets, weapons, and paint swatches and is idempotent because each row is looked up and skipped when it already exists.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L148-L154",
+          "version": "repo-lines-v1:sha256:8e8f443d7e9e2f040bf91f0b47e93ef351fac12f338a890b42185e39a4516ac2:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU0MmFlZTM5ZTEwYjU0ODM2OTJhZGM0MGIxNWE3YWZkNDgxMjg5MzdlZWZmNTFlNTVjNjk1MDVjYjUyYjUzZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzkzZjFkYTgzN2M5OGM0Nzc0ZmU2NzJhZGRlNmQ5ZTk3NjVmODNkOWNiODNmY2M0NjRkYjY0YTUyOWUyZWRiYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDFhOTlhNzc2ZDg1YzE4ZmMxM2Q5MjY4NjY0NzliNGIyMjY3NmQzNzRhM2M5YWQzMTlhNWU3MzkyNzkyMjE0NyJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L191-L194",
+          "version": "repo-lines-v1:sha256:d46b0521ee190da7926428ff642ff512849e0558a826825bd58994a92f3ed7df:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGM4OTE0NDdhNTRjZTQ1MGM5YmY5MTM5MTQwMmM5NzU1ZDcxMDBmZjRmM2Q2MjIwMzZlYWJkYzBkMGIyYjk0OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNThiZTg0M2Y3NDEzYTFhZWI4ZDk3NTg5M2IyMzc1NWI1YTJhZGZkZGNmMTMxMzc2OGIxMmNmNGM0NTBjYWM2MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTAyMmM5MGIyZmI0OTYxNTljZTg4MTAxMjc0MmQ2NzY1YjkxYmNkNmI1OGU1ZjFlMzQ0ZWI2MjkwYWQ1MjEzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjkwOWQ0MWVkMzYwOWJjNWVjOWNlNzNlYzA5MTM3NWU3ODE2MDY0NWU5YmU4NjY5ZWIyYTJiYjFiNjRkODhhMSJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L30-L34",
+          "version": "repo-lines-v1:sha256:a6dab467eb85499e043ca7cc78a763e7cef78c90b5ed5fd53e1e6d12028a5a50:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTEwN2U4ZTMzOGVjZmY4MmQ2NDQ3NGVmOWJkZWFhOGY5ZmE3M2M2MTQ1YWRiZjk2MGZmNWQ3NTE3M2YzYzg0ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGNlMmQ3YWU4NTA0NDQwMTU2NjgwYmY4MDMzMTU0MjZiNDk1YzQ5MmRmZDUyNjkxNjBmMWJjM2UzNjU4ZmMxNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGYyYjgxYmZmYjQ1MzQ3ZTkyNTc0YTJjZDVjMDY0M2E2NmRjYmIyNDEzODQxOTBmZmVmZGE2OWRmYTI5Mjg3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGU4NjlhMzg5ZGVhMjkyNTk4OWExYjM4ZWQ2NTljNzA0YjE3YTBmYzUxMjY2ZTlhNWZkNTE5MWIzYTkxOWI1MyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3770434384364df08217970cf8bd2221",
+      "statement": "The dev composition automates migration and seeding via a one-shot db-init service that probes Postgres with scripts/dev-wait-for-postgres.js, runs migrate deploy plus the seed, then idles with 'tail -f /dev/null' so its logs remain available.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L71-L77",
+          "version": "repo-lines-v1:sha256:53519d0a5527e3eb7234ac7395aef0b071257f29a83fce5f46095ed3028c4814:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjY2YzFjNTkwNGE2MTdkMjJhZWE2MGVjMzM4Njk3ZWEwZGRmMjc5NDViNmYwYWNhMmUxYWRjNTUxOWJiNjU3MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDkxZjVmZTkzMjgzZGM3ZGU1NDU5OWYzYTMwNDQwOGFhZThmZjA0MDcxZWZjMjZmNzY1MTA2ODQxZTI4MzIxMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTkzMWYwMzY5ODMxMTkwMWJiNjAwYzI3N2ZiNWZkNTNhZTE4MTEyYjdhZmQzNDZkN2YzMWNhMTJlNjI4NWVhMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmE2MDE3NzY3MGQ3NjFkMjg5NDYyNDU2MjQ1NjlmMmViZjU2ZDM5MzRlZDE1ZjAyM2MxOWY1MWUwOGU0ODYyMCJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L11-L21",
+          "version": "repo-lines-v1:sha256:533a7c6dc9a3a23e250733b2b184ccd2aaa5d1b302c828b30a323f80803c6fbe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNzRjYmZjYjk0OGU2YzQwNzgwMDBjYTdhMDc2MDNiZjllNTZkMmI2MWYzODA3MjQ4MWJmZTE5NTc5YzE1MDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQzYjYwMWQxYmUyZGRjZTc2ZjEwYjA1MGE1NzdkMmQxZWU5YWIwZTViNWU2NDNlMDEwZDczNzhhODk2M2U1YjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ2ZDEzYjZjZDYxMzVjNzk3MjAzNGQ0ZWQ3MjhmZjA2ZTg5YjZmZDE4NTQ4NWJkZTljNjgwY2QzMmMwOTMwMGIifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-wait-for-postgres.js#L21-L29",
+          "version": "repo-lines-v1:sha256:c7676902741e5bf68bc5ae16ab5274174576b69f5e76055a12b37ff257391570:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODAyOThjYTY0MDU3ZTZhZDYyMDA4Y2I5ZDc4MjhiMTNlZDNmMWE1MGY4NjExM2I5NmYyYzdmNWYwZDliYWNjMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDlmYWM1YTMwMzliYmFkMjg3YWM4MTVkNTMzY2YzYWJkNGI0MjE3OTIwY2JlMmM5M2JiMzRhNmUzMDAwMzE0MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmQwZjJkM2EzYWFkYTI3NTg2NDU3OGQwYTQzOTE1NjM4ZDU0M2ZlY2EyYzk0ODU4ZGI5NDEyMTFlODZjZWYyYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_39d9d2e9c2ab4fa3943d7306045c971a",
+      "statement": "Pull-based production hosting consumes ghcr.io/fatpat81/beerhammer/forceorg-{api,web,sync-worker}:${FORCEORG_TAG:-latest}; the deploy workflow publishes all three images on every push to main tagged latest and github.sha, so update is re-pull + up -d and rollback is re-running with FORCEORG_TAG set to a previous sha.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L58-L89",
+          "version": "repo-lines-v1:sha256:8fe2b4e577eb2dab7154ea91975eea349220fd025e4fc17f457e0af3817f6296:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjNzNkZmIxOTZkZDNlODJjYjRjMjRkNTkxYzlkYzY4NDM3MDdjOGZkZTczNjU4OGEzN2E2N2VkZWI3NDE3ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmMjkyNTYyZjFiMWNjZmYzY2UzNGQzODQwOWJhNzViMTU0ZmEzOTAxMTJlMzcyYzllYjg1N2E5OWE2OTgyM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L94",
+          "version": "repo-lines-v1:sha256:c58895b0bac09e4a8f91840c71663fd26da5c991987d16785f7541463bfc5d34:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3ZjRhMmViYmM0ZjBiMjlkZjRjMmUxZjQyMTliNjE3OTFkYzBjODI4NzQxM2NkMDlmN2JlNDEzYTNkZWU2YWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwMThlMjg1MTljMzFhNDAyN2VmNzY0Zjc1M2U2NWE3OWY4MzZkMDA2YWQ3NTYwMjYxMWE2YWViYmI3OGIwOTgifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L122-L130",
+          "version": "repo-lines-v1:sha256:2757a7c2be173370def35263d4034b439fc083abbad010d35f3a1e98657f8d42:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWY2NTgyYmVlMmY5MDEzOGZmZjBlYzE3NmEzNGNkMjMxOWRlYjcyZDFjZDEyNGExODU4YjYzZjg5ODkzMDQ0YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWIzZGJhODc4MjI5YjMyNmEzNjhlOWJiN2QwNzYwMTM3NDUwYjE4NmI3YTAwODkwNjkxMzM1ZTEwMGEzZTNjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmQyYzIyMDJjN2VjM2ZmZTEyMDcxZGMzMTcwOTc2NTE1MjI1YzNhNjMwODE0YTQzOTkyN2UxZGJkZjE3YWZmYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d249f6b8a53f47c89d54ce9fd35c43a0",
+      "statement": "docker-compose.prod.yml writes every security-relevant variable as ${VAR:-placeholder} (JWT_SECRET=please-change-me, POSTGRES_USER/PASSWORD=postgres/postgrespassword, S3_BUCKET_NAME=forceorg-miniatures, AWS keys and PUBLIC_CDN_BASE_URL default empty) and uses no ${VAR:?} required expansion, so the stack boots with zero configuration by design; docs/DEPLOYMENT.md §2/§3.1 document these as public test-only placeholders that MUST be overridden beyond localhost, and the API auth middleware's own 'dev-secret-change-in-production' fallback means an unoverridden server accepts tokens anyone can mint.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/middleware/auth.ts#L8-L8",
+          "version": "repo-lines-v1:sha256:54ac4c68d42cfb2528060e8e5c7177f09b8c8aeb0e0ccb21f5282bcbf6ab31e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTRhYzRjNjhkNDJjZmIyNTI4MDYwZThlNWM3MTc3ZjA5YjhjOGFlYjBlMGNjYjIxZjUyODJiY2JmNmFiMzFlNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTRhYzRjNjhkNDJjZmIyNTI4MDYwZThlNWM3MTc3ZjA5YjhjOGFlYjBlMGNjYjIxZjUyODJiY2JmNmFiMzFlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwY2Y4NGUyYmEyZDM5ZTc2OWNjNTc4YWNiNjU2OGI5MTdkYTEwYWY5N2U1NWZkNjE3OWMxMTU0YmZiMGNlZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmI2YjhhYzBjMTNjZWI3NTU1NjYyMDgwNzhiYzZhNDA2YjRlNGRmZGQyNTQ4OTQ4ZmMyMTI3YTg2MDkxM2NlMSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L26-L67",
+          "version": "repo-lines-v1:sha256:d4f5d93f74bca5f45f9263c9e0e9efb93b66af3c5d2afbfee58b70ea49a7bbaa:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyZDU4NTkzMzUxN2E1ZGM4ZTNkODNlMDE2N2I3M2I4YzhkYWNkN2ZjZWRhMDZkYjYzZjQyNDViMDZmYWIxYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhYzlkMWJmMTUzOTJkZmMxYWFhNGE5ZGVmMjU5NGE2ZWYyZjU0OTQ2MDVlNjAwMTUyZjVkNzA0ZjJiNTAxYTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU5ZDhjZDhkYmEyMjZhZDBkMGQ4NjQwNzdkMjljNDQ4NDgxMTFmYzRmMzFhOTUzMDgzOWE0OTJkZmU2Y2EzNGEifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L45-L51",
+          "version": "repo-lines-v1:sha256:a4fa7f2d11ebf7f44db6b2d4a6c249cc6a3ab40414dc5944c94f1c5c5c66d3c9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzEzZGUyODcwNDRlODNlNzc3ZTlmMDhkNDAzYWE4YmFkZWIyYzczZDc4YmY4ODY1YzNjODFiZTVlNzgwMTM5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTllNzlkN2ViOGQ5NjZjMmE2OTM3NTU1ODJhZjVjZjJlZDdhYjAwNDU1NGJhMDA0MTc1NzgyYWNjODc1MzFhNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTEwMjY0YzgzOTM5Yjk5ODY1ZTg3MWIzNmJlYjgyYjYwYTM4YTFjOWY4N2QwNDFlY2JjZTcxOTI1OTU0NWFkMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzM1YTlhMjBhMzc5MzZjNDk2NWY2MzU0ZDEyNWZlNmFiNzUxYWRmNTFiOTcxZjQ2MWI1MmNmYzQ1ZDNmYTgwNiJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L92-L113",
+          "version": "repo-lines-v1:sha256:4a3eba068ec0aba3c8d1194275d3c86ce0d71adf20c1be0731f4365478ba109c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZjY1NGJmNTFiMDA5M2QxNWU2Y2MxNjY3MjE3ODEwMjFiMDdiZjdlNDgwYjg2ODJhMTA5NGY0NTk0MzViMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxZDk3ZTNiZmQ0OTg0ODljMjc4ZTNlMDRhYzAyODE2YjIxOTFmNzYyMGRiMmI2OTQzNTgyMDM1NjViYmQxYzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiOWEzOWQ1YTdhNmNmYTE5Y2U1OGNlZjVjMmRiMmFmYWYzOTZkN2YyMWMzMjgzMWYyMDM1NGViNmJhYTQ2MDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNjZjQ1MTAzYWVkMDY2NzJiMmVkNTA4MmVkZTc4ZWEyMDA2OGM1ZTk2ZDQ4ZjA0MDMxMGY2MzlhNmMxMjIwYTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_023e60fce23b44c5a773446b7f4a26a9",
+      "statement": "docs/DEPLOYMENT.md hardening guidance: override JWT_SECRET and database/storage credentials, serve the API through a TLS reverse proxy, restrict CORS_ORIGIN to real browser origins, keep Postgres and S3 ports off the public network, and back up the two named volumes (pg_dump plus a copy of s3_data); 'docker compose down' keeps postgres_data while 'down -v' wipes it.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L159-L187",
+          "version": "repo-lines-v1:sha256:58d0a1c052cedc752642c6668c8bb770ce30b4a2d1cafdc518bacacb12ade650:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkOWRkZGY1NGQxODZhZDhmYjE3ZWZlMDBlODJjNDEyNzM3NjNlZjY3YmE2ZmVlZjQwYmIyODRjN2M4M2FkMmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhYTZmNGE0ZDA5ZDBkYWQ3NTg4NTI5NmRkOWJlY2U3ODAxNDU4N2FkMzI0M2QzOWJiOTgzODFhZmY3MTE4OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiZjAxNWI5NWYxMTQ0MGRjMTI3YzVkNTQ2OThjNjBlYjg3Nzc4ZjU1MzA0YTM5OTRhNTM3OGJkNjhjMjIwYjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwMjJjOTBiMmZiNDk2MTU5Y2U4ODEwMTI3NDJkNjc2NWI5MWJjZDZiNThlNWYxZTM0NGViNjI5MGFkNTIxM2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4b4a95f01f7d4c659864857f0876fbbe",
+      "statement": "./scripts/dev.sh wraps docker-compose.dev.yml as the single dev entry point (up, down, rebuild, verify, test, e2e/e2e-install, logs, shell, psql), and WEB_PORT/API_PORT environment overrides remap the published host ports on collision.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L12-L13",
+          "version": "repo-lines-v1:sha256:5c217f6ca2bcb64b7a27711a0a3eaf639ea6d023dd256555f97e8bdc13af91ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODA0ZDhlNTg0ODA4NmI2OTBmN2JlNDQzY2ViYWIxMDFjMThhMTIyZTg4NDNhM2M2ZGJlMWZjYmJlMDc3NGRmMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjY1Y2RlZTBkMzllZTRmMjgxOTU5MTQyZGM0ZTU5MzU0ZDIyOTIwNjdhZGRmM2U4NzkxNjAzYjE2Y2M4MmUwNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmYyZDMxZDE3NjA1MmEzOGI2ZWE5NjVlYWVlNmYwMDQxMjdmYjFjZDFkODQ0NDFkMGQxZWJjZjI5OTNiNGE1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmUxZWJjYjZjYWYyOTA5NmJjYzFkOGY0OGM4YzE2MDNlMTIzZDE1ZDMxMjdjNjc4ZDYzNTliYjk3YjE0MTcxNyJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L62",
+          "version": "repo-lines-v1:sha256:fc1942ada2f6ab0c420575784ec4f43afe911b1ab20fc5a0b5305eaccf8ffe4e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYjI1MzFhYTRhMGQ5ZDcwYzNiNmRhMzdmZjQ1NTYxMzNkZDk4OTY4ZTgxZWJhNjlkN2UyOGRlYjNkNTkyNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFlNWMwZGU0ZjE3ZWI1NDdmZjg5OTg0YzY0ZDMyZThmZWMyMWNlZjliMmQxZDUwZGE0YTQyZmMzNzZjYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzYTJiNmZhMWQxYTMxZjI0ZWIxNzU1YzI3ZDZhZWFjMDQ0NjY0YjgyZDE2ZjZmNjViYzY3M2U5OTk2YzhlMTUifQ"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L20-L64",
+          "version": "repo-lines-v1:sha256:25e6ebd984d330968c201f7d798b5fd6729af3ff59414ac3237f8b16220507fa:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjNTc0YzNmMjQ2MjczNzMzM2MyMThkYjNmNWJiMDllOTE2MzBhZDFiODQ0MDcxNTI1NWRkMmM2YmRhMDEyMTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI5MTYyNjk3OGY2YWQwYjE2NjNlMWYxN2ViNTQ2ODFiZjU2NGI4NzBjYWNiNWIxYWQ0NmEwNmUyODdjMjc0NGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0YTJiZWNmZjhhZmIzNGRiMjYwZGFiYzk2OTE1ZmZlY2ZkZTg0ODkyOTU0MWM2MTkzZGU2ZDE2NGMyMWU4ZGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b516cab8caf64ba6979bebda11d3e7d4",
+      "statement": "Table count on a fresh self-migrated database is 13: the init migration 20261005170232_init issues 13 CREATE TABLE statements and schema.prisma declares 13 models, so docs/DEPLOYMENT.md §3.1's '14 tables' statement contradicts both §3.2's verification table (13) and the migration itself.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L106-L108",
+          "version": "repo-lines-v1:sha256:b007b814c9f91783d1ec38667e2b375183dc9598e02df4944ed396d1b50f9c3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODg0YWM3ZTFkZjYzMDAyOGU4OGJlZmMyMTMzYTkyZTkwZmI5MzA0YTdkMmVlMDllNjIyNGQwMjI3M2NmZGY2MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzcyYTNmNzA5ZDc4N2Q4NDZhZTdhZTA0ZTNhOTEzYmExNTYxOWRkNjE0Y2I5Njg1NGFjNTZhODgxYjAxMmE4MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWIzZGJhODc4MjI5YjMyNmEzNjhlOWJiN2QwNzYwMTM3NDUwYjE4NmI3YTAwODkwNjkxMzM1ZTEwMGEzZTNjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjFiYjRhM2Y1NmM1MTNhYjNkNzlhMTc5NzI1Mjk3ZDUyNmY0ZGZlMzZlZmNmZWUxNjUyZjAyZjMxMDE3NzQ0OCJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L145-L145",
+          "version": "repo-lines-v1:sha256:077745602d86eca9d68b76d4b3f28b8e1f25a0062edc6bd989cd80bdec5ef1bf:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDc3NzQ1NjAyZDg2ZWNhOWQ2OGI3NmQ0YjNmMjhiOGUxZjI1YTAwNjJlZGM2YmQ5ODljZDgwYmRlYzVlZjFiZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDc3NzQ1NjAyZDg2ZWNhOWQ2OGI3NmQ0YjNmMjhiOGUxZjI1YTAwNjJlZGM2YmQ5ODljZDgwYmRlYzVlZjFiZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2Q2NjlmYjEwMzA3MzQ1MzhiOGE3MTRiMTczNmZlYzBhZTA2YTM1YjNjZWE1YjhlZGI1ZGY1ZDlkNzliODNkOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjc5ODM2YTg1ZTAyZDY5MWVlOGM5Y2UzZDliZWE3N2Q3MDYxZTg4M2QyNzRjYjAyNDA3YjRjMDRhZjliMTlkOSJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L20-L189",
+          "version": "repo-lines-v1:sha256:fe046e74d7b271120535ac1c6b4b79a0ccb244766ca24a888934677738a1193a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2MDZlZWY5NDlhOWQ1MjlmYjNlOWQxMmY5N2JkZWYyMzA5NzZmNTU0NzRiMWM2ZjgzMDQ3ZmZhODMxM2MxMWNjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI2MDdiYzUzMGE1Yzg5MzIxYjU5ZDk2YjFmOTdmMzlkYTE2ZTQ0MTBmNzA4MTk0ZmY1OWMyZTMxZWVhNTE5MDMzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhZmJkZmY1NDJhMzI1ZTYyNWFmMjMzNmJlYWEwNTRmYzU4OTI0NjMyYzUyMDNiNzRiOTk1ODJmNzJjMWNjODU5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3Nzc2YjMzNTZjYjcwM2NhOTkyNjcwNjg3ZjUzZDc3ZTBjNTQzMzZmNTVhMzBkOTA2NWViYWM3Y2YzZTA5OGZiIn0"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma",
+          "version": "repo-file-v1:sha256:7061ce310d11c427085e3795271fe92f5d3d4fcd18ef6fa9dbf21528abdd9164"
+        }
+      ]
+    },
+    {
+      "id": "claim_ed232e70aabe4ba3b0256c0b1f62a5f2",
+      "statement": "docker-compose.yml (the from-source composition) hard-codes dev credentials — postgres/postgrespassword, minioadmin/minioadminpassword S3 keys, CORS_ORIGIN, PUBLIC_CDN_BASE_URL — and sets no JWT_SECRET for api at all, so that stack silently authenticates writes with the middleware's dev-secret fallback and is unsafe beyond localhost.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/middleware/auth.ts#L8-L8",
+          "version": "repo-lines-v1:sha256:54ac4c68d42cfb2528060e8e5c7177f09b8c8aeb0e0ccb21f5282bcbf6ab31e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTRhYzRjNjhkNDJjZmIyNTI4MDYwZThlNWM3MTc3ZjA5YjhjOGFlYjBlMGNjYjIxZjUyODJiY2JmNmFiMzFlNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTRhYzRjNjhkNDJjZmIyNTI4MDYwZThlNWM3MTc3ZjA5YjhjOGFlYjBlMGNjYjIxZjUyODJiY2JmNmFiMzFlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwY2Y4NGUyYmEyZDM5ZTc2OWNjNTc4YWNiNjU2OGI5MTdkYTEwYWY5N2U1NWZkNjE3OWMxMTU0YmZiMGNlZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmI2YjhhYzBjMTNjZWI3NTU1NjYyMDgwNzhiYzZhNDA2YjRlNGRmZGQyNTQ4OTQ4ZmMyMTI3YTg2MDkxM2NlMSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L14-L17",
+          "version": "repo-lines-v1:sha256:441cebd06e3fbfb1552e518b265333f5677c927f349a7a16f4b1e0b2310c8964:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQyMmZmMDRlOWQxYTk2NjllZTRhZDUyYmZmY2M4YjdjZmM1ODkxZTUwOGZiYzViMzhiYmE3YWQ3ZjNhNDNlOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmFjOWQxYmYxNTM5MmRmYzFhYWE0YTlkZWYyNTk0YTZlZjJmNTQ5NDYwNWU2MDAxNTJmNWQ3MDRmMmI1MDFhOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODc0YWJmZWFiMGFhMGEwMWU2YjhlZDBkOWZhMjUzNGY2ZjRiNThhMzU2MmQ1MDlhZDRkYjQxODZmNjdjMDBiYiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L53-L66",
+          "version": "repo-lines-v1:sha256:ad3c44932c1e2d370c46b24948bf777aec705cc92caac94856d77f235bb4640d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyMjI3NzkwNWJkNmUwZTZmZDg5MjQ1MWE4ZGI3MzU3NmEzMWI5ZjliOWQwNmQ0OGY2ZDIzOGNkOWYyYzQ4MGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1ZjY2ODI2NDdlY2MwZTIwNjY1MDA1ZmYyYTU5MGRhNjRmNDBkN2RhNmMxYWUzMTVmZjA4Y2ZmM2ExYzFjMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlhYWUzNGE4ZDhkNzg5YWEyZjM0MDc4MDliNjlkMTJiM2JkN2FlOTQ5NzJkZjBlZTg2NzE5NDg1M2I4N2Q3MDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_52e92b5d8b1f4d5d889fae29fc5a5baf",
+      "statement": "A zero-configuration production boot is only partially functional: health and the login gate work, but with AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY defaulting to empty the API has no usable S3 credentials, and with PUBLIC_CDN_BASE_URL empty the storage service derives image URLs from AWS_ENDPOINT (http://s3:9000/<bucket>/<key>), which resolve only inside the compose network.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L17-L33",
+          "version": "repo-lines-v1:sha256:8c0e846d860eb2a22763bde5071a06e6e26e1f05e8efd9ff2da3392c89c75dd8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViNWVjYmVlNzEwZjI1ZjRkYmNjYjdiN2Y5YWYyODA3NTkzZDlhOGMzNjY2MTM0ZjI0MDBmN2ZmZmQ1ZjRlYjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhZDcxN2YzZTc5MmY3MDU5OTZlNDM5MGViYzc5ODg4YWJlZmUwNDQ1MjU1YmYxNzQ2NDI2ZjE1ZWFmYjU1NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjExYzFhYmI5OWNkODdmYjY3MDFlMWViNDUyNmI3ZjU2NjIwZTY4ZDkxNDRlNDBkODJiYjk0MDdhYjZiNDk1NzAifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L59-L69",
+          "version": "repo-lines-v1:sha256:3df6f9f36e94251f9521748a3f8456099fef304c23b3dcdb1be16bac203259c1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFkMzcwMDdjYjhlZTQ3NWUyOGQ0YTYwZTlmNTA4Y2E5M2JlY2U4NGQ3ZGZiYTRkZmJlOTAyOTk2ZmIzZDcyMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY4Yjk0NTQwMTBiMTY2YTNiMmQwYTdiZWY0NDM2YWM4OTkyMjllZGFlZWUwYTcyNTgxMDIzMzM4NzEyMzY5OTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwZGVkNzllMWZlNWRjYmM2MjJiMWE4MTY1NWU0OWEwZTY2ZDkwNzg0M2I1M2FiMDY0YjlmYWQxNjY2NjcxZGUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L62-L67",
+          "version": "repo-lines-v1:sha256:e697b57ec167d9000b42d1166008355f849382851b28c3a54c8796760193cee5:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjJlMzY0OTVkMGIzMmM1ZmVhZjMwMWNlZmZiMDM2MTkzMDUxMGE0OGQxNmE0OGM2M2I1ZTk5ZWNmOGMwMGViMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzJkNTg1OTMzNTE3YTVkYzhlM2Q4M2UwMTY3YjczYjhjOGRhY2Q3ZmNlZGEwNmRiNjNmNDI0NWIwNmZhYjFjOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGIyMTdlNjIzNTZkOGRhMWU2YzJiMjQyOTVhMmY2Y2EzMjY5N2QxMDExNjljMzUwOWYyNzc1YzU1MTU3Nzc1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTlkOGNkOGRiYTIyNmFkMGQwZDg2NDA3N2QyOWM0NDg0ODExMWZjNGYzMWE5NTMwODM5YTQ5MmRmZTZjYTM0YSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

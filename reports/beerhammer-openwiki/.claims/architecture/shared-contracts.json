@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c627d6075a0c8dc5a3f84c581b6a4990c74bef0b8faadfcfbac564d030eb9c8f",
+  "claims": [
+    {
+      "id": "claim_060505f6fbf94c06a8ecb7b3819fbfcf",
+      "statement": "@forceorg/types is a dependency-free, header-only contract package whose main/types both resolve to src/index.ts: it supplies the cross-layer vocabulary (datasheet, wargear AST, roster, audit, sync, and ApiResponse shapes) consumed with `import type` by apps/api, apps/web, apps/sync-worker and @forceorg/rules-engine-11e, and therefore contributes no runtime code.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/package.json#L12-L25",
+          "version": "repo-lines-v1:sha256:3f3faedb1c2990c51826a8b8c790f8a8b5edcf756b8990a69e80c6e3fe5eb477:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhM2I0NjlkOWUwOTc1NzIyNDY2NjczNGM5ZWY3YjI1NGQ4ODUzNGY1ZDViYjcwOTg5NjA4MDVjNTUzZGMzMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU0MWIzZjk1N2FhNGU2MmM3ZmJlNGQ4Y2RlZWFjYmU2NzRkOTVhODM3ZWZhZDI2N2JiMjhmY2U4YjNmMDdkYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmNTdjZWMwY2ZkM2ZkMmQ4ZjQ2NTk4NDM4ZGMwY2JmMGQzZjFiNzk4YWRiNTk2NGZhZjRiMzBkODUwNWRkMWUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L6-L6",
+          "version": "repo-lines-v1:sha256:745c435abcda0a69758f4c853e7d2b436edb3c72023031bfd9d120f13e36eabc:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQ1YzQzNWFiY2RhMGE2OTc1OGY0Yzg1M2U3ZDJiNDM2ZWRiM2M3MjAyMzAzMWJmZDlkMTIwZjEzZTM2ZWFiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQ1YzQzNWFiY2RhMGE2OTc1OGY0Yzg1M2U3ZDJiNDM2ZWRiM2M3MjAyMzAzMWJmZDlkMTIwZjEzZTM2ZWFiYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTk0MWVmNDE0ZGZiMjE4YTRmZDQyZGUyNGJkNzk3MGI3ZTAxMDllN2EzOWNkODFiMmRiYTQyZTU2MzAxYzg4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODk1ZGQxYjZlNjI3NmNmZmUwN2U3MjBmMjA0YTg5MmY4YmRhNzhkMGI1ODFlYWI2MDc0MjFmMjE4YmM0NzU4ZSJ9"
+        },
+        {
+          "resource": "repo://packages/types/package.json#L1-L15",
+          "version": "repo-lines-v1:sha256:6bd6d57fc11d9c865dff0af0532a4e75ec1ef6ca622fac9df9686ecd1e6c1ba3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L1-L319",
+          "version": "repo-lines-v1:sha256:c7b399cf67e7d80d9cb947abe916aa571c2746d5a4a180dbe4ca73699314951f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzE5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxNWI0NWZlM2IyNmI3MGE0Mjg3YzM4NjU4NjI3MzA4OGJkNjA0MmMxZmNkMDQwZDQwZjgyZGFmMGZlOTUyMTA2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_4a12e21fb16a44e9bcaef25889c1d777",
+      "statement": "The HTTP contract is the ApiResponse envelope — success boolean plus optional data, error.code/error.message, and a pagination meta block (page/totalPages/totalCount); docs/OPENAPI.yaml splits it into ApiSuccess (success=true, data required) and ApiError (success=false, error.code+message required, code drawn from a fixed enum of eleven values), and meta is only emitted in practice by GET /api/datasheets.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L40-L48",
+          "version": "repo-lines-v1:sha256:e88bd25caf5e430b2aa6da5a550b9227433f657252051e133c9f816ced733356:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTUzMDFiMDE1MzlmYTI3NjE1Njg2MGY4ZTE5ZTE4ZjU1NDVhYzRlZmI0MzEwMGI0NTBlNTQ5MmMwOGIzZTU2MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjJkMTFjYWY0M2U5N2VmMzY5ZTZiZWVkMWEyNjhiZDA1ODM4ZjI5YjlkZDI1NGJmNjliYTY0ODg0MTQ3MjM0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDNhYzUwNTliZTJiZjQ1ODgyNTNhMTA4OWZkMmJjODY2MmZlYWE4Yjc2N2ZjOTg2OTMxMmE4MmJlYjM4NDU0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmNjYTRmNjAzMzNiZTM4ODdhZjU3YmZiODI1ZjA3YjM2MmZhZGYwNTNhOTRjODMxMTM3YTYwNTNhMDZmYmU2OCJ9"
+        },
+        {
+          "resource": "repo://docs/OPENAPI.yaml#L449-L485",
+          "version": "repo-lines-v1:sha256:c89158a50668b03c449f58758fb66a0c4bc84f9cf74e88675c8659ee6943ef85:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0NWEzNjhhOWQyMzM1MGJlOTUwN2M1MTA4N2Q2OGY2MDA2Mjk1YzhlYzlmMmQ0MWIxM2ZkZmEwYTQ0ZTZiZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyMDg1ODY5ZjllZWIyMDQ1M2ZmNzFmMjYxYjZmODQ0Y2QzMTU3MGYwNzU2ZDA0OGY1YjNmMzk3ZDZiNzdhZWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2ODdmMWMzYmI3ZWQxNmE2NDYxZmM3ZTIyMDI1ZGY3NmE5YTExZDIyZWY3ZjZjYWFlOTNkMjIxNjQ5Y2I3MDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlkYjk4YzRhNGVmZWMwYWIyOTlhYzM1OWMzNjZlM2Y1MWZiODgyNTlmOTQxZmVkY2UxMjgyNTYxYWVlYzRiMjIifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L305-L319",
+          "version": "repo-lines-v1:sha256:540b6c6bad496cf1505ca5e999aa7029bc78a9cb81da830b8c218b24fd8159f1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmNzJlNjM3NTMwOWM4YjBhZDFmMjJiNzRmOGZiYjllMzhlZWIyODdhZDZjNmExMGVmNDMxYmEzNTJkNzU3NzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NjJlNzQ1NmQ1OWI2YTA2NTYwOGFmNjdkZjEyNTg5OGEwYTBmZGQ2ZDcxMTg3OWM5MTZjYjkxMTNjMzE5NzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bccfbde1dac34c8995a45b6991d997ae",
+      "statement": "Every response surface in apps/api conforms to the envelope: the rate limiter (429 RATE_LIMIT_EXCEEDED), requireAuth (401 UNAUTHORIZED/TOKEN_INVALID), each router handler's try/catch (400 INVALID_PARAMS/NO_FILE, 404 NOT_FOUND, 500 DB_ERROR/UPLOAD_ERROR/DELETE_ERROR/AUDIT_ERROR), the terminal 404 middleware, and the global error handler (500 INTERNAL_ERROR).",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L27-L77",
+          "version": "repo-lines-v1:sha256:62202688a190d6f06e73a4e06d5bb1536fcde5abef9e78c5fda2e37f5a8db067:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzZjFkODQxYjBlNjJlNTllNzYzODJiZjc4OWU1ZDI5MDdhZmE5MDI1YTk0NWNjOWUzZWM3ZWQ4MjA4OWQxNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmMDBlYjUwYWVmNjUwNDNiYmQ0MTlhYjY3YjFjMzgyYjYyNjhmY2YxZDBiMDFjM2Q4OTAzMzU0NzBhMmYyYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdjYWZmNzE3MDY1NzMwNmJiYzI0MjA4ZjU5YzAxZDJhNzEyY2FkYTUzNzIyNzQ1NzE4ODBkMDdiMWIwZTMyMjMifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/middleware/auth.ts#L19-L49",
+          "version": "repo-lines-v1:sha256:c654293f6d94c4f8e1404a254611bf3239dc953d343d000b15b5330048ab574c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxYTQ0N2VjMzRhMzE1NmM0Zjg3YTRiYmMwOTRhMGVmYzMwOGVhMzhlZTdjODA5NjFjMzhkZGMwNzY4ZDE5NTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM5NmU2Yzg0YWEwNDNkZmM3MjJkNTM1MjE0OTAyZDU3N2U2OGE5NmMxMzFlMmQ4MmM4YTFjNDA0NmZjMjA5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU2MmNkNGQ5NWQwMDBhYTRjNWM3NThkZjQ2NTg3NjYxNTdiODc5ZmI0NzU4YjViYzg3OGVlNWUzZDU5NTc1MWYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L37-L48",
+          "version": "repo-lines-v1:sha256:3fe5a7c2ae0d9bb082e51b137342031ee2878cde6b8061077efb54bfeaaa2afc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5MzQyNTViZTFjMzVkMWU4Y2I0ZDQyMGMxNTNhYTEyZTlkMjY5MDVmZmI4OGQwYzcxNjk0NjUwZDNiNGZmYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNhYjc1ZWMwZWYwYTg2YTUyY2MxZjlhOWUxYjAzOWIyZTA2NWFjOTU4YTA4MmFmNDk0MjMzNjdjZGNhMTE1NjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUyZTg1YTk4YjBhYzAwMzlkZWE5YWYyMWVkODRhNDY1MmJmMDM0MjU5NGFiN2EyNjAyM2I2MzZlODAxYTMwNDcifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L16-L146",
+          "version": "repo-lines-v1:sha256:dd3fb7378b29cf70dddb8d8d6d0ee05b5fe85a79f33e98dde50c5352bbc78df6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZWUxMzk1Njc2Yzc1N2FiZmMzZDQ0MDQxM2NiMjk1NTU4ZjE3MTM5MWU1NTI3MGE5NzEzZjdjMDIyY2UzZDlhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiZWJiY2VlYjNkMTZlN2E2Y2MxMTE3MDZlMzlkYmZlNzZmYjI0MjA1NzA1ZDc3MjQwYmU3MGJhNGI3MjI3MzlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MiwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJhYzQ5ZTNjOGNlMzJhMmFhOTZjNWZiY2ZjZDQxNWMyYmI1MTQxOWI2YTliNGQzYTk4MWNmOGUwNDkzOTIxOTY3In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_da55f36f695b4743bd75e261ced055dd",
+      "statement": "apps/web/src/lib/api.ts is the only in-repo envelope consumer: apiFetch throws ApiError(error.code || 'UNKNOWN') when !response.ok || !body.success and otherwise returns body.data cast to T with no runtime validation and discards meta, so a route that breaks the envelope fails only at the type level in the client.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L41-L72",
+          "version": "repo-lines-v1:sha256:e682903d116c2a16c6cad7d143d438eaed30e5e66758f8e33df3f5ff45fb4fe0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5YzgyNTg2NThiOGRhMjcwZmQ0ZDU5NTcwMWNmZDQzNjAwYjcxNGRkYWVkMGM2MWU5OTM0ODYyZDlkOGVmN2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdhM2M2M2FlYTZlNDUxOGU0NjFhNjRkOTU5Y2Q1YTE0YjI2ZGRhNThmYTIwMjQ4ZjFlYTYzMTNhOTA5ZTJjZTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8eb65eba6334457ea2c46b39e540f3f9",
+      "statement": "GET /api/changelog never returns 500: on a database failure it answers HTTP 200 with success:true, the curated CURATED_BALANCE_CHANGES constant and syncStatus 'OFFLINE', so clients must branch on syncStatus rather than success to judge data freshness; its syncStatus ternary is degenerate ('SYNCHRONIZED' on either branch) and 'PENDING' is never produced anywhere.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L168",
+          "version": "repo-lines-v1:sha256:9d78d483d2788d18e3027cb6715d960166aec95df420b6b1f24141d4674137d8:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4NDU5Mjk5YWE1NjkxMmY1OTcxMTk5YjJmMmNhMWM5OGM5NTExMjc5Y2NiMzMxNDM1MTc4ZjllZmI0MTc3YmIifQ"
+        },
+        {
+          "resource": "repo://docs/OPENAPI.yaml#L556-L561",
+          "version": "repo-lines-v1:sha256:f260a9c730cf149e74d31b9d54517b6bd5160e8adc024724a7f77825e022a73d:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjI4ZjFmNDYwZTBkYzEyZGJiYWEyOTBjMDc3MzljYmJkNDc4NjM2MWRhOGMxNWFiZTNjMGMyOTRjYTEwZDYyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTE2NWViM2ZmMDU5MWI5ZjJmMmYzYzUzZGZiNDVjOTg0MWJiNDI4ZjliODIyZTMxMjVlZTU3MDY4OGU2MzM5ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOThlZmFlZGVhNDUxYzY0YmY2MGQ1ZWNhY2QwMGM0OThmMTkzYzg2YmUwMzNkNmFkNzI3NjEwNGMyZWI3Zjg1ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTA1NGI0MmU0MWYyNGFkZmQwZWVhZjJjMDYwMDliODJlOWEyMmFkNTVlNjg5OWM4ZmNkZGFjMjYxMTMyNDg2MCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b42e1029531b471b84e15ca82c44310b",
+      "statement": "The ruleset version id format is 11.1.0-YYYY-QN-MFM and generateRulesetVersionId() in apps/sync-worker/src/etl-pipeline.ts is its only generator, computing year and calendar quarter from the current date at run time; its value is written solely to SyncMetadata.rulesetVersionId (once per endpoint, so all rows of a run share it, including NO_DELTA and ERROR rows).",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L20-L28",
+          "version": "repo-lines-v1:sha256:103d9ba69a2063d2d686e58c3d77233dc4dbfef9decb4c57f38d3c1837e20fd6:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFmMjJjZjA3MzI1OTJjMjQ3MTQxY2JlNjFlZmExMTAxMjYxMmY1YTMxMjJiOWFmOWJiYWY1MmY1NzI0ZDE5NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzFhMGJjN2ZkMmRmNzBhN2NjODgwMWU1OTRmODZmMDc3NmUzODE3Y2IyYTYwZDE4NGRlYTc2MDliMDI5Zjk4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTRjMWIxMDFhM2ZhZGI0M2E2Y2Q5ZjUxZWFjYzBhNDExYWRjNmU5MGRmM2FkZjYyZDEwMjZhMjE1ZDU1ZGViZSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L213-L218",
+          "version": "repo-lines-v1:sha256:27be44ffc12cca1aafb87cf6474612bcd6c2266da22c23dd7c48ce04beb8f849:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDkzMTJhYjFkZmRlN2Q4OTEyYzM2NDk2MGJjNWE3YThmYzRiM2Q2MDBiMDUyMGM5MzJjYzExNDJjMGNlYjQwNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzU1MjdjNjc3ZjVhYjg4MDE3M2U2OGI5MjZlMTdjYmVhNTRlZDkxMmY2YTQwYzYyN2ZkNDE0YjYwN2U4ZDk3YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWUwNTM1YmQxYmVjM2Q4ZDc2YmMzZTQ2NThjOWFjYmI3MzM0OTU3OTdhYjgyZmM4NWZhNGZhNGNiMzJlNDQwYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjdkYWM5YzhkMjJhYTA0ZWNhYWU2M2Q5YTcxZTAyNGU4MjJjNGRmOTRmMTAzOTkxNmZkZWRiZDFiMWFlZTJkYSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L68-L160",
+          "version": "repo-lines-v1:sha256:a836be41d85ec1b58857020f255c620d1fe5dd9d401a50303438d65d6d2685b0:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwN2IxNTY0NGM3MTY5ZjQyMGY5MzUyYjg1MzNlMTNhMDZlZTNiNmRlM2Y1YzdmMzczYzU4NzEwZjczM2VjZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhYWQ1NzBlMTI1YzcxYTQxZWExMWM0NWUyY2Y0NWYzZTNlOTYyOTZmMDc5ZDRiZTEwNmRmZDliMGNkOGFlMTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjVjYzE1MDY0MDIyZTRhNTgzMzZjMjg1Y2JiNjdhZDQ0OGEzMjJjNzVkMzgwNjQ4NjNmN2E2ZGQwZWVhMTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b03f2f52df9d4066870f0a0f381b4f10",
+      "statement": "Outside the worker the ruleset version is a hardcoded literal in two non-matching families: '11.1.0-2026-Q3-MFM' in the changelog route fallback/offline branch and in the web changelog page and ComplianceDashboard, and '11.1.0-2026-Q3' (no -MFM) in the roster create route, the audit route's rulesetVersionCompared, docs/API.md, and every web offline/starter-army fallback in lib/api.ts, app/page.tsx, app/army/[id]/page.tsx, app/army/[id]/edit/page.tsx and CreateArmyModal.tsx.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L95-L101",
+          "version": "repo-lines-v1:sha256:795a414d27c4f58ed194b685b38099ca9536efe7ff1b23e93eb794abdfa18910:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWJlY2Y4ZTQ1OTkzYzcxMDk2NDI4ZjFlZGFjZDZhMjVhYzllNDE1ZGRhYTkxY2Q0NGJmYzU4MGU4ODM4MWE3MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWQ5ZTEyNTQ2NDI1NTc2ZDNkZWFlOGM5YjlkYmYxMjhkNWQ2ZGRhZjVkN2ZlODU3OTM0OTI3ZGVmZmEzYjlkZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzA2M2JmMmU3OWYwMGMwOWJmZTA0YTEzNWRmZGM2Zjg1OTVmNTI4NTYyYjMxYWU0MjNjZmQ3YzE0YjYwOWE1YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWNiMjNhYzIyMjYwODJmNjliYzlhYTg1MGFkOTc3NjQ0MGZkMDQ2OWNhZWYxMTI2YTVkNjgwOGQ3YWNlZWY2YSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L136-L160",
+          "version": "repo-lines-v1:sha256:920f12e24655334024fb8534ee21316c1174f573132658287a595590112c3b3e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3Y2Q0YWYyMjkyMmY0ZmIyOWIzZDAxNjI2YTZjZWI1ZTczMTI5NThjNmU0NzNmOWMzYmUyZDNlYzgxMWVmNjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmYmQ4MGUzYmQzOTZjMmNlNjA3OTg0MDU4ZTMyYWY3NGZhOWMxZmY4MTRjNWYyMTdkMjVhMTU2YmRjZjljYzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NTY3NWM4YmFlOWJhMmYyMDI4MjYwNjNmYjYwYTJiMWYwNDMwMDBjY2JlZDM1NzdmNTIxZTg2NWYzYmY4ZTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1N2VlNTEyMzFiYzg4YTQ3ODhjMTM5OTFlZTgzMzg3NjlhYzBjOTc4MjRjOWY0ZWMxNjE5YmU4ZGMxYTYwODAifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L69-L82",
+          "version": "repo-lines-v1:sha256:b15ab3f5fb6c63ff1692b11ddbb05eeeb770b54e4f757070a688011f4758367a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3NzIwODZlNmE0NWY2MmNmZjc2YjZhM2ZhNTRlOWJkMDhhMjQyZDYwYTVhYjRmZGVlZTg1ZWVlYTk2YjI2MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1NmI0ZDI3YmM4NzZlMTZjNDYwMTcyMDQwMjU3MmI4MjExMGIzMjc5MDRmN2JhNzg0ZTMyYzU1NzdjMDczNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljYzI5MGQ0YjdmMDJlMmFjMGMxMmFkODkzYmU2NjI5NTdhYWM2Y2IwYmQ4NjM2NDVlNDY0YzU1NTk3ZWJlOTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L15-L21",
+          "version": "repo-lines-v1:sha256:11f016e3152f3d819aa085d3da7c7f16a757da36246dfa30dde0ca6894d075b6:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTljMDNjNGM0MjVhM2M2MzUxNGFjMDNkOWVhMWQzMDQ5YTdjNGMzYTgzN2QyOGJkMzE0YmE3YTU0MTM2MWI0NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTE5YWE5ZGY5ZTg5MzFjOTI1MGI0MzRiODUwNTlkODg0YTc3NzUwN2Y0Yzg4MzYyNzcyZGRkZTIzMzJlM2UyZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjgyYTUxZjkxZTYzNTEwMzNlMjFiMTY1YWYzOWU0MzdkZmUxMmI2OGIyYjRmNjNlZGZhZWYxYmI1Yjk3YmQ0OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTk3NTljY2MzNzExZGU1ZWI1NTU2OTEwZGY4M2QzNzA1YTg4NDZmMzA5NjE0YWQxYmU1OWM3MTZhYWQzMGUxYyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L76-L82",
+          "version": "repo-lines-v1:sha256:f8d618f4ce622fce2ecd870674371160ee499fb64339883150bb26777875a057:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjA4ZTkyN2UyOTZiYWY0OWQ1MjdhZGJiODJjOTU2OGUyOGFiY2M5OWIyMDBmMzExMDcxMzg3ZTE3NjQ4NmRjNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzE3YWYxMTAxYzk3YjdjMmY1MjU0MDc4MmU2MzRjYzQ0NDBmMGU5NzAzNDFlNTJmOTc1MjMxMWQ3OGI3ZDdkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODczMDFlMDQ4NmVhYmZhNzQyYmYzODQ2Nzg1YmIxMTBjZTI3NzhkZWE0ZmJkMzFlMGE2YWI1OTk4NGRkYjBjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGIxNjA5MmJmZjE5YTY2ZTU0ZDc2ZjhlZmNhZjM3NWVmZjI1ZDJkOTk1NDg2Y2UzYjQzNDAyMGQ4Y2JjZDhhZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L76-L119",
+          "version": "repo-lines-v1:sha256:dcec272848a42c8226d15123d6e515f4754f70b897b78717b687afcd63a50b61:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMjdjNDIzMGFiYzdiYWViMWM4NzM4NjkwMTViMDE5NDNkMzdjM2U0OGRiMGI1ZTRhNDYwYWIxNmQ4NmExYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhM2M2M2FlYTZlNDUxOGU0NjFhNjRkOTU5Y2Q1YTE0YjI2ZGRhNThmYTIwMjQ4ZjFlYTYzMTNhOTA5ZTJjZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRjMTNiM2IwMDk5Zjk5OTQwOWMyYjkzMzUxNTk3NjQ2NzZhZDk1NzZjNDcwNjQ1OWZkM2VjYzY4OWI3MWM3ZTYifQ"
+        },
+        {
+          "resource": "repo://docs/API.md#L135-L138",
+          "version": "repo-lines-v1:sha256:a32f2fbfb1b615a22ce3e100864642aa0fb35632e7613fb433edc73eddbce099:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk3ZmE0NDhlZWM4NGFiNzQzZWQxMzQ1ZGQ1YTJjMjZkMGRkZWYyOWU0ZTEzMzYwYThjNWExYTNmYWRiODJhYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2Q4ZDdhOTg4MGVjNDMzYjExYWJkMDQ2Y2I2NDQ4YTg0ZDA3ZGNmNjc3ZmZhZjIyYjg2YjRiMTg5NWZhYTAwOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODgwOTE4YWM2NDMwNzA0MDMwMDQzMjc4YWJiMTY3MDAxYzY4MzQzZmM1YTNhZGY3ZjgyYjYxNjk1MjliODRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTdkYmFhOTM1ZTc2NTZmNDgyZjM3NTFlNmJlOTNiOThlY2U2YTlmNjA2ZjhhZTc2MTkyZTIzNTRmNmEzNDgwMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_766a174700bc4d1b8144e93dea1eb9c2",
+      "statement": "No roster row ever receives a worker-generated ruleset id: POST /rosters hardcodes UserArmy.rulesetVersionId to '11.1.0-2026-Q3' (ignoring any client-supplied value) and the audit labels its result with the same frozen string while comparing stored points against live datasheets_11e rows — so a real MFM points change appears as a POINTS_SHIFT discrepancy attributed to the wrong ruleset, and currentRulesetVersion from /changelog can never string-match army.rulesetVersionId.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L51-L101",
+          "version": "repo-lines-v1:sha256:bff3b68e25066bc2021cbb356c948bfc05646b1c94bc782a7f0b73f9b01c179d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyOWQwZWFjYzU4YWJiYjAxNjQyYjkxMDRhOGYzMzE0YzY3OWMzOWY1NTcxYzAwYjAwMDliMTEyZGZjZDkxNjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY5YzBhZDM2NDIxMzU1MTA4MDdjNzU1NmIxM2Y3ZGMzYTk1ZTk3YmYzN2Y3Nzg3NmNhNjVkM2NhNTI4ZmY5MDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljYjIzYWMyMjI2MDgyZjY5YmM5YWE4NTBhZDk3NzY0NDBmZDA0NjljYWVmMTEyNmE1ZDY4MDhkN2FjZWVmNmEifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L69-L82",
+          "version": "repo-lines-v1:sha256:b15ab3f5fb6c63ff1692b11ddbb05eeeb770b54e4f757070a688011f4758367a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3NzIwODZlNmE0NWY2MmNmZjc2YjZhM2ZhNTRlOWJkMDhhMjQyZDYwYTVhYjRmZGVlZTg1ZWVlYTk2YjI2MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1NmI0ZDI3YmM4NzZlMTZjNDYwMTcyMDQwMjU3MmI4MjExMGIzMjc5MDRmN2JhNzg0ZTMyYzU1NzdjMDczNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljYzI5MGQ0YjdmMDJlMmFjMGMxMmFkODkzYmU2NjI5NTdhYWM2Y2IwYmQ4NjM2NDVlNDY0YzU1NTk3ZWJlOTUifQ"
+        },
+        {
+          "resource": "repo://docs/API.md#L135-L138",
+          "version": "repo-lines-v1:sha256:a32f2fbfb1b615a22ce3e100864642aa0fb35632e7613fb433edc73eddbce099:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk3ZmE0NDhlZWM4NGFiNzQzZWQxMzQ1ZGQ1YTJjMjZkMGRkZWYyOWU0ZTEzMzYwYThjNWExYTNmYWRiODJhYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2Q4ZDdhOTg4MGVjNDMzYjExYWJkMDQ2Y2I2NDQ4YTg0ZDA3ZGNmNjc3ZmZhZjIyYjg2YjRiMTg5NWZhYTAwOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODgwOTE4YWM2NDMwNzA0MDMwMDQzMjc4YWJiMTY3MDAxYzY4MzQzZmM1YTNhZGY3ZjgyYjYxNjk1MjliODRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTdkYmFhOTM1ZTc2NTZmNDgyZjM3NTFlNmJlOTNiOThlY2U2YTlmNjA2ZjhhZTc2MTkyZTIzNTRmNmEzNDgwMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1629534731c445f29499d43de1ee50e5",
+      "statement": "BattlefieldRole, WargearRuleType, TargetRole, AbilitySource, BattlePhase and StratagemCategory exist as compile-time string-union type aliases in packages/types/src/index.ts and as runtime Prisma enums in schema.prisma (re-exported as values from @forceorg/db-client and materialised as Postgres CREATE TYPE in the init migration), with a third inline mirror in docs/OPENAPI.yaml — so adding or renaming a label requires a coordinated schema + migration + types + OpenAPI + seed + UI change that no build step enforces.",
+      "evidence": [
+        {
+          "resource": "repo://docs/OPENAPI.yaml#L487-L489",
+          "version": "repo-lines-v1:sha256:bbe35fde6f33a9a43f7880b7b94b7203181072a51d0274f70ae5023bebf65afb:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjg2ODk2YjY2MDU4ZTNjYjliZGUwZTdhNDJhODNiNmQ0OGY5N2VlN2MxMDdkYzc1NjA0MWM0YzgxYTI0ZjAzYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFiNzdlNTQ2ZWFkMWUyMDJkMzUzNmI2YTI5Nzk3MTVmZmQ0ZjBkN2MyYmY3MGExZWI0ZjdjNjEzYWIxZWFkNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTMzNTMwOTE0OTEzMDIwMjU1YjEzM2RlMmJiZjBlMmFjNGRkNTgzN2I3ZTVkNzYzN2EyNmE3NjFhYTNhMTA4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjE0ZjM2Mjk1NWZiYTlhMWJjNWJkNzM2YTBlZWE1Mjg0MjAyMzc2YWUzMjA2ZmJhMjZlYWQ4NWQwODkzZWNmYSJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L2-L17",
+          "version": "repo-lines-v1:sha256:d509074e2daf27fd57eb48876728bb8c60cfe33809c8db010dc02605bc5e3b1b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1N2NiNzkzZWRjODk2ODZhZmJjMmM4ZTcwYjFkNzVhODhhZmY0ZWU2NjQyYmY1ZDg0YmVjMWViMDMzYjg2NjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1MjEyMzdhZmEwNTMzNjBlNDQ5ZDBlNDI1ZjdlMjIxMmM5NzNhYzVhOGI0NjBkNzE2NTQ3MGQzYjU2YzZkODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoxLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5MjdhYTY1NDM3MDJlNWZjNThlMDdjNjM2Mjk0YjMyOGJmMDM3ODAxNjBkZjEwNWM1N2JjYmEzN2ZlY2UzODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlNDZjM2QyMzUxMDg2ZjVjZDE2ZWFiMWY0ODAzMTZlOTU2ZmFiOTMyMjMyZWE5NDIzNzcxNDY1MGE1YzkyNDgifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L20-L68",
+          "version": "repo-lines-v1:sha256:4ee81e33937db0e9d2588029ce92d46fb5668848caa138a17ead89baa5fb9ab9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMjA4YTAwYjU2YzlmODA3ZjI4ZjYxM2FkNmY2ODljMWU0MGZhZWRjNmJjNmY2ZDE5NTVhMGI3MmQ0MTZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3NzdlMWUxNjU3OGE4MTZmY2ExMGM1MWEyZTEzMGJhOTZmMWQ3NDdhOTFhMGExNTUyYThjNjllZmE0ZWY0NWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxMjI1ODE3ZDM5NzU1MGVkMGY1YTJhNTY0YWFlZWJmMGE0MWFhMTA5Yjg2NTU0OGVlYWViMjViMDdjMTE3NGEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L6-L32",
+          "version": "repo-lines-v1:sha256:0ead7786c84ad2cfd99ca77800e979365059674f32755812d253eec4aca694bf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4MjAwOTY0YTk3ODYzNTUyMmIyYWIwOTBjNjUwNjVkOGVmOGU4NWM0NzMwYmIyZWIwNDYwZDM0YzY3N2RkYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjYWYzYzlkNWQ3ZjNjOTNkN2FiZjE5Mjg2ZWViMTRmNGQyYTg2MWZmNzMzZmM1N2U3MjNhYjVhY2QwODI5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjZThkZjFhYmI2NWIyYjllZDdiOWVhZTZlNzJiNzYyZTMwYjFmZThiOGM4NDA1ZTdhOGIwZjVkMjRhOGNlNGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFmZjFhNjg5OWE3NDYzYTE3ZDU1YjcxYzc5MjY5NmZlYTc0ODA3MzY0ZGI1NmM2OTUxODVjY2VhMzc2NDQyZjEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/src/index.ts#L19-L26",
+          "version": "repo-lines-v1:sha256:f67c6f9ed4accf4d1447f4179b8553a00f25b4d8e27b1d5c93cbb6cffa08c937:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE3NDQyOTA5ODcwM2U2MzRjYzY2NGU0OTc1ZDE0YWM0OTEyNzQ5ZTUxNjI0YWIxYTM1M2JlMjQ3M2Y5YzEwYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzUxNzNmMWU0MjNmMTdmZDliMzU1MWRhMmVjZGFiMDk1NGU4N2M5NGNlNDVkN2MzMDk2N2Q1N2Y5YjAwOTMxOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDc1NThhMTc0MzgzZWU5MWVmMTQ2ZmUxZDc3MTFmYmM4OTU3OGU1YmIxZDMxYzQ3MmRmN2ExYTMwOGE5ZDEzMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L6-L27",
+          "version": "repo-lines-v1:sha256:317d3549c28da82bfead1ca817c5e55d830d8c0b05f7a5f6c9c2820e0a4a89f6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMjA4YTAwYjU2YzlmODA3ZjI4ZjYxM2FkNmY2ODljMWU0MGZhZWRjNmJjNmY2ZDE5NTVhMGI3MmQ0MTZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MjgyMTY3OWI0Mjk3OGEyYTNiYTlkMTQ2MmY3MjA3MTMxMDczNDZlYzc5MjAzZmIyYzA4MzU3N2E1Njc5OTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzNTIwZWUzOTIyZGU4MDA4NjdjZGMzYTc2NjE0YzNmODAzY2NjMTZjNTE0NzNhZTFkOWNlNDI0YmU2ZjcxMzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhOWEzZmRjNzJhYTFlNmNmNDBmZWY0ZTEzOWYxYzBiOGUyMTMzNDhlZjA4NWQwMTE5MzU4ODBlNjhkOTVlMDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a36bb2cf763541a1935fa882b33c5a63",
+      "statement": "The duplication extends to model names (Datasheet, UserArmy, Ability, Stratagem, SyncMetadata, UserUnitMedia, LeaderCompatibility) exported with materially different fields by @forceorg/types and the Prisma client — Date vs ISO string, Json vs typed composition/stats — and the API bridges them with `as unknown as` casts, so field drift between the two is invisible to the type checker.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L36-L48",
+          "version": "repo-lines-v1:sha256:b489cb91693e0f56beb297140fbb1fc5214bb07eb9ca491196da5496c32da614:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhMjIyYzA3MzdmMmE2NzQ1NDljYTJhNTE5N2U0ZGFiZjgwZDkyYzMwMWEwZDNlN2Q3YTZmMGVmMDMxZTE1OTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNDFkNzNjNDUyMmJlYTM5ZmY4MTVlMjRiY2YxMzExODUzMWQ2NzFlYjNjZjUzMTIxODg1ZTExYTFjNDcyNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBkZjg3ODExZDc2ZDI2NTIwZmY0NjYzYTA0ZWU3NzVmZTJhNWEwOWQ0OTJhNDQ0N2RhN2ZmNjBlNzMwOGI3MGYifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L118-L144",
+          "version": "repo-lines-v1:sha256:15a471670ce6d40652857f80b3d9733a9e61d53274b246a325f8e10c9ca3d122:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjOGZmMzk1NjFjYzcyZjk1M2NjYjRmNjRmNWFkZmM5ZTlhOTk3ODYzODkwMzM2NjJlNmJlZjdhOGYyZmUzNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0ZWVhYzc0OGQyY2M3ZDU0Njg5Y2M4NGIxMDY5MTY5MzE1M2E4NTg1ODA5YTZkMzIxZTE5ZTZiZDMzNzY4ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUwN2YwZjFjNWIwYzM3OTkwNzk4YWFhNzM4MjVmNTM1MzZlMDI1NTg4MmM3NDM0ODBjYTdkOGYzYmUxM2RkNjYifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/src/index.ts#L1-L18",
+          "version": "repo-lines-v1:sha256:237a9b4f92a1a276877d634986cb4dbf9e3a250b97790724c04e1860b976a7f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5MmVlMTY5NDMxMDMxMjU3NGNlNDhiYmI3OTJjZDc2ZjA0Zjg4NDljODkyYmVkMGY3ZjQxMmIwYzZmMGI2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ3ZGViZGY1Yzc5MGMyNTc1YjM3OWU5Y2ViY2M4NDFkZTljNDRhMjRjMjdmOWFhYzMwNjE2M2UxNWI2OWIxNmUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L189-L203",
+          "version": "repo-lines-v1:sha256:55263650c4d0d5783bde7404e55876cd7828173f9329b49a2257141a4958205c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3NGI1NTdiZjc2NjU2MmM2ODBjODc4YzAxZDUzNTY4MDg4OWM4ZDk5YmRmNDU2NDg1NzEyMTQ0NjUzMWY4YWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRjYzMyZjIyYWIzNDk5OGIxNmMxNDE4MDhmMmFlZTJiMTcyZTgxMWE4M2UwMTM2MDc4NjM1NTQ0ZjM3NTQ5YTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlkMDViZTA3NjYyYTUyZTQ2ZGUwOWZiMGJmN2RjY2M1MjRlNjliNzM2YjRlMDM3OWQyYWQ4ZDliMjA4YmVhYjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_443bfb1f1dbb4b949acc111cb2b6d6cd",
+      "statement": "Enum-valued catalog tables (datasheets_11e, weapons_11e, abilities_11e, stratagems_11e, wargear_rules_11e, leader_compatibility_11e) carry no RLS — public read with writes reserved for the sync-worker service role — while the RLS-isolated tables (user_armies, user_unit_media, user_color_schemes) hold no enum columns, so enum drift can only enter through the worker/seed write path and never through a tenant write.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/rls-policies.sql#L6-L30",
+          "version": "repo-lines-v1:sha256:da31ed271e0f0edf1200d7646e14da60919115d8ac4c53841d0a1b1a4becf308:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2N2Y3ZTI4ZTdmNDYxN2Q4ZGM4NjJjZGEyOTE0YzFjOTA0MmQ3NTU1OGQ0NTMyYjVmYjFkYmM4MjgwMmU2MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0MjE1OGJjOGI1NTIwYjNlY2I3Y2VkN2ZiYzNiZGI2YmQxMzAxMjFiNzA4ZjA3OGI0MzZlMzFhZmI4MTdhMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2MzMzZmYyMTNmYjc4NzA0NzM5NGFmYmIyYTc4NDQ4M2U3YjM5YTVmN2Q0OTM2MGY0YzY3ZTk4ZDJiZjQwZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_762e4ff0f1494cbeb541b8f110311b17",
+      "statement": "UserArmy.rosterPayload is a bare Prisma Json column written verbatim by POST /rosters (defaulting to {units:[],totalPoints:0,detachmentPointsUsed:0}) and PUT /rosters/:id with no runtime validation anywhere in the repo, which makes the RosterPayload/RosterUnitInstance interfaces in @forceorg/types the only schema of record for it; OpenAPI marks only instanceId, datasheetId, datasheetName, modelCount and pointsCost required.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L56-L123",
+          "version": "repo-lines-v1:sha256:a0793cfd4e291c79aabf723a88b461c8497dc580f459b47126ed4d7fb132f794:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwNjQxNGYwZjkxMWM1NzM5NTcxNDc2Y2M2Nzc4ODVlMmZhZDc5YzJlYWRjNzQzOTJkNGEzNWUxYTZiNGEzMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyN2Y3MzliZTIyODBkYWVmZjExZDVjZDZlMjMxYjk4MGQxOTYyYjU3ODgxYmEzNGU3NjljMDU3OWQ2NTc2MjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZlZWMyMjUxM2IwNjRiNzRlNTg0ZWUyMzU1YWIwZWMwYzQzYmI4NmM1OTFkMmFiMmRiNzg2NDcxZWFmMzIzYTcifQ"
+        },
+        {
+          "resource": "repo://docs/OPENAPI.yaml#L589-L606",
+          "version": "repo-lines-v1:sha256:45276f46db2bba72ae5b3f7556551f715d00eeef8a08b99ac8e819aabf9cec41:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxYWNjMTVhMjJjODBmZmYzZTI1NjhiMzU5NGI1ZTkxNmJlNzkwY2MxYmU4NDlkN2Y3NmU1YjkwYzM5OTNjYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkOTAxNzRhOGQ2ZmUwYjA1YmFmZDY3ZTVkYTM2NjgzOTM1NmRkN2RmNGE3MzgyYzc2MDE3MDkwNmY1ZTkzYWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5NzAwNjJkZTYwYTAwZjg5NDRjODYzZDA0OWE2ZjAyM2ZjNzNkYjQwMzE4ZWRiMzA3NmEwNGU0MjAwZDIwYTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzMTExNjJlODBjZjRmNTllMWJiZTdkODgzYmY0YmIyZWI1MTk1Y2ZmYTNiMzg2ZTBiODc2MWZkZGQ4MGY5MmEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L164-L187",
+          "version": "repo-lines-v1:sha256:23cd18d609db33e44d9bc164f8b5a3517dbf906acbc056bc7f7986d3a1849f38:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjNTI4YTk5N2I0YzM5NTU0ZDg4M2NhNjVmZjY0Y2FlOTc3YjZiOWRlOWI2YjM4NjBmOWU0ZTM0MDIxMTdmMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwMzlkYWEwYzc3MDI5OGFjNWFlZDU5ZjQwZDBhYTMyNzU3MWQ2ZWE4NmY0ZjY1OTdiNzFmNWUxNjI3NzEzY2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZlZGFlZTBhNWM1MWE2MWQ5ZTFjNDY5MTliZDBhYmNjNjI0ZmQ3OGRlZjk4Mjg0ZDliOWZiOTE5MDQ1MjUwY2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f569bba57d49485fa401a390c5f90642",
+      "statement": "The audit and rules engine depend on specific RosterUnitInstance fields: audit.ts casts the JSON to RosterPayload and reads units[].datasheetId (datasheet existence and POINTS_SHIFT comparison of pointsCost vs Datasheet.basePoints), while validateRoster consumes totalPoints, detachmentPointsUsed, datasheetId (Rule of Three counting) and attachedLeaderId/instanceId (orphan-attachment detection); a malformed payload throws inside the handler and surfaces as a generic 500 AUDIT_ERROR.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L36-L107",
+          "version": "repo-lines-v1:sha256:39b4a36723d274742d690c7c76905394efb1a0c6a92f9b65bb232a0732ea2e98:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhMjIyYzA3MzdmMmE2NzQ1NDljYTJhNTE5N2U0ZGFiZjgwZDkyYzMwMWEwZDNlN2Q3YTZmMGVmMDMxZTE1OTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNDFkNzNjNDUyMmJlYTM5ZmY4MTVlMjRiY2YxMzExODUzMWQ2NzFlYjNjZjUzMTIxODg1ZTExYTFjNDcyNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NDMwZjg5MGRjZTdkODNiMGQxNTUwYWQ1ZTY5NWY1NjMwZjkzNTViNTJiNTljYjY0MmExYTBjZDIyODA4MjQifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L18-L136",
+          "version": "repo-lines-v1:sha256:d57b1fe938e1cfdab0cc49f828d91587a092da3139a68908baf2a7280b2d25e8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3NWU1ZmNlYmU2ODAwMzgyZmZjNDIzOTAwM2U1OTc4ZmZhMmJlODM2ZWFmY2FiZDMwZDI1ODFhZTk1M2M1MDk2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5ZmVkMWM2MGZhMTNhMTZjOWE5ZGJlNDkyODY1NjViOGFlMDRiYzRkMDhiMTExNGZkNjgzYzRjOTg3NTdlOTRlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_c40ebfa08eff4a4fad02d6f1d947a370",
+      "statement": "Two roster unit encodings coexist in the same JSON column: RosterBuilder persists its local RosterUnit (nested catalogUnit, validationErrors, and wargearSelections using `optionId` where WargearSelection declares `selectedOptionId`) from the edit page's auto-save, while offline/guest mode in lib/api.ts writes the lean typed shape — forcing view mode to define an OfflineRosterUnit normaliser that defaults battlefieldRole to 'INFANTRY' when catalogUnit is absent.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L86-L99",
+          "version": "repo-lines-v1:sha256:d603bdd671aacb3a72769498bea0460d70a84b5233f7697b6c88441abb4775ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZmJkZDBhZjM5ODRhMjQ4NGU2MmZiYWQ0ZmMzMzljNDQ2ZWJmNWRjNTVhM2VhZGNjOGQ3NDEyNjdiYTAxYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyNWE3NjMyNjUyYTIyZTM1Y2M4ZDM2ZmJhZjM1MTU2NjMxZGM2Y2Y3Njg2NGNlNDM2ZThhMTIzMmE3M2IwMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjMTdkMGRjZDVlMGUzZTAyZDhmMjk4NTlmYWEyN2Q4MTAxNjUyNDMyMzFlYjkyZDFjZGNiY2RhZjE2ODQ5ZmYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L196-L230",
+          "version": "repo-lines-v1:sha256:6449041b13809b4ed3de8cac84856b38994b780a0f5e22be15025c350db0d040:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzZWFmNjQ1YTk0YTE1ZDViM2E1NWQyMjk4NzJlNWEwY2IxZmI5ODIzOTBiMmI3YTA2ZTJhMDIyOWJmZWE2N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwNzc3ZGI3YTUyMjdiNzg0ODZmZjJmZTQ4YjliOWI0YjIxMDA2NzdhYzJiMzNjY2E1ZGI2OThiZDFiZDlkZjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5Yjc4YWQyMjExNjkwZTNhNjc4MDM3YjRkYTdjZDZiNDc1ZGViZDljY2YyMWZmNTNjYjM2YTI3NjkxNThjMjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyYjFiMmIzOGE0ZTYyNDRlNjM5YWZlMGI1ZGY3YjUyZTIyNTlkMDIyZmY5ZThlMDE2ODhhNmQzNjBmODdjYzIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L17-L36",
+          "version": "repo-lines-v1:sha256:4d4678fb0bf914d20070219e17b08ec5ee954f1146ea3374af348d851fcda672:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjMmJkZjRhODRmZDEwNzViNDRkYjM5ZmE4ODFmYzVmMTdlNjI0MjY3OTM0YjdkMDVkZTEwZTIwNDk5MDJiZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0OGY1ZjMxMzM1NzMwZmM1YTdjNjgxMTcxYTc2Mjc2Y2I0MjM5MDdjNzZhMzEzMWI0NzEzNjRhMjE0NzJhMWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMyMjM3NjljNjZhYTc3Y2M5YjI2Y2M0NDViMjE3OTYyZjA0YTgxNjdjZDIzN2VjNmQ2NWNjYzU0MDE5ZGJkNWEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L87-L116",
+          "version": "repo-lines-v1:sha256:b65f18e4dcc5cdb975ff6c261661f065e5c9c70996ba05a4b7d6d1a583d3aef3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5MTQwOWUxNjVjOWM4YmUyYWM5ZTJiOTMxMmY5ZjAyYTUyN2JmMTFkYTA0NmU1YzQwMDNjMGU1OGVkMzFkMDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxZjQwZGE1MDdjZTJhYjY2N2IyZjAzZTU5ZTE5NzBkNGUyNDliYmQ2ZTE4NWI0YTQ2NGJmNmU5NTAzOTA4MjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyNWFhZjU5ODFmNzAyNjUzN2I1NDg3NjQzMzllZjMwMTQ2MzBiZTdkMTE3YjVhYWFlYWM0Njc5YmMyZDRiODEifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L177-L181",
+          "version": "repo-lines-v1:sha256:7e17641585441bfba0bb36968a170d647c208b664c76a4fbcdcfcb4901971004:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2Q1NTlkZGU0NjU5ZDdjNTIwNTUxYjc3YzVkZDlhMGM0MWIwNzI3OTZmOWQzOGZiYzhjNDA2N2ZhYjc3NmJkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzRiZjc0MjExNTkyZTZiMWQwODJiZTQ2Y2FiNmYyNGI1MDZhNmYxNzU2NmE0YWQ1MTExNzI2MzFkZjA1MjRhNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmIwZjVkMmE4Yjg5YTUxZDAyYjZlOGEzMzcwMDY4YjNkMWU5YWEyODFkNzI5MDIxZjgxNzhlOWE3YTU4MDI0OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_78a14ea3fcc94672b1721c00b750624e",
+      "statement": "RosterUnitInstance.instanceId is a logical join key only: user_unit_media references it as a plain VarChar(64) with a @@unique([rosterId, unitInstanceId]) constraint and no foreign key, so renaming the field or rewriting payloads silently orphans stored miniature photos.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L277-L295",
+          "version": "repo-lines-v1:sha256:6e80eb74722ca1e59344ee37343b23e011d01ff3f0cdb2e7b5dacd30e4526150:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwN2NjMzI2NWJiODVjODVhZWUwNDkyNWJhOTMzNmExMThlYThiZjIyNGRhZDQzZjViMTNkZWIxNTNiZDVmMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTMzOTc0ZjE2MDQxZWUyMWRlMWJkOWJhNmYwZGZmOWI1ZmNkZGE3ZDQwNmYwYmVmNDVmMzUzNzIyZTU2ZTMifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L166-L175",
+          "version": "repo-lines-v1:sha256:15da5f444b8a77fd6bce43dbb094b22de06f5433a6d850b39570f436092db08c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjMzc0YzE1NjE2YTViMGQzNjI0ZDlmYjk2YTgzMjViNTcxOWQ4ZWViN2E5NzMwZTBmMmQ1Y2FlZDI0Y2Q3NGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5Njc2NjFjZDY1ZTQ4NjdjMzBkYTE1NDY2ZGUyMWQ5ODJiMzNmZjk1YTdiNzdiNGRiMmU4NjA0N2QxZmQ2NGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ1MzQzMjlkMDYwNDcyMWUzZjAzZDA5ZWI3N2I1ZGRhZWZiNzIwOWI5NzA0NmU0MjcwM2RjNjZhYjQ2YzI0MmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_75d152d3a71e40b6a0824bd5146bf9ef",
+      "statement": "The sync contract is weaker than the catalog one: @forceorg/types narrows SyncMetadata.status to SUCCESS|NO_DELTA|ERROR|PENDING while the schema stores an untyped VarChar(30) (the worker writes only SUCCESS, NO_DELTA and ERROR), and SyncDelta is defined but effectively dead — etl-pipeline.ts imports analyzeDiff/formatChangelogSummary without calling them, so GET /changelog reports curated changes rather than analysed deltas.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L38-L145",
+          "version": "repo-lines-v1:sha256:4f988c0a8d87ec6c74a7ede7460827efaa16f5ed9bafb00d3caf7a97d220906d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkNzgyMTAyNDVmOThlZjNjZjA1MjhkZDI1ZjAxNWZkZDlhNDhkMWU1MWZiNjU1ZWIxMWNhYWZlOWJiMGY0ZTAxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiMTk4YjQ4NjQ0ZmRjZWEyYWIwMjJkMGViYmM0ODAzZDYzMDA0NjFiZTk1ZGZmNWM1OWE1Y2NmNzlkNGY0NDIwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5NjYyZTc0NTZkNTliNmEwNjU2MDhhZjY3ZGYxMjU4OThhMGEwZmRkNmQ3MTE4NzljOTE2Y2I5MTEzYzMxOTczIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiM2YzMTQ2MGM0YWRhMTI5ODI2MzhlYmNlODFjMmU3NzEwNTJlZDYxOGMyY2I1NWZhYThjNTMyMjM0ZTA2YWI0In0"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/diff-analyzer.ts#L1-L30",
+          "version": "repo-lines-v1:sha256:094ad2edf42d521dcf436680d9c300e7a683d3805c4fe6a1af9cdb2df7177940:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5NGQzYjQ3ZTkyNTFiZmJhZDExMjNmYTY3MWI3ZjY4ZWM4MmM1YWY0YWQ1MjI1YjFkYmFjZDZjN2FjOWViNDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhiMDFhYWU4MTkzOWE4NGRhMmM5OTlkMmY4ZDZhNDYyOTI0NTU2NWU5NDFmN2I5Y2E0YWVlODhjOTA2NDczMjgifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L88-L160",
+          "version": "repo-lines-v1:sha256:b7c727efa654018639618e078155ce271aaca574c3976a0931c0d33600bf811f:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkNjNjYTlkNTA2M2JkZDVhMGM3NGUyYWM0NjAxMjYzN2I5YWRhMDIxYjU2MjhmMTIyOTFjN2IzZjE3YWVjMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4MmYzODhlOGU1ODU4Yjk1MjRmOTM3ODJhMGFiYTliNmJiY2U1ZmJhNjQxOWQ5MTNhNzNmMmRkZGNlZGMxMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjVjYzE1MDY0MDIyZTRhNTgzMzZjMjg1Y2JiNjdhZDQ0OGEzMjJjNzVkMzgwNjQ4NjNmN2E2ZGQwZWVhMTQifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L299-L313",
+          "version": "repo-lines-v1:sha256:092966743cfd35cab8d73bb61af2479b584173c28d7b894e6bb497ba6bed8996:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlNWY1MGFlNjViZWQ5MDI4MTNiM2M1YWRhMWNmMjQwOTg1ZWY0YTdmYjA4MGZhMjc5ZDNiY2JkZTQ4ZjA5NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzMTMzOTc0ZjE2MDQxZWUyMWRlMWJkOWJhNmYwZGZmOWI1ZmNkZGE3ZDQwNmYwYmVmNDVmMzUzNzIyZTU2ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L279-L303",
+          "version": "repo-lines-v1:sha256:f9db18636263209192bd9683472cc4e5848f73f804fd3acab9bd2fecb767901b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3ZjYzMDI0NmQxYTMzZTkyY2RmODA1OTgxMjAxZWViYmI0OGI0MTE0MTZlZThlMzk5N2M4MDgyMzE4ODdmMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllNWY0YzNlODhiYTQ4NTQ5ZDIxZDNlMGFlYzIzNTU0MTVhMDc3ZDg1ZDcyMTQ5MDljODQ4YzRlNDE1OWE2ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI0NWE0NDU3ZTBiMjc5NmI1YzAxMjNhYmNiOWZhMDlmMzc4MmEwNDVmNmUxZmY3MGY0YzY2ZDFlMGI4ZTI2ZDgifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

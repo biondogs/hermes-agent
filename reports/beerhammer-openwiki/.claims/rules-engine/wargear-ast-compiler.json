@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:587255a0e6ef33cc852f7c75ab4315bb2baaa4ae2e7c78efa0b7820fb0dd1eaf",
+  "claims": [
+    {
+      "id": "claim_fb61df0e01df4539b2fb0d6377caaea3",
+      "statement": "wargear-parser.ts (labelled §7.1) exposes compileWahapediaWargear(rawTextOrHtml: string): WargearRuleAST[] from the package barrel as a pure, line-oriented regex matcher with no database, points-table, or configuration input; its input in production is the joined rawText of a datasheet's wargearRules rows (CatalogUnit.wargearRulesRaw) or hard-coded demo prose.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L24-L38",
+          "version": "repo-lines-v1:sha256:54cad41d7a7bbd3098003d9c02f6aa02fe716fbaa4ca134c8caa73ce9d6f2b55:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzNjAzNTQxZWViODg2MGEzMzY2YjBjOGI0Mzk4MDIwZjczODZjYmM2YWE2NWI4YTM1MzBhMTQ1NzM3ZDIxNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwOTNlMTI5MDZhNjFmZDVjMDg5ZmVlOGZjYWZkOTUyZTU3YTU5MDlhMjQ5ZGQxMjUwOTQ5OGQyNzFhNzFjOTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlNWVhOTE1MmNlNTgzM2I5OWU0ZjkyNTdlOTFlODFiYTViNjI1ZTA3ODM1YjY1OTEzMWY5NjY0ZjYzODgxMGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhODJlZDFlMzgwNGNkNWI1YzViNTFkNGU2NmViNTlkMzk2ODQ3OWQ1NzEyMzIwMDY0ZWY4M2I2YTA3YmQxZWUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L164-L186",
+          "version": "repo-lines-v1:sha256:e8561a6fa011f99772f5ae30398626e0ce45d053b8eb193c3ac954309604e85c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiNzQ0M2RiMTZhNTIyNTdhMzM1YTU4YWI0MzU0NTI1NmQxNjNmZWE2NTU5OWU0Mjc2MzE1ZDZkMjkxNjE1ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2OGE2Yzk4MGNkOWRhNDIyZTYyNmJiNDBjODBhZjA5YmYyMzBjYjc1NzllZWRhYzIwMTE2MDgzZjdlYTRjYmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2ZTA2ZDk4YzI0YmQ4YmVmYTExNDFiYzM0YTkxNzRkMmQ1MWQ3OGEzYzcxZDkxMDExMTAzYjgyOWJmYWI5ZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyZmY1OGJjYzg2MDJjN2Q2MjgyM2NlNWViNzRlZmQ4YjNkMGU5MzJkODIwOTBkNDIxMWNjMGI3YWNhMWYyNWYifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/index.ts#L2-L7",
+          "version": "repo-lines-v1:sha256:7eef030012a581ca1865e777eefc4b74c1b101bd3ce01673338cf0cea1593610:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE3NDQyOTA5ODcwM2U2MzRjYzY2NGU0OTc1ZDE0YWM0OTEyNzQ5ZTUxNjI0YWIxYTM1M2JlMjQ3M2Y5YzEwYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWYxNzkyNzYzNjU1NjEwZGY1ZWUyYjdkMjFkYTBmOWNiYWIxODU5ZjIwNmUyMjhjYTllOWVmNzhkYzE3MDJlZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGFiNjc2NzZhNTRiYWFiMDA3NWU4MzU1MzI0Y2RmZmUzZTU3Mjg2ZjU2NjY1NTg0NjkwZDc0YjkzMzM5MmQzZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzBhMGY3ZTNmNWQ3OTAwNmEwMjgwZWRmNDZjZDU2NzI4MzQ0ODBhNGQyNGYwZGMxMzZjZmExYTk0MTEyYTQ0ZCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L73-L83",
+          "version": "repo-lines-v1:sha256:9d8f05eda6074283b87e32d2ae376e196bbc93d50f108583e5ceb1a9412be53e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyZWQ2MjQzMDBhMTgyM2Y2ODQzNjAyZWQ4MDc2MzU1ZjdiNmM2OTkyMmU2NTBlMDM4NDAxMDcyMjYxNzQxMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlODZiMTdmMDg1YjY4NDMzMjYyZjI4MTgyNDFjNzk2ODcyN2EwNWFhYWQyYjhmZTdjNTNiNzlmNzhiNGI5ZmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyNmJkZmM3OGQ3ZWMyYzhkOWVhMTViNjY0YWI5YjU0OTgxNjQ1MjAxZTQ1M2Q5OGY1MjNmNzU5ZTY0YWRlZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0MGUxYWM0MzQzMWZjMjE5NDhiZjM2NDNiMzM0MzZkZDNkODc4YWM4ODU0ZDJhNGZmZDRkMGFiZDI5NWQzODIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14633215a3114397a977f4a816b2b991",
+      "statement": "Before pattern matching, compileWahapediaWargear converts <br> and </li> to newlines, rewrites <li> to a literal bullet, deletes all remaining tags with <[^>]+>, splits on newlines dropping blanks, and strips a leading bullet from each line; tag stripping is purely textual, so inline markup is concatenated into the surrounding line.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L74-L87",
+          "version": "repo-lines-v1:sha256:13a6ce4b53a206e7da9bca68f2cc4a097ce85cf77475cc2d0145e79319b686a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2YTY1YjZjZGM4YTlkNDEwNTNlMTlmYzhlYjIxYzhmYmNmM2Y0ZWUwYWU3ZGQzMjAxYzM1ZTJlMDNmZTU0NzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmZDRiZDUwN2I4MjE5YzNlMjU0YzNlNmJhMTZiYjIxZmU1MmRkM2M5ZWY2YjBjMmJhODhiNmUxMThjZjc0NzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEyZTA2MTExNzhlNGY2OWNmZGQ2OWEwZGJlZjA5M2MyZDI1OTE2ZjBmMjVkNGFlN2I1OWU4MzA1ZjQxZDcyMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1YTY4MzY0ZDFkZGQyZjg3Y2I1NGEzODIyMjhhYjFhZWQ2YzA0MDJiNzhhYmQ4MzRmYjBkYjUyYmEwY2E2YjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0ba090c4d9a446be858ad432acdd863e",
+      "statement": "Exactly five line patterns are recognised and tried in a fixed first-match-wins order: (1) scale-factor 'for every N models ... can replace X with Y' -> REPLACE/TROOPER with scaleFactor; (2) 'any|all|each model can be equipped|may take|can take' -> ADD_ON/ANY with modelLimit 'ALL'; (3) '^N models can replace ... with' -> REPLACE with modelLimit N; (4) passive '<role> X can be replaced with'; (5) active '<role> can replace ... with', both REPLACE with modelLimit 1 and a keyword-sniffed role.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L89-L207",
+          "version": "repo-lines-v1:sha256:6caec7445687cfb1244ea01f7145b91ddfac4d6ccaeca4ce29fe3c30957a24b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhZjgzYzAyZGMxY2UxMjBmODM2ZDY5MzlmN2NmMDlhMjZhMTkxMTdmOTI2NWQwN2FhNTUxNDAyODNiMWY2OTA1IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzYTNlNDZmOTQyNzZiNmY2ZjRlZDFmMDJhZjc4YmVmNmEyZWUxYzQzOWRkNTU4NGI5NzM5NDgzMTMyMTRkMmI3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5Y2NhZWQwOTMxNTJmYzZmZWU1OTM1NDZjNTk0NmYyMWI4MjY1YmM4ZDg0NDZmNTQ4NTM4ZjA3Mzc2OThlYzZhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0ZDFiMzZhMGJkYjcwOGY3MWU2MDQ5YjI3ODE5NTRlZjYwNzU4Njg1YmE2M2FiMGJjNzdmOTA0MzYwNDhkNGFmIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_b2756fbe86cb4c17b8a494fe30ca495c",
+      "statement": "Every produced AST node stores the untouched original line as rawText (bullet included), keeping a pointer from the compiled rule back to the prose it was inferred from.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L85-L99",
+          "version": "repo-lines-v1:sha256:8143b8d733236d5e1516f3292e88d8fd4b67a697dd0808ebe2181147c8a483e2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ZjA5ZWMxNThiZDMzMDY5YjM5ZWMzMGQyNTM4Mjg1MjBjZDBlZDE2YjBjZjRiNjU5MDA2ZDFjMGIwZjQ2MDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4M2UwZTZiMTY0NjE1MDVhZjYwNDgxNDNlN2ZjMzlmYTcxYmI3MmU2ZjQ5ZDEzNTU2NDA0OGM1N2Y1ZWNhYmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxMGNhOWViMTkwNGFjNjZkYTFkYTZlZmY2OWI2YjQ2MTY5YmIxNjJkOTA0M2RmNzc5NzY5NGY5ZDBlZDZlMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc4NjJjNTVmNTYwY2E4ZTA5ZTNlMzJlOTRjN2NlOWZlMmEyNzMwNzVhNDgwZDA5ZTkzZjdhMGEyMTBhZmQ2OWUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L128-L145",
+          "version": "repo-lines-v1:sha256:520092615c54a6c83ddafed3e7ae1ccc7401222b973842a1311e3ac0d0138aa4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkOTRkNmUzMGZjOWVkOGViYmRlYTc0MzEyM2FlZTE0MzI4MmY0YjNmMzkzZjcyMWJhNDgxZTJhNzc3YzA5NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0ZTM4YmYxMzM3NTNmYjE2NjFlOGNiMGM5MGZhYWM4MmU2MTNmNTg0ZjA3ZGI3ZTFmNWE1NDljNmExZmRiNmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkZmNiNWMzOGM5Y2YwODUyMzNiZmVhY2ZiOTBhNjhmNzE2ZWEyNDM0ODE4NTJjZTJiZjVhZWM5NDg3MDVjZWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_92554d5e80d74ea6b321ecbe09d3eb1f",
+      "statement": "Scale-factor rules set constraint.maxSelections to the string 'floor(unit.modelCount / N)' rather than a number; no consumer anywhere evaluates that expression — RosterBuilder prints any non-number max as an infinity symbol, so it is a display string, not an enforced constraint.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L685-L687",
+          "version": "repo-lines-v1:sha256:664c9f6703e7eae4eb45d32fc22443f3fece02694a36de67f6473658bae751c7:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjljZTk3NDkwN2RkMjE2NjRkYTljNTljNmNlYjllNTk1YjVjOTYxM2E1ZjI0YjNiZjdlNmNlNjJlMWNmOWQyOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjViN2FmODQ3YzNlMjdjNDU5OTY1N2E3OTM4ZjIyNzUzZTEyYzhiMDE3NDIzNWQ5ZDJmZDEyZWU4ODVkNTk1ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDlhNjZjNzRjNzU0ZDIyMWQ4NmNkZmY2ZDg5MDhhZDQzOTMyNGE5NGJlMDcxZTc5ZDg1ZWM5N2RlZWQ5NGFlZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjk5ZmQ1ZGZhODc5M2MwNDNhNjAzY2JhOGU1NjE3YzE1NjJhNGM3ZTAzZjYyNjRjYjkyNTg5YjZmZDcxNzIxYiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L104-L108",
+          "version": "repo-lines-v1:sha256:e358160b7c6bc5a95a6d2f9e92238f973f5874b6dfb0614084f206a323fb4b4a:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWUxZjgxMDNkNDFjNzJiZjUyODgwOTllOWFhMzdiNTBlYWVlYjM1ZTZhODgzMzI4YzkyYmUwYzYwNDUxYjJmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWU2NzNhYmQ0NTdhOTdlZWExN2E2MDA2MmViMGZhZWE2YmRmMDk0ODY4Y2M2YjhmOGMwZWJkYTJmNjFlZDQyZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmEyZThiNzg2MGJhN2U0OTFjNDUwMmMyOTc1Mjk1ZDg2MTUxNzU3OTYxOTJlZTUxMzNhOGE3Nzc5OGNlZWMxNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGRkZmFjMDg1YTAxMWQ4ZTllZDUxMTc0MWVjNTU2YzZhNGVjZDRlZGMzYjRmODUyMjk5YmJhYjA1ZTczNmI4OSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b548faf99303488aa6ae86736a14007d",
+      "statement": "parseOptionList normalises ' or ' and ' and/or ' into commas, splits on commas, drops empty fragments and any fragment starting with '1 of the following', then derives each option via parseCountAndName plus slugify; plain ' and ' is not a separator, so 'X and Y' compound option phrases compile into a single option.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L60-L60",
+          "version": "repo-lines-v1:sha256:4db6461ed51e0d7a8abcf1ce30bc86929d6b2de3453587420ba4f8570d0ca9e4:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGRiNjQ2MWVkNTFlMGQ3YThhYmNmMWNlMzBiYzg2OTI5ZDZiMmRlMzQ1MzU4NzQyMGJhNGY4NTcwZDBjYTllNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGRiNjQ2MWVkNTFlMGQ3YThhYmNmMWNlMzBiYzg2OTI5ZDZiMmRlMzQ1MzU4NzQyMGJhNGY4NTcwZDBjYTllNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTQxYThmZTk1N2NlYzA0MGExMWRmZjJjNzJiNGUzYmQ5MDlmZWIxMjlhMThkODdkOTEyMzIxMzAwOTM0MTg3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTc5YzkxMzcyODQxZTllNDhmY2M2ZWFmMTNkYzc1YWQxYzIxMDUyNjE0ZDY2ZTkxODIyYWUyOTA0YmYzNzBhYiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L35-L52",
+          "version": "repo-lines-v1:sha256:396661283f6e026462fdc48943a5e3a72a14b515d1d12e4332f624a709bacc06:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0NmEzMjBlODZjMThmZTQ4ODZhYmI5MzRiNGJmNjk2OWE3ODZiNTVhOWQwYmFkNjk3MDU1Y2MyMWIzM2U5MDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3NzlkMTE4ZDZlM2NiZjQ1MDUzOTc0OGRlZTdhNDMwN2FjYmU2NDQ2Y2JhMjk3ZjI3NjBmYTVkMGJiYTFiYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNTliYTQ5ZjQzYWU4NjIyNjlkZDNkM2I1NzA0YmY4Njc3YWQzNDc0NzU5YWRhZDNkOWUzNTI3OTNiZjE3MWMifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L30-L40",
+          "version": "repo-lines-v1:sha256:87407bfa83368aa00050e47f0304c8de0624f9dd7e0b0496a428d713efb46d6f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0ZDZmODkzMWIxYjNiNjJhMzYwOWUyNWQ4N2MwZWJjOWE2YTM4MTA4NmZjYjBkNDY4MWZiN2YwZDhmN2U0ODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjZTYwMjBmOGM0NTZhOTRkMzY0MjA2OTZmZmMwOWU0OWZmOGU0OWI4NzAzMjJkMWYwYzc4MDJlNmI4ZmIyNmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwZWY2ODgzN2UzM2M4MDMyYjk3NDZmZGFkNmI5YmY3YzRjMWZiOTc2MmFiOTk1YWM3OTFkYjdlNzJmNWQ3MjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2b2804209b334fbbb1c4a13ec8eb38c9",
+      "statement": "slugify prefixes 'wep_', lowercases, collapses non-alphanumeric runs to underscores and trims edge underscores, and the resulting slug becomes each option's id, so option names differing only in punctuation collide.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L9-L15",
+          "version": "repo-lines-v1:sha256:704a5adc228ac813ce798d32835ccb2be8e186a9e4ad138b0c1e5214564c78bc:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIyNjdiMjMxYjQxYjM4Mzg5NmYzYTYyYTM4YmMxYjA4MjY3NGI4MTRkMjQ1YjE5MTAyOGZkYzVlN2IwOTlmMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjZmNWI0MGIxNTg0NTdkMTc4NjRmMjE3OTA3ODZkZDVhMmVjZGI2NGI2NmE2NTFmNzg4ZDRlMjVjZDMzMDNkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGI4ZjBjODQzMTE3Y2MwM2YyZjI0ZDJlNjM2ZjI2OGQxNGFkMjVlMTc1OGRmMjNjZTA1NzM5MTAzODFkYjczNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmM5OWMxYWIwYTIxZDI0YmYzMmU4OGJiMWE5ZDA3ZDdjODk1ODRmOWU5ZjNhMWFmMTVhMjE0NTViNThhNTAwNSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L11-L13",
+          "version": "repo-lines-v1:sha256:c6ab67a6479e2cf5a38143ba032db24d7965ba065ad350ee7fba3fabfdc90fbe:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTk1YTk0NzBhYzU4OGIyZTU1MDczODU5MmNmZDJhYTJmYmFmZjBjYmEzOGVlODYwZWI1MDU5NWZjNjFkNGUzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQ4MTBlNGYyNDc2NmUyNDg0YmQ3ODc5Y2E0MWQyOTRkZmUxNWQ0NWMzZmMyZDM3OGUyMjQ0NmVkM2M2ZTdiMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjhkOGIyOGQ4YzM5MmM3MWQwNjM1NjNiYWQ3ODc0MjkwMjdiNDAzMGYwMTU1NThmYmQ4ZTRmMDkwY2FlZWMwZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7265134f246400b982ef85a8abaaac8",
+      "statement": "parseCountAndName strips a leading bullet and matches a leading integer plus name, defaulting to count 1 with the whole string as name when no integer is present, and never singularises the name.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L17-L33",
+          "version": "repo-lines-v1:sha256:21c7df0cc4a38f0997c0f0ee2ea873aa92472a0ab3022498624f301d65078c46:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2YzNhNjYxMTVkN2NmZTVhNTg3YzJjNDIzMjkzZTdlMzlmMDUwM2NiYjUxMTdkZWM5MmY1ZGEyOGVmNWZmYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3NzlkMTE4ZDZlM2NiZjQ1MDUzOTc0OGRlZTdhNDMwN2FjYmU2NDQ2Y2JhMjk3ZjI3NjBmYTVkMGJiYTFiYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIzYjhkNTA2MGY0ZTRhOWY2MDJmNTE5Yzg1NmI0ODg2Njc1MzkyZjljM2NiMmQ0Nzg2OWY3NzJkZDk4ZDYzODgifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L18-L25",
+          "version": "repo-lines-v1:sha256:59a3233774cdedf3b4cb73128799387b28c5c832790a8a7cfeeb8ad42a761fc7:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWUwMzY1MDQzMzNlNGY4YjA5ZDFhZTAwMTBlMGNlYTY1MGMyNWQ0OTMwYmRkYzQ3ODFhNzA2NjcxZjJhZDhhNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWUxMWYzMTkxOGE4NDhkYmZiZDdkMGZmY2Q5NDZiMjExNzQ0Y2M5NTkwYzgxODY2MTRjYWI5NjM0N2E1OGZiZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDhjODdjZjlhZDRjOTZkNGUxOGJlMWQ5ODVlOGNhNmNmODUzMGU1NTk3MWUxOGQzNzEyYjEwNmU4MDYxNzI1YSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d983116ded8e4ff1955a91727e61b4f9",
+      "statement": "detectTargetRole resolves the captured subject noun by keyword sniffing (sergeant/champion/leader/captain/aspiring -> SERGEANT, chassis/hull/body -> CHASSIS, otherwise TROOPER) and the unedited capture is kept as scope.rawRoleName; because the subject regex group is lazy, weapon-noun lines such as 'The Heavy Flamer can be replaced with ...' split into role 'Heavy' plus replaces 'Flamer' and are scoped TROOPER.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L87-L87",
+          "version": "repo-lines-v1:sha256:642f0620010ebdfb8df29aa48622c96ec3dfb159d01e74177daa262e37a34173:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjQyZjA2MjAwMTBlYmRmYjhkZjI5YWE0ODYyMmM5NmVjM2RmYjE1OWQwMWU3NDE3N2RhYTI2MmUzN2EzNDE3MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjQyZjA2MjAwMTBlYmRmYjhkZjI5YWE0ODYyMmM5NmVjM2RmYjE1OWQwMWU3NDE3N2RhYTI2MmUzN2EzNDE3MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTk2ODhkYmY0ZDcwN2E2ZjM4ZTg5NmI4ZWQxNmE0YTIzNzMxZDk2MTM3N2JhYzRjNmI0MDBiNDVjNTllNzg1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTk2ZTFhOWNjZWNlOWM0YzM2MWZkMjc3NjQ2M2Y0YmE4ZmFlMjVhOWJkYzNmNTExYjI4ODY4MGIwYTgwNTA2NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L679-L683",
+          "version": "repo-lines-v1:sha256:3bddf2ed5364886d49baa97af3d0b8ffe5b6c5ca724af59d55feca566dece5b4:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODM2NjhjOTI4ZjRlMGQyNGFlMjMxOWVlYmU0ZGQ5NzM0NGY1ZWQzOTA3YzI3YWZlZjdiZDY1NzFhZThjYmZkMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDg4M2U4M2E2MzY3MWUyOGM5NWZmZWZmMDY1MDc4MTczNTUzOTc5MGU1NTgxNTVhOTVkZmJjMmViMDRlNDY1OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTVhYjcwZmU2NmQyNTY1NjdkZWQyZDI2MDIxNmI4ZDMwZWU1NDdiYmQzZWQxODMyMjQ3YTJlMWEwNTI5MGFkMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzNiZTI3ZjA1YjY1MDU0YTUzMGRjNTNlODAxMDVkNTU4OWEwYzY4MmYzMGM5NjI1YTgzNzYxNjAyYjM3NTkyZSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L160-L181",
+          "version": "repo-lines-v1:sha256:dd6edf73c6389f426f010031f739dc1f580596b2a9d971153cbdef071d73c992:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmM2NlMjVlM2Q1Nzg1ODFiOTBjYWRhN2E2NjQ5ZDhkYjJhYTIwNjdkNTk2OGM5NDgwOWIzMzJiMzFjNTBjODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMzNTAyYTMyNzQzOGZmMDM1YmRhYmY0ZGQxMmI2YmMxNDc4YmQ4NjQ0YWZiMGNjYTlkNDcyNTFhNWE0ZjQyMDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5ZDRjODJmOGMzNjEyZGEyMGFiMTA4MmZmZWRlNmQ2NDgyNTY2NTA1ZWM2ZjMzM2I1MzUzZGY2OTVkYjcwZjkifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L45-L49",
+          "version": "repo-lines-v1:sha256:ea5d210641e1687f917cc80f81e6f131010b159327b82acd9d301996b2ae33f3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjJiYzQ4MWE4NTdiMWRlNWYwNGM1YTg2OGFiNDAzMDIxOGQ0NjM5NzgyZGYwNjg0ZWUyOTU1MjVmOGFmM2VjNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjdhM2Q0NDhiNjZkMmZhMzFlZGQxZjFlZTc4M2IwMWM1ZGJhZjY1MWRiNWIwOWE1YTVhNTIxMWEzZjMwYzQ3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjIyZTY5YjY2NmY4NmI1NDBhNWNjYmRiYzQxMjNhY2IyMGFiN2RiY2NjMTU0NzA4ZTY5YTUwNzJhNjc3YjE2MyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2fc602bf073f4f4fa5c70da37bed0b9a",
+      "statement": "inferConsumedSlots classifies options by a ranged keyword list (bolter|cannon|flamer|rifle|pistol|melta|plasma|las) and a melee keyword list (sword|fist|hammer|axe|claw|blade|knife|maul), emitting ['primary_ranged','melee'], ['melee'], or the default ['primary_ranged']; the ConsumedSlot union's secondary_ranged and chassis_addon values can never be produced, and no consumer reads consumedSlots at all.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L54-L61",
+          "version": "repo-lines-v1:sha256:5b701823b5aa39b680d29b8cf40663a320864bbe923c609f7de423eb477ee777:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDhlZWQ5ZWQwYmY4YWQ1NTdkYTEzYTU2YmZjZDc1ZGQ0YWU0ZGRiZmE4MmM5NjZiYzQ5MjRjMjgxMTY1YTc5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTY0OTI2YTg5MWI1ZmIyMGViMjExNWIzN2QxYzdkN2E3ZjliYWMxZDUzNzUyYjkzZDk0MjlkYjc3N2UxNDAxZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODQ4ZDlkMGM0ZDJmZjdkYjcwMDdiYmQ0ZTk3NGU3NjYwYWViNGFiMmNhM2M3ZmM4MWNkMTI3MjNiNDlhM2NlMSJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L119-L119",
+          "version": "repo-lines-v1:sha256:0ccc9b60f5c29847ed11cdfca8a9965c9dd7b1a1e008a2ed9a3746fd472ca4d3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGNjYzliNjBmNWMyOTg0N2VkMTFjZGZjYThhOTk2NWM5ZGQ3YjFhMWUwMDhhMmVkOWEzNzQ2ZmQ0NzJjYTRkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGNjYzliNjBmNWMyOTg0N2VkMTFjZGZjYThhOTk2NWM5ZGQ3YjFhMWUwMDhhMmVkOWEzNzQ2ZmQ0NzJjYTRkMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVhZjdlNWJmNjgzZDEzYzBiM2M0MmVkY2E0NjFhNjNiNWFmNWJjNzlkMjUwMTY4NGIzNDQzYTY0YjBkZTMyMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTYzNWRlODA1M2I2NmI4M2JkMGFhMjFhM2U1MDRjMDUxMmJlNzdjMmNhZGM0NDk0OTUyMTE4ZWQ3ZDdlOWExMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7f2e872663c547b689ae4dc0db798e8f",
+      "statement": "Generated rule ids are rule_gen_<Date.now()>_<lineIndex>, so compilation is deterministic in structure but not in identity: recompiling identical text yields new ids, any wargearSelections entry keyed by ruleId is invalidated by the next recompile, and RosterBuilder works around this by keying rule cards on rule.id + '-' + idx.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L623-L625",
+          "version": "repo-lines-v1:sha256:4da5d67d0d910c615c4ae2c6c44366f0422c38d88567f36d074f4295552e2976:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTRlODhmYjRjZjYxOTAwZmYxYmJhOGU2NGNiYjQxMjFlNjNhYjNkYjllN2FmMGFlMzhiY2U2MjEwNDFjYzYwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOThmNzFkZWEyYjQ5OWY1NTgwNjgwNDVlMzQyNzc2MzIwMjdkODg3NzJjNTgwMjQxMzI1NGRhMjQ2NGFlOTk4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjdkMDBiYjNmZTJiZTkzNWYxMjFmZThlODkwOWQ4Y2JlMDQ4MDQwZDNmZmYxZjMwODY4YTkzZWY5ZTJhYzQxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWE3ODg1YzExZGUwMDM5Yjk5Njg5NWZlMjEzYjNjMjA1OWRhNGJkZmNlMzc2NjllN2FmMWNlZDA3MzA3YjhhNiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L85-L88",
+          "version": "repo-lines-v1:sha256:e5d4b96a9c4b8e74571d0a76b2b2990d11ebc6f48b92f2371f8f8e4476bd1593:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhmMDllYzE1OGJkMzMwNjliMzllYzMwZDI1MzgyODUyMGNkMGVkMTZiMGNmNGI2NTkwMDZkMWMwYjBmNDYwMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjEwY2E5ZWIxOTA0YWM2NmRhMWRhNmVmZjY5YjZiNDYxNjliYjE2MmQ5MDQzZGY3Nzk3Njk0ZjlkMGVkNmUyNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjgzNGM2Yjk4MjI2MTRiMjA0NzgxN2YzZGU1YjAwMGUwNmQ5ZWEyYTgxMTBjNmYyMzE1NDRkOGY4N2FlNDExMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_33fdb1704045453ba44ab23d2e5246e7",
+      "statement": "parseOptionList always sets pointsDelta to 0, so option pricing is never derived from prose; the '+Npts' badge in WargearRuleCard is unreachable and RosterUnit.pointsCost stays pinned to catalogUnit.basePoints regardless of the wargear chosen.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L246-L253",
+          "version": "repo-lines-v1:sha256:f331bd537a177c51c7b4dcb7deda571adee03603f3a626f911f6e1565b4a557e:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmQyZjRlOThiZTY0NzQxYjNmMGM5MWU3ZDIzYTZhYjkwZDg0ODRjN2ZlMTdmZjM0N2YxZWI1MmMxYjJhNzkxNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWE5YWI2YzZkYzUzZDgyMDIxNWIwNjVjNTE5MzdjNzk5ZmI2YzJmMmUyZDQzZGViMzE0MTU3YjFhMTljODE3MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzE3NjNmMDFjODcyY2IzYWNhMzVkNzJkOWQ1OGI0YjExMGNmYjczOTViZmZmMGY4NzY0OWZiNGRlMDY5NDgxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODVjOWYzZWJlZjg4ZmZjMTFiZTY1OTI1NTZmYTUzYjVlYjlkMDhkNzc5OTlmYzZkNDU5NmEzMDljZTQ4MGFmOSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L716-L720",
+          "version": "repo-lines-v1:sha256:333283512f75dd4d4227f5fcad32829325de959b07941b358a8489f1867da8e5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzYxMTAyYWEzZGU2MjcyMWZiNjE3YjY5OWNjMTg1NzFkZjI3M2MyYjQzYWE4ZDUwZjM4YjEwODBmODM0ZGQxZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQ0NGEzMWQ4ZWM3ZTg4Zjg1NTcxNTI2YmYyN2M5NTg4MjBkZmZkMjlmNjg1MjFkMGMwNWI3NzA1YTFmMThiNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTVlMTU5ZjBkM2Q5ZmYyODNkMzE1NzkyMGU4ZGIwMDA3YTdjODM0YjhiZDgzOTlkMjg4NmI1ZThiNDA5ZTZiOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDFhOWU2ZDZiODY5YThlOWU5NGQ5OTZkYWE0OWQ2ZmE5NmNlOWU0OTc0NDNjMjQxMTE1Nzc2ODdiNDZmNzNlYiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L36-L39",
+          "version": "repo-lines-v1:sha256:9646b95d81fbcf3a3235ae1d199e2994a3db7259732e253a8db03f6da907b182:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWVlOTJlMmVmNzkyNjk3OWViMmM4MjUxNTdmMjI2MWVjOGE5NjI2MDY4YmYwZjI4ZDZmODEyZWFhNDFjODYzOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjJkMTFjYWY0M2U5N2VmMzY5ZTZiZWVkMWEyNjhiZDA1ODM4ZjI5YjlkZDI1NGJmNjliYTY0ODg0MTQ3MjM0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWE1ZWVlMTE3YmUxNjRlZjI1YjNhODNmZjFkZDAwMGViYjNmNDU4NGZmYThiZmJkNjBjNjFkMTAzYmZiMmMwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzc5MjllOTFlMGY5OWMzZTgyNWRlNjliNDM1ZmI2NDg0ZDFiMGExZGYyZjQ2NTYxYWJmMWEyOWYwNDE4OGI4OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8cae2c3ec6334ad0b1513ebeb61364a9",
+      "statement": "Lines matching none of the five patterns are dropped with no error, warning, log, or fallback node type, and wholly unrecognised input compiles to an empty array — the builder UI therefore cannot distinguish a unit with no configurable wargear from one whose prose failed to parse.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L617-L620",
+          "version": "repo-lines-v1:sha256:bec0ec00264c5d9e66c5e7923611a7f59feb7311bd173ffb5e887e852247042d:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWUxMDRhZTgzMWRjYTMwNGMzMjIyZWM3NjI0ZDc2N2U0N2VjNmVlYTUyNTEwYWQ4NDM5Y2NiODJkMDI1MDgxNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjhmYjI5ODZkMjMwNDU0NDI4Y2FiOGNiZjVjYTljYjEwOGUwODVmZjIyZjQzMDIwZmZmNzFlM2I0M2ZmOTA2MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmYxODBjZmQ2NzU1OWIyNDZmYjk3NjU1YTNlZDBhMjI5NmJmZjc2M2YxYzI3Njc0YjdlOWVjZmE3NWQ3N2Y3MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JmYjgxYTFkOGJlODVmMzg1OGRkOGUxYzhlNDE2NjMzYjA1OTYzMTk4NWYzYzZlYzFiYWNmNTlkMGY3MDI3ZiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L108-L111",
+          "version": "repo-lines-v1:sha256:f155c7e995a09595cd08222814fe94a7bd65e5e6e0c6225d19f78c72e25aab08:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTI5NTIwYTgxMzhhNmI1YTA1Y2U1ZWE3OGRhOTc3ZWU4ODQwMjdjZWE2MmNhNzBhYmIyMDlmOTk4NjBmYTZhOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2EzZTQ2Zjk0Mjc2YjZmNmY0ZWQxZjAyYWY3OGJlZjZhMmVlMWM0MzlkZDU1ODRiOTczOTQ4MzEzMjE0ZDJiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTk5YjI0NTBlNjA1ODY1YzlkODU0Y2NkMTkwYzhjNDBjNDRhMDBhYTFjMjUwZTlkODQ5ODEzYWZhZGY1Yjg2OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjZmNWI0MGIxNTg0NTdkMTc4NjRmMjE3OTA3ODZkZDVhMmVjZGI2NGI2NmE2NTFmNzg4ZDRlMjVjZDMzMDNkMiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L85-L209",
+          "version": "repo-lines-v1:sha256:d2379c8a2f991dc6490b044c9debdba2e7035755942c016a8b96c9101e9df242:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwOGYwOWVjMTU4YmQzMzA2OWIzOWVjMzBkMjUzODI4NTIwY2QwZWQxNmIwY2Y0YjY1OTAwNmQxYzBiMGY0NjAyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzZWM5NjhkMGFlMDFkNjFhZTEyY2RhMTRlODRhNzljOGE1Nzc4NGI2NThjMmNjNmMxZDhhNzZkYmM3OTU5ZWVkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIyMTBjYTllYjE5MDRhYzY2ZGExZGE2ZWZmNjliNmI0NjE2OWJiMTYyZDkwNDNkZjc3OTc2OTRmOWQwZWQ2ZTI3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_ee8c04e6fdb44b959e80deb2c8db75ee",
+      "statement": "The repository's own wargear prose already exercises the pattern set's limits: 'For every 5 models, 1 model can replace with ...' and 'Can be equipped with ...' compile to nothing; 'All models can replace 2 Assault Bolters with 2 Plasma Exterminators' loses its quantity and is scoped TROOPER with maxSelections 1; and 'Any model can be equipped with 1 Multi-melta instead of 1 Melta Rifle' produces an ADD_ON whose option name swallows 'instead of 1 Melta Rifle' with replaces left undefined.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L39-L39",
+          "version": "repo-lines-v1:sha256:6b2af4055467493c61c1af0ac120f3d93b3ff6b766f731bb92ef28b88cade484:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmIyYWY0MDU1NDY3NDkzYzYxYzFhZjBhYzEyMGYzZDkzYjNmZjZiNzY2ZjczMWJiOTJlZjI4Yjg4Y2FkZTQ4NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmIyYWY0MDU1NDY3NDkzYzYxYzFhZjBhYzEyMGYzZDkzYjNmZjZiNzY2ZjczMWJiOTJlZjI4Yjg4Y2FkZTQ4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTYxZjExNTFiZjU5ZGU4OTMxZDU3ZmI5NTkwNzViYmJmMWU1NjQ0NjE5MzJkMGQ3NjU2MTM5MTY1MTc0YjVjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTE4NGZhNDg1MWE3OWVkN2IyYzgyMjQwZjQ3Zjk2ZDgzMTE5M2U5MmRiMzk0ODQzOTgxYzI4NTVmNmM3NGZkZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L99-L111",
+          "version": "repo-lines-v1:sha256:ff985133603f0fd13f7226f8386a8fa5087447c10a2d5878930879372158e1e7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjYmMxZGM4ZGVkNjIyMGFmMGZkNWQzOTg2YTE2NGI3MDk2MGMxNTVlYWEyYTI5NTdjMzI4NmQ2MWEyNzg4NGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4MmQxMWMzOTVkYjVlZDZhZjM2MjI1NjFiY2I1ZDBjNTkxM2RhYWY3NjJlYzczZjI0ZTg3OGRmZTViOGRmMDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQwMWFkOTM5MTljMjFiOGJhMGUwMTViOGJiYThhYzZmZDQ1MGZlMWJmOGZkMDJhNjNiZTI5ZGYyNWE2NDUzODUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MGZiNTE5OGIxNzQ2NjI1Y2IwZmViNzdhYTU4NjAzNTFiNDJkMjMzZmQxNmViYmNiOGU1YzBlMDhhYWRiNjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L104-L104",
+          "version": "repo-lines-v1:sha256:ed645ced8ab9d40cd8890f0efe0f4e057ea06df3b1da2d60374d027bd6251bd9:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQ2NDVjZWQ4YWI5ZDQwY2Q4ODkwZjBlZmUwZjRlMDU3ZWEwNmRmM2IxZGEyZDYwMzc0ZDAyN2JkNjI1MWJkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQ2NDVjZWQ4YWI5ZDQwY2Q4ODkwZjBlZmUwZjRlMDU3ZWEwNmRmM2IxZGEyZDYwMzc0ZDAyN2JkNjI1MWJkOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWViMjU4MjRmZWU1Nzg0OTY5MWNmMjgwMTFhNjU2NDYyMzgyNzBkZjU2NTE3YWM3OTlkNDE1ZjZkOTEyM2ZhYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTRhMGIxMWIzYzY0MmQ3N2IyMGEzOGRhOWQ4ZmVlZjdkZTM4NTc3M2FlYTQxNzQyM2M4MDA1MjE2MWZlODI5ZSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L91-L132",
+          "version": "repo-lines-v1:sha256:add23578b8fdf9f1fad78064cea2fb1c11fb10eec0261ac9b49ac8a9064f631d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5YzNmM2E0ZTI0NjM1YWRkMDEyZDA2NjdkOTkyNzI1MjBlMjIxYjBjOTllYmE0NTI5YThkZTA4YTJmYWYzOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1YTY4MzY0ZDFkZGQyZjg3Y2I1NGEzODIyMjhhYjFhZWQ2YzA0MDJiNzhhYmQ4MzRmYjBkYjUyYmEwY2E2YjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhZGRlZGVlMTc0YjkwNjY1ZGYzNmUyNzU0OTYyZjk3MGIwZmNhNjdjNzhlMGFkZjE5MTg2NjM3MDg5MjdlOWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5f992c0263df481eb1dfa4f0ffb516d9",
+      "statement": "compileWahapediaWargear has exactly one production caller, RosterBuilder, which recompiles inside a useMemo keyed on the expanded unit instance and renders one WargearRuleCard per node; the AST is render-only state that never leaves the browser.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L272-L278",
+          "version": "repo-lines-v1:sha256:aa65a8a3d59a5ff9c07c78f067e1738b5908f9e4757d90184949792052563c0d:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDAwMWMyNTAyNWFjZGI4YzQ0YjdjNDQxOWJiOWJmOWEzODZjMWIwMWMxZTdlYmU0YjE0NWZhZTIxNTJhOTNhMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWMwNTk4YzZjMzJiNTlhNzkyYmIxMzI5YmU2OGE5MmEyMjk1Njc4NjZhMGE4MjQyYmMxYjhiM2I2NmE1NWFhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTk5MTI0NTBhMjgzZjMzZmRjMGRmNTgwNjIzNDJhZWM3ZGIyNWU0ZWYzMzI3N2U3MDhjOWFhNzMyMzE2MDQ5NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTIzMDdjODUwYmVjYjE0OTk1ZjY2YmU5ZWM4ZTFlMGI3OTg3Mzk3YTI4OTA5YjRlMGJjZTI5ZmY0OGJiNTEzNSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L621-L627",
+          "version": "repo-lines-v1:sha256:e12ec6bebc4a49d4acfecb5b8aac7531bf031d70f488f0c39caf15d52233128d:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmY2ZGI0ZjgwMWNlZjc0N2I4YTc4NzRlMDNjZmJiZjI5MzVhZmNjNmE0N2JmNjllZWQ1ODAyNTM1Y2Y3OTUzOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMwYTc5MDJlNGFkZTlkOTc0M2NlOTk1NDhhZTc3ODRhZDQwMGU5NTYyZTYzNTdkMDg5OGZkYzgzMDI3M2NlMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQ1N2NhNGZiOGU0MDI1ZDc3MjgyYTNlODUzOTA0ZmJhYzE3Y2YwYzJhMTVmODU0ZDVjZDQxMjViMTQ5NDIzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2E0ZjNmNTA2M2Y2YTJiMjRjNWE0ZTA2YTA4NjExNmRkODJmMWQ5ZWNhZTVhM2E4ZGQzZmIzYjhmYzc4MTJjNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_fdd16184747643f7bf2b4a5993a3cc6c",
+      "statement": "Wargear selection is client-local: WargearRuleCard stores the chosen option in its own useState and never writes back, RosterUnit.wargearSelections is initialised to [] and mutated nowhere, and the API never reads wargearSelections, so AST constraints (maxSelections, consumedSlots, isMutuallyExclusive) are displayed but never enforced anywhere.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L246-L260",
+          "version": "repo-lines-v1:sha256:c5b81fe5d1e2d927b69168bb82b38e73c83e5098b0c8aebdc83a9f5cc1dde7d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkMmY0ZTk4YmU2NDc0MWIzZjBjOTFlN2QyM2E2YWI5MGQ4NDg0YzdmZTE3ZmYzNDdmMWViNTJjMWIyYTc5MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmM2NkZWRmZWFkNjMyNTUzNzQ3MjA0NmFjMDdlYzVkMzI4ZGI5MGY5NjAzNzNjMjM5YjM2OTA1OTdiMzI4ZGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxNzYzZjAxYzg3MmNiM2FjYTM1ZDcyZDlkNThiNGIxMTBjZmI3Mzk1YmZmZjBmODc2NDlmYjRkZTA2OTQ4MTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5YzE3ZDQ4NTFkZDc1NGYwZjQ5NjUwMTJkMjA4MjlkZGU2YmMyZWQwNGYwNTQ5YTFhNWJlYTllOGJjMGE0OTIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L29-L36",
+          "version": "repo-lines-v1:sha256:4084a7cc5313e62ce64539d98cc4a722646ba6314aee0335ad3e8e2045ab2983:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjBkZDBmNjY2NDc2NDZlYmQzMDkwOGEzMGJhOGVhNmJhYzQ5NzI4MTNiNmE4YmZiMmYxYWYwNDg4MjBmNzg5MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWFlZTFiNDQ1YjAxMTc4YWZmYTkxMjFiMzIzY2RlNjRiNDM0OGQxMDI0NDVhYTIyNTcyYzVhOWMxZTcyMmRmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzIyMzc2OWM2NmFhNzdjYzliMjZjYzQ0NWIyMTc5NjJmMDRhODE2N2NkMjM3ZWM2ZDY1Y2NjNTQwMTlkYmQ1YSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L657-L726",
+          "version": "repo-lines-v1:sha256:031a7e1a5860cb1e5fbb4c8ba97a749ee067a3769b69fa6246e66b1096f569b5:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5Zjc1OTZiMjA5NjcxMWEzNGI0MjkxOTdkNWJjMDQ4NmU3ZTI5MGZmY2ZlOTZkOTEyNDQyMmVmYTFiNTI3OTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2ZmMyZDVmYmZjMzI4Y2M1Nzk5ZmI5ZDk2YjAxYjk0N2I1ZTdhODIwM2NiNzc5MWFmODRlMTJkNzZhY2IxMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1de44ffd4969421f82c4ae748cbd7717",
+      "statement": "The two wargear-selection shapes in the codebase disagree: @forceorg/types declares WargearSelection { ruleId, selectedOptionId, count } while RosterBuilder's local RosterUnit uses { ruleId, optionId, count }, so wiring selections to persistence requires choosing one rather than casting.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L33-L33",
+          "version": "repo-lines-v1:sha256:da4cfa9c511b5c40295bd41ccafb94c5146cf09dd7a6e7d050da4b50a1787272:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGE0Y2ZhOWM1MTFiNWM0MDI5NWJkNDFjY2FmYjk0YzUxNDZjZjA5ZGQ3YTZlN2QwNTBkYTRiNTBhMTc4NzI3MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGE0Y2ZhOWM1MTFiNWM0MDI5NWJkNDFjY2FmYjk0YzUxNDZjZjA5ZGQ3YTZlN2QwNTBkYTRiNTBhMTc4NzI3MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjNlZDQ4ZjAyNTVhYjM5MjllYjhkYzA2ZTVmNDdmYmMwYWFkMTMwNzlhNTQ2ZGY1MDRlYzNhNzllYTJlMGFhNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjRlYTc2NDA5OGJkNDdhOTdhY2M0MGViNjg0YzI2MjAwNDUyYzRjZWE2MjFiOTg4YTZkNzE1YWI1NmYyNGFiMCJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L177-L181",
+          "version": "repo-lines-v1:sha256:7e17641585441bfba0bb36968a170d647c208b664c76a4fbcdcfcb4901971004:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2Q1NTlkZGU0NjU5ZDdjNTIwNTUxYjc3YzVkZDlhMGM0MWIwNzI3OTZmOWQzOGZiYzhjNDA2N2ZhYjc3NmJkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzRiZjc0MjExNTkyZTZiMWQwODJiZTQ2Y2FiNmYyNGI1MDZhNmYxNzU2NmE0YWQ1MTExNzI2MzFkZjA1MjRhNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmIwZjVkMmE4Yjg5YTUxZDAyYjZlOGEzMzcwMDY4YjNkMWU5YWEyODFkNzI5MDIxZjgxNzhlOWE3YTU4MDI0OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_271dcee512fa4a56a73ea33f193da245",
+      "statement": "WargearRule.conditionTree Json (wargear_rules_11e.condition_tree) is nominally the AST storage column but no application code reads or writes it — it only travels out as part of the row serialised by include: { wargearRules: true } — so the live design is 'store prose in raw_text, recompile the AST at read time' and the column can drift from the compiled AST with no test failing.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L24-L38",
+          "version": "repo-lines-v1:sha256:54cad41d7a7bbd3098003d9c02f6aa02fe716fbaa4ca134c8caa73ce9d6f2b55:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzNjAzNTQxZWViODg2MGEzMzY2YjBjOGI0Mzk4MDIwZjczODZjYmM2YWE2NWI4YTM1MzBhMTQ1NzM3ZDIxNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwOTNlMTI5MDZhNjFmZDVjMDg5ZmVlOGZjYWZkOTUyZTU3YTU5MDlhMjQ5ZGQxMjUwOTQ5OGQyNzFhNzFjOTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlNWVhOTE1MmNlNTgzM2I5OWU0ZjkyNTdlOTFlODFiYTViNjI1ZTA3ODM1YjY1OTEzMWY5NjY0ZjYzODgxMGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhODJlZDFlMzgwNGNkNWI1YzViNTFkNGU2NmViNTlkMzk2ODQ3OWQ1NzEyMzIwMDY0ZWY4M2I2YTA3YmQxZWUifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L164-L177",
+          "version": "repo-lines-v1:sha256:81b15b67474233d63d9f21647db1ea6530fbcce7f82a402ddaa5e8425ed1bbbd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljYjFiMzk4MDhiNDQwYzI1NTk1ZWZmNTVlODk3NzA3MTU1YmE4OWQ0NTg4ODI0MTVlZDBhYjQzYzcxOGE3OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiNmNiYmIzMDU0ODcwMjlmNmNiNmQ2Y2Y3ODM4NmRhOWQ5ZDIzZDY5ZTE3YWJlYjkwNzBlMTllZTIxNTU4YTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzZjllZDhkNGI4ODUzMGI0MDljOTU5ZjQ1YjlkYWZhNGE4Mjk2N2JlNjA1MzA4YzkwOTRhOTc4NTJmNjRmMzQifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L73-L83",
+          "version": "repo-lines-v1:sha256:9d8f05eda6074283b87e32d2ae376e196bbc93d50f108583e5ceb1a9412be53e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyZWQ2MjQzMDBhMTgyM2Y2ODQzNjAyZWQ4MDc2MzU1ZjdiNmM2OTkyMmU2NTBlMDM4NDAxMDcyMjYxNzQxMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlODZiMTdmMDg1YjY4NDMzMjYyZjI4MTgyNDFjNzk2ODcyN2EwNWFhYWQyYjhmZTdjNTNiNzlmNzhiNGI5ZmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyNmJkZmM3OGQ3ZWMyYzhkOWVhMTViNjY0YWI5YjU0OTgxNjQ1MjAxZTQ1M2Q5OGY1MjNmNzU5ZTY0YWRlZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0MGUxYWM0MzQzMWZjMjE5NDhiZjM2NDNiMzM0MzZkZDNkODc4YWM4ODU0ZDJhNGZmZDRkMGFiZDI5NWQzODIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5b0a15f7247e4cf1a6661e891e3511d7",
+      "statement": "prisma/seed.ts creates no wargear_rules_11e rows, so against a freshly seeded database GET /api/datasheets returns wargearRules: [] and RosterBuilder falls back to its hard-coded demo wargearRulesRaw, leaving the live wargear-compilation path unexercised.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L186-L201",
+          "version": "repo-lines-v1:sha256:c4ada5d2764f6663b8a9bb659859ff62f99437c29b44cb3d0a8f7743fcbb14d0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2OGE2Yzk4MGNkOWRhNDIyZTYyNmJiNDBjODBhZjA5YmYyMzBjYjc1NzllZWRhYzIwMTE2MDgzZjdlYTRjYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3ZDdhZTg2NmFhNTQxMTJmNjc4MTNlM2E5YTY3NmFiYjE5MjA1MTg2NDRlOTE1MTVmODdmZjVjYzliZGJiMTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4YWZhYjE1NzkyMTdmMWU5Y2VhNDUyODNhNWI4OThiM2VjOTMyYmVmZjQ0YWJmZDFkYTAwZDI4MmMxNDcxYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0NTRkYWNlMjU2MjgwYThmNTFkMzgyZWNjY2E2YTJjNzEyZGZiYzExOTAzNzliYzAxODdlMzJlNDM2NDYxNjkifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L1-L40",
+          "version": "repo-lines-v1:sha256:1defe235099ed8b0dee739f4cb21b205cb805f58efef63cd52b0e7b30a99d97f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNjU3YzVlN2I4MTJmZjM3Njk3OTU2MGQ0ZDhjNDRkODIyNjYyODA0MTJkYmE4NzU0Njk3ZjU1ZDcxZDVjYzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlMzBmOGE0OWQ0NzI5NmU4Y2I3NDE4Y2M0ZTkwM2IxNTY3ZTk0NTkwZDdjYjA5ODA1ODk1OTdkYTYxNDlhODIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8237f4a051d14c4c9911c31a1fcdb309",
+      "statement": "The 14 wargear-parser vitest cases pin slug shape, count/name defaults and bullet stripping, comma/or option splitting with '1 of the following' filtering, all five prose patterns, multi-<li> HTML input, and the empty-array case for unrecognised text, but assert nothing about consumedSlots inference, pointsDelta, rule_gen id instability, or the mis-parsed corpus lines.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L9-L111",
+          "version": "repo-lines-v1:sha256:f37add75945735c9959975a2a1cdcf878a8315661fdb45663aa9a78deb31470c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxYjI2N2IyMzFiNDFiMzgzODk2ZjNhNjJhMzhiYzFiMDgyNjc0YjgxNGQyNDViMTkxMDI4ZmRjNWU3YjA5OWYyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzYTNlNDZmOTQyNzZiNmY2ZjRlZDFmMDJhZjc4YmVmNmEyZWUxYzQzOWRkNTU4NGI5NzM5NDgzMTMyMTRkMmI3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkYjhmMGM4NDMxMTdjYzAzZjJmMjRkMmU2MzZmMjY4ZDE0YWQyNWUxNzU4ZGYyM2NlMDU3MzkxMDM4MWRiNzM1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIn0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

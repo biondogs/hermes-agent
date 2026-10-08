@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ac520f6b75d87fe32eb17223b87781f70c04e7251dc98958dd819deb45dfef14",
+  "claims": [
+    {
+      "id": "claim_44f0930a71f24592b8c4910ebad58561",
+      "statement": "@forceorg/rules-engine-11e exposes its whole surface through a pure re-export barrel (src/index.ts) with no factory, configuration object, or initialisation: four modules (wargear-parser, attachment-resolver, stratagem-filter, detachment-validator) plus the ValidationError type, so a consumer can only ever use one of the named exported functions.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L5-L6",
+          "version": "repo-lines-v1:sha256:c65ce37890176872f502bc6cc275ba5073b26179a2abfbd07920823931c689c9:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWZkMDQzZGRlN2UyMWIyNDE1YTFiMDc0YjFkNDUzMTQwMWI2ODJlNDdkNDI1NjAzMzI2ZTNhNzJjZTEzOWI0YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjZjc0MDgxOGNmMzRmMzYwNjI1YTI1NDE5Njg2MzlhYjNhZGJjZTdjMmQyMzZjNDZmNDJhMWJjNjI0Y2M1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjViMzA3MDhmYzEwZWQ3M2NmNDk2NGE1NThjYWVlZDgyMDRiYzEyMmE5MWViNTRkMDRhNjEyZGM2MzMzZTMzZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDlhYzBiMGZhODBhODhhYjJmMGFhM2FiNjU1YWZjMzgyNWJmZGQ2YjNhY2QzODk2MzY5NmFkOTZkODRmNTU4MCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/index.ts#L1-L36",
+          "version": "repo-lines-v1:sha256:84a55fde3383fcd508155fd11967085e5c6e734a5d04ffec37eb7a2f7c152f31:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhYjY3Njc2YTU0YmFhYjAwNzVlODM1NTMyNGNkZmZlM2U1NzI4NmY1NjY2NTU4NDY5MGQ3NGI5MzMzOTJkM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0ODUwZTdiNDM2NmRmZTRjMDY3Y2UzMDRmZTFlYjg5NmEzYTE2MzFlN2UzNGJlOTJhNTRlYTI0MzU0OTdkODkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_96caaac6d155425493d4ef00015979c7",
+      "statement": "packages/rules-engine-11e is the repository's only pure business-logic package: @forceorg/types is its sole runtime dependency and its src tree contains no Prisma, HTTP, or React access, which is why it is simultaneously the highest-leverage and the weakest-protected place to put 11th Edition rules.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/package.json#L12-L16",
+          "version": "repo-lines-v1:sha256:211820c83b8b546e7e4290e3ca4207bd44c8f83b48abed1e97046581e6b95d32:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzYjQ2OWQ5ZTA5NzU3MjI0NjY2NzM0YzllZjdiMjU0ZDg4NTM0ZjVkNWJiNzA5ODk2MDgwNWM1NTNkYzMwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjRjMGZhOGM3MTRiNmVmZTdjNDY1ZmE2NTAxMjkzNGEwNTA4OGI3ZDEzMTQ3ZWFiMTk4YTg0NmUxYWJhNDVmNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTQxYjNmOTU3YWE0ZTYyYzdmYmU0ZDhjZGVlYWNiZTY3NGQ5NWE4MzdlZmFkMjY3YmIyOGZjZThiM2YwN2RiZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmJlMTY2ODhmYzBkNWEwNDI2YWVhMzk0YmEwNWZjYWZmYTQ2ZTI5MzQ3N2FiYmZmN2VlNjJmY2ZjNDE0MjcyMiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L14-L21",
+          "version": "repo-lines-v1:sha256:dbb5a29f2835830d98b3643e42d80089c5cc6c998601c1ff3ee23270355dc773:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzYjQ2OWQ5ZTA5NzU3MjI0NjY2NzM0YzllZjdiMjU0ZDg4NTM0ZjVkNWJiNzA5ODk2MDgwNWM1NTNkYzMwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQ5OWZjNzcwNmQ1MGJmZGNjYTdjZTZhNGIxY2RlZTEyMjk3OTA4YjE4MDEwMzYyZDJkZmUwYTE3ZjY2MjMyMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L6-L6",
+          "version": "repo-lines-v1:sha256:745c435abcda0a69758f4c853e7d2b436edb3c72023031bfd9d120f13e36eabc:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQ1YzQzNWFiY2RhMGE2OTc1OGY0Yzg1M2U3ZDJiNDM2ZWRiM2M3MjAyMzAzMWJmZDlkMTIwZjEzZTM2ZWFiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQ1YzQzNWFiY2RhMGE2OTc1OGY0Yzg1M2U3ZDJiNDM2ZWRiM2M3MjAyMzAzMWJmZDlkMTIwZjEzZTM2ZWFiYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTk0MWVmNDE0ZGZiMjE4YTRmZDQyZGUyNGJkNzk3MGI3ZTAxMDllN2EzOWNkODFiMmRiYTQyZTU2MzAxYzg4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODk1ZGQxYjZlNjI3NmNmZmUwN2U3MjBmMjA0YTg5MmY4YmRhNzhkMGI1ODFlYWI2MDc0MjFmMjE4YmM0NzU4ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_0be91492092548b4a57b7fa7784f4eff",
+      "statement": "The engine never queries the database: callers push external data in as arguments (a LeaderCompatibility[] for attachment legality, a Map<string, Datasheet> for roster validation), which keeps every module testable with literals and makes legality a data change rather than a code change.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L45-L48",
+          "version": "repo-lines-v1:sha256:53860d0c5af433dcc5ede9dcf841b1f6b14e7c300cc4210bc997f03d64acfd59:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2VjMjg1OGFhZWRmNDVkZjVjYzE5ZjQwYmUxYzIyZDk0ZWNkYTMxNTc1ZDgzNWJkYWY3YTRhMTgzZDdmODY3YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDNlMGY1MzFkODgzOWQzNGIzNzUyMGM1MDA2M2Y4Y2NiODIzNDlkMmM0MTZjNTA4MDc0ODlkZDBjNDQxNDRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGRmODc4MTFkNzZkMjY1MjBmZjQ2NjNhMDRlZTc3NWZlMmE1YTA5ZDQ5MmE0NDQ3ZGE3ZmY2MGU3MzA4YjcwZiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L20-L30",
+          "version": "repo-lines-v1:sha256:4ca7ab2c188191ea22229d5f52d99de144a95eab27cb38242fc9c6b6efe2d91b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlODZhOTY2NTI3Y2VkYTNhMjBiYjUzNzMyMjc1YjE2YjJjZWY3NTczMjc2MTQ1NTRmYzk3NzA2ZDFkMjM2MzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzMmVlNjc2MTNiYzlkZDk1MjY5MDRmMGRmYjdjZTE4NDM5YjE2MzA1NDIzMTUzZTA4NWUyZDdmYzM5ODljZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMjNiMGMwMjI1OTE1MjYxZGRjZTg1MGYwODJiZTgxYTU4OTYyYjI5ZjViZGUxYTllMTU5NDYwYzZiODc1YTIifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L55-L58",
+          "version": "repo-lines-v1:sha256:86ea74e3436759caed25caa40163dfef942f0cce6995d797e4c315d26cd29546:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDdiY2NiZDVjZThkYzI5NmQ2MzVjYzU4MjFkZDFkYWUwNDVkNGRhYzhiOGEzZjZjYmI1MmE3ODNiMmViNzIxNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMGE0NTJmMTcwMzQ4NjhkYTU2ZDgzZDBkZmRkNDE3MmVjYTQ2M2IxZThmODI4OGUwMDE5MDFmYzMxYjI2NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWIyZjViZmY3Mzk5MDc2ZTgxMWI1YmRjZTFjYTU5NzFiZDBmMjY0YjE2NTk1MTA4NTg2ZjU2Y2ExMWM1ZDBlMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjZiOGZmMjg1ZWEwMzE5NWVmYjc2M2Y1Y2VlZDFmNDJiMzFhZGU3MWFlMWZhZTlhODQ3YzM2NTcxNjYzZGRmYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_52af3074f06e4242a0a0cca0534de401",
+      "statement": "Validation fails soft rather than throwing: each detachment-validator check returns ValidationError[] and silently skips roster units whose datasheet is missing from the lookup map, so a sparse datasheetLookup narrows coverage (e.g. Rule-of-Three counting) without any error surfacing.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L100-L103",
+          "version": "repo-lines-v1:sha256:2e4a1dfc24a306e7e0abf6cfc0ce1c9e9f043e7f36912c24e220990bc01bc2b6:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJmNWU5NjE4M2IxNzFmMDIzNzU4ZDc2NjJlYzI1YzJiYmRlNTUxMDJlOTRmNDhmM2NmNWYwM2Q4MDA2NDBiYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGFiOWMzYTE4NDU4Y2E0M2YzODI0ZTU4NmE2OTZlMDc5ZTBlZTRkOGQ5MjRhNGQ3ZDJmZjhkYWZjMTNkZTlmMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTM3YjA2MGNhMWJkOGE5MzA2Njk1M2YxOWY5ZTJhMTk1MzkxYzEwYmYwNTdjNzkwMzc0MmI2ODkwNDZlMGVkOCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L62-L71",
+          "version": "repo-lines-v1:sha256:0392f47c94d62a77aef473d861c629593d0e1966e1ac1906933fd1a4586a02b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiZjVlOTYxODNiMTcxZjAyMzc1OGQ3NjYyZWMyNWMyYmJkZTU1MTAyZTk0ZjQ4ZjNjZjVmMDNkODAwNjQwYmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI2YjhmZjI4NWVhMDMxOTVlZmI3NjNmNWNlZWQxZjQyYjMxYWRlNzFhZTFmYWU5YTg0N2MzNjU3MTY2M2RkZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4NDk3NTYzYWVjMGJiZWE3NTk1ZWJhMjAzOTY0NmUwZDcyNWM5MjlhYTVlODA3NWQwMTMyOGQyZGNlZTZjYTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9aa5deac504c4acf98d2dd0781aaba25",
+      "statement": "Only two application imports of @forceorg/rules-engine-11e exist today: apps/api/src/routes/audit.ts imports validateRoster for POST /api/rosters/:id/audit, and apps/web/src/components/RosterBuilder.tsx imports compileWahapediaWargear for the expanded-unit wargear panel.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L78-L83",
+          "version": "repo-lines-v1:sha256:7edc288eb55a79a414e193eee291d7bd20e059bc6142e681b8a302ea85b55d8a:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzNmZjE3NWNkODBkMmQ4ZTQ3Nzc0NWQ5OTMxMmRlZWM1OWVkNGIwNzg2NmM3YzBjZjkwMjBmNzRiNTc4NGJjNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODRlNDIwOGNkNmZmYjhjNGEzNTQ3YjJmNTRhZGExOTk3OGMzZjM2NWU3OGY5NTAyZWY1MTQ1Y2RkMmFhODU0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2RjYzg3MDRjOGMxNWRlZjBlYWFkOGI0YTE2MGJmN2U4ZWJjNTM2M2ZmMTViMTg1OTdlMzRiMDc2ZGQxMDlkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmQ4NDA3NTM0NzBjYjQ3YzEzYjZjNWExN2U2NWVjOGE0MTI3NTVhM2U3MzUxYWNhNGJjYmNiZDRiNjMxYTNkZiJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L9-L9",
+          "version": "repo-lines-v1:sha256:6bee070e7af6632da9713f6f35e7351deb8e1f1ee1414462c0fec27154b46723:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJlZTA3MGU3YWY2NjMyZGE5NzEzZjZmMzVlNzM1MWRlYjhlMWYxZWUxNDE0NDYyYzBmZWMyNzE1NGI0NjcyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJlZTA3MGU3YWY2NjMyZGE5NzEzZjZmMzVlNzM1MWRlYjhlMWYxZWUxNDE0NDYyYzBmZWMyNzE1NGI0NjcyMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDljNzFiYWI0OGI5YWNjYTU2Nzg5OTJiNTI3NGNhODljOGI1YmNlNTExOTAyNzlhZjYxY2ZiOThmNjM5OWZjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmQwNmQ5ZTFkODEwNzEwMTIwZmY5N2M4MzQ3YjQyYzUwYmYyOGU0MmI3YTI1Y2E3ZjBhZjQ1Yzc4MmI3NGI5NyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L273-L278",
+          "version": "repo-lines-v1:sha256:873b41d407c1c44ef7b531a156d7aafa9c54063c5bdc4d790ea5665f111e0a60:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODRlM2U3MGM4YTM5MGJjYTc1NDc3NDM0ZjU2ZWM2ZjUyMmQ4MzU3NjVkYTZkYWQwMzY5NTE1MWMxNzZiODMxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWMwNTk4YzZjMzJiNTlhNzkyYmIxMzI5YmU2OGE5MmEyMjk1Njc4NjZhMGE4MjQyYmMxYjhiM2I2NmE1NWFhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjBkNDJlY2YzYzgxMWEwMGZlMjUxODQ4ZmRjZDlhODMzYTA2MzVhNjI0NTUxYjZhMGUwYTNhOWZmYWNmODY0NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTIzMDdjODUwYmVjYjE0OTk1ZjY2YmU5ZWM4ZTFlMGI3OTg3Mzk3YTI4OTA5YjRlMGJjZTI5ZmY0OGJiNTEzNSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L9-L9",
+          "version": "repo-lines-v1:sha256:d091bd04240f3d16fe599c7e508e2c87cc1d1d7d1cad376dbfb47d07b8c6b6c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzNkNGRhMzdlN2VkZjkxYTRjYzJkZjlhZDk1M2M3MTFmZDNiODNjZjA0YTA5N2M3MDM3OTViMDE3NzYyZGM1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQyM2NjZGIzNTkxOWI0MGY4MzM4YjIxZDYyODNjZjQzYzE0NjJkODRiMGE1MDNmNjdlNTU4MGM5YmM1ZGRiOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e0870da43a6e4ddebe07f4b39dd7ffe7",
+      "statement": "attachment-resolver and stratagem-filter have zero production callers: the components that render the same rules re-implement them inline (StratagemPanel filters phase/keywords in its own useMemo, CompositeUnitCard clamps wounds in handleWoundDelta, RosterBuilder computes ruleOfThreeViolations with its own count map), so an engine-only change leaves the UI asserting different rules while every test stays green.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L102-L113",
+          "version": "repo-lines-v1:sha256:c0b90e6fdce1aa9b189b74626ff36d464b414308fab4d14a1e1cb423b985883c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3MDVlYWQzNmY0YjZlMGJjMmM5YmMxZDgzNmMzNzNiZjNiYWJjNjQzY2QxN2QwMTAwMjcyNjRmOTc1NmQ0YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NjE3YzU5NWQxYzc0NjA2MDlmMGMyZGMxMDVlNDg1MmU0OWIwMWY4OWI2NTQzNDhhYWU1YWVmYjE0ODVmYzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMWQzNmI1NmJkODdmZDBiZjJkMjFjZDNkMmExNGFjODQxZWMyODdhMzcyYTBjYzc2NWEzNzYzNzQwMjdhNmEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L228-L243",
+          "version": "repo-lines-v1:sha256:6bd3e7987f59e388f6562d4fc8944976f4087ac4c29406b06f6784e1324b789c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxYmM2MWM0ZDhiN2RkYmI2OWY4ZjA3ZmYxZWM3Mjg4YzBkN2E4N2JmOTBlMGE2MDJmNTMwZTg3OWM2MWEwOGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwYWNiOTQ4NjdmNjljNjFiZDM3MTcwODFjZTk1MDcwNGZkZjgyZDU4ZDZkNjRlNjUzODI4OTgzNWYxODkwNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2YjcxMDIzNjg4NTJlOGVhMGM3Mzg1ZjIwZjkzZGJjNWFmZGQxZTdhYjgzNjlkMWMyNWM4OWNjMjM1YjUzMmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA0NjFmNzVhMjIxYTZkYjAyMjcyMDBjMTgwODUyMDdmODM2ZGY3MzMyOTFiOThmNDllZTc2NjBhYzY4ZDMwNTQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L110-L125",
+          "version": "repo-lines-v1:sha256:baaa50930df4681a05f3ff8b3baf887a72f0aa43b4245559c87249f4af0875cb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhMDE2NWY2OWQzNDkwZDY5ZDIzMmRlNGM2YzY0MGM2YjQwMzM5YjliNWY0ODNhZTcwMGU2ZDNlNDMyMTNmZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNjk4OWFkYzU5OTJjZWJhZTRkNmZmMzM3YWZjZjZiY2I2YmJjYmYzNjI0MGMyYTA4NjUwNWE2NzdkMmZlZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM0Y2UzOGNjZWJhZGFmM2E0ZTZjZTRjNjgwMjZlMmQxNTZmODU3OWFiNDA4MWYxOWJkYmYzOWZiZTgzNGFjNDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1a38b0febec9473086b97dc73c52914a",
+      "statement": "apps/sync-worker declares @forceorg/rules-engine-11e as a dependency and builds it into its image, but no source file in the worker imports the package, so it is a build-graph/dependency-closure entry rather than a consumer.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.sync-worker#L24-L31",
+          "version": "repo-lines-v1:sha256:3a0b4e3efa43fb1c3f3a99e181a9249170b8ebd44654c8689fa8389108f246fd:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWE1OWY5ZGFjMzg0OGQzYjNmMzdkNzNkYmE4Y2QyNmMzNmE3Zjk3NjZiNDc3ODBiNjkzMTQyZThmZGU2ODEzMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzRiNTE2NGFiODI3MmQxN2VkOGM0NWNhODlhODE5M2UyZjJjMDhmOGIzODg1MzdjZWY3ODM1NTU5NDI1ZjQxNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjAzZDA2YjE3MTEwNDI2MzM1ZGMwNGYyMGViZjBhODEzNjQxNDZiNjVmZDkzMmFlOTIwOWY5YmJkOWVjMjllMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjRhMjE1M2M4MjJmNjQxNTY5NmRiYmNjNjgzNTA0NmI2ODkwMjRhNjUzYzdhMTEwZTZjNGM0N2RhZjU0NTMzNSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/package.json#L13-L18",
+          "version": "repo-lines-v1:sha256:dc359780a856cb335b73d85144740696f419dd597dd89a6b0fb300ab310fe319:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzYjQ2OWQ5ZTA5NzU3MjI0NjY2NzM0YzllZjdiMjU0ZDg4NTM0ZjVkNWJiNzA5ODk2MDgwNWM1NTNkYzMwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWFkNGFmYzU3NjM3NDhmZDk2MWYxZmI1MjZiMTc4NzY2MDJiYjcyMjJjM2ViOWNiY2FmNzIwYWVlYWFmNjA5YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWMyY2M5ZWE2MDE3NDI5YTFkNzk0MzIxNzJhMzBmODNlNzJlMmU4YjJlYzU2MDJjYzI0Y2MyZDJhM2I2OGQyNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_02e0c070256c46cda5514ccdbcfa1cdf",
+      "statement": "compileWahapediaWargear is structurally deterministic but not identity-deterministic: AST node ids embed Date.now() (rule_gen_<timestamp>_<index>), unrecognised lines are dropped with no diagnostic, and parseOptionList hardcodes pointsDelta: 0, so any persisted wargear selection keyed by ruleId is unreliable and the builder's points-delta badge can never render.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L623-L625",
+          "version": "repo-lines-v1:sha256:4da5d67d0d910c615c4ae2c6c44366f0422c38d88567f36d074f4295552e2976:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTRlODhmYjRjZjYxOTAwZmYxYmJhOGU2NGNiYjQxMjFlNjNhYjNkYjllN2FmMGFlMzhiY2U2MjEwNDFjYzYwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOThmNzFkZWEyYjQ5OWY1NTgwNjgwNDVlMzQyNzc2MzIwMjdkODg3NzJjNTgwMjQxMzI1NGRhMjQ2NGFlOTk4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjdkMDBiYjNmZTJiZTkzNWYxMjFmZThlODkwOWQ4Y2JlMDQ4MDQwZDNmZmYxZjMwODY4YTkzZWY5ZTJhYzQxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWE3ODg1YzExZGUwMDM5Yjk5Njg5NWZlMjEzYjNjMjA1OWRhNGJkZmNlMzc2NjllN2FmMWNlZDA3MzA3YjhhNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L716-L720",
+          "version": "repo-lines-v1:sha256:333283512f75dd4d4227f5fcad32829325de959b07941b358a8489f1867da8e5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzYxMTAyYWEzZGU2MjcyMWZiNjE3YjY5OWNjMTg1NzFkZjI3M2MyYjQzYWE4ZDUwZjM4YjEwODBmODM0ZGQxZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQ0NGEzMWQ4ZWM3ZTg4Zjg1NTcxNTI2YmYyN2M5NTg4MjBkZmZkMjlmNjg1MjFkMGMwNWI3NzA1YTFmMThiNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTVlMTU5ZjBkM2Q5ZmYyODNkMzE1NzkyMGU4ZGIwMDA3YTdjODM0YjhiZDgzOTlkMjg4NmI1ZThiNDA5ZTZiOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDFhOWU2ZDZiODY5YThlOWU5NGQ5OTZkYWE0OWQ2ZmE5NmNlOWU0OTc0NDNjMjQxMTE1Nzc2ODdiNDZmNzNlYiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L30-L40",
+          "version": "repo-lines-v1:sha256:87407bfa83368aa00050e47f0304c8de0624f9dd7e0b0496a428d713efb46d6f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0ZDZmODkzMWIxYjNiNjJhMzYwOWUyNWQ4N2MwZWJjOWE2YTM4MTA4NmZjYjBkNDY4MWZiN2YwZDhmN2U0ODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjZTYwMjBmOGM0NTZhOTRkMzY0MjA2OTZmZmMwOWU0OWZmOGU0OWI4NzAzMjJkMWYwYzc4MDJlNmI4ZmIyNmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwZWY2ODgzN2UzM2M4MDMyYjk3NDZmZGFkNmI5YmY3YzRjMWZiOTc2MmFiOTk1YWM3OTFkYjdlNzJmNWQ3MjgifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/wargear-parser.ts#L85-L87",
+          "version": "repo-lines-v1:sha256:5976a530cc25d54407fd8175cc79eeb78abafd0716d4214d5811693171e98518:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhmMDllYzE1OGJkMzMwNjliMzllYzMwZDI1MzgyODUyMGNkMGVkMTZiMGNmNGI2NTkwMDZkMWMwYjBmNDYwMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGZkNGJkNTA3YjgyMTljM2UyNTRjM2U2YmExNmJiMjFmZTUyZGQzYzllZjZiMGMyYmE4OGI2ZTExOGNmNzQ3NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjEwY2E5ZWIxOTA0YWM2NmRhMWRhNmVmZjY5YjZiNDYxNjliYjE2MmQ5MDQzZGY3Nzk3Njk0ZjlkMGVkNmUyNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzVhNjgzNjRkMWRkZDJmODdjYjU0YTM4MjIyOGFiMWFlZDZjMDQwMmI3OGFiZDgzNGZiMGRiNTJiYTBjYTZiOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6ac98a6c8edb4172b0685ef045163076",
+      "statement": "packages/rules-engine-11e defines the repository's only test and test:coverage scripts (vitest run and vitest run --coverage); no other workspace package.json declares a test script, so turbo run test only ever reaches this suite.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/package.json#L5-L11",
+          "version": "repo-lines-v1:sha256:b27eaf1d4338899b3334d27dfb3e4a88f2cfd9387b910693779a19dfb501ae92:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzBkMTk2MWRhYmQ0NjIyNWFlN2IyNTE1NzE4M2NjYmIwNjZhMmQxZTdlMTI3MzkwYjUwYzg0OTBkNDY3ZmRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTEyMGZhMWZlOTIyODZjMTYxZTE3MzRjMjU3ZTgxZTE1YTk5MmFiMGM0ZDY4YmU0ZDc3MDBkN2ZjMmM3Mzg1MSJ9"
+        },
+        {
+          "resource": "repo://apps/web/package.json#L5-L13",
+          "version": "repo-lines-v1:sha256:b9ec879f70dc13efe4555a51595abadaec7b8eedffeca5b62a4b3aa6b73ca7cc:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JiOWVkOWE5OGEzN2E3ZWUyNWZmYWQ4OTlmYjYwMjBmN2NmYWM1YjJjMTkyMGUwNWI0ZTFkOTUyNjA2Y2U3YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmM1NzE5NjYxMmJjYTJmODU3ZTM3N2M4MDRkNWRiZDEzZjU2OGY3MTFjZmU1ODQ2ZjY2YTRiNDI2OTMwNjExNCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b43e8e5ac8ce4c208fdbffcbdff7b01a",
+      "statement": "vitest.config.ts enables globals, uses the v8 coverage provider with text/json/html reporters over src/**/*.ts while excluding test files and src/**/__tests__/**; linting is tsc --noEmit and build is plain tsc emitting CommonJS from rootDir ./src with tests excluded from the emit.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/tsconfig.json#L1-L11",
+          "version": "repo-lines-v1:sha256:7f431d4a1238d7ab655eb902afa9278e2ff4f24e86348fe3c1e243fbd36a3642:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/vitest.config.ts#L1-L12",
+          "version": "repo-lines-v1:sha256:eef91be038693bc2b48f604b866495e5cc3396ff38ba07ba5c924fb2f0e5b1a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0YTE5MjExYzNhMDNiOTg3OTQ3ZjI0YjY5YmRjYzQ2OWY0Nzk0ODI5YTVmNWE0YTE4OGVhMmUxODE2NTRiOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7a420e602f69484f93b4afa346e1a2f3",
+      "statement": "The vitest suite holds 53 tests across four files in src/__tests__: wargear-parser (14), attachment-resolver (14), stratagem-filter (13) and detachment-validator (12), and they are the only guardrail for the two modules that have no production caller.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L1-L130",
+          "version": "repo-lines-v1:sha256:6dae294ff79e4a23e9c0427c66cc33d7e97de963869a7489b401d7ffab3340d0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjMDhlNDY5MWJhNjUzMTQ4OGJmZTEzMzk2M2UyY2MyNTk5MzBiNDFmMGY1NWFiNWU1Y2VhMmFkNjExZDg0MTg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L1-L188",
+          "version": "repo-lines-v1:sha256:8dfd5a0cd45f5f3781850f22c46ab19ec38aec529cf1ec0ab98df50d3da02559:eyJzZWxlY3RlZExpbmVDb3VudCI6MTg4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjMDhlNDY5MWJhNjUzMTQ4OGJmZTEzMzk2M2UyY2MyNTk5MzBiNDFmMGY1NWFiNWU1Y2VhMmFkNjExZDg0MTg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/stratagem-filter.test.ts#L1-L134",
+          "version": "repo-lines-v1:sha256:7195570496bde087cf1e26b40cbdd5625bbfbefe4270d2b59d380303f617baf8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTM0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjMDhlNDY5MWJhNjUzMTQ4OGJmZTEzMzk2M2UyY2MyNTk5MzBiNDFmMGY1NWFiNWU1Y2VhMmFkNjExZDg0MTg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L1-L112",
+          "version": "repo-lines-v1:sha256:4b39eab982fb13bb71d1b98453cefe59bfb195a53c42f878033585e4ff481e87:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjMDhlNDY5MWJhNjUzMTQ4OGJmZTEzMzk2M2UyY2MyNTk5MzBiNDFmMGY1NWFiNWU1Y2VhMmFkNjExZDg0MTg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_a219d11512f74387ae4fe7e7e56901bd",
+      "statement": "Every test file imports from its module directly (../wargear-parser, ../detachment-validator, ...) rather than through src/index.ts, so a broken or missing barrel re-export is not caught by any test.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L2-L9",
+          "version": "repo-lines-v1:sha256:cc4689be30734b82707a955f67c0716a5bd3eb0fd0f1916bec12457ea33572d7:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTgyMDA5NjRhOTc4NjM1NTIyYjJhYjA5MGM2NTA2NWQ4ZWY4ZTg1YzQ3MzBiYjJlYjA0NjBkMzRjNjc3ZGRiYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWU2ZjVkMzhmZWQ2ZjJhYTQ1YTIyYTkxMGFlZDgyNjM4MWY0NjMyNmZlYmZjZjA1OTVmMDU1YjRkZTYwODQyNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzA4ZTQ2OTFiYTY1MzE0ODhiZmUxMzM5NjNlMmNjMjU5OTMwYjQxZjBmNTVhYjVlNWNlYTJhZDYxMWQ4NDE4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTM4NTI4Y2ZmZjVkMmFmMWIyYmNjZDMzOWI0MDVkMWFmZTgxM2M3ZTBjN2FhNjY2NGM0ZDY3YzNkN2FhZmQxNCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L2-L7",
+          "version": "repo-lines-v1:sha256:c789bef2ff30cbe778f534dc27c029743d72b9a5e1390c6a2a2ff52a5d53f41c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTgyMDA5NjRhOTc4NjM1NTIyYjJhYjA5MGM2NTA2NWQ4ZWY4ZTg1YzQ3MzBiYjJlYjA0NjBkMzRjNjc3ZGRiYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzA5NDg1ZGIyMmNhNDMxZTgwMzNkZGIwZDcwMWFhNGQwODc1ZTI0ZTM4ZjE5Mjk5ZDlhYTE0ODk4NTc2YWI4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzA4ZTQ2OTFiYTY1MzE0ODhiZmUxMzM5NjNlMmNjMjU5OTMwYjQxZjBmNTVhYjVlNWNlYTJhZDYxMWQ4NDE4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjFiZGQ1NjQyNjQ4OTdlOTI3NmZiODEyYTMxMWUwZjdjOGRiMThkOWUwYTgzMmY3ZGY4MTk5N2RhMjlhMTdlYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_de5d1ff0ef8344d4b68ae4a48714ccf1",
+      "statement": "GitHub's deploy.yml runs npm run lint then npm run test:coverage --prefix packages/rules-engine-11e in an unguarded Code Quality Audits step on every PR and push to main, making this suite the repository's de facto unit-test gate; GitLab's test job reaches the same run via npx turbo run test build.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L35-L41",
+          "version": "repo-lines-v1:sha256:4ffda466cf5902b189ac22e30f4281f13057a680628acffcf9428c9854a18975:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjMzMDRmYWNlZDEwZjU5NTFhZDgyOGRmNjI3YWM0MGE0MTYxNGQ0NjMyYmI2MGNiMWIzYWVmYzVlNThiZmYyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkyMGVlZWZlYzE3MmM3ODFmNjQxYmY2OThjOTZlY2JjNGNjMDgzYzA2YzBiYTkwNDcwZGJhZWZjMDE1Njg0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwYjQ4ZjE0OWJkMDhkYjRkOGY3YzU4YjBkZmI4ZWQwNDQzNTE5ZWE2YzgzNDUzZmFlYzkwYjQ3NGViZDFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTg3MzMxZjBlOTBiZDExYTFjZjEwMTRlMDA2OWExNjY0MWE2OGU4MWM4ODk3OGJjOTZiY2QyYzEyM2Y3Nzc2OCJ9"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L29-L35",
+          "version": "repo-lines-v1:sha256:54a5ba31c2ef006cb1dac3348cb1461787353c5ba509fac5833b373c92120cab:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2E0MTk5NDY0ZDE5ZWQ5NmZjYTI0ZjZjYTc2MjgxOWM5YmQ3MTdjZmVhYTNkOWY4MDhmYjU0MmM4NTk2OTVmMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWY3ZmZlZjgxN2U0YTk3M2VmZDY0OTMyNjlmYTlkMjYzZDUwNDk4NzZiODVkYzcyZDcxNTE0MGIwYWE1OTgyMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM1MTg3MmZkYWE4MmI2ZWM1YTg2NmY3OGU0YWFjMWEwNTdhNzBmYTJlNjg4NzhkMmJkNTc5ODQ2MjgzOWNmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjNkNjZjZDI2NDEzMjI5NzJhMmQ5MGJmMWYyYjRlNDdlZmZiNzRkZjVjMmEwY2M3YWQ5NmYxNDJmODBiZWVhYyJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L16-L22",
+          "version": "repo-lines-v1:sha256:f721cac983a3d49dbe9010b00263b55637783084730a75e89051b421a1d98b2f:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzgxZGJiZTM5NDc2MjY2M2VjYWZhNmIwMDc3OTI2MDc0MDU2ZmIxZTgzNDdhMDA4MmNkOTFiMTI1NDEzMWVkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWYwY2RiOTcyYTdiZmI3ZWQyNDZmOWZmNjcyMzg1ZTU1ZjQ5NjhmYzExMDQzZGM1YjY4NGQ1MWRmYTMxZGJjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDhhMjVkZDZiN2RkMGZmMDJiMDg4N2U5ZTIwYzEwN2E4NjdjODhmODBlMjRiMWE5NjQ0NWJmNjM0NjU0NTdkNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2QxZWJlYTdiMGY2YjYyYWY2MGY0M2NiNjk3OGRiZDk4ZTliZTNjMmJjMTRjOWFkM2M5ODhhNTk3YjM1YmNjOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4e838c9e8884f96b541f673551b8ee8",
+      "statement": "Each Dockerfile builds rules-engine-11e before its consumer: Dockerfile.api and Dockerfile.sync-worker copy only dist/** plus package.json into the runtime stage, while Dockerfile.web copies the built packages/ tree wholesale after building types, ui-theme, rules-engine-11e and web in order.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L21-L29",
+          "version": "repo-lines-v1:sha256:cba59e5ec179f4a50335d403d445a7adadbe78f0291d3003000b03f5fdd02a41:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWE1OWY5ZGFjMzg0OGQzYjNmMzdkNzNkYmE4Y2QyNmMzNmE3Zjk3NjZiNDc3ODBiNjkzMTQyZThmZGU2ODEzMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzRiNTE2NGFiODI3MmQxN2VkOGM0NWNhODlhODE5M2UyZjJjMDhmOGIzODg1MzdjZWY3ODM1NTU5NDI1ZjQxNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDk0Yzk3ODAzMGUwYzc0NjEyYjlmYTUzMDgzYTI5ZmYxNTI4MjAzMzlmODM0MDQxNGEyYTZkZGE1ZGE0NDUwMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2Y1Y2Y4MTFjYjlmN2U5ZTVhYjVmZDU5MzU1NTA5ZDE1NDkxOWRkNzM3M2YzOTY4ZGM2YjIwN2EwMTY3NTJiNCJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.api#L47-L48",
+          "version": "repo-lines-v1:sha256:344754797ae7d65711a0c0194cc7be7af0886624ada18b8d963b5229ca427582:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTNiNjE0ZDZmYjNjNGQwNzI1MGE0OWUxNGMzNzJlMmUyMGUwODU3NDVmZDgwNTY1NDg4ZjAxYThjYTM2Y2IwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWE0NjIxNmFhZmU5YjhkZWQ1ZTRmMjM3NjAzZTY4M2U1NTBhMWU4ZDRiZDZiYzUxZWE2MWNkNGU3YzQ3OThjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTBmNjk1ZDNkNTU2ZTc5NGY4YjVjNzBkNjJhZTczOWUwNDIyNzVkYTRjZDg4N2I5NTZhYzVkOTcwZjljYjJmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZThjNjZlYmNlYjZkOTRlYjFhMWViZTliYzc4OWY5YjdiMDgzNTdkYmI2Yzk0YWI1MWRkMTEwMzMwYmYzMTBhZCJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L47-L48",
+          "version": "repo-lines-v1:sha256:344754797ae7d65711a0c0194cc7be7af0886624ada18b8d963b5229ca427582:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTNiNjE0ZDZmYjNjNGQwNzI1MGE0OWUxNGMzNzJlMmUyMGUwODU3NDVmZDgwNTY1NDg4ZjAxYThjYTM2Y2IwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWE0NjIxNmFhZmU5YjhkZWQ1ZTRmMjM3NjAzZTY4M2U1NTBhMWU4ZDRiZDZiYzUxZWE2MWNkNGU3YzQ3OThjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDlmYmM4NWNiNzFhZDQ2MTJkM2VkZTM4MWNjZDQyN2YzNDhjY2E3MjBiYjZhM2VmOWQ2OTVjMzEzOGY0ZGU2NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDdkMjg4ZWJjODNmYjZkYTkzOWJkNjVkNzAxNGZjZDIzYzA2ODY1MDJhMWNiZTM4OWIwMmI4OTdhMzA4MGVkYyJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.web#L38-L41",
+          "version": "repo-lines-v1:sha256:8c7f36081f0902f494bf92cf86c6d868416857946769202fffeaba341916395f:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGU5MjAzZDFkZWNlNjVhNTA5ZjFhOTQ2MmNmZGIwNTM2ZDVkM2QwOThiZWJhYmFjODM0ZTM2NmI0NmM1OWVkNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjZiMDhkZDZmODQyOTk1ZTAyYTRiMDI4OGU2MWFlNDRjZGM0M2IzZjcyZDBjYTZhMWQ5MDRjYTA1ZjMyMTY1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWM2MDE0NjA5MjZmODk2YzM1MThjNGIyYjFmNmRiN2NiMWQwMmRjOTA2MTk3NGMzMzk5ODhiM2M5YjljZjA3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTYyY2QzMTcwZGYxMjQyN2Y1MjVlODcxNTBmYTYxYjdhOWNjNGM1NTk0N2YxZjliNWFmZTkwZmIwMDIwNzk3OSJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.web#L56-L58",
+          "version": "repo-lines-v1:sha256:40fb51bb0b86e5f153be494e0ac6763f856b7be0cf73b200870dabfce3fc029a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmM3OGZiNGM5MjlhOTI5YzMyMzQyNDE2NTBiOTcxYzUwZjVmYzY4ZDFhZDIxYzFlNGY1YjhjZjkzOGIwYjE4MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDQ3MTViNDI5ZDQ0ZDk2NGUzNTI5YTU0OTQ4MWViYzE1YTVkYTc0YTE5Y2RhMmQ2ZjljYmQ5ZDgyZDg2OTEzNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWRjMTk1MWU1NzAwOGRmODY5MWQ4NDI3YjgzNmEwMTI1OTA2ZTYzZjA2NTlmMzk5MTEwMTA5MGY1NGJmMWM1NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGNlNGNjYjI0ZjQzMTMyMzdiZGQwYjRiYzQ5ZDYxMzkzMTI4ZDc2NjE4MmFlNDcxYzNkMmRkMTJkZjNlNzdlNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7fb8510bb3a4b11aeb7317c335668a0",
+      "statement": "In development the web app bypasses the compiled package entirely: apps/web/tsconfig.json aliases @forceorg/rules-engine-11e to ../../packages/rules-engine-11e/src and next.config.js lists it in transpilePackages, so web consumes TypeScript sources while the API consumes dist — meaning apps/api cannot reach module internals that are not exported from index.ts.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L4-L8",
+          "version": "repo-lines-v1:sha256:b3483e952de263d03f64c85a11ab3f89d996ee6d2bd9003ff4f7167e4825b816:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWNmZmZkNzY1M2UxNjcwNzRjM2E2MTM4NmFiNmM5MGVhMjI4ZWRjYzM1ZjMzYTBjMWExZDNlYTYzYTliMjQ2MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmMzNjNmMDBjNTA2ZWM1NjJlZDUwMDJmYjg2ODVhYzQyZTZiMTBiYjhkZDEzMGQ1MGNmZmE1Y2MzM2RjNjg4ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjU0MGJjNjllM2I3NzY5YTVlN2NiM2ZjY2Q1YmFkYzU3MDI5OWQ2NWE0NWY2ZjZhOGJhOGQ1ZDA4OTdkNmRkMSJ9"
+        },
+        {
+          "resource": "repo://apps/web/tsconfig.json#L14-L27",
+          "version": "repo-lines-v1:sha256:63eafa632b61fb366f84b0df03063f5514c5e5e03e03e6ffb163a61e8a5352ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyODM2YmM3NGZkOWEyMmM2OWE4MzMzNWQ0ZWJjM2Y2MTgzMDZlNTJlMDBmZWNlY2U0NzYzMzkyNWVjMDA3NzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTFkZjVlYjMzNWZlOTBlYjMwZDEzZTk0YWZjNDEzMDUxM2QzODdmMzAxN2EzYzQ3NjNhMDcyMzg5YmNjYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkOGE4Yjc5OGJlMTgwNzAxOWE1ZDY5NTFmNGE5YmI0YTljZWZlYTlkMzU3NzIxZTZhZWQ1MDFjOWJkYzFlNmUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

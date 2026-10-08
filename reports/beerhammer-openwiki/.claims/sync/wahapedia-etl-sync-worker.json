@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c9157dda2b2cede8876058ac1b159fa45b222db9da98ac5da0d9190e3b35a5f6",
+  "claims": [
+    {
+      "id": "claim_ac4e72d7a8f340f2937c8502da651709",
+      "statement": "apps/sync-worker is a one-shot job: src/index.ts calls runETLPipeline() once, then exits 0 on success or 1 after logging a fatal error. It contains no loop or timer; all scheduling is external (GitHub Actions cron '0 2 * * *' at 02:00 UTC plus workflow_dispatch, or `docker compose run --rm sync-worker` for a service gated behind the `tools` profile in both dev and prod compose files, which never starts it during `up`).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L8-L12",
+          "version": "repo-lines-v1:sha256:56507fdac5f79c78f0c22e85f3f99f77a3d1dcfdc75aca37c8263b5f9938c472:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTk2ZGM0ODE0OWY1YTgzZDFlZDZkYmIzOWJiYzdlMmI5MDJhYTNkMzRkNmJkNWFlNGIyOTFiNjhkZjBjYTc5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2RjY2I3OTZkYmZjNThiMjE0ODdhZGFkODMzM2FmZDg4MTI0OTA0MWViODkwZTFmYzdlNzBmMzE4ZmU4NmEyYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2Y2ODZjYjBjNTY5YjBlMzM0YWRiNWY3MzczZTUxZDEzZmJiMDNkNDVhZWM5ZDk3Y2MxMTUyYmQ3MGZhM2FlMyJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/index.ts#L8-L18",
+          "version": "repo-lines-v1:sha256:d7e7c99e39f0e36be1b4fb88992ba987906d943a4a3788cf29650d910be9ed24:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlODIwMGViZDE3MDliNmE2NzViZWNiM2JlOWYzOWU1M2JiYWMwMmNjOTI3MjM0NjJjMDU0NjhlYjBkYTZhMTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyN2VlYTcyMmIxMTQ5MjM0MDg1MGM5M2VhZmVlMzQ5ZDc3N2MxYTE0MGU3N2FiZmFhOTQzMDU1MzE3ZDg0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhmMDRjZTYyYTM4NzE1MDE4YjgxYTRhYWFhY2FiZDNkYmRiMzJhYWVkYmNhNzExZWZjYWZlMzc2NzUzODc1MGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L84-L95",
+          "version": "repo-lines-v1:sha256:a382fac2cdcd42daa28b4fb8db3de3fc5d4effb0348375a9bd28acc2cac27352:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYmEyOGVmZmY5ZGFiNjkxMjhlYzU0MWM2OWM2YTlkZjdhNTBkYWQ3MjlhODFlMzIzMDIzYzA2NzViNjc0ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc4MWQ4MzI3MTA3NTU3NDllMjNlNjkwZDZkYzgxNDRlZDBmZTgyZjFlYjU5NDcyOTg5ODU0MTM3YjBlMGJkNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L84-L101",
+          "version": "repo-lines-v1:sha256:834fd747e8e091dcc0bfd3d687d3425b12e8580fab3c62bc8d49a45df649c6d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4NzNjMjI3NjdkMjRlMTNjNWE0ZTA1ZTk3MWI0YjRmN2JkNWExMTU0Yzc3YWIyMThmMmM2NGRmZWMyYjI4NmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMTY3ZDg5OGUzNjRhNjQyZWQwNjRiNWI2ZjJiYjExZTQ4OTkxMjdjZTg2NDAwODQyZDhiYmM3NjFkZmI4YmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_440956a27c064434bfef6a73d173e6b3",
+      "statement": "The worker needs both DATABASE_URL and DIRECT_URL because its Prisma datasource declares url = env(\"DATABASE_URL\") and directUrl = env(\"DIRECT_URL\"); both compose files inject both variables explicitly and gate the container on postgres being service_healthy, while the GitHub workflow supplies DATABASE_URL, DIRECT_URL and ALERT_WEBHOOK_URL from secrets. ALERT_WEBHOOK_URL is the only optional variable: both compositions pass it through as ${ALERT_WEBHOOK_URL:-}, i.e. an empty string when unset, which sendAlert() treats as falsy and returns on immediately, so an unset webhook produces a completely silent run.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L36-L41",
+          "version": "repo-lines-v1:sha256:cb4baa4fa70ebdf461f68ecb3f929099b6a22ef5f5e285f807d76793bc4e5143:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzZWViYTRmMjBkMGZkZjFmYTVjMTIyOTU5NDk5NjhlMDE5ZWM1NmFkNmEyOTYwMGI3MDExNzZhMzZjMzhkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWU5YzMzNzM5OTZkNmQ0NzA3ZDlhYjNkMGFhNDdlODMxYjg4NzA2NDgwM2FmYWQ0ZWRlZDY3YmFlZDg5YTFkZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTYxYjBlZGY3ZGVmODM0M2UxNGMzZTNiZmM2ZGQ4MmViNmI5ODZlMzEyY2UxNTc0MDk4NWI2YWI2MTI1YjE0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L169-L171",
+          "version": "repo-lines-v1:sha256:424c47e3acf80023849461ac52f02ac3fa0f297581e077367227e88579dc1492:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2ViNDVmZjkxMDU3MTBmOGRiMjA2MjBhODY3MTM4NzMzMjE5M2U2YmE2MmFiNTQ1YTg4NTJhM2FjNjBlZmIyYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTUzZjc0ZGI3N2E5MTljY2NkNTFlN2NmODJhYThmOTExYWQ5NWFkZGExYmZkYjM3MmU4MTMwMzZjM2NjYjk5NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzExYmQ5ZDJmNWFiYjk2ZDdmMDhmMGFkN2RhZGY2NGFlYTBmM2Q0MjNlMTY5MmYwM2JlYzEyZjllYTk5NDJjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzExZWM5ZTU0ODhjZmRiY2U3NGEyOWVjNTJlMmNkZWIzM2I3YWJhOWUwZjQyMjEzNmVkY2JkODgxZTU4MDI5ZCJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L92-L95",
+          "version": "repo-lines-v1:sha256:fb9259c7920a2324851dcb0f375988decc98c7a9ce339c7562b46a0a50200902:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmFjYTQ2ZjNlOTMwYmViMTNlOGRlODMyMDZkZjg5ZTQ2OThlZTcwZWJkNjJjYjQxYmFkNDRiMzAwMjAwNjRjYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2I2YzI4ZTFmZjZiMzEzYjBiMTViMzkyYTRkZjRhZjIzMTExYjI2NjU4NTg0MmFlYTYzNDNiZjgyOWQxYTY4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTdhMjNmOTAzNmQ3NjBiYmM0MDk0M2ZlMmVlOTAzM2JmMzRlODRkYTUzMGI2ZTA3YzE3MGM3MmIxYzdjZmRlZiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L95-L101",
+          "version": "repo-lines-v1:sha256:c6c50c8dcc2cc21d5d3b683b9f9781ae573f1f3f6219bdd366e4a6d943d348cf:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZkZDU1ZWYyYWUzY2E2NzRhNGMzYTU2ZGFiMzRmODkwOGQ3NDA0MzIzZGI1NGVhZGRjNGU0Y2YxODllOGZjZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmFjYTQ2ZjNlOTMwYmViMTNlOGRlODMyMDZkZjg5ZTQ2OThlZTcwZWJkNjJjYjQxYmFkNDRiMzAwMjAwNjRjYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDBmNzYyMjZjZjZjN2U4ZDViNGY2NTlhYTU0NTM4MTVkM2YyM2M2OWFkMDJmZDk0ZGEwMTUyMTQyMzVlNGE3NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTdhMjNmOTAzNmQ3NjBiYmM0MDk0M2ZlMmVlOTAzM2JmMzRlODRkYTUzMGI2ZTA3YzE3MGM3MmIxYzdjZmRlZiJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L6-L13",
+          "version": "repo-lines-v1:sha256:649ebee9c18e5217b3ea4ee3a08a18e133afdb9c4e41ec955b556d3cc78f95cb:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDk2NzA0ODliNzdhYThlNzUyY2VlM2Q1MzFhOThkMTA1ZjgzOWQyMTU0ZTM1NjI5ODhiN2M1NGQ5Yjk3NGQwMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDhiZDA5Zjc4N2ViZjFjM2YwMjU5ZDYzYjZlY2UzOWFlY2FiOWRmM2MyZWYzMmY0MzhlZTk0MDQxOTkwNjU3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWU2YTJhM2I3ZDYzNDRlYjBmN2ZjOTU5NmIwZGEyZDJmODI4MDM4NTNkZjVmMDVhNWFkY2E2MjNjNmI2NmU5OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7db7b6d0b27476ebef5d3a7b1743b2e",
+      "statement": "Two execution paths reach the same pipeline: the container image's CMD runs the compiled `apps/sync-worker/dist/index.js`, whereas the GitHub Actions job runs TypeScript sources directly with `npm run worker:sync` (tsx src/index.ts) and never builds the worker's dist.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L30-L37",
+          "version": "repo-lines-v1:sha256:4ed13abc151ea4725f6891aebd4b61a9be49cb8b6707cf7c0854ef4e28c89473:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzNhZTY3NjIxZjlhZjAzMzg0NzlkZDliMDAwN2UxOWQyMGJkNmQ1NDBkMWI3OGJhNGZiNWQ2ZGU5NGM4NGY3YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGZkM2I0NzAxNTI5MDY3Yzg4MTliYmNjYzE1ZDNmMjBlYzNlMTM4Mjc3ZWM4N2ZjOTFjNzA5ZDA1OWE2Yzc5NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwYjQ4ZjE0OWJkMDhkYjRkOGY3YzU4YjBkZmI4ZWQwNDQzNTE5ZWE2YzgzNDUzZmFlYzkwYjQ3NGViZDFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGE5MDljYmUzNTg0MTA2ZDViZjY4YmJkYzIyZDg3ZjdjOGFjYmRlMTE5ZjU4MWFmNjBjMjQ3YjI3YjMwYmNhMyJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L55-L56",
+          "version": "repo-lines-v1:sha256:fc2a9d78c4819e0fb12818fdf44be5b1b823f9c675dc56acad302e4973d4513d:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDU4ZjYxNDc2MDIxOTE0MjY0NWYxMzM4ZTA3NjM4YWIxODQ4OWRkYzk5YTYwNjRhZjI3M2I0ODBiMjE3NmFkNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWZiYjYwNTc4YTgxMTk5MWU5NjM0ZTU4ZDI5YTI0OWI1ZTgyZDlhYWFiOGQ4OWMwOGY2MDE1OWEzYThkZTc4MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZiMTMyOTYzMWEzNGMwZTMxNjczZmY2ODY3YmNmYjRmOWRkYmJkNzBhNzI2ZWM5NWZlNDEzM2MxZjI2ODEzMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/package.json#L5-L11",
+          "version": "repo-lines-v1:sha256:ae716620834c87dfdca2d976bf5627d2ca0b7570f8ffb90d033c6d8b55676574:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmNiNDRlNjk4OGU3OTcxMjVkMWJlYmIwMzQ4MjNkZTQ0N2EwYmQ2MTU1MzEzNzIzMjFkMDBmYjJjYjMxZGM1ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTg0OGY0ZjJkY2Y3ZDI1NzM3MjM2MTY1MWUyYzk5MTY1OGRhYjQ1OGFhY2I1ZDM1MmVkN2IxNTc0ZmJlMzdiYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzk1OWRlMDcyOTBhOTNlYzc4YWZkMmUzNGNmZDM1NjA1OGVlNTg3MGVkZTUyMzI4ZDM5NjYxYmZiYTg4YTU3OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_62632e35cd8a4b13ba859a3706c0c0fc",
+      "statement": "runETLPipeline() walks a hard-coded WAHAPEDIA_ENDPOINTS array of four {key,url} entries (datasheets, weapons, stratagems, abilities) under https://wahapedia.ru/wh40k11e/*.json, which the source marks as placeholder URLs rather than real Wahapedia paths, and processes them sequentially.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L12-L18",
+          "version": "repo-lines-v1:sha256:c8d722f23600dd1f4e6f6f2dd3763d7d8122989ae8e8f523cf21916c86b891d7:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDkxNGNkZGY3NTQ1NWVlNGZkY2MxZWVmYjE3MWIyYjQ2NDU4NDU5NTZkNmE5Njc4N2QwMzdhNjVjOTFhMmQyYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjAyZDJjMGQ2ZGM1ZTc0ZDkyZmExNGI5MWRiZWEyNjQwOTBiZWIzNWZkYjkxODhkOWIzNDExODFkY2U5ZjRjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzhmYmJiNGFlY2YwYWNmNzY0ZjVjZmQ3ZWUzMGExMWQwZTFkNTRiMWNmNDAyNmNjOGVlYTVjNzFhMzU2ZGNjNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQ3ZDZmM2RiODYyNzZhYWYwMzNhMGEyMDUzZjUxMjRhMDJlYzJjZWY5MTMyYzMwNmU1MDhmYmNjZjc5MjkxMCJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L196-L206",
+          "version": "repo-lines-v1:sha256:d41cafa930668094a06d3b5ca764891c1054ee381309b64c92539a06291557f1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxMDZhZTgxNjY0NGM4M2MwZDFjYmQ5ZDdmYmFlZDZhZGI0NWI4ZTUyNGE0N2VhMmQ4MWZkYzFiNmYxNThmOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNkN2QwZjk4NzU3OTBkOTA3Y2JhNTU2NzI5MmE1NzlkOTg3MzYxNmNhN2FhYTgwNGRlZTk5MGMzY2I1YmVjZWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYzNTEyYjliYzM1MjlhMWE0ZDVmMDcwYmExNWQxYTllM2U0Mjc5N2QxMmRlMzc3MTU1OTI4NThkOGMzOGFhMGMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_eb273ecf709648ae8796988bb47dd93d",
+      "statement": "Every SyncMetadata row carries a rulesetVersionId generated by generateRulesetVersionId() as `11.1.0-YYYY-QN-MFM` from the run's wall clock (quarter derived from the current month), not from any Wahapedia data; the API's GET /api/changelog surfaces this value as currentRulesetVersion.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L140",
+          "version": "repo-lines-v1:sha256:f457c4bbaa26f8e18954b88bdecacd4419bec2c0e1a1c1d4021c8724844e09c9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1NmNmN2Y1MTRiNDc0YTc2ZjkxMTA4ZDNkOTBjZGZlNDcxZjM5OGYxMjkxMTMyZGQ2ODQzYTBkNWYzM2I2YjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwM2Q3YjcwNjM4ZDQ4MzI1MDYwNjI2YzI2YzQ2MmRmMWQ0MWExOWVkMTNmMDc4NjQ0YTFhZmJmYjVjYTZkMmMifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L20-L28",
+          "version": "repo-lines-v1:sha256:103d9ba69a2063d2d686e58c3d77233dc4dbfef9decb4c57f38d3c1837e20fd6:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFmMjJjZjA3MzI1OTJjMjQ3MTQxY2JlNjFlZmExMTAxMjYxMmY1YTMxMjJiOWFmOWJiYWY1MmY1NzI0ZDE5NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzFhMGJjN2ZkMmRmNzBhN2NjODgwMWU1OTRmODZmMDc3NmUzODE3Y2IyYTYwZDE4NGRlYTc2MDliMDI5Zjk4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTRjMWIxMDFhM2ZhZGI0M2E2Y2Q5ZjUxZWFjYzBhNDExYWRjNmU5MGRmM2FkZjYyZDEwMjZhMjE1ZDU1ZGViZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6a696311060945b09224a83b73801be0",
+      "statement": "processEndpoint() reads the latest SyncMetadata row for the endpoint URL (orderBy syncedAt desc), issues a GET with User-Agent ForceOrg-40k-SyncWorker/1.0 and If-None-Match when a stored etag exists, computes a hex SHA-256 of the body with computeContentHash, extracts etag/last-modified via extractCacheHeaders, and compares against the stored contentHash with hasDelta. Equal hashes writes a NO_DELTA row carrying the freshly fetched etag/lastModified/contentHash; differing hashes writes a SUCCESS row.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/checksum.ts#L8-L35",
+          "version": "repo-lines-v1:sha256:88ae35232f807990928143b6983193ccf6c432ac6d912e07b6fb5c722a68341b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0MjJkMzhkZDc4MjhiMDJhY2M0NGM1ZWZkMTIwYjNmNjk0YWRhZGQ5MTk0MTgxOGVmMjA5MjIwYjU5OWQ4Y2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L68-L141",
+          "version": "repo-lines-v1:sha256:bd8cf597d44075ffad049e594be49e6a1ace5d795519683cad3ff7a88811bc32:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwN2IxNTY0NGM3MTY5ZjQyMGY5MzUyYjg1MzNlMTNhMDZlZTNiNmRlM2Y1YzdmMzczYzU4NzEwZjczM2VjZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhYWQ1NzBlMTI1YzcxYTQxZWExMWM0NWUyY2Y0NWYzZTNlOTYyOTZmMDc5ZDRiZTEwNmRmZDliMGNkOGFlMTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiOTkyOGYwMzE5OWJiMTBkNWUwYWI5ZTU2NDlmYWY4ZWVhMjhlYWI0YWIwZmNjZjAzNWFiNjdlN2M5NTMwNWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_43a59498d3084152a057e23874fa093c",
+      "statement": "fetchEndpoint() returns null for a 304 Not Modified response, and processEndpoint() treats null as no delta, inserting a NO_DELTA row that reuses the previous etag, lastModified and recordCount (contentHash defaulting to empty string).",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L45-L100",
+          "version": "repo-lines-v1:sha256:a9bf45f599c08a166b643e840c6d7a281cb8738983109a8995372a63e9554df4:eyJzZWxlY3RlZExpbmVDb3VudCI6NTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NTk1ZjRlZTVmZjYzZDUwOTUwNDE5ZGMzNDQxNDUxMzg1MWRjOTczNmZkMTdhNGY3YmZhOTMwYjI2MWI2ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhMTA5ZWNlODVkOGZjMGYwOTMyY2Q0ZmI2ZTA1MzEzZDdmNGJhNDQ0ODA0OTRmYmJlNDA4M2MzZjg5NTdkNGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZiYjQyMWQ4YWFiNTllMTZhYjAyOTMyZjlhYTVhZWNkMGZlZjExYzcxMDkyOWNjNzUyMzA0OWViYzQ1YWZkZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c0164c0e95d34479948bfcf8c85b2784",
+      "statement": "hasDelta() returns true whenever the stored hash is falsy, so an endpoint with no prior SyncMetadata row (or a prior row whose hash was cleared) always registers a delta on its next run even if the payload is byte-identical.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/checksum.ts#L19-L22",
+          "version": "repo-lines-v1:sha256:3092057bc11cbe63d5ea6488c90312b668c78dde8360744ef47b3f3909da515d:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzMxZDQ5YTdiNGNhOTdjNjgwNzQ3MjJiZDg5MzliZGI2ZTdjYmJlNjc0NTRlYjE1NTk5Mjc3MjkwM2U4ZTU1YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDk4MzA1MGU2MTk4ZTNhMTJjNWE3NjcxYjhmMDhlNzMxNmEzZmMxN2ZjNjM0Yzg1MjJlMjc2YmIzZTlhZDE4MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjZlZDY3ZGJmMjVmM2ZmNmU5ODUwMmQ0NmNjNWEyNzFhZmM3Njc3ZTQ3NjYwYzFlYjg4MGFmNTQ3N2U4YTE0MyJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L106-L120",
+          "version": "repo-lines-v1:sha256:fe0d0df7157d5c7ca25fd9d7f7f1c49524a7ff69df510cf035e5da89dbba4ffb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyY2VlODA5ZmE4ZTk0OWNlM2FmYzc2MTA1MjEzZDAxZGM2NGJmYjIyMzg5MDVjMWUzN2M4YWFhZDc4NmU0ZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQxYWYyMjMzZTQxZjU1YmRiMTYyYWEyNDRmMTRmNTYxNzQ0NTNhYjRjZWJlNmRmZmU3MjE0NTY0OTNjNjFkYjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkY2M5ZTk3MzIyMjEyMTMwOGQxMTE5MWMzMDhjMDljZDAwY2M2MTNkM2MzZmJkM2QzYjUzN2ViMWJhMDU0YzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2ff07e76855944749086288a89fa1e46",
+      "statement": "Fetch failures are indistinguishable from cache hits: fetchEndpoint() catches its own exceptions (including thrown non-OK HTTP statuses) and returns null, so an upstream 500 or network error is persisted as status NO_DELTA. status ERROR is written only for exceptions raised inside processEndpoint() itself, and that ERROR row stores contentHash: '' plus the message in errorMessage.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L149-L163",
+          "version": "repo-lines-v1:sha256:d406e8a0092b081009610e83b69756e5c701435b697cddadbc6561c4cdadfd77:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwYzkzNGY1Y2Y1OGMwZmI3NjgwNDhlNTk1MGRmNWI2ZGUyNWY5OTNlNzkzYTNkMWFhOWM3MzZmMzQ1ZmRjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM0MGY3ZGNmNzIyZjFkYWUzYTNhMzU1NWM2ZTAyOTYxMDQ4ZGUwMzBhNWI4MjVhYjM1YTg5YjZhZmEzYzU4NDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTI5ZTkxZTBmOTljM2U4MjVkZTY5YjQzNWZiNjQ4NGQxYjBhMWRmMmY0NjU2MWFiZjFhMjlmMDQxODhiODgifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L45-L63",
+          "version": "repo-lines-v1:sha256:ac60ee3cb08ae9feb4bba9a5d2d9a43ad53b6c27a010535d05805fcf102b7775:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NTk1ZjRlZTVmZjYzZDUwOTUwNDE5ZGMzNDQxNDUxMzg1MWRjOTczNmZkMTdhNGY3YmZhOTMwYjI2MWI2ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhMTA5ZWNlODVkOGZjMGYwOTMyY2Q0ZmI2ZTA1MzEzZDdmNGJhNDQ0ODA0OTRmYmJlNDA4M2MzZjg5NTdkNGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3ZTdkZGMxYzYxY2E5OTVhMDNmZDI0YTU2YzM4OGVkMTAzOWJiMThiMzQxNGE5MDA2NTA2NjgyZGMxNzk3YmIifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L83-L99",
+          "version": "repo-lines-v1:sha256:5f7f4977e184b6a1c3acb68a9d1ebe9e33c554d3d73bdb85d6a1f450b3de0193:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2NTY3MGVhZjdkMjA5MDEyODYwOTBkZTkwOWEwOTU4N2ExMWY1MDk4NTYyYjA1ZWFiM2FiNGVkMWM4NjZmNTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2ZmI5MzU3NDg2ODNmYWM5MWM1ZWQzMmMyNTc3YTJiNDllMDA1OTg2NWRhN2U5ODFmZWE0ZTRiZTNlZDYwM2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0N2Q3N2VkMTk2MTg0NDE3YjY3YTY0ZmQ5NzM2ZTFmMzNiMzQ3OWIxZDI4ZGRiNmQ4YTc5NDQyZTBiZDZhMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0YzI1ZjZmYjk3YTQ5MjMzZGZjODljNGU5Y2EwNGYzMTM2MDg1NWVlYTMxNzYwNmFiMmYzYjQ0MmRkYzYzYmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_52a7d769ccd9455db1459197c9c85b75",
+      "statement": "On a detected delta the response body is JSON.parsed only to derive recordCount (array length, otherwise Object.keys length, silently 0 on parse failure); the parsed payload is then discarded and never upserted into rules tables.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L122-L148",
+          "version": "repo-lines-v1:sha256:d095da0351b39a6a88a8d2dadc0bc8fa9d761ef35364149b091e745ee16ee6f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjZGNjNWM1MjA2MGM1YTc5NjQ0ODk4YTVhMGJlMjY1ODhiYjcxYmUwMzIxNDVlZDE5MzZiMGRlODgwNjJmZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNTM3YmMzMThlMDVjYzQyMzAxZjQzNmFjMDBkYmRlNTNlMjcyNWI5Y2Q4YWUzZmE0ZjhmMzNlZjEzM2ExNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzNGJiMjA5ZTYzZjFhZjcyMWVlYTU5YWJlMzhkN2YwZGVlMTE1NDU4OGIzMWZmNGY3NTE4MjZjZTZhNTc4MWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f734f3d01367443e9492cdaadb57ff90",
+      "statement": "Current limitation: the pipeline logs metadata and record counts but performs no ingestion — despite the 'N records ingested' message, runETLPipeline/processEndpoint never upsert into Datasheet, Weapon, Stratagem, or Ability, so the rules tables are untouched by this worker.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L122-L164",
+          "version": "repo-lines-v1:sha256:989973fdb6555b985ff9a76bc8ed65dd521029224f3fe6a582acac6a97a588c8:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjZGNjNWM1MjA2MGM1YTc5NjQ0ODk4YTVhMGJlMjY1ODhiYjcxYmUwMzIxNDVlZDE5MzZiMGRlODgwNjJmZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNTM3YmMzMThlMDVjYzQyMzAxZjQzNmFjMDBkYmRlNTNlMjcyNWI5Y2Q4YWUzZmE0ZjhmMzNlZjEzM2ExNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5ZWIxZGFiOTE5Y2NhMDRlYjkxNjAwZjU3NGE0NWFiYzIxZDcyYjBlYjYwMmRjNDkxNjU4MjFlYThkOTg5MGIifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L190-L225",
+          "version": "repo-lines-v1:sha256:df30134acaca863e8ef221a84cdd1484c7f3a732f919a5b4afa566cd2d42a083:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyYmUwYzhlZmI3MmFiOTAxZTRjODk0ZjJmNmQ5M2Q5ODk2YTNmNjUwNDM1YWJlN2ZhN2NhNmU5YzA5MzEwZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkMGEyNWNlOTcxMjdmYjg0ZjU2ZDQxNGYwZGVlNzdhMjcwMThmMzM4MThmM2E0Mzk2NzRiMWZiZTczYWQxY2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2df164ea73e94000aa041cd8617afa34",
+      "statement": "analyzeDiff() and formatChangelogSummary() in src/diff-analyzer.ts are imported by etl-pipeline.ts but never invoked anywhere in the repository, and no test file exercises them, so the changelog-diff capability exists only as unwired code.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/diff-analyzer.ts#L18-L104",
+          "version": "repo-lines-v1:sha256:d84c6ac586f21b297278bcbe8383e1dd046eeb16cbc6cf6ecfb9b267bc5934b4:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyZTk2ZjMxZDM5ZjJiNWQ0NDUyZjdhNDJmMmIzNjVhZDU2MzZiZGZkMGRhNWMzZjFjOTMzMjI1MmRiMDU0NzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkOTVjYTEzZjY5MDBmYTZmMzc1YjY0ZmI3M2Y3NjUwMDg4MWY5ZGRiMzcyYjk4YjRiYWJlZjliZmRlM2RjZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L7-L8",
+          "version": "repo-lines-v1:sha256:45181332a823c8070793723d6cc9ac1219857449f168b0950c252a1365e3b9ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjExYWNmNDU1M2UwMDJkZjNiNDA2OTkyZTgxNGI5NTZhMzJhY2EyOGMzYThlMDY0ZDVlYzhhNmQxM2Q0MzdhOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjdmZDkyYjBiZjE5ZWMzMzhmODA0MTk0OTViZTcyNTY4ZWMyMGI2YzhhYTE0ZmU5OWIyMDM5MGU0ZjM3NjZkNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmY4OGMxZWExNjcyMWMwZTc2ZWUwODZiYTFmM2UwNWNmOTJlODc5ODM5N2NlOWViYzQ5MTAwZjAwODYxNjNlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzhmYmJiNGFlY2YwYWNmNzY0ZjVjZmQ3ZWUzMGExMWQwZTFkNTRiMWNmNDAyNmNjOGVlYTVjNzFhMzU2ZGNjNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_bf11f1d3cfdb4d0fadd803fec4527a53",
+      "statement": "analyzeDiff() matches incoming against existing DatasheetRecord entries by `name`, classifying unmatched incoming names as added, unmatched existing names as removed, and modified when basePoints differ or the keyword sets differ; every point difference additionally yields a {datasheetName, oldPoints, newPoints} entry in SyncDelta.pointChanges, which formatChangelogSummary renders as an arrowed points section.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/diff-analyzer.ts#L18-L64",
+          "version": "repo-lines-v1:sha256:ba3dad8aa926729e220aaf8e8de539268abea9b94a538778eb0c0c61e5c4927a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyZTk2ZjMxZDM5ZjJiNWQ0NDUyZjdhNDJmMmIzNjVhZDU2MzZiZGZkMGRhNWMzZjFjOTMzMjI1MmRiMDU0NzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkOTVjYTEzZjY5MDBmYTZmMzc1YjY0ZmI3M2Y3NjUwMDg4MWY5ZGRiMzcyYjk4YjRiYWJlZjliZmRlM2RjZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0MzM2ZDVkNTMzY2UzMjQ5OTkzZTgyYWQxMWZjNDI2ZTNiNjQ1MGYzYTVhOTZjODY0NGFlNTY4YjBhNjlmY2UifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/diff-analyzer.ts#L90-L97",
+          "version": "repo-lines-v1:sha256:02cd2208953bd45d9fbc92edad65f39614a41335ceaeeaf312172a09f909d775:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGZiN2RlYWVmMmYwYWJjNTZhODA4ZTliNTAxZDJmZDMxYWZiZGMxZmE0YTg2NzNmOGE0NzU4ZDk3ODYwZGIxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmUyNzQ2ODY4MTNkZGNkNjUwNGY3NDQwNDk0MTA4NDU1YjdjYzY0MmY5ZjdkNGZjMjU5NjdjM2JhNDliNjZhYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWNhYTlkZDdjMzQxYzkzMGIzYmU4YjM2YmRjOTRhM2I3M2VmMmZjM2NlZDMwZjIyNDkyM2VhZmU4MjQyODUyNCJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L294-L303",
+          "version": "repo-lines-v1:sha256:03de6aa724016554aea72cf2866a72931b9a957565f3cc5fb3c39dacc288ce46:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0Y2Q1YjZlYjEwNGZhNjk2YzgzMmE2ZDdjMzk1MWI4YmVjYTg0ZjI1YzQzMjdhZjg5YTM5ODIyMzI0NzkxODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2Njk1N2UyMTQyYmY2OTM0ZDE4ZjI4NzU4ZjU4Zjc0ZTAxNmEwN2E1NGFmZTJiN2UzYmViZTEzOWZkYjkxYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI0NWE0NDU3ZTBiMjc5NmI1YzAxMjNhYmNiOWZhMDlmMzc4MmEwNDVmNmUxZmY3MGY0YzY2ZDFlMGI4ZTI2ZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2ed787b1c6e14a85895b67c9fa5afcb0",
+      "statement": "sendAlert() POSTs the run summary as { content: fenced text } JSON (Discord/Slack webhook shape), returns immediately when ALERT_WEBHOOK_URL is unset, and swallows its own delivery errors; runETLPipeline calls it only when updated > 0 or errors > 0, so an all-NO_DELTA run produces no notification.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L166-L184",
+          "version": "repo-lines-v1:sha256:de167e145e07a46abb3fffcab92aab51324745ae43a2aa0d58fa0e15cca758b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4MzNjZGZjN2IyZjg3NzY3ZTZmNGM0ZGM5YTY2NjMxZWYzMDEyZDI4Yzk5MmM5NjEyMWEwZGE5NGM5MWZmN2QifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L208-L224",
+          "version": "repo-lines-v1:sha256:d0efdf23b3d68f5e1439277aab49bb7115c02cadef38c9b4fc6c0f7d4fd7450f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzM2Y5MTYwNmI3YTk2MWExYWNkMTE3NTFkNDhhN2I1ZjJlZTk5NjQ2ZWEzZWRmZDU1NWI2YTEwMmU4M2Q0MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3NzMwODVkYjhlNTRhOGQzNWQ5YzU2NzgyNzY4OTlhNTQ1ZmNlYmM1ZDdkZTAxNGMyMGQ2M2ViYzkzMmY1N2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_55ba78273878483c91b37fc18b56b40e",
+      "statement": "The worker's entire write surface is prisma.syncMetadata.create() appending rows to the sync_metadata table (endpoint, lastModified, etag, contentHash, rulesetVersionId, status, recordCount, errorMessage, syncedAt; indexed on endpoint+syncedAt); rows are never updated or deleted, so a feed's current state is its newest row, and the endpoint URL is the lookup key, meaning changing a URL orphans prior history.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L76-L80",
+          "version": "repo-lines-v1:sha256:39ccde97c89b5b708feca781271294349956dd5d113e415239cb28e5d8332d53:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2YwMGM5OTY4Y2I4ZWMwMTBhODliMGJiOWYxODcxMTI2MGRkZWU0NDdhZDFjNGM2ZWZiMjNjOTNiODM0ODQyZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2EzZTQ2Zjk0Mjc2YjZmNmY0ZWQxZjAyYWY3OGJlZjZhMmVlMWM0MzlkZDU1ODRiOTczOTQ4MzEzMjE0ZDJiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWFjM2E1ZjM4OTg3NTRlY2ZiMjkyMTMyNDdkOWNhYjkxOWExNDQ0NDBkMGQ4M2M1NTlkYWJhZDI5ODRkYWYxMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzIyOTk4ZDdiZGM2NzVjODE5MzA1ZTVjODFiM2FkM2ZlY2RlOTY1YWIzNTM3MjQ3MzM0ZjE4ZTdmMmFhMzgyZCJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L299-L313",
+          "version": "repo-lines-v1:sha256:092966743cfd35cab8d73bb61af2479b584173c28d7b894e6bb497ba6bed8996:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlNWY1MGFlNjViZWQ5MDI4MTNiM2M1YWRhMWNmMjQwOTg1ZWY0YTdmYjA4MGZhMjc5ZDNiY2JkZTQ4ZjA5NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzMTMzOTc0ZjE2MDQxZWUyMWRlMWJkOWJhNmYwZGZmOWI1ZmNkZGE3ZDQwNmYwYmVmNDVmMzUzNzIyZTU2ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_446f54e3c4824608b3600ca6091e0b33",
+      "statement": "@forceorg/types declares SyncMetadata.status as SUCCESS | NO_DELTA | ERROR | PENDING, but the worker only ever writes SUCCESS, NO_DELTA, or ERROR; PENDING is never emitted.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L87-L160",
+          "version": "repo-lines-v1:sha256:f73b1b9f84df4a49a949b4b0bfe01abe8e4f4cb85b0bc722770e60db61aa8309:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwNzNhNTBhOTM0Zjk0OTExZWI2MGI2ZWRiZGU2MWYyY2RiZDc4YTA0Y2I4ZjE3MzBmYmRhNzkwMGM3OGRmMGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkMjExZTM4NzY2NmJmY2ZmMzcyZWUxNTAzYWEzNDFmOGU2YjhhZGJiMGY0ZTM4MjgxMTY5ZDcxYTkzYzgyOTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjVjYzE1MDY0MDIyZTRhNTgzMzZjMjg1Y2JiNjdhZDQ0OGEzMjJjNzVkMzgwNjQ4NjNmN2E2ZGQwZWVhMTQifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L281-L292",
+          "version": "repo-lines-v1:sha256:6739044ca97ba746cf04b99194320690fd3817aaf0511e750e54969817d4e13a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MDY0MWI2YWRiYzE0ZWI1OTM0MDVlOTkwYmZhY2UxMjQ2YmI5MGIwODUwYjMwMjlkY2IwMTIzMDUxNDgyNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExYzkyYTY2ODE5NjU0Y2ZhYWY4Yzk4MTZjNzBjZDc3YTVjMTI1ODdiNDc5MTRiNGI2YTI5NjBlYTUxNjY2ZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3ZWU5NTk2MTczODQ1MGEyNDFlYTU0ZmU1M2ZlZGY4NzRlYmI3ZDEwZWI4YjAyMDY2MzAwMWE5ZDViZmZhYTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7420902d6f5d43b2a1ad3f22fe8aff7a",
+      "statement": "GET /api/changelog reads the ten most recent sync_metadata rows ordered by syncedAt desc to derive currentRulesetVersion, lastSyncedAt and the per-endpoint syncRecords list, making the worker's metadata the only real data behind that endpoint's sync status.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L151",
+          "version": "repo-lines-v1:sha256:a8a24a999e3081a01cd2ba47ade72fd4c223b37ec7f009d577ef55cfaa30e134:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNDFhOTBlNGZhMGZlNDFhNWRiZjM3NWQ1YmE5MmNlMTc5OWYxYjQ3YzdhZmM4YTZkMDNmNzE2MzM4YmVjMGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5ab44c4a03ba47b5a38ea95b344dbfac",
+      "statement": "The production composition runs the sync worker pull-only: the sync-worker service declares no build: and instead references the published image ghcr.io/fatpat81/beerhammer/forceorg-sync-worker:${FORCEORG_TAG:-latest}, kept under profiles: ['tools'] and gated on postgres: condition: service_healthy, so a prod host can run one-shot ETL passes with no source checkout while `docker compose up` still never starts it. The dev composition is the only one that builds Dockerfile.sync-worker locally.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.sync-worker#L55-L56",
+          "version": "repo-lines-v1:sha256:fc2a9d78c4819e0fb12818fdf44be5b1b823f9c675dc56acad302e4973d4513d:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDU4ZjYxNDc2MDIxOTE0MjY0NWYxMzM4ZTA3NjM4YWIxODQ4OWRkYzk5YTYwNjRhZjI3M2I0ODBiMjE3NmFkNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWZiYjYwNTc4YTgxMTk5MWU5NjM0ZTU4ZDI5YTI0OWI1ZTgyZDlhYWFiOGQ4OWMwOGY2MDE1OWEzYThkZTc4MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZiMTMyOTYzMWEzNGMwZTMxNjczZmY2ODY3YmNmYjRmOWRkYmJkNzBhNzI2ZWM5NWZlNDEzM2MxZjI2ODEzMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L84-L95",
+          "version": "repo-lines-v1:sha256:a382fac2cdcd42daa28b4fb8db3de3fc5d4effb0348375a9bd28acc2cac27352:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYmEyOGVmZmY5ZGFiNjkxMjhlYzU0MWM2OWM2YTlkZjdhNTBkYWQ3MjlhODFlMzIzMDIzYzA2NzViNjc0ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc4MWQ4MzI3MTA3NTU3NDllMjNlNjkwZDZkYzgxNDRlZDBmZTgyZjFlYjU5NDcyOTg5ODU0MTM3YjBlMGJkNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L84-L101",
+          "version": "repo-lines-v1:sha256:834fd747e8e091dcc0bfd3d687d3425b12e8580fab3c62bc8d49a45df649c6d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4NzNjMjI3NjdkMjRlMTNjNWE0ZTA1ZTk3MWI0YjRmN2JkNWExMTU0Yzc3YWIyMThmMmM2NGRmZWMyYjI4NmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMTY3ZDg5OGUzNjRhNjQyZWQwNjRiNWI2ZjJiYjExZTQ4OTkxMjdjZTg2NDAwODQyZDhiYmM3NjFkZmI4YmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7ddd199bcb9430d913e94ce0ce6b083",
+      "statement": "The worker image is published to GHCR only. The GitHub deploy workflow builds Dockerfile.sync-worker on pushes to main and pushes forceorg-sync-worker:latest plus a commit-sha tag (the mechanism that makes FORCEORG_TAG pinning and sha rollback work), whereas the GitLab CI build-images stage builds and pushes only Dockerfile.web and Dockerfile.api, so a deployment sourcing images from GitLab has no sync-worker image and must use the source-build composition or the workflow instead.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L51-L89",
+          "version": "repo-lines-v1:sha256:ef324ede16e9308f83bc57be0cd43f83bfe205e24d69c0f92762e0cceb521c73:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzZTc3NDAwMDQ2ZWVjZWIxYzIwMGFmMzgwNWZjNTRkYWRkZmY5NzNiNmYzZjU2NGNmZGEwYTlhMGJmYzZiYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzMzEyNzI1OGYxYTFmMzE4NzJhMTZmNjk5NDIwZGNiYWRiYThlYmEyMTIwNmE0MWEwOWY3ODVlMWVmMTRiZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L37-L64",
+          "version": "repo-lines-v1:sha256:673e026c7ada76864d512571b94c943dd63592f8a8a1584e663659c722de9868:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhNmU4ZTk5OWM1OWM3ZDIzMTk2M2ZjNzViYzQyNWFmZmE0NjkzZjlkNDA2MWRmOWQ1MzU2ZmNiZjY5NTQ2ZTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4YTZmMDYwNTQwMWVjZWY3ZjdiOWU3N2I3MTA2ZjI2MzBlNmI0MjNlZDJiOTRjOTU5NmM1Y2FhZDJmOWFjNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiYmFhYThjNGUxYWUwOTY1YWE5MWM5MGEwYTYzOTE0N2E1MDAwZTFjOWJmMWE3YTQ4YWUzNzYzOWM2ZDFhMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzMTE1OTZlZTEzN2M0MGE3YjVmMjhjOTAwYzdiN2UzNWEyYjJlOGQ0ZjVjMzI3NGEwOTFkYzI3NTYyOTcwMzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b5aebec8818546579c631d9a407a24ad",
+      "statement": "In docker-compose.prod.yml the worker's DATABASE_URL and DIRECT_URL are interpolated from the same public Postgres placeholders the API service uses (${POSTGRES_USER:-postgres}, ${POSTGRES_DB:-forceorg_dev}), so the worker boots with zero configuration against placeholder credentials — unlike the API service in the same file, which sets no DIRECT_URL and depends on its entrypoint default. An asymmetry follows: the worker's DATABASE_URL falls back to ${POSTGRES_PASSWORD:-postgrespassword} while its DIRECT_URL falls back to ${POSTGRES_PASSWORD:-postgres}, so with no overrides the two URLs carry different passwords and the default DIRECT_URL is not a usable connection string; runs still work because the worker image only issues runtime queries over DATABASE_URL and performs no migrations.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.sync-worker#L53-L56",
+          "version": "repo-lines-v1:sha256:a605bb67fd15d586a2b31bb0cad34118da9bddb53d12fd9da154f016904426dd:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ZmOGJhYWJjNjcyNDIyN2ZjMDIxOWQwY2ZmNjdmNzNiYTZiY2JjOWQ1MmFkZTdjZGM5MDNjZGMwMjA4YTZmZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWZiYjYwNTc4YTgxMTk5MWU5NjM0ZTU4ZDI5YTI0OWI1ZTgyZDlhYWFiOGQ4OWMwOGY2MDE1OWEzYThkZTc4MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzkzYzM5ZTRjZWI3MzE1NmE2ZTc0YmE4NjZlZDgzNmM0ZjEzYjIyYThjM2RhYzg1YWYyMjM5YzVjZmVlYTdlZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L6-L10",
+          "version": "repo-lines-v1:sha256:b0d9f487cbe7396f06b6d609d7aeeeaff7b5949dd2c40097229ad3200eb204e1:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzRiYmRhODk3MTU4MjYwYWVjOTczZWM2YTNhZDliNjVjNzI4ZTlhNjQzNDlkMjMwYzM1YWZkNTI2N2M3MjUwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDJkNTBlOGIzNDg0YjMyZmU4OWI1ZTQ3YjgxZGJhZWM0NzZhMjg4YTM0YThjZTUyOTM0NWNjMjM0NGY1YmQwMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWI0NGFmYTk3NzgwNzQ5ZTA5YjczY2M1NGM4NTY5OWYyNDlkMGU2ZDA1NThlNjE2ZDAwYWI1YjgyMmFjNDhmMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjJkMTQwMzZhMzU1YTk3ZDBmMDdkMjg2OTRjZDU4MmI0OTVjYjY2ZWNlMTlmYjIyZGFkZjk4YzczY2RkOTk2MiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L57",
+          "version": "repo-lines-v1:sha256:173c88f409564db8ef2fe01543a65c754c5f1ef76518e1d3ca12b41cf2b18b27:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwZTRkZDg3YmM1MzU0M2I5OTJhM2M0YTNlMmY4NzI5NTRmZWFlZDk2NzNhMDlhMjYyZWM3NGU0NWVhYWViNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiYTYzNWJlZWM1NDIxNzY1OTkxYzIwZjg4OWE0M2I1YWI0YzcxZGUxZjgzMzhiODI2NjZhNzc5NzJiMmUwZGIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L92-L95",
+          "version": "repo-lines-v1:sha256:fb9259c7920a2324851dcb0f375988decc98c7a9ce339c7562b46a0a50200902:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmFjYTQ2ZjNlOTMwYmViMTNlOGRlODMyMDZkZjg5ZTQ2OThlZTcwZWJkNjJjYjQxYmFkNDRiMzAwMjAwNjRjYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2I2YzI4ZTFmZjZiMzEzYjBiMTViMzkyYTRkZjRhZjIzMTExYjI2NjU4NTg0MmFlYTYzNDNiZjgyOWQxYTY4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTdhMjNmOTAzNmQ3NjBiYmM0MDk0M2ZlMmVlOTAzM2JmMzRlODRkYTUzMGI2ZTA3YzE3MGM3MmIxYzdjZmRlZiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

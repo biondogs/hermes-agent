@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:22dab46fb304fe103b68800db361fabe5f8a8244fee8c0deda0263a1ccb3b10b",
+  "claims": [
+    {
+      "id": "claim_a14999ddf1ee41a9a1cf2a2326175445",
+      "statement": "packages/db-client/prisma/schema.prisma is the only persistence schema in the repo: it defines 13 tables plus six Postgres enum types, is re-exported for all consumers by packages/db-client/src/index.ts, and no component uses raw SQL ($executeRaw/$queryRaw appear nowhere in apps/), so anything the schema does not express does not exist at runtime.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L1-L202",
+          "version": "repo-lines-v1:sha256:a0a7b57697bc2a0ec3014b44a9fc091cdd2b38bfe69249d17d07cab5cad4013c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzOTI3YWE2NTQzNzAyZTVmYzU4ZTA3YzYzNjI5NGIzMjhiZjAzNzgwMTYwZGYxMDVjNTdiY2JhMzdmZWNlMzg3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0OTk2N2VjMWVkMzgzNmY4ZWIxN2FmZjE3MmI1YmZlZjdkZTYwNDg1YTQzOWM2Y2ExMWM1OTFlMTc1NTczOWFlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzNGFmY2Q0MmI4MTFhMTFiNDdjYmExMjJjMWY3MGYzZGMwZmQ5NzE1MjM4NTg4ZmRiYWVlNDg5OGVjMWNmOTEwIn0"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L1-L313",
+          "version": "repo-lines-v1:sha256:7061ce310d11c427085e3795271fe92f5d3d4fcd18ef6fa9dbf21528abdd9164:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxNWI0NWZlM2IyNmI3MGE0Mjg3YzM4NjU4NjI3MzA4OGJkNjA0MmMxZmNkMDQwZDQwZjgyZGFmMGZlOTUyMTA2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://packages/db-client/src/index.ts#L1-L26",
+          "version": "repo-lines-v1:sha256:a9db24cd012c5c33c6d7e9d8e37a5a5329bd3d4fcc018c1c5f5a090118761b9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5MmVlMTY5NDMxMDMxMjU3NGNlNDhiYmI3OTJjZDc2ZjA0Zjg4NDljODkyYmVkMGY3ZjQxMmIwYzZmMGI2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1MTczZjFlNDIzZjE3ZmQ5YjM1NTFkYTJlY2RhYjA5NTRlODdjOTRjZTQ1ZDdjMzA5NjdkNTdmOWIwMDkzMTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9dce29e5e6154510abf82cc0c35c04b6",
+      "statement": "The schema splits into three ownership classes: public 11e catalog tables (datasheets_11e, weapons_11e, datasheet_weapons_11e, abilities_11e, stratagems_11e, wargear_rules_11e, leader_compatibility_11e, paint_swatches) read by the unauthenticated datasheet/stratagem/weapon routes; per-user tables (user_profiles, user_armies, user_unit_media, user_color_schemes) scoped by userId in the API handlers; and sync_metadata, an ETL log written only by the sync worker and read by GET /api/changelog.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L137",
+          "version": "repo-lines-v1:sha256:c19615c8abe50f27a2b49bc6431624bb87e1ed1df7c242efcd19950a9c27808b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1MjUwYzQ3ZTFhYTM4ZDA4NDRlZGI0MjUzMDJhYmQ4ZjE5MGU2NjE3NzA4ZmE4NjhmNzExMmQ4MzVlOGYyMzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxOWIwN2E5YjUwZmQwN2I3ZTgwZmQyZTQwNzk4NDM0YTI0MDMyNWQ5MzBjMjIzZmQxNTYyYzNiNTM0MjI5Y2UifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L15-L53",
+          "version": "repo-lines-v1:sha256:82242411524531303248e78466eee1ebf5d043eed04ae9696e15e670f9f32224:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5MjcxNmYzY2UyNmY1ZmRmYzc4MTlkNjEwZTJiNTNmZWI5OWY1N2M2ODM5N2M5N2MxM2JlNzkxMmJlODVlNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxMDg3Y2Y1Yjk5MGRkNDg2MTdhZjExNGFhNWQ1ZDQ2MzI1MGU4ODUzYTdmZmVmNWUzOGFlNmE4NzU2MTM2ZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NDU2ZjQ1YTVlYjVkNmQ4ZGM3NzJmNmM2YjFiZmIzNjIyYjkzM2FlZWQyNDE3MDg2MGM3NmQ3NzM4ZTE4MDIifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L77-L160",
+          "version": "repo-lines-v1:sha256:9e93bf2798f3c8cf99f474ca52a46436fa70b2778f83c38c25bb67254c52bc2b:eyJzZWxlY3RlZExpbmVDb3VudCI6ODQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiMzlkNzg3ZWVjOTgwMjFhZDA3Y2IwY2IzZDcyNDJjMGZkYzk4N2E5MDYzMTYzNWQzNzYyOGQxOWRmZTAyMzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3ZGVlN2IyZTA1YjNjODYwMWQ2MzFjYzFmOWVhNjAzYWVlMjQ1MjQwMmZjNzFiNjgwNWNhMDE4NmViZTQ3NDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjVjYzE1MDY0MDIyZTRhNTgzMzZjMjg1Y2JiNjdhZDQ0OGEzMjJjNzVkMzgwNjQ4NjNmN2E2ZGQwZWVhMTQifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/rls-policies.sql#L6-L30",
+          "version": "repo-lines-v1:sha256:da31ed271e0f0edf1200d7646e14da60919115d8ac4c53841d0a1b1a4becf308:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2N2Y3ZTI4ZTdmNDYxN2Q4ZGM4NjJjZGEyOTE0YzFjOTA0MmQ3NTU1OGQ0NTMyYjVmYjFkYmM4MjgwMmU2MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0MjE1OGJjOGI1NTIwYjNlY2I3Y2VkN2ZiYzNiZGI2YmQxMzAxMjFiNzA4ZjA3OGI0MzZlMzFhZmI4MTdhMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2MzMzZmYyMTNmYjc4NzA0NzM5NGFmYmIyYTc4NDQ4M2U3YjM5YTVmN2Q0OTM2MGY0YzY3ZTk4ZDJiZjQwZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f278cb9fa6ec4ed9983fe73d2dd03fbc",
+      "statement": "Faction, detachment and chapter identity are bare VARCHAR keys with no foreign keys — no faction or detachment table exists — so an invalid factionId or detachmentPrimary is accepted by Postgres and simply matches no rows.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L270-L298",
+          "version": "repo-lines-v1:sha256:f5e7114f09bd2c7cc17bee4ca77abf6c86a9a1efb48047a79357c4ec47dc51ba:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0YmE2NzhlYmEyMDlkNzQ3NWFiMmRlMGM5N2E2NGFiZjA5YTJjODM3MjZjYzE0YWQxNzZlYTg0ZmQ2M2M2ZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MjE4NDlhMjk4NmU2NjE1NzM0OTExYTk1ZGY3ZGEyZmE1NGVhYmE3OGM2MjU4MjQ4N2I5OWMyYjAzNjA3OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhMDBkYTA5YjMzZDNiZDI1OWYzMjM2OGQ2MzJiYzZhOGZjZmFmMzJhNDllMTdlZmI3NTgwZThhZGExZjFkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L118-L144",
+          "version": "repo-lines-v1:sha256:15a471670ce6d40652857f80b3d9733a9e61d53274b246a325f8e10c9ca3d122:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjOGZmMzk1NjFjYzcyZjk1M2NjYjRmNjRmNWFkZmM5ZTlhOTk3ODYzODkwMzM2NjJlNmJlZjdhOGYyZmUzNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0ZWVhYzc0OGQyY2M3ZDU0Njg5Y2M4NGIxMDY5MTY5MzE1M2E4NTg1ODA5YTZkMzIxZTE5ZTZiZDMzNzY4ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUwN2YwZjFjNWIwYzM3OTkwNzk4YWFhNzM4MjVmNTM1MzZlMDI1NTg4MmM3NDM0ODBjYTdkOGYzYmUxM2RkNjYifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_722081fbbbe34461b3f25d35c0455a54",
+      "statement": "Every foreign key in the schema is ON DELETE CASCADE ON UPDATE CASCADE with no RESTRICT or SET NULL anywhere: deleting a user_profiles row removes that user's armies, unit media and color schemes; deleting a user_armies row removes its user_unit_media; deleting a datasheets_11e row removes its wargear rules, abilities, weapon links and both sides of any leader_compatibility_11e row. user_unit_media has two independent cascade parents (user_id and roster_id) and abilities_11e.datasheet_id is nullable, so an ability may exist with no datasheet.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L270-L298",
+          "version": "repo-lines-v1:sha256:f5e7114f09bd2c7cc17bee4ca77abf6c86a9a1efb48047a79357c4ec47dc51ba:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0YmE2NzhlYmEyMDlkNzQ3NWFiMmRlMGM5N2E2NGFiZjA5YTJjODM3MjZjYzE0YWQxNzZlYTg0ZmQ2M2M2ZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MjE4NDlhMjk4NmU2NjE1NzM0OTExYTk1ZGY3ZGEyZmE1NGVhYmE3OGM2MjU4MjQ4N2I5OWMyYjAzNjA3OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhMDBkYTA5YjMzZDNiZDI1OWYzMjM2OGQ2MzJiYzZhOGZjZmFmMzJhNDllMTdlZmI3NTgwZThhZGExZjFkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L217-L295",
+          "version": "repo-lines-v1:sha256:6147f5f8b14452f4f48f38fdb24da60ed1d365ab3d9f3791281c776fd8705ce3:eyJzZWxlY3RlZExpbmVDb3VudCI6NzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NGMxOTdhYWE4ZmI0ZTk2MzNlYWQxNmViMzBjNTYxOTA5ZmEzM2ZkMDVmMTE5YTQyOTkxNTI4NjE3MDc1MTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwNjJlMGYwMzFlMjMwNTdlNTIwYzAzZTljMGU1YmEzOTk0Mjk1MzllOWMxYTI2OTk5MDhiYzU2ZmY1NDFlZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTMzOTc0ZjE2MDQxZWUyMWRlMWJkOWJhNmYwZGZmOWI1ZmNkZGE3ZDQwNmYwYmVmNDVmMzUzNzIyZTU2ZTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7b80fbc924d94440908408b3f226996e",
+      "statement": "The only uniqueness constraints are weapons_11e.slug and the composite uniques on leader_compatibility_11e (leader, bodyguard), datasheet_weapons_11e (datasheet, weapon) and user_unit_media (roster_id, unit_instance_id); stratagems, abilities and paint_swatches have no unique index even though seed.ts deduplicates them by name/brand in application code, and the user_unit_media composite unique is what lets media.ts upsert a photo by (rosterId, unitInstanceId).",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L75-L95",
+          "version": "repo-lines-v1:sha256:b86eb65dee440d4d4008fef0b21d63439efe096ba0965e7aa2fad5ef28ce1641:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5MTk4ODEzYTA3N2ZkYmVmMTU3ZWE3ZmY1ZmUyMzdkMDdlZjkzNmM3Nzk0MjY0NjBkMTA0N2Q5MDJkZTdjZmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzMmUwNjhhMzUzYjBlYTE1MzQ3MDBmMDFjZWJlMGQ4YjUwZWNhZDBjNzA4ZWFhMTY2ZTQ3YTJjODdhN2I5YzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MTBiZmFhODI5ZjI3Yzg2MDI4MDkxN2E0OTU3MjA0MzBhNzRlODU5ODQ1NGRmMGZiYzMzOGFiNWE0ZmViYzgifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L204-L268",
+          "version": "repo-lines-v1:sha256:fc8669568e83ff41f2ead386724e3bfb8086342ad5c656c2065b2b74e96960af:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1N2ZjZDNlYTUyOTM1MjY1NDIxODFhN2U4ZGM1Yzg1NjkyMmEyNWFlNGEyODg2ZmZjZjZlOTRlOGIyODM2OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwYjc5ZTFhNzE4YmIyZDNjNDI1OWViNjdhY2MzNmZmYTNjOWMxYWI4NzQxMmFjNTlhMmY1NzNkODI4Y2EyMWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViZWJkZDhkN2RkZTZlOGNjZWZkY2MzY2ZjMDljMjI1ZTE5ZjFkYzI3N2VjMDQ2YTZhMTI0ZDU1NTliNjJhNDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImExYjVkZWJhMzVkYTQ5MjY1ZTQ4NzVlNmQxMWJkMjYyMzcwMmMwZGExMzhkNjNlZjFiZDM2NTNmZmQzNTY5OGYifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L30-L57",
+          "version": "repo-lines-v1:sha256:d2509c7dcab3f29fdf2468f70bfbf00435a96e21a4588cb0a641f7ba4a5f4728:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxMDdlOGUzMzhlY2ZmODJkNjQ0NzRlZjliZGVhYThmOWZhNzNjNjE0NWFkYmY5NjBmZjVkNzUxNzNmM2M4NGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRmMmI4MWJmZmI0NTM0N2U5MjU3NGEyY2Q1YzA2NDNhNjZkY2JiMjQxMzg0MTkwZmZlZmRhNjlkZmEyOTI4NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzYTY3MmYxMzVmYzc3MmY2OGM4ZTk5NThiM2E5OGJhZTYyOTg1ZTcyYTU4NDQxYjY5MzIyYjFiODE2OTdkYjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_10a9ab72968d40a6b5992a98bd64fa8d",
+      "statement": "Five JSONB NOT NULL columns carry the unmodelled domain with no database validation at all (no CHECK, no jsonpath, no FK from inside them): UserArmy.rosterPayload, WargearRule.conditionTree, Datasheet.unitComposition, Datasheet.stats and UserColorScheme.palette.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L31-L75",
+          "version": "repo-lines-v1:sha256:c93c2493fc7163d39b18eb0ed798342febb23516c4e521f7ab5f4275b15a1f5b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0ZGVmYzc5MTI3Mjg2MTY4MTIyODg3Zjg4ODYwY2YwYmUwMzkxYmFiMDNjODg1YmVjM2NlMTQ5NmNlYWVlYTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyMmEwOTQ4NDAwMGIwY2Q0YTcxYWRjZTkxYTdjZWJmZDFkMzRhN2VkMTg1YzgyNDRiYjNjZDhkZDM3ODM4ZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4MjY3NjVjNmUwZDJlOTIzZGEzOTM3MzU0ZTVkYWZhYTUzN2UxMGMyYTU3YTE5OTdiMjljZDQ4MDZlYWQ2OGYifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L118-L145",
+          "version": "repo-lines-v1:sha256:6b0262d523863b3ae319ce1ca8feb9e2431e59c9f8c308415abbf382c94ea293:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjOGZmMzk1NjFjYzcyZjk1M2NjYjRmNjRmNWFkZmM5ZTlhOTk3ODYzODkwMzM2NjJlNmJlZjdhOGYyZmUzNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0ZWVhYzc0OGQyY2M3ZDU0Njg5Y2M4NGIxMDY5MTY5MzE1M2E4NTg1ODA5YTZkMzIxZTE5ZTZiZDMzNzY4ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQyYjVhY2Q3NTA0OGQ0YWQwYmZlMDdlMTNhNDllMTNmNDI3MzJkZGE4MWJmYWY5Mzc2NjU2ZGZiYjhlNzA3ZmIifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L164-L177",
+          "version": "repo-lines-v1:sha256:81b15b67474233d63d9f21647db1ea6530fbcce7f82a402ddaa5e8425ed1bbbd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljYjFiMzk4MDhiNDQwYzI1NTk1ZWZmNTVlODk3NzA3MTU1YmE4OWQ0NTg4ODI0MTVlZDBhYjQzYzcxOGE3OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiNmNiYmIzMDU0ODcwMjlmNmNiNmQ2Y2Y3ODM4NmRhOWQ5ZDIzZDY5ZTE3YWJlYjkwNzBlMTllZTIxNTU4YTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzZjllZDhkNGI4ODUzMGI0MDljOTU5ZjQ1YjlkYWZhNGE4Mjk2N2JlNjA1MzA4YzkwOTRhOTc4NTJmNjRmMzQifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L86-L100",
+          "version": "repo-lines-v1:sha256:02081f998909162c186b47f950ab7626720175f8425aa21123e68206b96dc972:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzNzcyYWViNGM5ZTQyZmEyOTU4YzcxZWU5ZGMzZjQyYmMxMTIxMDg3ZjBjNjMwODk0NGYwN2YxMmM1NTljMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1Zjk3YjhhNjVkZTI3M2QxMmZlYjE0NjhkMjU1NTIzYmZhMzkwMzE0MWEwZjRlMzJhMjNhMDhjM2E0YjkxZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0MmMzMTRlYTMwZWY4ZTllNWNmYzEyNjRmZThhNTI0MTZiMTZlNzFjMDQyYTgzOWM4YTE5OGU2OGIxZjVhNjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2b24a337e3da4118963d65a2c3248d45",
+      "statement": "roster_payload is persisted from req.body with only a fallback default and later cast as unknown as RosterPayload and dereferenced via rosterPayload.units.map(...), so an external token holder can store a payload without a units array and the audit route will throw inside the handler and answer 500 DB_ERROR rather than a validation error.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L36-L51",
+          "version": "repo-lines-v1:sha256:15abb009c2fd3bc085b380d5a1a9a54b786486d2ac3726ad898341e58e988b37:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhMjIyYzA3MzdmMmE2NzQ1NDljYTJhNTE5N2U0ZGFiZjgwZDkyYzMwMWEwZDNlN2Q3YTZmMGVmMDMxZTE1OTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyOWQwZWFjYzU4YWJiYjAxNjQyYjkxMDRhOGYzMzE0YzY3OWMzOWY1NTcxYzAwYjAwMDliMTEyZGZjZDkxNjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNDFkNzNjNDUyMmJlYTM5ZmY4MTVlMjRiY2YxMzExODUzMWQ2NzFlYjNjZjUzMTIxODg1ZTExYTFjNDcyNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1MjYzY2NjMDE5OTNkYzRlMDExMWE4MmU2YmRkN2ZiOTIwNGQxOWQxOTc3N2E0NDc1NjRiMTAyZjczY2FhMDUifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L56-L122",
+          "version": "repo-lines-v1:sha256:0c2ea9646fc73f5312ebc8d00773d9112e39456309ca31eba1a0bcb5d71a2796:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwNjQxNGYwZjkxMWM1NzM5NTcxNDc2Y2M2Nzc4ODVlMmZhZDc5YzJlYWRjNzQzOTJkNGEzNWUxYTZiNGEzMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyN2Y3MzliZTIyODBkYWVmZjExZDVjZDZlMjMxYjk4MGQxOTYyYjU3ODgxYmEzNGU3NjljMDU3OWQ2NTc2MjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4YjdkNzgzMmE4MTQwYTJhYjMwYTJjYTI0OTk2NzEyYTc0NjIyMzFhOWYwMmMyYTA5N2YzNjI5NjZkNzQzYjMifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L183-L187",
+          "version": "repo-lines-v1:sha256:dc8d80300099fc79c5e9167e9b51e09975d97dfafa63cf8cf6eb3caab487e4c5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGM3ZTQ4MmE2YTc3YTUxYzliZDNkYTI2MmZjM2I0YjkxMGM0MDE2ZmEzMDJiMzljMDdlNzFmMDY3MjM1ZThkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2NjZTYxYzliOTgzMjczNDcyMGJjZjg2ZmYzNjI3YzY5MjQyM2QyNjcyM2E4NmU5MmRlYTE5NDcyN2ZiYTc0NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmVkYWVlMGE1YzUxYTYxZDllMWM0NjkxOWJkMGFiY2M2MjRmZDc4ZGVmOTgyODRkOWI5ZmI5MTkwNDUyNTBjZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_197e4c9a49084b048d2dc24bc89833f7",
+      "statement": "WargearRule.conditionTree is never read or written by application code — no reference to conditionTree exists in apps/ or packages/rules-engine-11e, and the seed inserts no wargear_rules_11e rows at all, so /api/datasheets/:id always serializes wargearRules as an empty array; likewise no application code touches user_color_schemes or paint_swatches.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L59-L82",
+          "version": "repo-lines-v1:sha256:768172f1b37dc68bc7a00123b3835292adfbbc941ad943d824bdb5239453817a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjMzU4MjlmOGMxYWNjNTk4ZmJmNWRkOGE2MWYyNjU2NWQzNGU2OGQ1NWNjMTFmODY2OTY5ZDI2N2Y2OTM2NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiMGRjNTRhN2Y5Zjc3YjJkMDdhNjYzYWU2YTE5YTc4ZTI5MWQ1ZmI1YWNkMjY2NjcyNzIzNTdjMGJlOWEwNWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmZmU5MGFmNWE0YzdjZDNlZmVkMDU1Yzc3MzA4Y2M3M2IwZmIwYTQ0NGE3YmU2ZjkyN2Q0MWExZDQ2YjAxNjIifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L164-L177",
+          "version": "repo-lines-v1:sha256:81b15b67474233d63d9f21647db1ea6530fbcce7f82a402ddaa5e8425ed1bbbd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljYjFiMzk4MDhiNDQwYzI1NTk1ZWZmNTVlODk3NzA3MTU1YmE4OWQ0NTg4ODI0MTVlZDBhYjQzYzcxOGE3OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiNmNiYmIzMDU0ODcwMjlmNmNiNmQ2Y2Y3ODM4NmRhOWQ5ZDIzZDY5ZTE3YWJlYjkwNzBlMTllZTIxNTU4YTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzZjllZDhkNGI4ODUzMGI0MDljOTU5ZjQ1YjlkYWZhNGE4Mjk2N2JlNjA1MzA4YzkwOTRhOTc4NTJmNjRmMzQifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L16-L227",
+          "version": "repo-lines-v1:sha256:4f90a1e39470d2d84a192eb95b300aa6c0c08e450e4cabe70123d10b93898457:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZTgyMDBlYmQxNzA5YjZhNjc1YmVjYjNiZTlmMzllNTNiYmFjMDJjYzkyNzIzNDYyYzA1NDY4ZWIwZGE2YTE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjOGZiYmI0YWVjZjBhY2Y3NjRmNWNmZDdlZTMwYTExZDBlMWQ1NGIxY2Y0MDI2Y2M4ZWVhNWM3MWEzNTZkY2M3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYWZiYTQ4NmI5ZWI3MjkyMjZjZGIyNTk5ODM4ODA5YjFmMjU1MTllMDdmMGUzNTMxYTNhZjQ5NGIxMTIwZTVkIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_8c4392e797b34e0991ac2cc966e36f29",
+      "statement": "user_unit_media rows are kept in step with roster_payload only by the client: PUT /api/rosters/:id replaces rosterPayload without deleting the removed unit's media row or its S3 objects, and only deleting the whole roster cascades them away.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L114-L163",
+          "version": "repo-lines-v1:sha256:10b34ea397a25d74a5c23eb45c89d9ac0f28829d1aa4fffa1c43bde7f459bc0c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJlYmMyYzgxNzljNTg2YTcyYzIwMzcxMmE4YjU5NTdmMzI1NjBkNGFhZTJmNTIyZDMwNzI3YzlhNzQ2NWQ2OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkOGQwN2RjM2NiYmMwMDkxOWIwZmYxYTRjMGMyZTY0YWFiOGNkMzg5ZmE1OTY0OTI2ODdjMDNkYzJkYjk4Y2YifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L95-L143",
+          "version": "repo-lines-v1:sha256:9e754d43c6068e6ed739556d78d720d870d98d2c870ace4fe5dc4858ab7e5dc7:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZjEyOGI0YzNmOTIyMzA0ZGEyMGQwYjQ2NGE1NzJhYTI2ZWU5NGUwN2E2NjAxZjRhYmFmYjdlNjllNGQ2MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhYzc3MTU0NTgzOTg1YTZkMDBhNWExM2NjMDVkMmZmZmIwM2QwMmE5ODFmNDEyOTNmOTFlMzY3NGUwODI4MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1ZTk0NzZlMzBmM2IyNjFkMDY5YjNhNGNiOTU1YmM1OWUwNGI2M2Q1NjQ4ZTExZWMzZjRmYjMxYWZmNGU2MGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4OWNiNjYwODdkMWMzMDM3NzFhYTgxM2Y5NDYxNjRkNTlkMzg5OWVmMDQ0Y2U1N2MzZjgyOGE2OGQ1YjcxYWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_55e4dcb37e6c42a79980189d75901fd6",
+      "statement": "The six Postgres enum types created by CREATE TYPE in the init migration are duplicated as string-union types in packages/types/src/index.ts, so widening a TypeScript union without an ALTER TYPE ... ADD VALUE migration type-checks and then fails at insert.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L1-L17",
+          "version": "repo-lines-v1:sha256:4dc8269bedd79a59ae1cc6807119b3b144f3b4d7c93d776d90a5c760b9e9adc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5MjdhYTY1NDM3MDJlNWZjNThlMDdjNjM2Mjk0YjMyOGJmMDM3ODAxNjBkZjEwNWM1N2JjYmEzN2ZlY2UzODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1MjEyMzdhZmEwNTMzNjBlNDQ5ZDBlNDI1ZjdlMjIxMmM5NzNhYzVhOGI0NjBkNzE2NTQ3MGQzYjU2YzZkODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlNDZjM2QyMzUxMDg2ZjVjZDE2ZWFiMWY0ODAzMTZlOTU2ZmFiOTMyMjMyZWE5NDIzNzcxNDY1MGE1YzkyNDgifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L20-L68",
+          "version": "repo-lines-v1:sha256:4ee81e33937db0e9d2588029ce92d46fb5668848caa138a17ead89baa5fb9ab9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMjA4YTAwYjU2YzlmODA3ZjI4ZjYxM2FkNmY2ODljMWU0MGZhZWRjNmJjNmY2ZDE5NTVhMGI3MmQ0MTZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3NzdlMWUxNjU3OGE4MTZmY2ExMGM1MWEyZTEzMGJhOTZmMWQ3NDdhOTFhMGExNTUyYThjNjllZmE0ZWY0NWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxMjI1ODE3ZDM5NzU1MGVkMGY1YTJhNTY0YWFlZWJmMGE0MWFhMTA5Yjg2NTU0OGVlYWViMjViMDdjMTE3NGEifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L6-L27",
+          "version": "repo-lines-v1:sha256:317d3549c28da82bfead1ca817c5e55d830d8c0b05f7a5f6c9c2820e0a4a89f6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMjA4YTAwYjU2YzlmODA3ZjI4ZjYxM2FkNmY2ODljMWU0MGZhZWRjNmJjNmY2ZDE5NTVhMGI3MmQ0MTZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MjgyMTY3OWI0Mjk3OGEyYTNiYTlkMTQ2MmY3MjA3MTMxMDczNDZlYzc5MjAzZmIyYzA4MzU3N2E1Njc5OTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzNTIwZWUzOTIyZGU4MDA4NjdjZGMzYTc2NjE0YzNmODAzY2NjMTZjNTE0NzNhZTFkOWNlNDI0YmU2ZjcxMzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhOWEzZmRjNzJhYTFlNmNmNDBmZWY0ZTEzOWYxYzBiOGUyMTMzNDhlZjA4NWQwMTE5MzU4ODBlNjhkOTVlMDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fd9c435852704d2f8e47ddc16d0299c0",
+      "statement": "packages/db-client/prisma/migrations contains exactly one migration, 20261005170232_init/migration.sql (plus the postgresql migration_lock.toml), which creates all enum types, tables, indexes and foreign keys; schema evolution has never happened here, so prisma migrate deploy is a no-op after first apply.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L1-L32",
+          "version": "repo-lines-v1:sha256:9d295761830c3c7c1b0721294b2ab038d0955c48053a3756193200f32353841d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5MjdhYTY1NDM3MDJlNWZjNThlMDdjNjM2Mjk0YjMyOGJmMDM3ODAxNjBkZjEwNWM1N2JjYmEzN2ZlY2UzODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhYTdhZjhmOTcxODJjNjhhMjY5YTFmNzYwZjMzOTdkMTgwOWI2ZTAwNGUyMTg5NzVmZWU1ZDc1MGJkMzUwZjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0YWZkMjQzNDZlMTM4MDk1Mzg1NDVlYjMwNmQyZTY4MGQ4MDM1MzMyMzgxN2UyZTQwYzE1OWQyZGY3ZWU4MDMifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/migration_lock.toml#L1-L3",
+          "version": "repo-lines-v1:sha256:693566b52c49db47a2b0901d12400aa3d710d13a49f4a2a154b80c0505ed737c:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmRhMTc1ODgxYzU4MTRjZGIyNGVjOWNjMDNmZmY4YTNkMGUxZjgyMzQ3M2FlMWY1MTlmZTZiZDM2MTZjYjU0OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTM2Yzk2YjA0YzEwNGU3NThkMDJhNmNkYjdmYzI1ODNiM2M3N2I2YzZlYWNhYjFmNTYxZjRjNDQ1OTdiMTBiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_86139ffd4e9140c1b023c7b7cde2437c",
+      "statement": "The datasource uses the pgbouncer-style split url = env(\"DATABASE_URL\") / directUrl = env(\"DIRECT_URL\"); client generation runs from the root postinstall hook, but Dockerfile.api installs with npm ci --ignore-scripts and runs npx prisma generate explicitly, and wahapedia-sync.yml runs the same command as its own step, so the postinstall hook is not load-bearing.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L24-L28",
+          "version": "repo-lines-v1:sha256:9e468494bb008090aa7ea45272c1ba8fde6459c185272b09f57c3427afe16952:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGVmNjg3Y2Q5M2I2ODgxNDg0YzEwNTIyMmQyNTAzZmYzNGViMTViZWI0MDE0YmY2ODk2MTcxMWVjYzU4YzlmNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmZjNTIxMDFlOWM5YzdjMGY5NGE2MGI4MWE0NGNkZGRjYTI5MDEwMWEzZjRjZWQ3NDM3YzQ2OTY1MWRjMDNmNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZlZDgyNGVkN2VhYWNmNDc4YzI0ZDJjNjE2YWQzNzQzNTY4Y2M1NDc1ZmQ2MDcyOGI2YmRkYTkxYjZlY2E1YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2M4ODUyY2ZhNzE5NGMwN2ZkZjFiYWE1YjJiYjY2NWEyZTU0ZmE4MDM3MDlmMDM4MWRkNTY2YTIwN2ZiZDFhMyJ9"
+        },
+        {
+          "resource": "repo://Dockerfile.api#L16-L30",
+          "version": "repo-lines-v1:sha256:476a718312c003b96e90ad188934471ad027fa6a93c191943c55a6561920354a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTZiYjBkNGYyMGRjZDlmNzdkMDJmOGI3OGViMzMzZDYyY2ExYTUwYzQ5MmE5M2YzMWJkYzgxYzkzYzlhY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwOTc3Mjc2NjgyOWMyMjQ0MzUzYmU4NGMxMzEzYjJiYTA2NmRkYzc0ZTFlZTIwODg1NDc1Nzc2MjkxNmZmZjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkZjc3NzE4ZGE4MDFlM2ExOTFmNzQ2NzcwYzRmNjM1ZTJlZGRhNzkyNTE4NjZjZmE1Mzc4ZGI0ZTk4MmZhZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2MmNkMzE3MGRmMTI0MjdmNTI1ZTg3MTUwZmE2MWI3YTljYzRjNTU5NDdmMWY5YjVhZmU5MGZiMDAyMDc5NzkifQ"
+        },
+        {
+          "resource": "repo://package.json#L17-L22",
+          "version": "repo-lines-v1:sha256:3c6447ff01ca914dae746714492563f0f0bd8a90dfdd6dcd6fc52b111a9d8641:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWY0ZTc5MDI5M2NlNzhlNWEzMWMwN2Q1MmViNzg0OGQwZTQxMGJmYzI5MWVhYzJiNTY1YTY1NDU0N2Q0ZmE3NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUwZDJlYzU4ZDQyYjBiMDhmMDVhYmExMmNkZjk1MjRjMTZiMDM1MTJlOWYwOTA0NTU0ZWQxNzE0YWY0YWU2MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDExODZmZjBlMWZhMTYzNzQwYWQzMjg1YWNkZmEwN2E0MmE4MTM2NzAwNzY1Y2JiN2M0YmY2M2Q1ODFjNGUxZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjE2YjU1NzM3YTVlMjViYThiZTg4NDE0ZjEyYWJjODdjNWIzYjI0MjQ5NmIwNGZmZWRkYjhlZThkOGVmM2U5YiJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L6-L18",
+          "version": "repo-lines-v1:sha256:b7959f45239abdd42b798d1e2a60ad3f3789c3164c10d000330cbea997cdbd53:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA5NjcwNDg5Yjc3YWE4ZTc1MmNlZTNkNTMxYTk4ZDEwNWY4MzlkMjE1NGUzNTYyOTg4YjdjNTRkOWI5NzRkMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA4YmQwOWY3ODdlYmYxYzNmMDI1OWQ2M2I2ZWNlMzlhZWNhYjlkZjNjMmVmMzJmNDM4ZWU5NDA0MTk5MDY1NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZmYTM3ZDJjN2FmMmM0NmUxYzBhNjhlMzgxOGQyOTZjMTJjZmIyMTUzNzU4OGIxMjYxMTU5MzE3NTFiNThiZDEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_00a85edf692645ed91f11e8f5f08e3ab",
+      "statement": "apps/api/entrypoint.sh is the automated migration path: under set -e it defaults DIRECT_URL to DATABASE_URL so the schema's directUrl validates on plain Postgres, runs npx prisma migrate deploy, and only then execs the API — so a failing pending migration aborts the container before node starts. With DATABASE_URL unset it logs 'catalog-only mode', skips migrations and boots anyway. Dockerfile.api copies the prisma directory and the prisma/@prisma packages into the runtime stage solely to support this.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L40-L66",
+          "version": "repo-lines-v1:sha256:411afbb6e54b2e8dc724d5492a85496b7d49cfcd6b0bec181c792e04a3900d51:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNTliNjQ4YTg0Y2I5NjYwZTBlOWYyYzZhOTI5MzFiMDM3N2Q3NDI2YzJlNWYxOGZjODQyYmRhMTljODQ5YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4MWNkNzU5MGEzNWQ3ZGMxYjk3MGNhZmMzY2Y3YmQ3YTZkYTA0ZTg5ZDI1YzlkZjUxZjc3MzI4NDVkOTMyMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMGJiMmZhZDFlOGI0Zjk4NzAzNWVjNDZhZTliYTFhYTMzYzZiNTRjZDdkMGNkOGE3ZTg5NjI0YzRkZDhiYWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L1-L20",
+          "version": "repo-lines-v1:sha256:42cc56c7ac632e70797867c602a967e8b48afeaf32be29fb3f06a6f55701795e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4MDc2ZDNkMjhkMjFlMDIwMTJiMjBlYWY3ZGJmNzU0MDlhNjI3NzEzNDQzOTAyNWYyODJlMzY4ZTMzMDVhYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dc5d077e973b4e84b19863fd64811724",
+      "statement": "packages/db-client/prisma/seed.ts (run via tsx, registered as the prisma.seed hook and exposed as npm run db:seed) is re-runnable but protected three different ways: findFirst-then-create guards for stratagems, paint swatches and abilities (best-effort, with no unique index behind them); upsert on the real unique slug for weapons and on composite uniques for the link tables; and upsert on hard-coded UUIDs with an empty update object for the five datasheets.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L17-L21",
+          "version": "repo-lines-v1:sha256:0ac4e1311e5a32046087f25a65c5252eb808afcbd30b9af6fd25421b8eb5601b:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWY0ZTc5MDI5M2NlNzhlNWEzMWMwN2Q1MmViNzg0OGQwZTQxMGJmYzI5MWVhYzJiNTY1YTY1NDU0N2Q0ZmE3NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDExODZmZjBlMWZhMTYzNzQwYWQzMjg1YWNkZmEwN2E0MmE4MTM2NzAwNzY1Y2JiN2M0YmY2M2Q1ODFjNGUxZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlYWJlZmU3MmNiMmYyNTYzODQxZmRjYWM3OThmYmFjOTgxMWY1NTcxOWM2OWFkMDk0MTM1MzIyYjU5ZTJiMCJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L8-L26",
+          "version": "repo-lines-v1:sha256:394673f58c6ee177aafd87f832ca6b894b3153f87506dc1151d598b491e4bc04:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyMTQzZGIyMGYzZGFiMzUxYjhkMTI4YTUxNDdjODQ3NzU2YjkwYWQ3ZjRhOTg1NGRkOWM5ZTk0YzQ3NjcyZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2MDA0ZjBhMjJmZmZmZWU0OTE3MDM1OTA3NDA4ZjJlMjI1OGYwMjk1ODcxM2MyMTQ5ZDU3ZjZiNDZjYTZjMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L16-L236",
+          "version": "repo-lines-v1:sha256:84249572cc76f3c478a6c637c40a2201360ef39cc118cce7accb0bd1f43330f4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZTgyMDBlYmQxNzA5YjZhNjc1YmVjYjNiZTlmMzllNTNiYmFjMDJjYzkyNzIzNDYyYzA1NDY4ZWIwZGE2YTE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzYTNlNDZmOTQyNzZiNmY2ZjRlZDFmMDJhZjc4YmVmNmEyZWUxYzQzOWRkNTU4NGI5NzM5NDgzMTMyMTRkMmI3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjOGZiYmI0YWVjZjBhY2Y3NjRmNWNmZDdlZTMwYTExZDBlMWQ1NGIxY2Y0MDI2Y2M4ZWVhNWM3MWEzNTZkY2M3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_6c9af01391ad4997b752bcabb4dd891c",
+      "statement": "Because the datasheet upserts pass update: {} against hard-coded fixture UUIDs (11111111-...0001-0003, 22222222-...0001-0002), editing a seeded datasheet in seed.ts will not propagate to a database that already holds the row; the row must be deleted (cascading to its rules, abilities and links) or edited directly.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L82-L168",
+          "version": "repo-lines-v1:sha256:17ac38d218f2581413eb026cd06fdcd3a0ce90e3061ef587aaeeeaf55b97a55b:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZGQwZGVkZTg3NWEwNGI2NTM0OWJmOTMyZWE5Nzg3OWYyMTcwOWJkN2MxZjY2MGNmN2RhMGU3ZWJlNGVlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNjFmYzg1MjE0MTFjYTAxNDQ3Nzk3YmZmNDczZmRlMjgwZTE5NDhkYjQ2ODU1MDBhNmRjNTA2Nzc2N2I3OTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjODQxZDdjNWIwODU4YTJiYjVkY2ExMGRjMThlOTYwZjliMDc3MDQyM2QwYzI0N2VlYWMwMzdkMWI1ZDRlYTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRlN2MzODYxNzM3ZjNlOTYyMzk4ZDg4YThlMjdlNzZmNDVhMjRjNzUwYTU3ZDMxZDU5NzA5YWE0ZjM1MWE5MzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_41e3232bb3054b6da59c381df8ef0b4e",
+      "statement": "seed.ts writes only catalog tables: it creates no user_profiles, wargear_rules_11e or sync_metadata rows. Since user_armies.user_id has a FK to user_profiles(id) and no code path in the repo inserts a profile, a roster write for an unknown JWT sub is rejected by the FK and surfaces as 500 DB_ERROR.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L69-L88",
+          "version": "repo-lines-v1:sha256:b3f299afad80807679a921bb16ae8eadbafb25a92c0cf45daf91baa90da63241:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3NzIwODZlNmE0NWY2MmNmZjc2YjZhM2ZhNTRlOWJkMDhhMjQyZDYwYTVhYjRmZGVlZTg1ZWVlYTk2YjI2MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1NmI0ZDI3YmM4NzZlMTZjNDYwMTcyMDQwMjU3MmI4MjExMGIzMjc5MDRmN2JhNzg0ZTMyYzU1NzdjMDczNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4YjdkNzgzMmE4MTQwYTJhYjMwYTJjYTI0OTk2NzEyYTc0NjIyMzFhOWYwMmMyYTA5N2YzNjI5NjZkNzQzYjMifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L291-L296",
+          "version": "repo-lines-v1:sha256:5ab687ba47b283cabee6543651c89b1248e51a038079a00dadef084cbe95893c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTRiYTY3OGViYTIwOWQ3NDc1YWIyZGUwYzk3YTY0YWJmMDlhMmM4MzcyNmNjMTRhZDE3NmVhODRmZDYzYzZkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDI3NDQ3MGJhOGI3NzlkNDljNzhjN2MwMDkxMWYyNmQ4ZWMxNjlmNDkzMTI5NjU2OTQ2YWJiNTIwMTk0ODMxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzI0Y2VmNWMxNTI0Mzc1ZGJlMTMyYmI0NGUzN2NkMWViOTE3Y2QzNTQzNGM4NGQ1YzA0YzYwMTJmMWRlYjZiMiJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L16-L227",
+          "version": "repo-lines-v1:sha256:4f90a1e39470d2d84a192eb95b300aa6c0c08e450e4cabe70123d10b93898457:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZTgyMDBlYmQxNzA5YjZhNjc1YmVjYjNiZTlmMzllNTNiYmFjMDJjYzkyNzIzNDYyYzA1NDY4ZWIwZGE2YTE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjOGZiYmI0YWVjZjBhY2Y3NjRmNWNmZDdlZTMwYTExZDBlMWQ1NGIxY2Y0MDI2Y2M4ZWVhNWM3MWEzNTZkY2M3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYWZiYTQ4NmI5ZWI3MjkyMjZjZGIyNTk5ODM4ODA5YjFmMjU1MTllMDdmMGUzNTMxYTNhZjQ5NGIxMTIwZTVkIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_fe693d7d0f7a45feb63160921f174d02",
+      "statement": "In the dev stack, migrations plus seed are applied by the one-shot db-init service running scripts/dev-container.sh db: it waits for Postgres, runs prisma migrate deploy, then npx tsx packages/db-client/prisma/seed.ts with a non-zero seed exit logged and swallowed ('seed is idempotent fallback data'), then idles with tail -f /dev/null so logs stay readable; it re-runs on every up.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L71-L77",
+          "version": "repo-lines-v1:sha256:53519d0a5527e3eb7234ac7395aef0b071257f29a83fce5f46095ed3028c4814:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjY2YzFjNTkwNGE2MTdkMjJhZWE2MGVjMzM4Njk3ZWEwZGRmMjc5NDViNmYwYWNhMmUxYWRjNTUxOWJiNjU3MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDkxZjVmZTkzMjgzZGM3ZGU1NDU5OWYzYTMwNDQwOGFhZThmZjA0MDcxZWZjMjZmNzY1MTA2ODQxZTI4MzIxMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTkzMWYwMzY5ODMxMTkwMWJiNjAwYzI3N2ZiNWZkNTNhZTE4MTEyYjdhZmQzNDZkN2YzMWNhMTJlNjI4NWVhMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmE2MDE3NzY3MGQ3NjFkMjg5NDYyNDU2MjQ1NjlmMmViZjU2ZDM5MzRlZDE1ZjAyM2MxOWY1MWUwOGU0ODYyMCJ9"
+        },
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L80-L82",
+          "version": "repo-lines-v1:sha256:d6cc935ff8c1eb535180cb15eb3489dee3481212dc5fc88b04d4bfee1163da87:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjNlNmU4YzZhOTIwOTA4MjE4NGJlYTA0M2Q0N2IwZTAyY2U5NzRiYzNlMjg1Mjk5N2JmNjMyYjU4MDhmMGY1YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjYxY2M3OTJmYjFmZWE1NzViN2ViZTdhNmU2MmJiMzczYzI3ZTRjNTdkNzUyMDBlZjZmZDA5NDdlZjMwMDg0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTc4Njk0OGZjMjBhMTAyNjU1MWI5MmJmMTlhMTA0NzZjZmUyOTUwMWVkNmQwZjc2YjBjMmY2M2MzNGJjYjg1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDY2ZmU5NTZmYmFiY2JmNGU2ODAzMjNlZTVlZjg4NjVmYTAxNzY4ZWEzMmM3NjNlNTU1ZjU4Mjk2NTY0MDgyOCJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L10-L21",
+          "version": "repo-lines-v1:sha256:b05104099a606a9afef25094ae7f10a8ec2b211ed55ed1d3e167f1f89181bf50:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyMGVhZmIyNDI2NDEzYzhjMWYyOWQ3NGRhOWU5ZTgyNmZhMDYxODdjOWRiYzY5ZmE4NTlmMWVhZGIzYzNkOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3OGNmZjRjMzViYmRjZmZjZmZiYmM4ZGU2ZmE5YzI2MDhlYjk1YWI3MTM1NDc3YTU5OTdhYjIzMGMyMDVhZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ2ZDEzYjZjZDYxMzVjNzk3MjAzNGQ0ZWQ3MjhmZjA2ZTg5YjZmZDE4NTQ4NWJkZTljNjgwY2QzMmMwOTMwMGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2a913fb60612446faf056c9448352a77",
+      "statement": "In the pull-based prod composition the api service receives DATABASE_URL but no DIRECT_URL, relying entirely on the entrypoint's DIRECT_URL default; sync-worker is the only prod service given DIRECT_URL explicitly, and its fallback password differs from DATABASE_URL's (${POSTGRES_PASSWORD:-postgres} vs :-postgrespassword) — harmless only because the worker image ships no schema and runs no migrations.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.sync-worker#L34-L56",
+          "version": "repo-lines-v1:sha256:843a789ed1dd349c46aa3062d010b0755feccea67e001cc7fefefa9608669365:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YzkwODdlNDk5OGU4NWMyMTNmNTIzY2Y3N2Y2NDQ5MzU1ODgyYWE2MjFiMmUzNjhiZjA3Mjg3YTMwNzhlNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmYmI2MDU3OGE4MTE5OTFlOTYzNGU1OGQyOWEyNDliNWU4MmQ5YWFhYjhkODljMDhmNjAxNTlhM2E4ZGU3ODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzZTExZmU4OTBmYzVlMDdmYTdiZDAzY2MxMWU2MWVkYmRjMTQ0NmY0MzZmZjc3MmVhODdiZjUwMDVlOGY5MTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L69",
+          "version": "repo-lines-v1:sha256:3b0f0ff4b0d69f60ebe0c539985b1aeefe41a6f04506700c63385391d136af84:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNGQ3NzBiMzY2NmQ5Y2M0OTdhMDM3YWZiZGU1MGMxYmJmZDQyZGQwMzkxM2Q5YzBmMzAzMDljZWE2MjcxYTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5NmNlODMwNjExNmYxYTJjODBjNjVmNjg2NjEyZjkxZTYzNGUwMzg2M2FjZThjNDQxNTgxMzA5MmJmMDY1ZGIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L86-L95",
+          "version": "repo-lines-v1:sha256:6f95d882dcb1e475c49f8aa9efc6cdfe8f3231768829ab215eb3d24ae2124149:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmM2Y1OWI5ODM5NzQ5ZWY2YWJkYzBjZmM1MWNiODhiZDYxMjEyMmYzOTIwYWNkMTM5OTM0ODFjNWY1OWFlYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3ZDQ2MzM0M2E3YjMxN2QyNTc0NTFiMjQ2NGNjZDc5YzI3YmZmYWEzNjczYWRlMjFkN2Y2ZDA3NDU2NTMwMTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9dfc48e1c96d4f80b8e5d53cc9006145",
+      "statement": "packages/db-client/prisma/rls-policies.sql is intent, not enforcement: it enables RLS and creates auth.uid() = user_id policies on user_armies, user_unit_media and user_color_schemes, but no migration or script applies it, auth.uid() is a Supabase function absent from plain Postgres, the compose DSNs are the postgres superuser which bypasses RLS anyway, and user_profiles is covered by no policy at all.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L10-L18",
+          "version": "repo-lines-v1:sha256:65d567b7b42e6dc99b57934060d332a2c01381a7b855517c88b40d60c9e00bd3:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQ0ZmNjNzk4MWQzZjllN2M2ZWI4ZDYxY2EwMjFiY2JhNjI2OWYxYWZjMDIxOTQzZTdmNGVjNjE2MjdiNjU1YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzc2OWQyMzdjZDQyMGI5ZDM4Yjk4MWEwYTRmNjc3MDE5MGE0YTgzZGNhMWZlNTZjNGY1YmExZTJjYmMwZWY3NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWI1ZmFlZmRhMTc5OTA5MGQ4Nzk1ZjhjMWJkZDdkYzMzNjYyZGY4NDk5MTRiMzFmZTE2Y2MwYzM1MzJhOTk0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2Y2YTk0Mjk4OTIwMGM0NjhiYjM4MmZmM2JmZTNmNTgzOGM3NjMzN2FkMzVmOGRlMzZiNWVhYTFkMDgyM2NkYyJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L53-L57",
+          "version": "repo-lines-v1:sha256:63d527d90f33f9b3a5994f8a64eec05d6f2968a4da7706c5e72e52e8445e619c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjcwZmMxMjBmOGNhY2Q5N2M4NWM3NWE0OTkzNTdiZjViNWQ5ZTNjOTJlNDliM2U3MDE4ZWI2NWUwN2QxODExZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzVmNjY4MjY0N2VjYzBlMjA2NjUwMDVmZjJhNTkwZGE2NGY0MGQ3ZGE2YzFhZTMxNWZmMDhjZmYzYTFjMWMyNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDUxZDNjOTJjOTZmMThkNjEzZTM1ZTg2NWI0MjAxN2U4NGQ1ZGE5ZjliNTkzYTFlMWQxNDBkNmUwZGZhYTRjNyJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L204-L298",
+          "version": "repo-lines-v1:sha256:ee7fadf3f08c5a322812f76e5e072d49bbb4d4768851ec39244645ea09efe9b2:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1N2ZjZDNlYTUyOTM1MjY1NDIxODFhN2U4ZGM1Yzg1NjkyMmEyNWFlNGEyODg2ZmZjZjZlOTRlOGIyODM2OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MjE4NDlhMjk4NmU2NjE1NzM0OTExYTk1ZGY3ZGEyZmE1NGVhYmE3OGM2MjU4MjQ4N2I5OWMyYjAzNjA3OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViZWJkZDhkN2RkZTZlOGNjZWZkY2MzY2ZjMDljMjI1ZTE5ZjFkYzI3N2VjMDQ2YTZhMTI0ZDU1NTliNjJhNDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/rls-policies.sql#L1-L30",
+          "version": "repo-lines-v1:sha256:dbf49ac85bb0ee11b86f4c2536c3fe4cb6dc7fd3a7c50b3d3fc84c170d3b3a96:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYTIzM2JiM2Q0Y2NjODM2NzZmYjg5ZTJkMmU4N2Y1OTc0MzI4M2JkZThmMTQwZDcyMTI1ZjZhNWFlOTFiYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0MjE1OGJjOGI1NTIwYjNlY2I3Y2VkN2ZiYzNiZGI2YmQxMzAxMjFiNzA4ZjA3OGI0MzZlMzFhZmI4MTdhMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_63abe4c39253426ab05e9f9505b77a06",
+      "statement": "The Wahapedia ETL never mutates catalog rows: per endpoint per pass it reads the newest sync_metadata row, sends If-None-Match, compares a SHA-256 content hash, and inserts one new row with status NO_DELTA, SUCCESS or ERROR plus recordCount and a date-derived rulesetVersionId (11.1.0-YYYY-QN-MFM), making sync_metadata an append-only audit log indexed on (endpoint, syncedAt) rather than per-endpoint state.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/checksum.ts#L11-L22",
+          "version": "repo-lines-v1:sha256:8f7128cbb4a54597bd385997dcae3aebbc0fd5e219d00f348e462fe744319b49:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMWY3YmQyNTRlZjJkYzg0ZjE1YWJlYmI5YzNkMjc4MWI4YWViZjJkZDFmNzRkNWM5Mjg1YjQ1ZmZhMjA5OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiMmQzZTdjNmUxY2YzODNlZjlhY2VlMmI4Y2EzYTU3ZjViYTIxMGU4MDIzMmNhOGExMjAxNDY5MTEzNjJhYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI2ZWQ2N2RiZjI1ZjNmZjZlOTg1MDJkNDZjYzVhMjcxYWZjNzY3N2U0NzY2MGMxZWI4ODBhZjU0NzdlOGExNDMifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L68-L163",
+          "version": "repo-lines-v1:sha256:8379b4da7d00bee11f10a096f5cab3c1d2642ee894529cc0bd5c7382afc85639:eyJzZWxlY3RlZExpbmVDb3VudCI6OTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwN2IxNTY0NGM3MTY5ZjQyMGY5MzUyYjg1MzNlMTNhMDZlZTNiNmRlM2Y1YzdmMzczYzU4NzEwZjczM2VjZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhYWQ1NzBlMTI1YzcxYTQxZWExMWM0NWUyY2Y0NWYzZTNlOTYyOTZmMDc5ZDRiZTEwNmRmZDliMGNkOGFlMTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTI5ZTkxZTBmOTljM2U4MjVkZTY5YjQzNWZiNjQ4NGQxYjBhMWRmMmY0NjU2MWFiZjFhMjlmMDQxODhiODgifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L194-L268",
+          "version": "repo-lines-v1:sha256:1f220b7ed4904df79282e8d8f7cfea0f0478616c292ccbcf616d0af36ddbae5a:eyJzZWxlY3RlZExpbmVDb3VudCI6NzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWZhMzhlNGY5ODkwMmMzZjUzOTE2MjI2Y2JhNDE1NjY4M2I4NGIxZmZiMGNkYmJlYzE3NTJhYjgzNDMwMzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwYjc5ZTFhNzE4YmIyZDNjNDI1OWViNjdhY2MzNmZmYTNjOWMxYWI4NzQxMmFjNTlhMmY1NzNkODI4Y2EyMWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyZmY4ODY1MWMxOTIxZGY1NmJjZjJjOTY1ZTIxYzNiYjYwZmI0YTZmOTA4MTMyZGMyN2E1MzRiNTE5NmRlMDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImExYjVkZWJhMzVkYTQ5MjY1ZTQ4NzVlNmQxMWJkMjYyMzcwMmMwZGExMzhkNjNlZjFiZDM2NTNmZmQzNTY5OGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a03cb1c47acb43308dcdc57d99096635",
+      "statement": "The ruleset version id exists only as independent string literals: GET /api/changelog derives it from the newest sync_metadata row and falls back to '11.1.0-2026-Q3-MFM' when the table is empty, POST /api/rosters hard-codes user_armies.ruleset_version_id to '11.1.0-2026-Q3', and the sync worker regenerates it from the current date — no constraint ties them together.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/changelog.ts#L121-L165",
+          "version": "repo-lines-v1:sha256:880407ca429fb1129dfe853356c985ff2cbf12b87d9c95d9c69b1f726304c743:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNTM5MzZkOTUyNmJjYTg1ZDRmMjMwZTY1YzMyZmM1NDYxY2YyNmVjZjliZDE1ZmMzYWYzNTljMzliNDcwODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2YTFjZWFkODllZTdhMzMwNzYyNjY5ZjEwZjVjODc1NmM5NDE0NTQ4ZDFmMWMyOWMyYWIzYmM1OGViMTY2ZGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ1YTk5ZWY1M2RhYTFkZmM1OTVlZDNmZTExMzA2Nzg3Y2JlOTI4OTNlNWY5OGZlZTQzNTliMzAxN2JhNDNjYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI0NjY3MzdkMmMyMDgxNzMyNTE1ZDczOWVkNTYyY2Q5YWYyMjRlMzdiNTZmOGViMzE1YjM0Yjk5ZjBiYTI5ZjMifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L69-L82",
+          "version": "repo-lines-v1:sha256:b15ab3f5fb6c63ff1692b11ddbb05eeeb770b54e4f757070a688011f4758367a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3NzIwODZlNmE0NWY2MmNmZjc2YjZhM2ZhNTRlOWJkMDhhMjQyZDYwYTVhYjRmZGVlZTg1ZWVlYTk2YjI2MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1NmI0ZDI3YmM4NzZlMTZjNDYwMTcyMDQwMjU3MmI4MjExMGIzMjc5MDRmN2JhNzg0ZTMyYzU1NzdjMDczNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljYzI5MGQ0YjdmMDJlMmFjMGMxMmFkODkzYmU2NjI5NTdhYWM2Y2IwYmQ4NjM2NDVlNDY0YzU1NTk3ZWJlOTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L20-L28",
+          "version": "repo-lines-v1:sha256:103d9ba69a2063d2d686e58c3d77233dc4dbfef9decb4c57f38d3c1837e20fd6:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFmMjJjZjA3MzI1OTJjMjQ3MTQxY2JlNjFlZmExMTAxMjYxMmY1YTMxMjJiOWFmOWJiYWY1MmY1NzI0ZDE5NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzFhMGJjN2ZkMmRmNzBhN2NjODgwMWU1OTRmODZmMDc3NmUzODE3Y2IyYTYwZDE4NGRlYTc2MDliMDI5Zjk4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTRjMWIxMDFhM2ZhZGI0M2E2Y2Q5ZjUxZWFjYzBhNDExYWRjNmU5MGRmM2FkZjYyZDEwMjZhMjE1ZDU1ZGViZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_68198024934c4e9ea8d547aecf2cec36",
+      "statement": "updated_at columns are maintained by Prisma's @updatedAt, not by the database — there is no trigger or default — so any future raw-SQL or manual UPDATE leaves them stale, and the catalog tables (datasheets_11e, weapons_11e, abilities_11e, stratagems_11e, wargear_rules_11e, paint_swatches, sync_metadata) have no updated_at column at all, modelling them as insert-only.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L154-L202",
+          "version": "repo-lines-v1:sha256:7a6fa685ef2e86ed0f4ec426eb6adbd298e506e2bfedff9576838087c5a685dd:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmYjVlOWY4ZTYwYWMyMTdiNmI3NzMzZWU1OTJmNjE3NDc0NjU3OTA3Y2I0OTY2ZDMzZTEzYjc4ZGMzYjA5MTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmNTVmZTMwYTUxYjg4NGIxNDQ2ZTQ1YWUxZTkxNDM3MTc3OWMzYzE2ODI3MjM5ODg4NTQwNjE1N2NjNTY0ZTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0YWZjZDQyYjgxMWExMWI0N2NiYTEyMmMxZjcwZjNkYzBmZDk3MTUyMzg1ODhmZGJhZWU0ODk4ZWMxY2Y5MTAifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L45-L54",
+          "version": "repo-lines-v1:sha256:385c424351e3df211f75ec3a3951fca6d7e4602eb27b5175b3072ba4f96837a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YTcyOTZkNzUzZDU2ZDg3Mjk4MGQ0Y2UyN2JkYWNjYTgwZDQxYjY4NDIzNDQwYWNmNjVjZjA5NTRjYTliYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyMmEwOTQ4NDAwMGIwY2Q0YTcxYWRjZTkxYTdjZWJmZDFkMzRhN2VkMTg1YzgyNDRiYjNjZDhkZDM3ODM4ZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAyNDg3YjE5NWY5MjM2NjQ3MzMzMGE1MDY3YjE4MTAwMTZjZjM4YzM2OWQ0Zjc1MGM0ZmQ1YmRkMGFkZTNiZmEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L72-L114",
+          "version": "repo-lines-v1:sha256:429ec05997ff11412083687bac066ed2dcc1ae5c9b982712e5db6a0cd379efaf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhZGQ4MDc1OTIwNDUzM2M5ZTE4ZjVhMjE3ZDZkNGExMzQ1YTVjYjFkYjk3ZGJiZGZjMzZhZWZjN2Y4YjA4ZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxMjI1ODE3ZDM5NzU1MGVkMGY1YTJhNTY0YWFlZWJmMGE0MWFhMTA5Yjg2NTU0OGVlYWViMjViMDdjMTE3NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0ZWVhYzc0OGQyY2M3ZDU0Njg5Y2M4NGIxMDY5MTY5MzE1M2E4NTg1ODA5YTZkMzIxZTE5ZTZiZDMzNzY4ZjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c3d5eb52102e4b3a816298d3e77acb8c",
+      "statement": "The authoritative table count is 13: the init migration contains exactly 13 CREATE TABLE statements and schema.prisma declares 13 models, while docs/DEPLOYMENT.md contradicts itself — §3.1 claims a fresh self-migrated database has 14 tables and §3.2 says 13 — so the §3.1 figure is a documentation bug, not a 14th modelled table.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L106-L108",
+          "version": "repo-lines-v1:sha256:b007b814c9f91783d1ec38667e2b375183dc9598e02df4944ed396d1b50f9c3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODg0YWM3ZTFkZjYzMDAyOGU4OGJlZmMyMTMzYTkyZTkwZmI5MzA0YTdkMmVlMDllNjIyNGQwMjI3M2NmZGY2MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzcyYTNmNzA5ZDc4N2Q4NDZhZTdhZTA0ZTNhOTEzYmExNTYxOWRkNjE0Y2I5Njg1NGFjNTZhODgxYjAxMmE4MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWIzZGJhODc4MjI5YjMyNmEzNjhlOWJiN2QwNzYwMTM3NDUwYjE4NmI3YTAwODkwNjkxMzM1ZTEwMGEzZTNjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjFiYjRhM2Y1NmM1MTNhYjNkNzlhMTc5NzI1Mjk3ZDUyNmY0ZGZlMzZlZmNmZWUxNjUyZjAyZjMxMDE3NzQ0OCJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L141-L146",
+          "version": "repo-lines-v1:sha256:a520ea9cc791696f7cea72ce929423709fce0f84c16cdaefe8c1b6529138508e:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDMwM2M2MjExMDQ0OWZjMjVhYjUwY2M5MTA2YzhhMzEyYzZmMmZiOTM3MzVkOTc3NTAzOWIwNTU3YmQwYzBhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDNkNTFkMmIzMWQwODEzODFiMzZlOTA0ZWI4YzZjNGFhNmYzZmQwYTk2ZGZmMTk4OTgzMTgzZTM5NGFjYjljZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDEwOWU0ODVhMjQzNGUxNmM0MzkyYjQxMTU1ZTE3YWExN2Q0N2FiOWJlMWJjZDAyMjZlNDIxYWU3YzE5M2I2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjU4NmU4OTViNDUyZGRlZGIyNWY3OGM1NTU4ZWNmNDhiMGU0MzllZTRkZTU3N2EwNDJlZWYxNjRlYTgzMmQ2NiJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/migrations/20261005170232_init/migration.sql#L20-L202",
+          "version": "repo-lines-v1:sha256:09db8e4aee91bdeb40e8be399e911017a3b2c502c0cc7a6bdf8c42af3deaa35f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2MDZlZWY5NDlhOWQ1MjlmYjNlOWQxMmY5N2JkZWYyMzA5NzZmNTU0NzRiMWM2ZjgzMDQ3ZmZhODMxM2MxMWNjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0OTk2N2VjMWVkMzgzNmY4ZWIxN2FmZjE3MmI1YmZlZjdkZTYwNDg1YTQzOWM2Y2ExMWM1OTFlMTc1NTczOWFlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhZmJkZmY1NDJhMzI1ZTYyNWFmMjMzNmJlYWEwNTRmYzU4OTI0NjMyYzUyMDNiNzRiOTk1ODJmNzJjMWNjODU5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzNGFmY2Q0MmI4MTFhMTFiNDdjYmExMjJjMWY3MGYzZGMwZmQ5NzE1MjM4NTg4ZmRiYWVlNDg5OGVjMWNmOTEwIn0"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L72-L313",
+          "version": "repo-lines-v1:sha256:c5d51bb8008c3445adfb0854974328bcdc0908cb14271808f21c9cff9b64fad0:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjYWRkODA3NTkyMDQ1MzNjOWUxOGY1YTIxN2Q2ZDRhMTM0NWE1Y2IxZGI5N2RiYmRmYzM2YWVmYzdmOGIwOGQwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmMTIyNTgxN2QzOTc1NTBlZDBmNWEyYTU2NGFhZWViZjBhNDFhYTEwOWI4NjU1NDhlZWFlYjI1YjA3YzExNzRhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_32ae2e96d3794cac9dd79016cdf28081",
+      "statement": "The prod composition's api service pulls the published image with no command override, so a fresh production or CI database is migrated to the full schema by the image entrypoint's prisma migrate deploy — Docker on the host is the only requirement, with no source checkout, Node install or Prisma CLI — which is why Dockerfile.api must copy packages/db-client/prisma plus the prisma/@prisma packages into its runtime stage, while the sync-worker runtime stage carries only built dist output and therefore cannot migrate at all.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L45-L66",
+          "version": "repo-lines-v1:sha256:b514112e77b71647984ff46828b8a34463e9762b908ccce974c668e0b1c0a0c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmOGUwOWQ4Yjg1MGMxMGJiYjljZTg0MzBkOWMzOTY2YTQ5YzgxOTNiNDMyNDIxODU3Yjk5ZjliODQyYTcwNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4MWNkNzU5MGEzNWQ3ZGMxYjk3MGNhZmMzY2Y3YmQ3YTZkYTA0ZTg5ZDI1YzlkZjUxZjc3MzI4NDVkOTMyMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5ZmJjODVjYjcxYWQ0NjEyZDNlZGUzODFjY2Q0MjdmMzQ4Y2NhNzIwYmI2YTNlZjlkNjk1YzMxMzhmNGRlNjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L42-L56",
+          "version": "repo-lines-v1:sha256:1479c0ab0b2cc7842f42254238fb601dcd4b4deeb4450b709a07de68992efb9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNTliNjQ4YTg0Y2I5NjYwZTBlOWYyYzZhOTI5MzFiMDM3N2Q3NDI2YzJlNWYxOGZjODQyYmRhMTljODQ5YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmYmI2MDU3OGE4MTE5OTFlOTYzNGU1OGQyOWEyNDliNWU4MmQ5YWFhYjhkODljMDhmNjAxNTlhM2E4ZGU3ODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU5YmVkNjIwYjA0YTQ3NjAzNDhiMWMyMWVlMGE1M2NkMzY4N2Q5Yzg1OWQ1MzRkYTc1OGRjYzFkYmVjZjU3MGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L10-L20",
+          "version": "repo-lines-v1:sha256:a4815335137468be891faeb5d841427da61cf4ff01da65a61aec2c623082a56c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0NGZjYzc5ODFkM2Y5ZTdjNmViOGQ2MWNhMDIxYmNiYTYyNjlmMWFmYzAyMTk0M2U3ZjRlYzYxNjI3YjY1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViNWZhZWZkYTE3OTkwOTBkODc5NWY4YzFiZGQ3ZGMzMzY2MmRmODQ5OTE0YjMxZmUxNmNjMGMzNTMyYTk5NDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L57",
+          "version": "repo-lines-v1:sha256:173c88f409564db8ef2fe01543a65c754c5f1ef76518e1d3ca12b41cf2b18b27:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwZTRkZDg3YmM1MzU0M2I5OTJhM2M0YTNlMmY4NzI5NTRmZWFlZDk2NzNhMDlhMjYyZWM3NGU0NWVhYWViNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiYTYzNWJlZWM1NDIxNzY1OTkxYzIwZjg4OWE0M2I1YWI0YzcxZGUxZjgzMzhiODI2NjZhNzc5NzJiMmUwZGIifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L92-L108",
+          "version": "repo-lines-v1:sha256:e77c5c36058afe9b87ded1bf13dfa5dfc1d79b278dc0ab940932f1788747bb14:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZjY1NGJmNTFiMDA5M2QxNWU2Y2MxNjY3MjE3ODEwMjFiMDdiZjdlNDgwYjg2ODJhMTA5NGY0NTk0MzViMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3MmEzZjcwOWQ3ODdkODQ2YWU3YWUwNGUzYTkxM2JhMTU2MTlkZDYxNGNiOTY4NTRhYzU2YTg4MWIwMTJhODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiOWEzOWQ1YTdhNmNmYTE5Y2U1OGNlZjVjMmRiMmFmYWYzOTZkN2YyMWMzMjgzMWYyMDM1NGViNmJhYTQ2MDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxYmI0YTNmNTZjNTEzYWIzZDc5YTE3OTcyNTI5N2Q1MjZmNGRmZTM2ZWZjZmVlMTY1MmYwMmYzMTAxNzc0NDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4e339008f5284d579a0b2ee7e7a19bf0",
+      "statement": "Unset variables in docker-compose.prod.yml fall back to the public placeholder credentials postgres/postgrespassword on database forceorg_dev — the same DSN .env.example and the dev/source-build compositions hard-code — so a zero-config test stack boots and self-migrates the schema the documented commands assume; seeding stays a separate manual host step because no prod service or image runs seed.ts, leaving a fresh prod catalog empty until someone runs it (or a sync pass).",
+      "evidence": [
+        {
+          "resource": "repo://.env.example#L19-L20",
+          "version": "repo-lines-v1:sha256:c0ee35b08e4601e3262b63cf112bfcf1b53e33aece1ae6edaf67186340cf16ef:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzgyNGI2NDA1NGZkMDFiNDZiYjA5YTEzZGRjZGRlOGE1NDhjYzY4YTdkYTNlNzI5ZWE1YWY3ZjcxMTA2NmM4MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjE1OTFiOGI0NjRjNzA3Mjg2YzdmN2MwNzcxYWMyOTI5YTljN2U5ZjJiNWNkYjg3ZDNlMTI4ZDc2MTFjNDY4ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDI2NjEwZDk0ZTNkZGU4NGE4YWY4MGZjY2IzZGVkNTU5ZmZhMjIxNmE4ZjQ4NmJiNzNmYjFiZjMwMGZhMTEzMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjMxNWJjNTdjMjM5MGE3NTM2MWMyNTA4MzM4MmI0MzIxNzE3OWUwZGMxZWEwZWQ1MTA3Mzk5YzEwNzYzOWE1MCJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L14-L33",
+          "version": "repo-lines-v1:sha256:6dd3e0bd92b12465e537d1ac2d4a9ec4981d9d3df5e3f89dc32384d0db624c8b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5YzBmMjI4N2M0OGQzZjI5OTViOTQ2MWRjMmZmMWQ5NTQxMzBhZGFiYTZjYmUxMDJjODI4YTI2YzViMjJmOGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0NGNiZTZmMmUyYjRjYTFkNWZiNWY4NDM5NzQ0MTZiMDVkZmVlNzIyYjVjMzM5MWFkMmI0MWIyNzIyMzUyMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFmMTIwM2M2YTY2ZTViMzliN2QxMThlYmZlZTUzNDdkMjVkNmMyN2UwMTUxMTE0OGYyMTlmNmIxOThhZDIxMDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNDdkY2I4NTU5YzQ1NWUzYTdkNmQyNTNiMDg3ZmQyZTE0NzFmNDc1NGFkOWRlMDJhNWQyNWZiMTRmM2VlZDcifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L54-L57",
+          "version": "repo-lines-v1:sha256:92c5a45b63393c82744f1328cf21fe877644eab12fe9c2e4708d883cd09c3dce:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjBlNGRkODdiYzUzNTQzYjk5MmEzYzRhM2UyZjg3Mjk1NGZlYWVkOTY3M2EwOWEyNjJlYzc0ZTQ1ZWFhZWI1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjFmYmRiYzZkOGIzNWVmZjY1Njc5ODdiMzg3YzQwMjYxMTI0ZDVmYmY2Y2ZjMDA2MjY1MGU0MmI2NThlNjQ4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGJhNjM1YmVlYzU0MjE3NjU5OTFjMjBmODg5YTQzYjVhYjRjNzFkZTFmODMzOGI4MjY2NmE3Nzk3MmIyZTBkYiJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L148-L154",
+          "version": "repo-lines-v1:sha256:8e8f443d7e9e2f040bf91f0b47e93ef351fac12f338a890b42185e39a4516ac2:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU0MmFlZTM5ZTEwYjU0ODM2OTJhZGM0MGIxNWE3YWZkNDgxMjg5MzdlZWZmNTFlNTVjNjk1MDVjYjUyYjUzZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzkzZjFkYTgzN2M5OGM0Nzc0ZmU2NzJhZGRlNmQ5ZTk3NjVmODNkOWNiODNmY2M0NjRkYjY0YTUyOWUyZWRiYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDFhOTlhNzc2ZDg1YzE4ZmMxM2Q5MjY4NjY0NzliNGIyMjY3NmQzNzRhM2M5YWQzMTlhNWU3MzkyNzkyMjE0NyJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

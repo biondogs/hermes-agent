@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:4233c57b87cc3ba04483039446b3611b08701180ba760123b0148d2daa235c57",
+  "claims": [
+    {
+      "id": "claim_b4779affc927462598ff63bc2789d99b",
+      "statement": "packages/rules-engine-11e/src/detachment-validator.ts is the sole implementation of the matched-play structural checks; it exposes validatePointsLimit (POINTS_EXCEEDED), validateDetachmentPoints (DP_EXCEEDED), validateRuleOfThree (RULE_OF_THREE) and validateAttachments (ORPHAN_ATTACHMENT), all returning ValidationError[] with severity 'ERROR' | 'WARNING' but in practice only ever emitting 'ERROR', and validateRoster simply concatenates them in the order points, DP, Rule of Three, attachments.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L78-L83",
+          "version": "repo-lines-v1:sha256:7edc288eb55a79a414e193eee291d7bd20e059bc6142e681b8a302ea85b55d8a:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzNmZjE3NWNkODBkMmQ4ZTQ3Nzc0NWQ5OTMxMmRlZWM1OWVkNGIwNzg2NmM3YzBjZjkwMjBmNzRiNTc4NGJjNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODRlNDIwOGNkNmZmYjhjNGEzNTQ3YjJmNTRhZGExOTk3OGMzZjM2NWU3OGY5NTAyZWY1MTQ1Y2RkMmFhODU0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2RjYzg3MDRjOGMxNWRlZjBlYWFkOGI0YTE2MGJmN2U4ZWJjNTM2M2ZmMTViMTg1OTdlMzRiMDc2ZGQxMDlkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmQ4NDA3NTM0NzBjYjQ3YzEzYjZjNWExN2U2NWVjOGE0MTI3NTVhM2U3MzUxYWNhNGJjYmNiZDRiNjMxYTNkZiJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L124-L136",
+          "version": "repo-lines-v1:sha256:6a79c391cfce9e21d812da8c8b50ef34263278100e56b849bb63838198b789dd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2YjhkYjU2MDMyNThkYmZmOGNjNWM2YTQ1MzVmMGI3ZGRlNmYzOTMxNjg3OTNmNDAxNDcxMDc4MzkzZmRiODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmNTJlNzM2OWYyMWI2NTY4MDA2YjE3ZTM5ZjljYTRjYzc5NmVjNWZjNjVhMTRjNmMyZGE0Mjc5ZTU0NjNkM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L8-L13",
+          "version": "repo-lines-v1:sha256:59c6a071f41b540c8ee96f563d59556b9b2bca0597242894d3a9221cf0c3b5d5:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODU2NzVhYWNjOWQyMzZmM2Y1Yzg0MmMwYmQyMzE0YzQxYWViMDEyNmYzMmQ0ZDA5YzBhNTZjNDc1NGYwMGQ4NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDlhZTcyNzg5MGNiMmI3MTgxYjJiMjA2ZGY5Njg4ODdkMWEwMDBmM2VjNTE0OTJjZmFiZDI0MDJhOTY4OGRhZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2Y4ZWZhZDcyNWRmZjA5MjM3NmM3YjIzYmEzMTdjODc5ZjMxZmZkZDk2ZmZmZmQ4ZTM5NjY0NGUxMjdmMmQ5NyJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/index.ts#L28-L36",
+          "version": "repo-lines-v1:sha256:5780503f78bed1cfc86b1e1495cd2b33559fa0168689e21a18233b4b7130d7f3:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE3NDQyOTA5ODcwM2U2MzRjYzY2NGU0OTc1ZDE0YWM0OTEyNzQ5ZTUxNjI0YWIxYTM1M2JlMjQ3M2Y5YzEwYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzQ4NTBlN2I0MzY2ZGZlNGMwNjdjZTMwNGZlMWViODk2YTNhMTYzMWU3ZTM0YmU5MmE1NGVhMjQzNTQ5N2Q4OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2ZjZGNmNjkxYWY3MzhmODY5ZDc3N2E2OTRjYTNiYmY3ZmEzOWU0NTllNTIyYTJjYTBkZmIzY2JiMDA3YTY5YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_76f550d3c5c94851bee5f4f0484ed63e",
+      "statement": "Both budget checks compare strict greater-than against the denormalised RosterPayload totals (roster.totalPoints vs pointsLimit, roster.detachmentPointsUsed vs dpLimit) and never recompute totals from the unit list, so a roster exactly at the limit is valid and a stale cached total is validated as-is.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L19-L32",
+          "version": "repo-lines-v1:sha256:23bcb81987b9a412786dda45a4588c5de7a8a281cc1e1332a1e474374cc74a01:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZlOWI1Y2I4Yjg2YmQxZThhOWRmZWY1ZDYzOTg4OGJhMjg5NGYwZDQzMmVmYjg1MjFmZTI2OWI4ZTM4NDRmZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxNDc3NjdmNDhhY2FkMzg0ZjM2OWNjOGY4MWZhZGY2NmViNmQ4ZGI3N2IyN2ZiZmQ4Y2IzZTQ2N2ExNjBlZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1MDFhNmFmM2MyZjRhNjg5OTM0ODJiOTJkOGI2MGQ1Yzk5MGExODI2ZjliYWY2NWY1YjFiNDgxZGE3MzI2NzUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L18-L49",
+          "version": "repo-lines-v1:sha256:05450d06d019d0bcf63b960fac5d8d99a57a3bc44ce6878fbdb566e7eac5a32f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1ZTVmY2ViZTY4MDAzODJmZmM0MjM5MDAzZTU5NzhmZmEyYmU4MzZlYWZjYWJkMzBkMjU4MWFlOTUzYzUwOTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmZWQxYzYwZmExM2ExNmM5YTlkYmU0OTI4NjU2NWI4YWUwNGJjNGQwOGIxMTE0ZmQ2ODNjNGM5ODc1N2U5NGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3NzQxNTVmY2E5MTQyOTVlZTQwZDhlNzVlNTEzZTRlMjZjMTM3ODdkMGRkNWQzMmNmZmY3MzIwZTRlMmIxMzUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L183-L187",
+          "version": "repo-lines-v1:sha256:dc8d80300099fc79c5e9167e9b51e09975d97dfafa63cf8cf6eb3caab487e4c5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGM3ZTQ4MmE2YTc3YTUxYzliZDNkYTI2MmZjM2I0YjkxMGM0MDE2ZmEzMDJiMzljMDdlNzFmMDY3MjM1ZThkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2NjZTYxYzliOTgzMjczNDcyMGJjZjg2ZmYzNjI3YzY5MjQyM2QyNjcyM2E4NmU5MmRlYTE5NDcyN2ZiYTc0NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmVkYWVlMGE1YzUxYTYxZDllMWM0NjkxOWJkMGFiY2M2MjRmZDc4ZGVmOTgyODRkOWI5ZmI5MTkwNDUyNTBjZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1d1a72b34dcb428db71a06457dc3f1f1",
+      "statement": "validateRuleOfThree counts roster instances per datasheetId, exempts datasheets whose battlefieldRole is BATTLELINE or DEDICATED_TRANSPORT, errors with RULE_OF_THREE when a capped datasheet appears more than 3 times, and silently skips units whose datasheet is missing from the lookup, meaning a roster of unknown datasheets yields no Rule-of-Three findings.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L78-L138",
+          "version": "repo-lines-v1:sha256:c2884f975bbbe3b13dbe0e11e106ff4c9c524244530657ccf6eb601f6f3ebf2e:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5ODdmMjYxNmM4YzRhNTJlZjlmMjZkNTU1MmY3MWU0MWY2ZTg2ZmY0NTQ5ZTA0YzY2NjI4NTY5MDYyYTcxMGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhNDEwYmUzZGEwNmY3ZmI2ODIzNjdlMzM5NGYwOTUzZjE0Yjg3NDY1MzQ5NjNiMDc2YjE4ZWIyYjM2ZThhZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkM2I0N2I5ODJjY2NiMDRhZmZjMmY3YmUzNTc2YmVkNjQ4YWMxOThlYzc0ZmE2NzIzNTVhYmM0MGZiYTZlNDQifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L55-L88",
+          "version": "repo-lines-v1:sha256:1b84ac2ec23d8808d3ef32be248048eb921e7dca3017fe981ff5752acda91465:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3YmNjYmQ1Y2U4ZGMyOTZkNjM1Y2M1ODIxZGQxZGFlMDQ1ZDRkYWM4YjhhM2Y2Y2JiNTJhNzgzYjJlYjcyMTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViMmY1YmZmNzM5OTA3NmU4MTFiNWJkY2UxY2E1OTcxYmQwZjI2NGIxNjU5NTEwODU4NmY1NmNhMTFjNWQwZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4YzJhNTA5NTBhY2VhNzE5NTUwZjE1NDQ0YzlhZjlmZjM5NmUwMzE0NjA0ZDUxYWMyZDBiZmM4MTAxNTZiY2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ef2cd9a3c2b54a998d38c607249ad013",
+      "statement": "validateAttachments only verifies that a unit's attachedLeaderId matches some roster unit's instanceId and reports ORPHAN_ATTACHMENT (ERROR) scoped to the dependent unit's unitInstanceId; it never consults the LeaderCompatibility data or the engine's isAttachmentValid, so an existing-but-illegal leader/bodyguard pairing passes validation.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L141-L172",
+          "version": "repo-lines-v1:sha256:3056a06e19dec6638e0204bbe3402760e14b32b3b7c70b212c06a1a4889f07ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMDRmNjBmNmMxM2I2ZmU0OGI4YjAwNWE5YmYwMTRjMGRlN2MyMmFiYTFlZDJjYTRjOGNkZjZlYWY3MGY0ZWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxNjQ4YmMyYWEyODlkNmM2YzcwZmQ2ZjIxMmY1OGQwMDU5YmYzMjUzMWU0YTQ1M2RlNzc2NjMyOTZmZDE1MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjYWFmMmI1ZGEyYzEwZGE1YzZiMDRlN2Q2NjRmOTE1YTQzYTcwZGE0Y2FlZTgzNDg3OTAxMzM5NDEzNmUyODEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L20-L30",
+          "version": "repo-lines-v1:sha256:4ca7ab2c188191ea22229d5f52d99de144a95eab27cb38242fc9c6b6efe2d91b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlODZhOTY2NTI3Y2VkYTNhMjBiYjUzNzMyMjc1YjE2YjJjZWY3NTczMjc2MTQ1NTRmYzk3NzA2ZDFkMjM2MzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzMmVlNjc2MTNiYzlkZDk1MjY5MDRmMGRmYjdjZTE4NDM5YjE2MzA1NDIzMTUzZTA4NWUyZDdmYzM5ODljZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMjNiMGMwMjI1OTE1MjYxZGRjZTg1MGYwODJiZTgxYTU4OTYyYjI5ZjViZGUxYTllMTU5NDYwYzZiODc1YTIifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L94-L119",
+          "version": "repo-lines-v1:sha256:8cf7417fe0b986c77c3e49cd646df457f4175ec7388e283345986e6656fc892d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNmQ4OTY5YTE0YWFhNDQxOTA3OTU1N2YyMzhlNGFhOWRlN2RlYTI4ZDdmOTU4Njg4YmY2MzQxZmZmOWVkOWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5MjZlNWI3NzY5MzQ0ZDkwOGYxNDY3YzVlNWVmMmY1NmQ3YjI5OTU1NGE1NDFhNzUwZDI2OTE2MTIwNThhZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1ZWQ1OGVkYzczNmQzOGU1NTgzNThlYTI5MTU3MzBlNzlmYmYyMWE4NGQxZDRmYjg0ZmUzYWE5YjAwZTA2MTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_87e480d44b614a3d9dc28f1567c119f6",
+      "statement": "Roster validation does not enforce model counts or wargear selections: neither 'modelCount' nor 'wargearSelections' appears anywhere in apps/api, so Datasheet.unitComposition min/max and the compiled WargearRuleAST constraints (maxSelections, consumedSlots, isMutuallyExclusive) are never re-checked server-side despite the INVALID_LOADOUT category name.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L50-L93",
+          "version": "repo-lines-v1:sha256:9715ed5097b592b303a99b6e7ab9ef70b876b8bd6842359b6cb3756488bbf613:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYjY2NDQ0YWY1NTIxOThjZjJmYzE2YjliNjc2NmM3MjdhNDE4OTk3ZmQ5MjVjZjg3OGUxYjQwZWJhMjFjN2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4ZjY0MmQ4OTNiODc0OWFiOWQyNDJmZDYxZDAzMTIzNTg4ODRhNTczMzg4OTg1ZDU0ZmNiMWI3NWIwZDVmMGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzYWVlZGJlNTg2OGVjNTdhZGJhMDUwODZlZWE4Y2I1MzY1MmQwZDcxYjc0OTQ4YzcxN2I5OWM5MDc1Mjk1NjMifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L128-L181",
+          "version": "repo-lines-v1:sha256:b7dfe883081aa1200a184fecf735fefbaecf6292396515eecee1bc78bfa8ff0f:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkOTRkNmUzMGZjOWVkOGViYmRlYTc0MzEyM2FlZTE0MzI4MmY0YjNmMzkzZjcyMWJhNDgxZTJhNzc3YzA5NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0ZTM4YmYxMzM3NTNmYjE2NjFlOGNiMGM5MGZhYWM4MmU2MTNmNTg0ZjA3ZGI3ZTFmNWE1NDljNmExZmRiNmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZiMGY1ZDJhOGI4OWE1MWQwMmI2ZThhMzM3MDA2OGIzZDFlOWFhMjgxZDcyOTAyMWY4MTc4ZTlhN2E1ODAyNDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_928538631e8d427288465a91b9d43c41",
+      "statement": "POST /api/rosters/:id/audit is mounted at /api behind requireAuth in apps/api/src/index.ts, scopes its lookup to { id, userId } (404 NOT_FOUND otherwise), and converts any thrown error into 500 AUDIT_ERROR.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L59-L59",
+          "version": "repo-lines-v1:sha256:08cea2ff91931b52aa2120a99bcde5822aedc28d0f63e80559c9e2960244a3fa:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhjZWEyZmY5MTkzMWI1MmFhMjEyMGE5OWJjZGU1ODIyYWVkYzI4ZDBmNjNlODA1NTljOWUyOTYwMjQ0YTNmYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhjZWEyZmY5MTkzMWI1MmFhMjEyMGE5OWJjZGU1ODIyYWVkYzI4ZDBmNjNlODA1NTljOWUyOTYwMjQ0YTNmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTU2ZjE1ZDFmZDFmNTMzNDVlZjA5ZTVkOWJiYjQzZDhkN2Y2NjJkNmQ2ZDlkODczNmY1YjRmNjBhMmYzOGExZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTZmMjAyYTVhMmRhMTFiZDA5ZWI4NmYzOWY5MGJmOTQyZWY4MjA2ZGM1ZGFkN2E5OWUzMzNiYTBiM2VkN2Y5ZiJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L104-L108",
+          "version": "repo-lines-v1:sha256:3b0389ea963312ff79b2999dbd22f0e8a9ee8094f624805ea525b3afa0a091e7:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTBjOTM0ZjVjZjU4YzBmYjc2ODA0OGU1OTUwZGY1YjZkZTI1Zjk5M2U3OTNhM2QxYWE5YzczNmYzNDVmZGM1YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjZmNWI0MGIxNTg0NTdkMTc4NjRmMjE3OTA3ODZkZDVhMmVjZGI2NGI2NmE2NTFmNzg4ZDRlMjVjZDMzMDNkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmVmMDA1MDY5YmNjM2JlYzAwODhkYTI3YjA0OWVhOWY5MGMzYjJjNTE5YjE0MWFjNGEzZjlhMmM2N2NhYjdiMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmM4M2FhZDk5ZjBiN2M5YWRkN2FmYWU2YWZmYzFhM2QyMTEyYzlmODA5M2MzNmYyMTBlNzlmYmY3ZDI0YjdjMCJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L25-L34",
+          "version": "repo-lines-v1:sha256:c0eeaf515626bf5d321ed47b2c7a66ef21d3a89716c04d0ea39390dc823d33d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1OTRiMTQ1ZDdiOGQxYjUxNjI0MGMzOTFlZjZjOTg2OThjMGM0MDhiZTM1MzllMTMwNTAwZjY0NzQ5MGM0NDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNGEzMDY1NDRlYmU5NDRkNmEyZjVhOWE4OTJhMzAxMDlkMWE3YjNjNzFiNzlhZGMxZWRiNmMyMWIzZjQ4MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyMjA4ZmFjMTA2YTIwZWU1ZDJhYTg2NjMyNDBhMTk3YTc3MWIzYmRmMGRhYTQ5ZTJiY2ZmMWMzYzVlZmRjNjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_57b0b5d317124eb7909c691f97234096",
+      "statement": "Before calling the engine, the audit route performs its own drift detection against freshly fetched datasheets: a unit whose datasheetId is absent produces a RED INVALID_LOADOUT discrepancy and is skipped for downstream checks, while a mismatch between Datasheet.basePoints and the recorded unit.pointsCost produces the only server-side AMBER POINTS_SHIFT discrepancy with oldValue/newValue point strings.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L39-L75",
+          "version": "repo-lines-v1:sha256:705112d304394048a59e094a0bc8be8338269741af7ecde127a503623309277a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMjcxMzk5ODJmOTlmNWYxZjdjMWU1MmMxMmYyYTNiYTllMDM2MGE0NGIxMGVlZGUyNmI1ZDY4NGYyOWQ3MjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlkODU2NDhmYTQ5YWZkODMyNWU1YTBlMjc2ZjNiMmY1Y2U0MTMyNjFhNDEyOWU1ZDk2MzU3YWRhOTQ2YmM0ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmYjMzYWRlMjE1NGU5MzE1N2M0NDU2NmVkYWQyYzFmMTUwOTcyM2YxMDEzMzQ0ZDk1YzMzYzQ4YzVkYmU2MzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b00ad5117bee4e0dafa881280fdd2f33",
+      "statement": "The audit route maps engine output into RosterDiscrepancy with severity ERROR to RED and WARNING to AMBER (the WARNING arm currently dead), category RULE_OF_THREE to DP_VIOLATION and every other code to INVALID_LOADOUT (so POINTS_EXCEEDED and DP_EXCEEDED surface under the Loadouts & Rules tab), and discards the engine code plus unitName (always '' except ORPHAN_ATTACHMENT's unitInstanceId).",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L85-L93",
+          "version": "repo-lines-v1:sha256:32bdbd74382196fb9d79428da9551c8da39bcb74de5e53d0b234adf9c74b01ad:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDVhNTUwYzQ3MWVjOWI4YTUxNjE5MjU1ZGU2N2RjNzdhNjE2ZDFjYmMxZGQ1ZmYwZGUwNDZiNTJkYWJlNzM5ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzgyYzlhNDc1MmM0YmM4ZjFlMmRhMTVjZmUyMTBkMDUwNjY1MzNmYjM2YzUxMTFhYTkxZGY3MjM1OWYyMzY5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDNhZWVkYmU1ODY4ZWM1N2FkYmEwNTA4NmVlYThjYjUzNjUyZDBkNzFiNzQ5NDhjNzE3Yjk5YzkwNzUyOTU2MyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L311-L314",
+          "version": "repo-lines-v1:sha256:6c3aa218e63f27a8982d0ccdd05ccd27a0b4abb4f26618350970a6bbf2eb0437:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDIyYWMwYjA0YjQ3ZDIyMDQwNmY3MmM4ZTFkOWFhZDRiNzQzOTZmOWQ2N2ZiZWJiMzc5MTZlM2FlNzBhNDI1ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGViZDI2YzYyNDBmYjYwOWFmNjlkNjdhMDFlMjQ4YjE1ZjA4MDcwOWJhMzdjMWQxNzZmODFhYTBlNGZkY2U2NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTZlMDAyNzBlZGQwYTdiNTk2NmZkZmEyYjIzMDQ1OTQ1ZTFmZjFjOTBlMTBlODZjY2U2NWNhZmRiMTZjYWI1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODg1ZmFkZDQ5NmJiZWVlN2E3Nzc2MmM2OGFjNjk2NTJiNzhiMTRiMmVkM2M4M2NjYzg1ZmI4NTcyZDU1N2VlZSJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L217-L227",
+          "version": "repo-lines-v1:sha256:fc5329ca52e870fec8b351763280d0091f10cf086a6760eb5d9731c6380b4eb8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhMjczNWRjYjY3MjgwNWI2MDIxMmNhYzc1NGJmNTc3MTAwNjQzODMyZDk4NGJiNmM3OThhMzM0NjYyZWFjYWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFjZTlhOGM4MjQ3ZThmZTNhMjAzOTQ3NmEzNmQ3ZDVhNDhlNTljZTE2Yzg2ZjdlZDRjYjdlODNhNDY2NmY2ZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhiNGJlYzRhZWNmYzk2YzVhMjc0MjQwOGMyYTYwYmVjYjdiNjUyZTZkOGNhN2ZiMDliMTk4NGE1OGQ0MzVhNGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b0144f0c603942b5a06708e1f361959c",
+      "statement": "The audit result's isCompliant is true only when zero discrepancies have severity RED (AMBER point shifts still report compliant), and rulesetVersionCompared is the hardcoded literal '11.1.0-2026-Q3' rather than UserArmy.rulesetVersionId or any SyncMetadata-derived value; no file in apps/api references SyncMetadata.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L95-L101",
+          "version": "repo-lines-v1:sha256:795a414d27c4f58ed194b685b38099ca9536efe7ff1b23e93eb794abdfa18910:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWJlY2Y4ZTQ1OTkzYzcxMDk2NDI4ZjFlZGFjZDZhMjVhYzllNDE1ZGRhYTkxY2Q0NGJmYzU4MGU4ODM4MWE3MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWQ5ZTEyNTQ2NDI1NTc2ZDNkZWFlOGM5YjlkYmYxMjhkNWQ2ZGRhZjVkN2ZlODU3OTM0OTI3ZGVmZmEzYjlkZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzA2M2JmMmU3OWYwMGMwOWJmZTA0YTEzNWRmZGM2Zjg1OTVmNTI4NTYyYjMxYWU0MjNjZmQ3YzE0YjYwOWE1YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWNiMjNhYzIyMjYwODJmNjliYzlhYTg1MGFkOTc3NjQ0MGZkMDQ2OWNhZWYxMTI2YTVkNjgwOGQ3YWNlZWY2YSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L69-L82",
+          "version": "repo-lines-v1:sha256:b15ab3f5fb6c63ff1692b11ddbb05eeeb770b54e4f757070a688011f4758367a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3NzIwODZlNmE0NWY2MmNmZjc2YjZhM2ZhNTRlOWJkMDhhMjQyZDYwYTVhYjRmZGVlZTg1ZWVlYTk2YjI2MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1NmI0ZDI3YmM4NzZlMTZjNDYwMTcyMDQwMjU3MmI4MjExMGIzMjc5MDRmN2JhNzg0ZTMyYzU1NzdjMDczNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljYzI5MGQ0YjdmMDJlMmFjMGMxMmFkODkzYmU2NjI5NTdhYWM2Y2IwYmQ4NjM2NDVlNDY0YzU1NTk3ZWJlOTUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L281-L292",
+          "version": "repo-lines-v1:sha256:6739044ca97ba746cf04b99194320690fd3817aaf0511e750e54969817d4e13a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MDY0MWI2YWRiYzE0ZWI1OTM0MDVlOTkwYmZhY2UxMjQ2YmI5MGIwODUwYjMwMjlkY2IwMTIzMDUxNDgyNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExYzkyYTY2ODE5NjU0Y2ZhYWY4Yzk4MTZjNzBjZDc3YTVjMTI1ODdiNDc5MTRiNGI2YTI5NjBlYTUxNjY2ZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3ZWU5NTk2MTczODQ1MGEyNDFlYTU0ZmU1M2ZlZGY4NzRlYmI3ZDEwZWI4YjAyMDY2MzAwMWE5ZDViZmZhYTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1b05a8df0cce4c4f91cf6e39dc6b33d9",
+      "statement": "ComplianceDashboard triggers auditRoster on open and on re-audit, renders its banner from the discrepancy list (isFullyCompliant requires zero discrepancies, isBattleLegal requires zero RED) rather than from isCompliant, and on any auditRoster failure silently computes an offline audit limited to two RED findings (currentPoints above pointsLimit as POINTS_SHIFT and currentDp above dpLimit as DP_VIOLATION) with the different ruleset string '11.1.0-2026-Q3-MFM' and no Rule-of-Three, attachment, or datasheet-drift analysis.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L41-L107",
+          "version": "repo-lines-v1:sha256:56dc0fe835264f762f6fd8739343283ebcb157335680951e7ad67bbd2882864e:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1YTM1MzZiYjhlYzBiNTA4OTZmYTVlMGYyMTVjN2Y5ZDY0ZGZmNTQzYzE2MzhkZGFiZjYzMzNjZDU5YTIyYTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlNGFiYjRkOTE0NzIwNTNiZTUxMDJhOWQ1NTY5M2VmMjhhM2VlNjM1YTUxYmRlOWMxNWFjYzhjNzE3MDgyMmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyMzM4MjU3YjNjMWU3NzhkODcwN2U1ODI1NDkyNzhjMDk2NDNhMDFhY2RmMzU3YzgwZDYzOTBkYzNlMzA5ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxNjkxOTk4ZTg5ODU2MzYzNjJjN2RlYTRiYWU3OWI5YjY5ZDZmMjJhMTBhM2Y0ZTc4MTIzMjYxYzdiZDU0NWYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L76-L82",
+          "version": "repo-lines-v1:sha256:f8d618f4ce622fce2ecd870674371160ee499fb64339883150bb26777875a057:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjA4ZTkyN2UyOTZiYWY0OWQ1MjdhZGJiODJjOTU2OGUyOGFiY2M5OWIyMDBmMzExMDcxMzg3ZTE3NjQ4NmRjNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzE3YWYxMTAxYzk3YjdjMmY1MjU0MDc4MmU2MzRjYzQ0NDBmMGU5NzAzNDFlNTJmOTc1MjMxMWQ3OGI3ZDdkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODczMDFlMDQ4NmVhYmZhNzQyYmYzODQ2Nzg1YmIxMTBjZTI3NzhkZWE0ZmJkMzFlMGE2YWI1OTk4NGRkYjBjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGIxNjA5MmJmZjE5YTY2ZTU0ZDc2ZjhlZmNhZjM3NWVmZjI1ZDJkOTk1NDg2Y2UzYjQzNDAyMGQ4Y2JjZDhhZCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ad32b991e4004f588de074bd3e7f8f02",
+      "statement": "auditRoster in apps/web/src/lib/api.ts has its own catch that returns a synthetic AuditResult from the locally stored roster comparing only rosterPayload.totalPoints to army.pointsLimit, with a single army-total POINTS_SHIFT RED discrepancy and rulesetVersionCompared taken from army.rulesetVersionId, so the dashboard's richer fallback fires only when that local path also fails.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L390-L419",
+          "version": "repo-lines-v1:sha256:db6e52816b56f1e78dfc5a034e88d4b79c44710fffe14aa04efdedf09450803e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkOWVkMGMwN2UxYmY4ZmEwYmFiZTYzZTVkMzNhYTFkZDczZjJkZDA5YWE2MjdjZGFiZmFjNjQ4NzkyMDY1ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3OTVhYmRkODk0M2VlZjYyMWZiOWVjMTEzOTE2MGM0MWVkNWVjYjFkN2RhZDVkZmIxMGMyNDIyMGI5ZWUzNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a8ab07095e0c48f6b619621df2f48e93",
+      "statement": "Parts of the compliance UI are inert as wired: the army detail and edit pages pass only pointsLimit and currentPoints leaving dpLimit=3 and currentDp=0 defaults (only apps/web/src/app/page.tsx passes the DP props), and no caller supplies onAutoFixPoints, so the 'Sync Active Points (1-Click)' button gated on pointShiftDiscrepancies length greater than zero and onAutoFixPoints never renders.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L283-L290",
+          "version": "repo-lines-v1:sha256:6e70751fe0f37e187ed503bb847ca0b04eb85812e6b164bbe0714921b24ea123:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjU4MGVmYmJlYmQyMTVjNTQ5NjZjYWI1MzlhZDU4YjZiZGIxZTg1NTc1N2VmOTYwZjYzZjZlZjhiNWE2NjlkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIxMDYzYzRkZWE2OGEzODE2NjExMGJhZDJkMzM4YjRkNzJlMDJkMzdiZTA4MTVhNzg0NTFlOTkzMzJkNmRmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzdlZGQyYmZiYzJmNTdlODI1MTc2MGI5ODI5ZWY5ODdiZmE1NjY3MWJhZjAyMzdkMTJmZDkxOGEzYWZiZjM4YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDgxMGZhYThmYmFlZmFmZmFjZDBkOWIxNjdlZGVhNmRlYzExMDU4NTNhMWM1YTJlMGE4ZTQyY2QzMGQ3ZTk2NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L609-L616",
+          "version": "repo-lines-v1:sha256:bef5c8efc2ac8dd93ee04fad1eac7753e15970bcb3c1413afd45a8d5d00efcd1:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjU4MGVmYmJlYmQyMTVjNTQ5NjZjYWI1MzlhZDU4YjZiZGIxZTg1NTc1N2VmOTYwZjYzZjZlZjhiNWE2NjlkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIxMDYzYzRkZWE2OGEzODE2NjExMGJhZDJkMzM4YjRkNzJlMDJkMzdiZTA4MTVhNzg0NTFlOTkzMzJkNmRmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzYyYzM0NzQ5YWFiNGU3M2Q0MTNhZWNhMzEyM2UxNWNlNzcyY2Y5YTEzZTkwZmFhYjU2NWJjNDM2MWFkZjk1NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDgxMGZhYThmYmFlZmFmZmFjZDBkOWIxNjdlZGVhNmRlYzExMDU4NTNhMWM1YTJlMGE4ZTQyY2QzMGQ3ZTk2NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L433-L442",
+          "version": "repo-lines-v1:sha256:1b9ce0d6bebd39ccdce10473086b88442c8c4692f93ec5c64c4660b7e901622d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ODBlZmJiZWJkMjE1YzU0OTY2Y2FiNTM5YWQ1OGI2YmRiMWU4NTU3NTdlZjk2MGY2M2Y2ZWY4YjVhNjY5ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMTA2M2M0ZGVhNjhhMzgxNjYxMTBiYWQyZDMzOGI0ZDcyZTAyZDM3YmUwODE1YTc4NDUxZTk5MzMyZDZkZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlMTMzY2QyYjQ3MjhkMGM5NWM2YWU3ZmIyMjVmZTdhM2JhNzI1OTMxYzg2MDg4YjE4YzAxMGZhODFkNDRjNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4MTBmYWE4ZmJhZWZhZmZhY2QwZDliMTY3ZWRlYTZkZWMxMTA1ODUzYTFjNWEyZTBhOGU0MmNkMzBkN2U5NjUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L369-L378",
+          "version": "repo-lines-v1:sha256:c61ad994f22a48eeb916b040b384a1229113f800f8ffa1cfbe53838ff2856257:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjYWYzM2UzY2M1MGU3ODFmNjA2MjBmZWQ3NThkMzIwZDAxYjJhOTU1Yjg0Yjc1MjJhNWM0MGZkMjcxYzMzMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0NjgwNDU4MDNhYjM2N2U3ZjE3ZTQxYTM2OTA2NGZiODExNmQxNjA0NTI3ZThmZjhjYTZmMzZmMTFhNjM1NjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmMDViYWQzNTVlNjg5N2U1MDdkNGQxOTJhM2VjOTlmNmE2YWJmYzIwN2U0YzkyMjk0MzFiODVmNjNkNTc0ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3NjU2ZGE1OTY4ODRkMzg3MDMyNjAxMmI1ZjgxYzAyYmIwZmMyNjExMTE5OTUzNWNhYzA0NDI3ODI0OTM4MjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6782f80156b34315bac27df26479a8fa",
+      "statement": "packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts is the executable specification for the engine: exact-limit equality is legal for both budgets, 3 copies pass and 4 trip RULE_OF_THREE, 5 BATTLELINE and 4 DEDICATED_TRANSPORT copies are exempt, a missing leader yields ORPHAN_ATTACHMENT tagged with the dependent unit's instanceId, and validateRoster aggregates POINTS_EXCEEDED with DP_EXCEEDED; nothing tests a datasheet missing from the lookup or the route's severity/category mapping.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L12-L188",
+          "version": "repo-lines-v1:sha256:9f70e6ab4ae5278711a6e40f2f572526ebab0993541f695ec3c72310ababa77d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTc3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzOGQ2N2ZjOGI1M2QzYmFmNDc2MDE3OTgxOWNhMDJiOTVjN2E0ZmFlNWQ0M2I5ZGY1NWY4YWE4NzgyNzFhZjA3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiNGRlYmQxZGEyYjlkNjE1ZjQwNGRhYTA5NmU2ZDkyZjkyYjYzNGQ4NTJhZTNlMjZlZjM4ZmY4ZDUzODQ4YmRlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

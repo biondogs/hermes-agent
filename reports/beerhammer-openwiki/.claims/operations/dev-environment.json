@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:dfbda4d728c56a7f46d0b972e3e5ae2297048daacd763f09c1e992da694cd505",
+  "claims": [
+    {
+      "id": "claim_827666bdd3f24148a4ec85daa5750036",
+      "statement": "Local development supports two loops that share the same root Turbo/npm-workspace commands: a host-native Node 20 loop (npm install, npm run dev) and a shared containerized loop where Docker is the only host requirement and ./scripts/dev.sh up starts Postgres, SeaweedFS S3, db-init, and hot-reloading web and API servers from one forceorg-dev image.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L1-L41",
+          "version": "repo-lines-v1:sha256:7239d83a37e7e714e1babd7aee4b886b475cd6c891fd3ee8e13daacccd788f90:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5YWNiZTM3MWE0ZDg2YWNhNjUxY2I5MThlYjlhY2I3ZWVmMTc2OThlN2NjNzk4YWRmMzJmNzg3YTljNThhMzAifQ"
+        },
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L1-L33",
+          "version": "repo-lines-v1:sha256:290dc126b0186bca581844ea80d938d2b30ef1719a140c5332c7f2e059d394de:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViNjE4OWZmZjY5YzViYzQ0MjAxMDFhN2QzMmI2NTkzOTkyZWY4YmYyZGY5NDFhM2NlZDM5YmMwNDc1ZTcxNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjMTVmNmE3MGJiMDc3YjZjODkyOGYzODRiMWFhYmYyZGI5MzkwMjk5YWQxNWVjY2E2ZmE0YWQzN2E1YzFiYWMifQ"
+        },
+        {
+          "resource": "repo://docs/DEV_NOTES.md#L25-L44",
+          "version": "repo-lines-v1:sha256:94d461545c71b98c143fe4ecf0e82f753b814d19311cb7540e58e863a0e09746:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4MmVkMzU4ZTk1MjdkOTQ4MjlkNTRkZGQ0MzcyNDZiYjMxOGY3ZjkzYzY1MGQ4Y2Q5Nzg5OTFjYmE0Y2I0NzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMzN2YxZTE0ZWY3ZDgxYmY3NjM1YTlhMGQyNDI3NDgyYzA1MDM2ZDVjOTZmMjgyZjlmNTI1ZTNlYmVkMmE2MDEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_46a34069a30e46419dff99986167b3ce",
+      "statement": "The host toolchain is pinned by the repo itself: .nvmrc pins Node 20, package.json requires node >=20.0.0 with packageManager npm@10.8.0, and the root .npmrc sets include=dev so installs never skip devDependencies.",
+      "evidence": [
+        {
+          "resource": "repo://.npmrc#L1-L1",
+          "version": "repo-lines-v1:sha256:8a4e4b88cb3f8c49a32bccbf88da534fc4c0ab7c96000a3a265f7e1640053f14:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGE0ZTRiODhjYjNmOGM0OWEzMmJjY2JmODhkYTUzNGZjNGMwYWI3Yzk2MDAwYTNhMjY1ZjdlMTY0MDA1M2YxNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGE0ZTRiODhjYjNmOGM0OWEzMmJjY2JmODhkYTUzNGZjNGMwYWI3Yzk2MDAwYTNhMjY1ZjdlMTY0MDA1M2YxNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://.nvmrc#L1-L1",
+          "version": "repo-lines-v1:sha256:5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTM3ODc5NjMwNzUzNWRmM2VjOGQ4YjE1YTJlMmRjNTY0MTQxOWMzZDMwNjBjZmUzMjIzOGMwZmE5NzNmN2FhMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTM3ODc5NjMwNzUzNWRmM2VjOGQ4YjE1YTJlMmRjNTY0MTQxOWMzZDMwNjBjZmUzMjIzOGMwZmE5NzNmN2FhMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://package.json#L24-L31",
+          "version": "repo-lines-v1:sha256:7d95c218dd1248c275c40398763aec739172e3fb009517447f52952be261929b:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWRjNGRlN2VkMzVhMjMzNjQ1Mzk4NjRkYWRiOTM4Yjg3MjMzMzc5MTc5ZDYyOTJiOWZmNWY2MTlhNmMxMzE2NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWU0YzAzNTEyOGVkNTcyNmI4NTZmMzlhN2ZjNjNmZGEyNzY1NGQzNWRjZDIwOGY4YjdmY2QxNGRiYTFhODM5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmVhOTcwZjhlOGVjZGRkYjA5MjBmMTQ3YzgxMzBkYTk0NjRjOGZhOTIxYjFjOTgzZDE5YzM3YWI0ZDk0OTI0OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ca9db291e2ed4075b5bcd005f82b682e",
+      "statement": "Root npm scripts are a thin workspace façade: build/lint/test/test:coverage run turbo tasks, dev runs turbo dev filtered to @forceorg/web and @forceorg/api, test:e2e delegates to the web workspace, and db:generate/db:migrate/db:seed forward to packages/db-client's prisma generate, prisma migrate dev, and tsx prisma/seed.ts.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L10-L23",
+          "version": "repo-lines-v1:sha256:746a4d8d68769fcdfaaeb85ac28f64f84b839dc24874f7f0b5b6cf5cdaeea722:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODMzZDU5NDljMDNhNDBjYTk1MjQ5MTYxMGE2NjU5NjQ0YjNhYTQ2NjM2MmY3OTkwMjBkYmYxOTgxNTQ3ZGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdjYmQyNjY1MjlkNTc1N2Y3ZjdlYjFmNGVlMzQ2ZDBhOWU3NGNkZGY0NjkyMDAwNzMzY2EyMmU2ZWQ2YThmZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFiMDg2Nzg4YjY5MGI0ZTZjNjFmYzdhNjQ4ZDUzOWUyNjMxODVmZmVmNjY4ZDEwZTYxNzI0NDdiZDgxMThiYTEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L10-L14",
+          "version": "repo-lines-v1:sha256:17cfca37b68be3ba5ddf8b8d4f809e25ea56c8afdfc63f5b099ac53d4a6b8fd2:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2MyYjI1ZDBiMzY5N2M1ZWI0OGQ5ODA3NTkxYjNhYjAxZjdjZWViYzU0ZWRhYTY0NWE1MGFhZDg5NWUxMzUwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzJmNjYwODNiMzUxYTI0MGJhMDI5NTZkMjVhMTNkMWUxNGJhODMwYWQ0YjI3Yzc4M2QxODBjYjBjNWNkYTAxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTkwZWYxYzJkMWIxMTQxNmQ5YTQ3YTk5ZTY4NWE2MzkwMWRiYjk0YTA4OGQwNzljOGMwNGY1NzBkNGRjMWFlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTI0ZTRkZDQ0ZGU2MzI3YTI5MjAwOTk0NzBlMWZjODgxYjM1NWY0NDc4ZGZiODgxM2VmZjE2ZDU3NDc0YjIwNSJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L4-L22",
+          "version": "repo-lines-v1:sha256:f40332c2e684f0aa8b671187fa72f27bc16d35ff55cfbfd9b9abbd9410af30c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZTIzYjQ5ZWQ3ODBkMzgwMzk3YWVhNzllM2NkZTgwZmU5NGM4YzU3YmZmODc1MjJjODMxNjM4MDhmN2M3OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlY2ZlMzAzYmI2MDQ1N2E3MGNiZDI2ODQxMThjYTAyZDU1MjQ3YmIwNTIyMTBlMmU3MmZlZDIxY2I2ZWZmODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkMWViZWE3YjBmNmI2MmFmNjBmNDNjYjY5NzhkYmQ5OGU5YmUzYzJiYzE0YzlhZDNjOTg4YTU5N2IzNWJjYzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9b3b6e95109c41beaa96196fa0df983d",
+      "statement": "The root postinstall hook runs `prisma generate --schema=packages/db-client/prisma/schema.prisma`, so a fresh clone's npm install leaves a usable Prisma client without a separate generate step.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L21-L21",
+          "version": "repo-lines-v1:sha256:df798e019bb53dac8e237f2ad7dc016274ee3cacedc4a0c34b5f248463c9e64a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDBiYzI1YzAxNDQxMjdjNWYyMWM1NTI5YTgyMzk2OGM3OTNiMGE0NTRhNjdlYmVkY2MwMTYwYmZlN2FjOTU1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlYWJlZmU3MmNiMmYyNTYzODQxZmRjYWM3OThmYmFjOTgxMWY1NTcxOWM2OWFkMDk0MTM1MzIyYjU5ZTJiMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_319d954e5ea04073904f906b70934960",
+      "statement": "scripts/dev.sh is the sole host-side entry point for the containerized loop: it cds to the repo root and wraps `docker compose -f docker-compose.dev.yml`, mapping verify/test/e2e-install/e2e/shell to `run --rm toolchain bash /app/scripts/dev-container.sh <cmd>`, logs to `logs -f [svc]` with an all-services fallback, and psql to `exec postgres psql -U postgres -d forceorg_dev`; unknown arguments print the header comment and exit 1.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/dev-container.sh#L70-L75",
+          "version": "repo-lines-v1:sha256:0d43caa1e296ff9e0b2e8d9645961c92b30a8aaad9947e1c3e0b98a4f7abe894:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzFkNDEyNjM5ZmRlOGIxM2FkZTIwNzU3ZGVlZTJhMmIyNjFiMTAzOTY1NDZkMmU4MmFiZmM3N2E0NzVmOTZiZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGI1ZjlhMzNhODNmYTZmOTM0MTM1OGZhMGM1YzQzZjY5NjZiMGI0MzdhNzFmYTc0ODgyZDNhNDg0OTZiZTI5MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzRhMmJlY2ZmOGFmYjM0ZGIyNjBkYWJjOTY5MTVmZmVjZmRlODQ4OTI5NTQxYzYxOTNkZTZkMTY0YzIxZThkYSJ9"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L17-L65",
+          "version": "repo-lines-v1:sha256:398d87c6a98065f1fd4595967e27e6a739ea90f076ae937e4679e97701835757:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmM2MzM2NjdkMDMwMDczMWJkZDg0NDcyZGM0MjRlMWY5YzY0MTc1ZWEyYmFkYjY2NjQ3MmQ5MWFlYjRlZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YTJiZWNmZjhhZmIzNGRiMjYwZGFiYzk2OTE1ZmZlY2ZkZTg0ODkyOTU0MWM2MTkzZGU2ZDE2NGMyMWU4ZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAzNTEyMWJjZjY3NmMwMzI4NGZkNmYzOGQyYWQ5ZWQxNTQyNDJmMDFlMTI3MWM1NGQyMDU5ZWRlOGI1ZTYyNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6d61d18f291445579bbbff3531fd8ba7",
+      "statement": "dev.sh up runs `up -d`, then polls the web root on ${WEB_PORT:-3000} up to 60 times and curls ${API_PORT:-4000}/api/health, reporting the API as still booting rather than failing when health is not yet available.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/dev.sh#L29-L41",
+          "version": "repo-lines-v1:sha256:00ba8e2369482ca6b1341787e9f65212b98fadae9e9ac8dec3d16866b85cc79b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMDU2YTYzZGZmMTRjZjU3YTBmNTk1MmIyYjE0ZDVlMDQwNWFhZjU3ZDY4ZTUzZThkMzJlNmNmYzhlZTdkMWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA4ODE0M2JiZmE3ODU4MGM1MTE2NzEwZjAzMmNjNzBiM2M2ZmQ3ZmM2OTY2M2JmYTI0NDQyOTg2YzkxMTU0ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE1ZGYzYTg5NzU2MTBhOTdmMGQxMWYzMTE4OTcxOTQzZjRlYWM4ZThjOGI4MjQzYjk3MjgxYmVmZmE1YmIwZTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ac8b0104632a4026a3443193ae2ea0e7",
+      "statement": "The one-shot gates share a single compose `toolchain` service behind `profiles: ['tools']`, so `dev.sh up` never starts it and each one-shot exits with the gate's status; verify runs npm run lint, npm run build, and npm test inside it.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L108-L127",
+          "version": "repo-lines-v1:sha256:f4e203b96e54d86a9a8cce40b2401b78422d0d256fc6c5d390638ab39562c117:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5NzVmNTAyZjlhYjk4OWNiMjUzMGMwM2FhYTczNjE2MzQ0NjRmNTEwZmI2N2RiNGNkNDEwNjAwM2FhZjY5MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTYxNmRkNDBkZGIyNjg1NjM5OGY2Yzk1NThiODIyNjJkMjhjMzk0YzkwNTQwMGU2OWQ5OTMxODYzOGVlZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4NzAxOTc4YWEwY2E1YTc4NmJhOTMyNDE1MDUyY2VhYWY4MWY1OTBkYWQxOTVlNzI4NGNiOGE4NTkyOWE5OGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzMjIzMzI4NDNkMmM3ZDk1YzhmMGE5NjUxMGRlNDhmYTQwMTdmNGFjZWQ5NDNmMWI3NGQyNmE1NjdkOTY0MTgifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L44",
+          "version": "repo-lines-v1:sha256:c45573afbe1e34cebfa088f9560c64768fb318eae77286bb0b7fa02a6867235b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYjI1MzFhYTRhMGQ5ZDcwYzNiNmRhMzdmZjQ1NTYxMzNkZDk4OTY4ZTgxZWJhNjlkN2UyOGRlYjNkNTkyNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFlNWMwZGU0ZjE3ZWI1NDdmZjg5OTg0YzY0ZDMyZThmZWMyMWNlZjliMmQxZDUwZGE0YTQyZmMzNzZjYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMTQzNmU2NzJmMTZmMTc0MDQzNTViNjNmNTdkMDliN2FlZGE3OTU0OWFiZGNmZThiZjNlZTEzMDI2OGVhNDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_34e77fe034284d61893df6ac74f92cf6",
+      "statement": "Hot reload works because the repo is bind-mounted at /app while node_modules, apps/web/.next, and the Turbo cache live in named volumes, guaranteeing a host node_modules can never shadow the container's pinned dependencies; Postgres and S3 data volumes survive `down` and are wiped only by `down -v`.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L129-L135",
+          "version": "repo-lines-v1:sha256:7c9ade08b091674f7b40e7c15ef133c159864a9e103b44a910cf6dd9e10ec737:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDVlNTEwMDMxYjNkNWNmZjg2OGI5OWEyNzVkZDI0ZDcyZTQ1Y2I1MDZiM2M0ZjU4OWNkMDhkZDgwZTlmYjJlYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDNmZGE5MWViYmI0ZThmODk1NTUzMGU3ZWUyOWI3ZThiYWExYzZiZDI0N2JlYzM1Y2MzNzliMjhjYWU5ZDAxZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjBhNWIzMmZlY2FmNWUxNDgyMWM0YWJhNmFmZDhlNWMwNDRkNjljNTAwMjhiNjIzNmQ1YmNmNmJhMzViMzQxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.dev.yml#L33-L37",
+          "version": "repo-lines-v1:sha256:3344766e0670a6fb5ae86144fc9182f602c5a263ce8aa85b11abe50ca7606851:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGZlMWY5NWJiMTdjMWU4YTA4ZjFjZDE2NjA5OWZiNWU5NjliZTdmOGZjZGJjZGI2MmRiMDZiMzVkNjFmNjNiYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmQyZjFlZDNhYWUzZWUzNjdkODQ1MmUxMjEyZTZjZjAwMGFiMzM0MGI2ZmM2Mzc2MTg3ZTRmMWZlZDJiMjI0ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDRkZDIxNTkwMmNmZDMzMGU2YTE0NmE2N2IxZDdjYjc3ZDliYWMxNjMxZDEzNzUyMTBlNGI0MzBjMTdlNTkxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTk0OGZhNjhhMjZjMjhlYzNlZTAxMmM4NTFiNDY4NmM5MGUzMmE1Y2YyOGI5NDUyMjc1NWYyNzc3ZWEzYmVmOSJ9"
+        },
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L108-L116",
+          "version": "repo-lines-v1:sha256:61d9f65ac44866474f69eaa910671e8ae54dc190e5e9d14716e907fde204fff1:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDZjOTZlOGVhMDc1YTEwOTE3MDY0N2U2MzJlZWU0Y2VlYjE0NTZiMTUwMjEyYzhmY2UzMjMwNTI2MmYxZjJiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWE2NTZlMTFlNTIzYThmZjQzMTgxNzc5YTgyNTEwZDlkZGRhZjk4MTg4YTcwNWY4NDc2MDA3ZWY1OTkxZmVmMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWJlZTQ0ZTYxZTI4ZGIxYWExZjQxMTk3NzM0NTY4YzU0NTRjNjY0NDBkMGNjYWM3MjlkYWNhYTM4NTdhNmQ3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmI5M2QzZjY3MjMyZWFjZmE4NjgwMzc1YTEwNWU0MzVlNDMyYTI2MmMzYmRlNGI1Y2E1YmJiNWJhOWQzYjkxYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_fb78f3fdc6da4bd886f82a7e38bf8a69",
+      "statement": "Dockerfile.dev bakes only the toolchain (Node 20 bookworm-slim, Chromium runtime libraries, npm ci --include=dev from manifests copied before source, plus a package-lock.json checksum in node_modules/.deps-stamp); source is never baked in so the image rebuilds only when manifests change.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.dev#L9-L42",
+          "version": "repo-lines-v1:sha256:e37a9933d7b5ed99c0a7d42df809fe3705a56db43deb6baa48f94bd881af2377:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NDg1MjhhNzE0ODg3OGQxZmNiNTIzOWM2ZTE4Mzk5MTNmNDFhNjJkNGU4ZWIxNGQwMTI2YmQ5ODg5MzZkZGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyNzBkZDMyMDM1ZTRkOWQ2YjNiNGNhMTMxZTNhODRhMTRkZjQwNGUwMWE5NTAzZTg4MDUzY2E3MzRjNjNhZDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIyOGI0MmZmODE2NTM3OTg0MTdkNjJiMTNmZTg2YWZhNzQyNTRlNGFjYTRhNWJkN2JlNmM5NWVmYWVjMDUwMDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_94928c85a51045e9b123d8a22b87636e",
+      "statement": "dev.sh rebuild invokes `docker compose build --no-cache deps`, but docker-compose.dev.yml defines no `deps` service, so that build fails and the accompanying force-recreate of db-init never runs; the documented dependency-refresh workflow therefore depends on rebuilding the shared image directly.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L18-L22",
+          "version": "repo-lines-v1:sha256:b5ecc7a08859f97159a4c94b863cbfe668e0bd2f33263d5bbd4c196e48332a07:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDI5NTc3NGI3YzIyMTYwYTQ4NjQ1YmEwNzU4M2FlM2ZjNWNjM2EzMTAxNDMzNzdjYmI1NjViYzYzYjdlYzRhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNjMjMxZjdkZThjYTM3ZTdiNWUwYzU4ZGQxZGViNWI1NTcyZWYzNjFlMWNiNjFlY2EzNDY2MmY2NmIzZDM5NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDJjNGYwYWVjMmI3ZTNkMjJmMzE0NWZkNGJlMzIyYTRhYzJiNWJlZWJhYjVjYTg2N2NlNjYzZTRkNDVjMWRiMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmFmZDBiMGE3ZmUyN2E5M2U1NzEzOWM3NTUyNmNkNjIyZTg5ZTA2NDM2N2M5ZDYxNTVlNWYyNTViOGQ3ZmU1NyJ9"
+        },
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L88-L94",
+          "version": "repo-lines-v1:sha256:53e4c959083b7cef6c60bfc0e3f2cd5c50085826a50ed5a1edbe61ca82db0807:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY1MWQwNmY3NDcyYTgwMWY5YjUxOTYyNWJiZTliYTZjYmU4M2ZmNmUzYmJhOTgwYWYzMzZkNTVlZWQ4MDA1ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjIxYzNmMjczZGU0OTcwNjllNzE2MmMyOTAxOGUwNDg2NWI4NmYxYTZjMjYyMzk0MjAyMWIzZTU1OWJhMmUyOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTMyZGM2OWMyMWQyOTdjNjBiNDhjMmIwNGQ0MzVmODhlYzVjZGY0Mjg2ZTM2ZDVkMThlYWU2YWIxOTYxMDA5ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2Y4Y2FlODMzNTBlZmZlN2IwNTFmNjdmM2QwMTYzNzM3ODNkODk4YmE1MWM2ZGI2ZmJlNDI3N2JhZWYyZTVmYyJ9"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L43-L46",
+          "version": "repo-lines-v1:sha256:f73e1a650bb6903f68799a0d5828a4ebad36fcd5d3bd90041b81df7ae84c2436:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjY0NTgyNzU2YjdiYzJiZDAxNWNkYjcwNzFiNmQxN2MyMTJmZDE0ZTQ0MTFiMzM5YjQyNTc4ZTE5MDViY2UzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmMDAyNTFkMWU3NTAxODY4NTUyNzVmZmFiZDEwODBiY2UyZWQzMzZlY2RkYmY4OWI5MzI2ZTAxYTMyYWY0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTJhZjg0N2ExNWU3YWY4ZTM2NmRiZDYyODNjMDJjNjM4NjIyNDJjNjM2NzY5YTZjNzQwNzc5YjM5ZmRiMjVkMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5ff9d636ba1344dfbd2b769e3382e3ab",
+      "statement": "db-init is the only schema-mutating service in the dev loop: it depends on postgres being healthy, runs dev-container.sh db under restart: 'no', and after applying migrations and seed executes `tail -f /dev/null` so its container stays up purely to keep logs readable.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L71-L77",
+          "version": "repo-lines-v1:sha256:53519d0a5527e3eb7234ac7395aef0b071257f29a83fce5f46095ed3028c4814:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjY2YzFjNTkwNGE2MTdkMjJhZWE2MGVjMzM4Njk3ZWEwZGRmMjc5NDViNmYwYWNhMmUxYWRjNTUxOWJiNjU3MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDkxZjVmZTkzMjgzZGM3ZGU1NDU5OWYzYTMwNDQwOGFhZThmZjA0MDcxZWZjMjZmNzY1MTA2ODQxZTI4MzIxMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTkzMWYwMzY5ODMxMTkwMWJiNjAwYzI3N2ZiNWZkNTNhZTE4MTEyYjdhZmQzNDZkN2YzMWNhMTJlNjI4NWVhMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmE2MDE3NzY3MGQ3NjFkMjg5NDYyNDU2MjQ1NjlmMmViZjU2ZDM5MzRlZDE1ZjAyM2MxOWY1MWUwOGU0ODYyMCJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L10-L21",
+          "version": "repo-lines-v1:sha256:b05104099a606a9afef25094ae7f10a8ec2b211ed55ed1d3e167f1f89181bf50:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyMGVhZmIyNDI2NDEzYzhjMWYyOWQ3NGRhOWU5ZTgyNmZhMDYxODdjOWRiYzY5ZmE4NTlmMWVhZGIzYzNkOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3OGNmZjRjMzViYmRjZmZjZmZiYmM4ZGU2ZmE5YzI2MDhlYjk1YWI3MTM1NDc3YTU5OTdhYjIzMGMyMDVhZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ2ZDEzYjZjZDYxMzVjNzk3MjAzNGQ0ZWQ3MjhmZjA2ZTg5YjZmZDE4NTQ4NWJkZTljNjgwY2QzMmMwOTMwMGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0a7237704d2346dd926e11d47b5587f7",
+      "statement": "The db-init wait step is a TCP reachability probe, not a query: dev-wait-for-postgres.js parses host:port from DATABASE_URL and retries net.connect every 2s for 60 attempts, exiting 1 after 120s if postgres never accepts connections.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/dev-wait-for-postgres.js#L1-L29",
+          "version": "repo-lines-v1:sha256:021258dfd16bbcf182f47f47c40581a8f511c103f7ad652eb962437c6208d44f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMDQ4ZTA2NTMyOTUxY2Q2MTI5MThmMDgzNjYxYjIwNzFlNmQxZTZkZTVkN2U5ODE3MTI2NmU2OTJlZTNkNWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5ZmFjNWEzMDM5YmJhZDI4N2FjODE1ZDUzM2NmM2FiZDRiNDIxNzkyMGNiZTJjOTNiYjM0YTZlMzAwMDMxNDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_aedbe9ac4e414562b906196f0866375e",
+      "statement": "db-init applies schema changes with `prisma migrate deploy` (committed migrations only, unlike the root db:migrate script's `prisma migrate dev`), and the seed step is wrapped in `|| echo` so a failing seed is logged as a warning and never blocks environment startup.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L17-L19",
+          "version": "repo-lines-v1:sha256:760608e7617e8eef14cbe0896551911a4d7e265ce2ebfde865b7801aed552fde:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWY0ZTc5MDI5M2NlNzhlNWEzMWMwN2Q1MmViNzg0OGQwZTQxMGJmYzI5MWVhYzJiNTY1YTY1NDU0N2Q0ZmE3NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzQ2ZjNmM2Y5YTRlNmEwMjJhNmE2MGUxMWRkMDk2Y2Q0Y2Q1YTMwNTNjYjAzOTYxMWM1YTY2MTQzYzMyOTkzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDExODZmZjBlMWZhMTYzNzQwYWQzMjg1YWNkZmEwN2E0MmE4MTM2NzAwNzY1Y2JiN2M0YmY2M2Q1ODFjNGUxZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzQ4YjgwYzU3NzQyYmY1ODYxYTM3NTY1ZDZkZTgyMDlhOGQ2ZTMzZjgxNDBiZWM5ZTAxNzgwYzYwMjI4N2U4NiJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L14-L19",
+          "version": "repo-lines-v1:sha256:dbe043cadecbcc51e4cce58063880f99e5b4b439ffff9b2afcb115144f05d01c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YzNjA1NDBlMGNiYzM1NGY2ZjU5ZWRkNTlmNjE5OTIxMmVlYzg0YTNkZWM4N2I4OTdlMmM4YmRmNWFkODBiNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTQwOGIwYTQwY2RkOTdhODM0NjQ5NTRhMmMzNTEzMzgxMmFmNmQ5MTdkZTU1MWU0YWNkN2E1YmJjZWZkZTJiYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjE2MjM1M2U4YjlmMTAyZTI1MGQ0M2Y5MWZjZjFhN2Q2ZDRmMDgxNzA5ZDY4OTNlMjk2MTZkYTUzZmYyNTFjYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTZhNDVhMmJlOTc2NjQ4ZDUyNzAzYjY3NjkyNzRlMTk2NTlmNGM3OGU2MGUxMmYyM2M4ZjIwNWIxYzNkMDQxYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1743585fba854056928d2bd6f0088a76",
+      "statement": "The dev seed is idempotent fallback catalog data rather than test fixtures: weapons, datasheets, leader-compatibility and datasheet-weapon links use upsert while stratagems, paint swatches, and abilities do findFirst-then-create, so db-init is safe to re-run on every up and is force-recreated by rebuild.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L16-L227",
+          "version": "repo-lines-v1:sha256:4f90a1e39470d2d84a192eb95b300aa6c0c08e450e4cabe70123d10b93898457:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZTgyMDBlYmQxNzA5YjZhNjc1YmVjYjNiZTlmMzllNTNiYmFjMDJjYzkyNzIzNDYyYzA1NDY4ZWIwZGE2YTE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjOGZiYmI0YWVjZjBhY2Y3NjRmNWNmZDdlZTMwYTExZDBlMWQ1NGIxY2Y0MDI2Y2M4ZWVhNWM3MWEzNTZkY2M3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYWZiYTQ4NmI5ZWI3MjkyMjZjZGIyNTk5ODM4ODA5YjFmMjU1MTllMDdmMGUzNTMxYTNhZjQ5NGIxMTIwZTVkIn0"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L43-L46",
+          "version": "repo-lines-v1:sha256:f73e1a650bb6903f68799a0d5828a4ebad36fcd5d3bd90041b81df7ae84c2436:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjY0NTgyNzU2YjdiYzJiZDAxNWNkYjcwNzFiNmQxN2MyMTJmZDE0ZTQ0MTFiMzM5YjQyNTc4ZTE5MDViY2UzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmMDAyNTFkMWU3NTAxODY4NTUyNzVmZmFiZDEwODBiY2UyZWQzMzZlY2RkYmY4OWI5MzI2ZTAxYTMyYWY0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTJhZjg0N2ExNWU3YWY4ZTM2NmRiZDYyODNjMDJjNjM4NjIyNDJjNjM2NzY5YTZjNzQwNzc5YjM5ZmRiMjVkMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3e4df9528ecc4a1e97e245b2bade671d",
+      "statement": "Only the web and API host ports are overridable: WEB_PORT/API_PORT are Compose interpolation variables that simultaneously republish the ports and keep CORS_ORIGIN plus NEXT_PUBLIC_API_URL consistent, while the processes inside still bind 3000 and 4000; dev.sh up explicitly warns about the host port 3000 collision and suggests WEB_PORT=13000.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L27-L31",
+          "version": "repo-lines-v1:sha256:111a5faed5936d1ba0a48d41c58f198f6d109c0d9b18e938488ea2b0543e3430:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTRkZjYzOWFkMWU5OThjYTVjNjQxZDdlMGNiZjIzZjZkYzEwNGJlMDhiNzE0NzViYWY2NDVhNzZlZDRjNWFhOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjg3ODAwMTMxNDA0MzUxYzliNzI0ZDYxYmYyMjVlYTg5YWIxOGFkOGJiMTg2MDNkZDdhODYxNGQ5NWQ2MzI3YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2Q4MjIwM2RmNzk2ZjcwMzI0ODNkNTg5NDYxY2JhZDQ3MDQyNTk0MTk3ZDVlZjFhMmJkOTE0MWNhMDdhNzdkNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzg1NzVlZGI5OTg5ODIxOWRiNWFiMmQ0OWRlYjE3MWQ1MmE1MGYxYjc2MzJiNzc4NzZmYTc3OTZiZmI1ZjI2OCJ9"
+        },
+        {
+          "resource": "repo://docker-compose.dev.yml#L83-L94",
+          "version": "repo-lines-v1:sha256:7eeef350a2b02673816adf5506299f4167b954ae3ec66f2346921ff5832b077c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMTZlZDIzOWEzNjUxYjUwNzljMGU0ZTdmMDc4NDRlYTMyOWM4NzYyOGJmOWZjYzQ2MzY3NzMzZjVlMWU5M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNGQ3NzBiMzY2NmQ5Y2M0OTdhMDM3YWZiZGU1MGMxYmJmZDQyZGQwMzkxM2Q5YzBmMzAzMDljZWE2MjcxYTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYzZmIyYzIwOGYxOGNiMGMwMTc5YjQzODg4YzQyNmI5MDE1MmZmMzczZDRmOGE2YzJkZWEwOWNlMWMwODlhZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBiNWVkMGU0ZDUxYjFlOWY3MTJjMDU1ZWRkOTNkZmFmYTAwNzM5NWYzOTg2ZjgzMzU5MDBmZjkzYjEyN2JjNmMifQ"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L22-L41",
+          "version": "repo-lines-v1:sha256:12929223adfdbe66e4590148f5ad9d5acb5f6ab44edd13a1f9777827075709d5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxMmVkN2FlMzQ0NWUzOWIxOWUyMDBlMDg0Y2ZlOWJiMWJjNDliMzQxZTgwYzJiMDUzYWVjYWM3ZTE3N2ExNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUwYzQyOTVjODY5MjdlODA5OWI5MDVmZjQwNmFjOGFjNWZjYmYwYWMyZTY2MjQyMWE1ZDhmZWFhYjQ2NmY1NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE1ZGYzYTg5NzU2MTBhOTdmMGQxMWYzMTE4OTcxOTQzZjRlYWM4ZThjOGI4MjQzYjk3MjgxYmVmZmE1YmIwZTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6e7052b49e214fc1962b67b09d5d27b0",
+      "statement": "The E2E loop is immune to host port 3000 collisions: dev-container.sh e2e runs `npx next build` then playwright test, and the committed Playwright config's webServer boots its own `npx next start -p 3456` with reuseExistingServer: false so the suite can never exercise a stale server holding the port.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L14-L39",
+          "version": "repo-lines-v1:sha256:39913b1f337a06680abe3112411cc2a54e68c9ec462d54fc3eade120a00e4360:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNDBlNzkyNDRiNDMxYmU5MDQwMGRhZTkzYmYzMDRhZDg5Y2VlNWY2NjJkM2M1NGU5NGFkNWI3ZjVlNjkxNDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxOGRjMjk3OGY2ODRlMmJkYjU1YzY4NGVlMTNhNDIzZTYwYjNkMTRhZjkzMGNlN2ZmZmI2YjlhOTk0NTA2ODQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L46-L55",
+          "version": "repo-lines-v1:sha256:9d72bd6f8566f3a7a9d6b666375bb463e054eebe6100dc859cc8c12e4ea65c82:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1NDEzM2E4NTMwODQwNjM3OGQzY2EyMmRkNzA4ODk5YjcxNGIwNjY2NGI1NDM1MWRhYjM5ZjdhNjIzNDE4NTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhNjNmYThjZmE2ZDc1MThlMGE2ZWJjZWU5MTc0ZjhkOGE1NTExODEyZjk1YWI0MDY4NGZiYmVkYThmMDMzZDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyYjU4YzY2MTZjY2I4ZDlmMzQwODQ5NTAxNzNhMDM5YmIyNzk2ODc0YTVkMWQwZDQ4OWIwZGE5YmU4YWYxN2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0d3541ebe0744462913a780aeef4f653",
+      "statement": "The containerized e2e command hard-fails when Chromium is missing from PLAYWRIGHT_BROWSERS_PATH (default /pw-browsers, backed by the dev_pw_browsers volume) and directs the developer to run e2e-install, which downloads the browser into that shared cache volume.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L113-L124",
+          "version": "repo-lines-v1:sha256:40f1087e8ec4da259bc1f0cb34538fdba66dd901f5155b0e4a8b3953cbfbb6a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViY2Y2YTc5YmRiYjUxOGM0NTAwNzA2YmFjNjM3YzA3M2MxZTMyOGUwNDlkM2E0MjZhYzVkMDBkMmM0MjNjYWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3NmYzZjU2MDA2ZmNmMTUxZDJmYTlhYjYxYmZkMWM2ZjdkZmVlMjNlZjVjMmE4NGJiYWYzZmNhM2Y0MTIzN2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiNmMyOGUxZmY2YjMxM2IwYjE1YjM5MmE0ZGY0YWYyMzExMWIyNjY1ODU4NDJhZWE2MzQzYmY4MjlkMWE2OGQifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L48-L62",
+          "version": "repo-lines-v1:sha256:753778b2f4f187fa5ceb6ba450006066e369f4037289dec732fe404ca23be60b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiZTViOWUwZDllODYyYTU5YzU4ZWFkYjdhMTQ2NDhmMzc0NzFkN2U3NjQ1OGM1YzUxMTY0M2M4YWI2OGJiYWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQxMTQzNmU2NzJmMTZmMTc0MDQzNTViNjNmNTdkMDliN2FlZGE3OTU0OWFiZGNmZThiZjNlZTEzMDI2OGVhNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzYTJiNmZhMWQxYTMxZjI0ZWIxNzU1YzI3ZDZhZWFjMDQ0NjY0YjgyZDE2ZjZmNjViYzY3M2U5OTk2YzhlMTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2195076a128d4d2f81d37d79beebab9d",
+      "statement": "The compose comment claims scripts/dev.sh creates .env.dev when absent, but dev.sh contains no such logic; the committed .env.dev (only NODE_ENV=development) is read via env_file on the shared dev anchor, so deleting it breaks `up`.",
+      "evidence": [
+        {
+          "resource": "repo://.env.dev#L1-L3",
+          "version": "repo-lines-v1:sha256:bd8a64700a8bb1582e257ed50ecb649431f4165671a380e32050e01add020a9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEyYTEwYjczZGZlZWYxYjY4ZDhhZjU3NDhjNzc3YWQ3NzMyM2NmMTgyODlkMjU4YWZiZTI1NmZkMjc0M2MwOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTdiZWJhYzI2ZGY0NzRiOGZiMTk4MmQzMGJmZGRhNGUxZDBmNzljZTI2ZjFiNTUxZGJmZmMzMWIyYTNhNmM1OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.dev.yml#L26-L26",
+          "version": "repo-lines-v1:sha256:7393d880438781e62be78ee7112a2ff2f7a39c6b23b95b3e9feaad28be08ef5d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzM5M2Q4ODA0Mzg3ODFlNjJiZTc4ZWU3MTEyYTJmZjJmN2EzOWM2YjIzYjk1YjNlOWZlYWFkMjhiZTA4ZWY1ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzM5M2Q4ODA0Mzg3ODFlNjJiZTc4ZWU3MTEyYTJmZjJmN2EzOWM2YjIzYjk1YjNlOWZlYWFkMjhiZTA4ZWY1ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmFmZDBiMGE3ZmUyN2E5M2U1NzEzOWM3NTUyNmNkNjIyZTg5ZTA2NDM2N2M5ZDYxNTVlNWYyNTViOGQ3ZmU1NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWQ4NDExNGVhZjUzOTNiYTA0Y2ZhZjA1YzVmYWQ3YmYzNDk5N2E3NjVjNmU3NTdjMDA5YTUzODQ4M2MzMWFlYiJ9"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L17-L65",
+          "version": "repo-lines-v1:sha256:398d87c6a98065f1fd4595967e27e6a739ea90f076ae937e4679e97701835757:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmM2MzM2NjdkMDMwMDczMWJkZDg0NDcyZGM0MjRlMWY5YzY0MTc1ZWEyYmFkYjY2NjQ3MmQ5MWFlYjRlZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YTJiZWNmZjhhZmIzNGRiMjYwZGFiYzk2OTE1ZmZlY2ZkZTg0ODkyOTU0MWM2MTkzZGU2ZDE2NGMyMWU4ZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAzNTEyMWJjZjY3NmMwMzI4NGZkNmYzOGQyYWQ5ZWQxNTQyNDJmMDFlMTI3MWM1NGQyMDU5ZWRlOGI1ZTYyNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b2e390346ff64b58ae56f5e7b160ea7b",
+      "statement": "Stale Next build cache is a known dev failure mode: alternating production builds and dev mode leaves apps/web/.next with mixed output causing globals.css parse 500s, fixed by restarting the web container (or deleting .next on the host path).",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L118-L127",
+          "version": "repo-lines-v1:sha256:eae8db4a1f50d16eabd08ff68c4b19b51a5eda6c20af361d657d5481c304b310:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwNDJjM2EzNjVmZDdlYjZhYjBiZGY1ZDc4MTU1YmI4Yzg0MGFkMjAyNTYyZTI4MzkyNjQzNjlmOWExNWU3NjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMDM0ZTc3MDFlZDk5MGRkZTllOGYwMjk5MjQyNGYwYWJhNDgzNjhlNGRhYmNlMGM5OTQwZmQ1ODEzZDk0MzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFmOWYzODJlM2RkMjFkZDRlMDIzYWE1OGU0MGVmOTExMDcwMmQxMmIzNGJmOTQ0MzNkNjY0Yzk5ODRhY2JjNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0127973939a24c85b49dabc5bf9e699f",
+      "statement": "scripts/generate_icons.js is a standalone sharp utility that renders icon-192.png and icon-512.png from apps/web/public/icons/icon.svg and is not wired into any npm script or dev.sh subcommand.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/generate_icons.js#L1-L25",
+          "version": "repo-lines-v1:sha256:47d4c0d826aee9c4fecff7edfebf6df59bed41a46003b3f1380793345611defe:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5YjNjMDk1MTExZmRlNmM4ZTllMWQ4ODY3N2NhZmVkNWM1NmEzOTM1MzczMzY3YjgyYTFkZWMzYzYwMjc2NzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0OGI0OTA2MmY5YjU0YTZkYzk1NzA4ZDFlNWZlODQ2NWQ3MjgzZTI0ZTZjOGNkMDM5ODdkMDFiZmUwZjc5MGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

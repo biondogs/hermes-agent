@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:149ba9f0efb6222dae49b466f4113f9913cc6ce8d3d457079909f4ea46cb87a4",
+  "claims": [
+    {
+      "id": "claim_967adee546f944e69dcfc889d1599f71",
+      "statement": "RosterBuilder is the only consumer of @forceorg/rules-engine-11e in apps/web: it imports compileWahapediaWargear and runs it over the currently expanded roster unit's catalogUnit.wargearRulesRaw, so the compiled wargear ASTs are transient view state that is never persisted, and the attachment, stratagem-gating and roster-validation parts of the engine run server-side only.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L273-L278",
+          "version": "repo-lines-v1:sha256:873b41d407c1c44ef7b531a156d7aafa9c54063c5bdc4d790ea5665f111e0a60:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODRlM2U3MGM4YTM5MGJjYTc1NDc3NDM0ZjU2ZWM2ZjUyMmQ4MzU3NjVkYTZkYWQwMzY5NTE1MWMxNzZiODMxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWMwNTk4YzZjMzJiNTlhNzkyYmIxMzI5YmU2OGE5MmEyMjk1Njc4NjZhMGE4MjQyYmMxYjhiM2I2NmE1NWFhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjBkNDJlY2YzYzgxMWEwMGZlMjUxODQ4ZmRjZDlhODMzYTA2MzVhNjI0NTUxYjZhMGUwYTNhOWZmYWNmODY0NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTIzMDdjODUwYmVjYjE0OTk1ZjY2YmU5ZWM4ZTFlMGI3OTg3Mzk3YTI4OTA5YjRlMGJjZTI5ZmY0OGJiNTEzNSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L605-L627",
+          "version": "repo-lines-v1:sha256:336cb132d596b60802283a074a303ab97145b19499c0bb2a059de378e89a5b0f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxNDY5ZjdiMmIwMGFlYzIyZDRiMzk1MTVkYmFlODk1YTc3OGJhZWJmYWE3YTEyN2Y0MzBmNjc3MGFiMDA1ODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMGE3OTAyZTRhZGU5ZDk3NDNjZTk5NTQ4YWU3Nzg0YWQ0MDBlOTU2MmU2MzU3ZDA4OThmZGM4MzAyNzNjZTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlYjkxZWViNDE4YzE0YWU1MGUzYjNiMGEyM2Y2N2ZkNDA5M2ZkYTgxNGI3NDhlZWI1YmM1NDdlMzZkNWQxYWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhNGYzZjUwNjNmNmEyYjI0YzVhNGUwNmEwODYxMTZkZDgyZjFkOWVjYWU1YTNhOGRkM2ZiM2I4ZmM3ODEyYzcifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L9-L9",
+          "version": "repo-lines-v1:sha256:d091bd04240f3d16fe599c7e508e2c87cc1d1d7d1cad376dbfb47d07b8c6b6c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzNkNGRhMzdlN2VkZjkxYTRjYzJkZjlhZDk1M2M3MTFmZDNiODNjZjA0YTA5N2M3MDM3OTViMDE3NzYyZGM1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQyM2NjZGIzNTkxOWI0MGY4MzM4YjIxZDYyODNjZjQzYzE0NjJkODRiMGE1MDNmNjdlNTU4MGM5YmM1ZGRiOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_55c7d9e4fc9640f3abc1e4d83e81368f",
+      "statement": "RosterBuilder's catalog is local-first: state initialises to a hard-coded six-entry Adeptus Astartes DEMO_CATALOG with hand-written wargearRulesRaw and catalogSource 'demo', and is only replaced when fetchDatasheets returns a non-empty array; the API mapping joins wargearRules[].rawText into one raw string and falls back to the name-matched demo entry's prose when API rows carry none. The 'Live API Data' vs 'Standby Catalog' badge plus an InlineError with Retry are the only degraded-data indicators of this kind in the app.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L152-L206",
+          "version": "repo-lines-v1:sha256:6d010bff458a6795b146b6fa08993f32b155a138922bf79578e6cfd87a67fa6f:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkOTQ1ZTNkYjliNGYyNWNiZGQ4MTFlY2Q0YTVlYjM2YzkzYzA0NDRlMWVmYmIyMjEyMzUyODA4NGFmZDQ1ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NTZmY2UzOTgzNmM0Nzk5ZmI4NDAzNmVlZjhkZWM3Y2ZmYmFhNTI3NzkwMzEzYmExOWU0NTJjYWVjYzc5YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4MzlhYTEyYjU0MmM5MWU0N2NjN2EzNTI5MWVhZGZlMzhiNDI3OTI0NDlmOGRiYjc5MTRhM2M0ZWY2MDU5MDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNGM0ZWZlNjY4NzA1MDZkODY0MzNjNmNlZWU4YzNmYzQyMjFjOWFjMGMyYzJlMjdmMjc4NTExZmI0NzA4MTgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L388-L428",
+          "version": "repo-lines-v1:sha256:853ea751fafa51f0e721d222e82aa4533697b53cc26f1cd33b8ccdb032036ec7:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ5Yjk0OTYyODIwZTJiNmI3YjIyNTI2MDRiZTM0MjI0OWUyZmMwZGIyNDFkYWQ1MGFiNzNlMDIxMThmZmY3YjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ODNlODNhNjM2NzFlMjhjOTVmZmVmZjA2NTA3ODE3MzU1Mzk3OTBlNTU4MTU1YTk1ZGZiYzJlYjA0ZTQ2NTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgxMGEyZWIzY2E2ZThmNmMwNWM1Yzg5ZjNjNDIxYmYzOGE2NDM0ZGI0ZmM5ZGNiYzc2MTlkNGQ1N2I2Zjc1OWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ0MTU0NGUxMzg2YTFmNTI2ZTdlZTAzMjMzMjhjNThjYmM0OGQxYjY0ZDRiYjczYTZjZGExYTRiOTY1OTIyYzgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L40-L107",
+          "version": "repo-lines-v1:sha256:46231bf717d31d15eb760d3af768444aabcaed5ba24140a1dbf3e2e24932177c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0ODAzMjFmMjAzM2M3OTU3YmQ3NWE2M2U3YWY3Mjc2Y2Q4NzZiNGE1YThhYmM2ZDE1ZGFhYzA0NDhkOGQ1ZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMyMjM3NjljNjZhYTc3Y2M5YjI2Y2M0NDViMjE3OTYyZjA0YTgxNjdjZDIzN2VjNmQ2NWNjYzU0MDE5ZGJkNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVjZjE4YmU2NWYxMmUyZmYxOGFmNzM1YmZhYWU3YTQ2ZGY1Yjg2ZTRjY2M1ZWJjZjQ3ZTlkMWZlNWEzZjliZmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_62a34aa3f9054099aa226545187549be",
+      "statement": "Wargear selections in the builder are decorative: WargearRuleCard holds selectedOption in its own local state and never writes back to RosterUnit.wargearSelections, pointsCost or validationErrors, so a chosen option never changes the displayed or saved point cost (pointsCost stays at catalogUnit.basePoints set once in addUnit), is never sent in the PUT body, and is discarded when the row collapses.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L246-L260",
+          "version": "repo-lines-v1:sha256:c5b81fe5d1e2d927b69168bb82b38e73c83e5098b0c8aebdc83a9f5cc1dde7d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkMmY0ZTk4YmU2NDc0MWIzZjBjOTFlN2QyM2E2YWI5MGQ4NDg0YzdmZTE3ZmYzNDdmMWViNTJjMWIyYTc5MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmM2NkZWRmZWFkNjMyNTUzNzQ3MjA0NmFjMDdlYzVkMzI4ZGI5MGY5NjAzNzNjMjM5YjM2OTA1OTdiMzI4ZGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxNzYzZjAxYzg3MmNiM2FjYTM1ZDcyZDlkNThiNGIxMTBjZmI3Mzk1YmZmZjBmODc2NDlmYjRkZTA2OTQ4MTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5YzE3ZDQ4NTFkZDc1NGYwZjQ5NjUwMTJkMjA4MjlkZGU2YmMyZWQwNGYwNTQ5YTFhNWJlYTllOGJjMGE0OTIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L657-L726",
+          "version": "repo-lines-v1:sha256:031a7e1a5860cb1e5fbb4c8ba97a749ee067a3769b69fa6246e66b1096f569b5:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5Zjc1OTZiMjA5NjcxMWEzNGI0MjkxOTdkNWJjMDQ4NmU3ZTI5MGZmY2ZlOTZkOTEyNDQyMmVmYTFiNTI3OTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2ZmMyZDVmYmZjMzI4Y2M1Nzk5ZmI5ZDk2YjAxYjk0N2I1ZTdhODIwM2NiNzc5MWFmODRlMTJkNzZhY2IxMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fe1555cf90524b3683a8cca5a8905c8b",
+      "statement": "RosterBuilder's validation is advisory only: it computes points-over-limit, DP-over-limit, and a Rule-of-Three check that flags more than three copies of any unit whose battlefieldRole is neither BATTLELINE nor DEDICATED_TRANSPORT, renders them in a red warning block, and blocks no add, save or navigation action.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L228-L243",
+          "version": "repo-lines-v1:sha256:6bd3e7987f59e388f6562d4fc8944976f4087ac4c29406b06f6784e1324b789c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxYmM2MWM0ZDhiN2RkYmI2OWY4ZjA3ZmYxZWM3Mjg4YzBkN2E4N2JmOTBlMGE2MDJmNTMwZTg3OWM2MWEwOGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwYWNiOTQ4NjdmNjljNjFiZDM3MTcwODFjZTk1MDcwNGZkZjgyZDU4ZDZkNjRlNjUzODI4OTgzNWYxODkwNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2YjcxMDIzNjg4NTJlOGVhMGM3Mzg1ZjIwZjkzZGJjNWFmZGQxZTdhYjgzNjlkMWMyNWM4OWNjMjM1YjUzMmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA0NjFmNzVhMjIxYTZkYjAyMjcyMDBjMTgwODUyMDdmODM2ZGY3MzMyOTFiOThmNDllZTc2NjBhYzY4ZDMwNTQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L356-L372",
+          "version": "repo-lines-v1:sha256:d5d4ce6b6f0d2914209771a348a8c22a12c958bd3138372fb6c50c5da5fc56d7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhMzI3NjM2NmY4ZDczN2Q3YmZlMTNmNmVmZmJjODNhMzQ2Nzg4YWYwZmNlYzA1NmM3OTZkYmY2MTU4YzhhMjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMzAwNDg0N2UwNGQ4ODQxMmY5NGVhYjZiMDU2NDlkNjJiMDQyM2QwNDliYjRiMzI3YTgxNjMxNmQ2NDQzY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1M2YzNDJlNjBkN2YzMzYyMjkzMjk3ZGFkZGI0ZDZjZmM2M2ZmZWI1NDM0ZTFlM2QwOWNmMDc3MjJiNDkwNDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2NjhmMzhjZTQzMDU4NWEwZTU3YTFlODgzYzljYThlYmU4MzBlMWUwYTljZGY4OGU1MDM5NDdhMmZiZWZkNjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_61d4e6d6662949de80dd90f0bec1c1bd",
+      "statement": "RosterBuilder re-seeds its internal rosterUnits from the initialUnits prop via an effect keyed on the prop identity; because the edit page passes army?.rosterPayload?.units || [], a roster payload without a units array yields a fresh array identity each render and the effect overwrites in-component edits back to an empty list.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L139-L140",
+          "version": "repo-lines-v1:sha256:1a482a0e9f0632cd0ab770b7a508138caa271eaee9d8a14ee4875a0a21cbf4ec:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmQ2ZDhmYjk1ZDdhYWQxNTg5OTU1MjQyNjgwMDFlYjgzZWQ2NTNiZWVjMzVkZTY5ODg0NDc1ZDhhZWNmYTgxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDM0YmE5N2FkZGVjYjE5MTI1M2U1NzQxYTVjNzUzMDhmMWE0ZDE1NjcxMmFhODc5NWZkY2U0ODdmMzBmZDUwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGM3MTMyNTVmYjRmYjBjZWRhZmE1ZDcyZDMyMzA2NmM3MGJiOTM1OWU5ZDk1OWE5NDI1MTU3MjhlMzgyZjY2YiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L271-L277",
+          "version": "repo-lines-v1:sha256:245ed392e2f004a867cd7712c2e13e583ea7bc66b77fdcf881ce38645b93b896:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWJjODI0MjU1OTY0NmEwMzUwYjlkM2NhMTJiMGFkNTk0NTFmZDBjOTdjZDI1ZGZlNmIwN2YzMWI3ZjU0MTA5YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmE0MTQzNjc2NmIyZjhjNGZkNzA3NmU5YTdiZTJmYjNjMjQ1NzI4MjI4YmNiOWRjM2E3NmY1MWE1YTQwYzFkOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTExN2ZhYzFlMDI0ZmI5ZTlhMzQ5MWUzOGFiYmNhODdjNDg0MTk4ZjgyM2E2YTE3ZDQwNTkzZjJiOTAzYmJlMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmZmNTk5YjBlNzYwNWM4NWE1MjEzODNkM2VjYjg1YWU4ZWQzMGVmODM5NTg4NjM2ODY2NTVkM2JjZmQ4NjAwNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L146-L150",
+          "version": "repo-lines-v1:sha256:44867b78cf448c5465605d7582ec8f00ce4aba20353995e0598f85f57865d3a3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTk2NmZiZmE4ODk5OGRhNzQ2NTZjNTAxOTQ5NTZjMjVmMDg0OTQ1NzY2MGMwMDlmZTYzZDFlOWZhOWRjOTMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjNlMDg3ZGNlNmJjNzc1ZGU2ZjI3NzM1YzVjMjM0M2I1YTE5ODk5MjIwNzk1MzMyNGMwZTRhZDc4Zjk0NjVkNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTdmNWNlMzFhMmI5OTgwNjY5NWM3OTU4MmQ3ZDcxYTljZjMwZmNmNjVmZDAzZmJmYzNlYmYwZTI4NWFkMGVlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjM4MzI3NTViYjdkZDM5N2M2Y2YzNTUwYWEyZGE3YzJmOGYwZWEyNmE0NzM2NjdhYmZkYTRlNGQyODJmN2EzMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e4333e0615a840269e1abb058dc5a0b2",
+      "statement": "The Roster Studio route (/army/[id]/edit) is the only writer of roster payloads: onRosterChange marks state unsaved and restarts a 1200ms timer before performSave, which recomputes totalPoints from pointsCost and detachmentPointsUsed from catalogUnit.dpCost and calls updateRoster; since updateRoster writes localStorage before the PUT and swallows PUT failure, and the page's own catch also sets saveState to 'saved', the 'Saved' pill can be shown while the server never accepted the roster.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L86-L128",
+          "version": "repo-lines-v1:sha256:10e0febf7c12b5e349e312fef75bfa48633aa96d5a4b8d9e7a8229c8936810c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZmJkZDBhZjM5ODRhMjQ4NGU2MmZiYWQ0ZmMzMzljNDQ2ZWJmNWRjNTVhM2VhZGNjOGQ3NDEyNjdiYTAxYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyNWE3NjMyNjUyYTIyZTM1Y2M4ZDM2ZmJhZjM1MTU2NjMxZGM2Y2Y3Njg2NGNlNDM2ZThhMTIzMmE3M2IwMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxN2Q5NDQ4MzcwZWMyNWRmNjdhMjc4N2MwNDQ3ZmM1ODBlMGMyZTIxNWI3MzUyYjg4ZDVmNzBkNzAxYzQwNWYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L327-L370",
+          "version": "repo-lines-v1:sha256:bcefafe613887a77b333e1f264b3ad3b15f0730c7b128fa25ad51ec734d6da11:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZjQyNDcxNTViMjY0MDQ3NDQ0NDA4MDczNWFjY2ZiODBiZTc3ZDkyYmMyMDM0ZjE3ZGQwODViMTlhNzY5MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4OWZhYTBlYjgwMTdmNmM1YjZkOTE0ODkzZDQ2ZGM2NzA3NjU5NjkyMzA3YzIzMWIxODIyMWI0ZGZlNzk4ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4OTVmZWQ1M2JkODBlOWE2OTk0YTVlYjRlMThhMTY4ZjQxNjMwNzc4MmFjOTAwMzU2M2UxMzA3NTVjZjZjNDAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f92f0308372d4bd6835dd975402f5ef2",
+      "statement": "Both force routes substitute a fabricated army object when fetchRoster throws instead of surfacing an error: the studio synthesises a 2000-point Ultramarines Gladius Task Force with an empty units array, and the console synthesises 'Ultramarines 1st Company' with totalPoints 355 and an empty units array.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L53-L72",
+          "version": "repo-lines-v1:sha256:4f51e2d0610744fc74780ec3a8c5c89b64bc122ed97372cfb520802e40a4a2c0:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyMmI4OGRjMGI0NGJmMmI5Y2QzOTZhOGQ5NWViNDBkZjcyZjc1MWIyYjFjM2IyNDZlZjkzNmIwM2RkNjM4NzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2MDNmNzM4NjVkNmJmMjgyMmFkN2U1OGQ5YmMyNzk0NWY1NmJhOGY5OGY2MWIxY2YxNDU2ZTk0ZWQxOGU0ODMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NTVjNGNjZmI0ODQ3MTJjOTgyMGJiNDVhODdmMGEyZDBjNjdiNjhjMDQ1YThkNmMzZmJiZDI2N2UxZDYxZGQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L164-L183",
+          "version": "repo-lines-v1:sha256:c8a7aff01ab60942471d9fe7cfd18d3e772954a6f03c006655a31cfc08b9507e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyMmI4OGRjMGI0NGJmMmI5Y2QzOTZhOGQ5NWViNDBkZjcyZjc1MWIyYjFjM2IyNDZlZjkzNmIwM2RkNjM4NzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2Y2EwNjNhOGZjYTcxM2NiNWU5NDIxMmNjOGY4ZmEyYThmZmZmMjI3NzcyYmE1OWViYjcyZDU2M2E0NTdhNDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NTVjNGNjZmI0ODQ3MTJjOTgyMGJiNDVhODdmMGEyZDBjNjdiNjhjMDQ1YThkNmMzZmJiZDI2N2UxZDYxZGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ff6bb5331218483690ea18b5a9254a5a",
+      "statement": "FactionSelector persists heraldry only in the studio, where handleThemeChange triggers performSave with factionThemeOverride; the console, catalog and dashboard wire the same control to plain local state, so their theme choice is discarded on navigation.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L130-L133",
+          "version": "repo-lines-v1:sha256:8ae1d53264f333c3dcdf1889e6496d0efa42994f48ac44ae44f284d191df6a91:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJiM2JiOGRiMDAxNTJkZmNhYjg0MDNkNjExZjlmNTdlNDBiMjVkYjFmNDE1MDIzOGU5Njg4MDAyMGZiNjA1YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDJhMmNiMjVhMTIyYjQ0MjIxYTYyMzRlYzY2MGE3YjVmYjdmOWJkZTdiM2I5ZTJiM2M1NTlhMGQ5NmZhYzczOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTMxMzk5MWMxZWZhNGUwMGFkMDgxZjE1MjdlYjE5MmM3ZTZhNzFlZjMxMmUzMDgzMjkxNmMwMmIyOGI0NjNjYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGRkYWMwZjFlYmQzNmRhNGJhOWM2MDM5OTFjN2M1ODEyMTU3ZDU4ZGY3NDcyY2U1YzBlMTkyN2UwZmVhYzQ0MSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L392-L396",
+          "version": "repo-lines-v1:sha256:f4a697458405a22d7b64b53d1f930388b194366f39357da3821d85eb772f3186:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmJmYWU4NzQzODdmZjE1NzllYmVlYjI4ODFlZmQ5YzY5OTZhYTNhMzQ1OTIwYWZlY2M4N2M3YzU2NTgzNDExYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1OTJlMDdiNGNmNTNhODM4NmM1NjgwY2ZiN2YzZTRlNzU0Mjk2OWM4NzI2YWM1ZWQzMjc1M2Y4Y2E5NTk3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjZkNmNjZjQ1Y2RhNmMzYzlmMjRjMjNhOGZhN2U3Zjg3ODQ5NDhhYzY5MWM4NTg4NjM2MDhkMWI1YzE1NTNkNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzBkZGI5NjVlOGE3ZDhiNzZhNTBkZmE2MzIzOWI0MWU4ZDRlOWIyYzFkZDg1YWZiZDk4Y2Q2NzI2NGJiZGRjYiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L236-L239",
+          "version": "repo-lines-v1:sha256:f8c1a55abade8e6bc8c0f6b5e60e77919106f8a0bb8a305399a2af19783cf3d2:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDZlZWVhODMwYjlhNWQ3MTFiZjZlMWYzMTg2ZTE1YjA5ODZjNzc3NjllYTliY2QxYTA3ZjQ4ZTQ0NjM1YTRiMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1OTJlMDdiNGNmNTNhODM4NmM1NjgwY2ZiN2YzZTRlNzU0Mjk2OWM4NzI2YWM1ZWQzMjc1M2Y4Y2E5NTk3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGZmODViODU2ODc0MThhN2Y1ZmQ0ZDBkOGM3OGFkYjFjZjlhOGQwN2JhZjNiNGJkNjdhNjFjNTM4MWExMGNkZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjk2N2JjMTdmNzVjNDdhNDlmMzRkOTI3OGFhZWQ0MWZhOTRhOWMyZTNlZDg2ZThiN2MzZjE5ZjBjYjZmNzhmMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3477700550144300b3203aac4f574a11",
+      "statement": "The Tabletop Console's unitsList is fixture-backed at two points: when rosterPayload.units has length 0 it returns the three hand-built DEMO_FALLBACK_UNITS (which is exactly what the route's fetch-failure branch produces), and for a normalised unit with no matching datasheet it copies weapons and abilities from DEMO_FALLBACK_UNITS[0], so an arbitrary unit renders the Captain's profiles and abilities.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L196-L200",
+          "version": "repo-lines-v1:sha256:45c3352571dfd18c27af7e94832b3f1439f0c63b9d1769fa0c89f71b8b8178fb:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTNlYWY2NDVhOTRhMTVkNWIzYTU1ZDIyOTg3MmU1YTBjYjFmYjk4MjM5MGIyYjdhMDZlMmEwMjI5YmZlYTY3YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTliNzhhZDIyMTE2OTBlM2E2NzgwMzdiNGRhN2NkNmI0NzVkZWJkOWNjZjIxZmY1M2NiMzZhMjc2OTE1OGMyNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTI4NGYyMjg1ZjhmMjdmNDgzMGRkMjNjNTY0ZTRmOTU2NjlkMzI3ZDljN2QxZTI3ZjYyNjQxNzk2OTA0ODk3OSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L24-L103",
+          "version": "repo-lines-v1:sha256:7aa34a1f7815214b731770e42395a96d02b71e8f9d53afe90c2c56b26873f3f4:eyJzZWxlY3RlZExpbmVDb3VudCI6ODAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4MThmYTBiNmFhMDEzNTZiYTlmMTI5ZmM5OTA3YzIwZDRjMWNhYmY2ZGE4NDE5ZTY4YzFkOTQ5OWZlZmU2ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkZWIwYTZiNjMwYTJkMDc3MTVkNjgzYzk1NDczZTZhNTQzZjUyYzc5MmZiYTljMzUzZDdhMGFkNTVhMGJiNzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjY2IzM2RkMDVhZmFlNDZlNjBhMDU2MWQzNGQ0ZGI2ZWMzYzRlYzhjNDlmZWY1ZGNjNTNmODFmZTViZTE1ZjEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L263-L279",
+          "version": "repo-lines-v1:sha256:7204bc49111ac32884d94fbbfddac47d9cbeb97954772fc58409fe5a87496ca5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmYjczOGZhODdmM2Y2YWZhNzg2MzZiYTlmNWE4YTQ0Y2E2YzJiNmI1MGM3MDQyNDg2MjBlMDY0MWM3NmIyMTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5MzRkYzI5NzE4NDkxNmRmMDRkYjJhZDRiYzVjOGE1MGQxY2ZiYWQxZWZmMjA0MGJhNDYwZjUyMjFjNjk2ZDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjZjc3YjFkMWU3MTU0ZDQ2MDNhMjA0YzZkOGQ2YzJjZjI4N2ZiYTY1MjUzNjliZGU5MzAwYTkyMmMwMTg0MWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVkMDg0YWY5Y2Q2NzczODNkYjE0M2JmMTE0ZmY3OGJkZTMxMDUwMmM0ZjFmOTQ3NjJiOWM3NmEyYWI0NWU0NWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_286a85f6cd80442a906b567c03ad29b8",
+      "statement": "The console normalises two persisted unit shapes - RosterBuilder's rich catalogUnit and lib/api.ts's lean datasheetId/datasheetName/modelCount guest shape - and derives ModelHealth from modelComposition using two heuristics: isLeader is a substring test for sergeant/captain/leader in the model name, and maxWounds is computed as (wounds || toughness || 4) greater than 5 ? 3 : 2, so high-wound vehicles are tracked as 3-wound models. Wound allocation is specified canonically by the rules engine's attachment resolver, which the console does not use.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L202-L262",
+          "version": "repo-lines-v1:sha256:dd44b4a9eb04b74f5a8f2307f5b9d936d5496e4f5bb73fc1911590194ae5cfd3:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4NDRlZTUzYTdiY2NmMTM0MjhlNjdiNmRlM2MyYTdlZmQ5MTI5Y2M2NTU4NDRmZmY5MDYzMjFlZGNkZjY5NGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2MWI2MjI4MGRhNjBiYzkxNmQyNjNmN2EwOWY5ZGM2YTY2OWY1MWI2NGVmMWVlMmM5MDc0NmMxMTA4YmYyYWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5MTM5MWFmNjZkMDZmYTk2MDRiYjFlMTYzODdiYTdjYjZhY2NkNTJjNTBlMzJhMGI3YjcwMGI3YmRiOTFhYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU0Yjk3ZjBiYWNkZTAwNmY5YzMzM2ZjMGJkYjNiZWU4ZDY0MGQ1YjIyMzVhZTBmNTE0YWRjOTVjY2Q1ZWMxMzUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L87-L116",
+          "version": "repo-lines-v1:sha256:b65f18e4dcc5cdb975ff6c261661f065e5c9c70996ba05a4b7d6d1a583d3aef3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5MTQwOWUxNjVjOWM4YmUyYWM5ZTJiOTMxMmY5ZjAyYTUyN2JmMTFkYTA0NmU1YzQwMDNjMGU1OGVkMzFkMDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxZjQwZGE1MDdjZTJhYjY2N2IyZjAzZTU5ZTE5NzBkNGUyNDliYmQ2ZTE4NWI0YTQ2NGJmNmU5NTAzOTA4MjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyNWFhZjU5ODFmNzAyNjUzN2I1NDg3NjQzMzllZjMwMTQ2MzBiZTdkMTE3YjVhYWFlYWM0Njc5YmMyZDRiODEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_647e497110e9414db1b4ef4bb6609c5a",
+      "statement": "CompositeUnitCard owns wound state locally: it seeds models from initialModels with no sync effect (so upstream recomputes never reset a mounted card), clamps each model to 0..maxWounds with buttons disabled at both bounds, renders a 0-wound model as DESTROYED instead of a bar, and calls navigator.vibrate plus the onModelWoundChange callback inside the setModels updater, meaning side effects run during state computation and can double-fire.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L217-L269",
+          "version": "repo-lines-v1:sha256:2fdb7ac8c2010c43bcc93df2c1e4e469a6c6eb4ed4dc07080d84116da44c5da9:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2YTJhZTlmYmI2OGQzNDU0YmU2MjQ3OThiYzFmM2IyOTc0YzkyZjFkYzNiOTU3YzBhNmQ1ZGI1OGZkZWRhZDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRjZGZjZjBiNGUxZjExZDY1Nzk2ZWQ4NTU1MDg2OTNmNmIyYjU4YzA1MDI1NzNlYzZkODgwMGQ2MDI1ZTJkNDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2MTY3Y2EyN2IzY2JhNjlmYTI1ZjAzODA0ZWY3ZTZhYmI5YmMxYmE3ZThlNTMzNjMzYjRmMjMyNWM1MGVmYmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmNzQ5ZDA4YzU2Y2UwNDQyNjYyZjdhN2U0MzY2ZGQwMTdjZjQ5YTdmM2YyOWRiOTMyZWRkYTdkOWU2NjUzYjEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L35-L41",
+          "version": "repo-lines-v1:sha256:3d8048b2582ee79f064ff107ebace2a1551c1e1ec87da4410f3ba92f2953e638:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmM4NDY2ZWM2ZTdhZGJjYmFkM2ViMTNkNTU5OWQxYzkzNmQyY2ZmMmU4NmQ5OGY4MGY0NGQzM2E5ZDhiZTNmMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQ4OTNiNmVjMmQ3NmVhMGUxNWY4M2Y4NjQ3OGFkYzE5YjBiZmRhYjNmZTUzYjdhYmQ1MGMzMmI0N2Q0OTAyNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzFhZDY0Nzg5YWVmMTM3MDRiMzcxNDdkMDJkODRhYTg3YmY0MjU1OGIxMDg2NDAxNTU3OGQwNzJhYWI1ZmQyNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L87-L87",
+          "version": "repo-lines-v1:sha256:1c260922ea4ffc226584d605957975fe6c6597115a91c3e0397676bb5c187b57:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWMyNjA5MjJlYTRmZmMyMjY1ODRkNjA1OTU3OTc1ZmU2YzY1OTcxMTVhOTFjM2UwMzk3Njc2YmI1YzE4N2I1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWMyNjA5MjJlYTRmZmMyMjY1ODRkNjA1OTU3OTc1ZmU2YzY1OTcxMTVhOTFjM2UwMzk3Njc2YmI1YzE4N2I1NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGFlMTMyZmI5ZGFiZDVhNDA5ZjU0OTY0ZDc3N2JlM2Y4NzE4YjBhZGVhNjNiM2ZlYjVmMjY2MDMxNzRjMWEzNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTA4ZDg5Zjk5MmZlYzFjZmExNGU1OWY2ZjRiMDRkZDU0ZTRmMzJiODExNGUyZmJkODAwNGRjYzdjOWZiMjhmOSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L96-L113",
+          "version": "repo-lines-v1:sha256:6680c09475a806ac9cf370df9a4b0e90854070667d17a69d5b02c0e8e580024f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkM2I5MzBlYjk0ZmI3ZjY3YzJiYjg1OGY1ZjMyMzZlZTNmYjE3NTk0ZTE0ZDJiOTk4MzY1ZGRlNzU0NTg1ZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkODY3YWIwMzBlNWI2MjEwNWI0ZGQwYzRiYWY5OTYxOTFkNWMyNGM0NWEyYTc1NzY2OWFhODU5Yjk0ZjlkNjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMWQzNmI1NmJkODdmZDBiZjJkMjFjZDNkMmExNGFjODQxZWMyODdhMzcyYTBjYzc2NWEzNzYzNzQwMjdhNmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cb71661ee94243ee846f73cde3116749",
+      "statement": "Wound tracking is not persisted and not shared: the console omits onModelWoundChange and mounts CompositeUnitCard twice (desktop and mobile layout containers) with independent state, so damage is per-copy and per-visit and is lost on unit switch or navigation; the footer's stratagem count is a hard-coded availableStratagemsCount of 6 at both call sites.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L494-L507",
+          "version": "repo-lines-v1:sha256:91319de5199785dbf81d466d606d6e672b790a9eaf73fa57f8457cbf687d550b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkMDY5NTNkMTkwZWJhMGZmNjg0MjU1OTNiODMyNzdmNTQ2Yjk5YjJiMjRjYjVkMDFhMzA2YzNmNmYyZGM3MTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhNDE0MzY3NjZiMmY4YzRmZDcwNzZlOWE3YmUyZmIzYzI0NTcyODIyOGJjYjlkYzNhNzZmNTFhNWE0MGMxZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUwYTU4YjkwNTU5YWMwNjEzZmJjZjhmZTExODczMjlhNTdiNDNhNGUzNDk2MDgzZWFiNzg4NzhjMzI3ZjE4OTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3NjQyMGVlZDgxZjFjYmQwMWY4Y2Q1NGZiNDhjYmM4MWFhMDg4NjI3NzA5ZjNlOTAwOTJlMDJkMjI4ZDdkN2QifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L543-L582",
+          "version": "repo-lines-v1:sha256:72c893002edea262f7e0f4b5ca1e28f8b30af2680c394f9f217291c118575c7d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5MzE1NGRmZmM4YmE4MzExODRiMmZjZWVjMGM0N2M4NDY1MTRkMTQxOWI4YjAwN2QwOGNlNDlkYmE3ZWVjOWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiNTkyZTA3YjRjZjUzYTgzODZjNTY4MGNmYjdmM2U0ZTc1NDI5NjljODcyNmFjNWVkMzI3NTNmOGNhOTU5NzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwYmY0YTUzNDMzYWUyZjM5ZGEyYWIxMGVlZGY3MGMxMGU4NjU1OWZlZWFjODA1ODFiYWJkMjNkY2U2MzdiM2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiZGMyOGYzYmQwZWY2ZGFjNDE3NDA0ZGUzMmFiY2IxNjNkNGQzYjI5YWUyZWFiZGM2MTRiZThjZTNkYTFiNjYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L341-L348",
+          "version": "repo-lines-v1:sha256:13b956a4adf94b3193cb5d3d0350924bc137b7fefea06bc05f7c41e36e485bf6:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDE2Mzc4YzFkMmQ1NjNiN2I5MDU4ODUxZGEwNjlmZmZmYzlhZDhhNTBjZmI1ZGJlNjJhZmE1MmVhMDhlNjI4YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ2ODA0NTgwM2FiMzY3ZTdmMTdlNDFhMzY5MDY0ZmI4MTE2ZDE2MDQ1MjdlOGZmOGNhNmYzNmYxMWE2MzU2MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGQzZmM3MzM0NjBlOTI2ZjdhMGJmNjMwZWQwNzc0NTc1ZDNkZTNkNjI4M2JmODhkMTVhNDkyMzAyNzdhZmZlMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjRkYmJiYmE3ZTFmMTJjZDMwNjdhMmEyZmVhNGYxMjVmMWY0NjgyMTUwY2I1NTAxYjlmMGNiZTE4ZDM4ZDI3NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_31906601661c46b8ac7851653a3b76d0",
+      "statement": "CompositeUnitCard has two photo code paths and only one is live: the rendered lightbox opens PhotoUploadModal, which uses uploadMiniaturePhoto/deleteMiniaturePhoto from lib/api against API_BASE, while an unreferenced handleCustomPhotoUpload/handleRevertToDefault pair fetches the relative path /api/rosters/:id/units/:instanceId/media (bypassing API_BASE, with no matching Next.js route handler) from a fileInputRef that is never attached to a rendered input.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L115-L140",
+          "version": "repo-lines-v1:sha256:928fa6cd188cd096360662dc765dd1cf101ce3a273af4d2ce89cb3ef2e2ad18f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxMDA4NzlhNTBjNDk5ZTNjY2M2YzJmMmM0OGYyNjQ5MDhlNjRiMmRhMjBhMmI2ODdhYzQ0OWYyZDFiYjlhNmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdlMDVlMzJiMzM4MjE1YTFhZjIxMDFhMWQ0M2IwZDVhMzExNTk2OWZhZDk0MzlhMDY2NTJjNjAxNGU1NTIxNGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkMzY1MzZkOWVkZDM2ZTQ0MDYzNjQwN2M2OTk0NWVhZDZhOGZkZjFhZmNlNTI4MTJkNjY2NDQwZDYxMDEyM2UifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L399-L412",
+          "version": "repo-lines-v1:sha256:a08a727a366fa6aa038fa6e30a11b396b2f5b3bee15c87cc716ab555ab23d122:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjNGE1NzkxNDBiZDI2ZmM4MmQzMTMwZWRlYzRmOGE1NWI2ZWI2YmM5NWRkNmYzMDg3YjZjMjkyZGEzYjZlYTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMTA2M2M0ZGVhNjhhMzgxNjYxMTBiYWQyZDMzOGI0ZDcyZTAyZDM3YmUwODE1YTc4NDUxZTk5MzMyZDZkZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1YmI0NzIxMzcxNzExNjM1YzM3YzA0ZmVmYWUzMThjZWNkMDZhZjI2M2JjY2M0N2IxNmY5NzM3MDM2Yjk3MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFiYzdhMmU1NGY1NjNmNmIyNDIzOGNkNTE4OTgwMTdmNzRjNjI5M2JmMzU5ZDY5ZGFlNGVkNDEzMTQ4NWE3ZjYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L92-L92",
+          "version": "repo-lines-v1:sha256:6ec54e98013ec0628bb9b956d76b264657df718622456be402aa035615b3bcba:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmVjNTRlOTgwMTNlYzA2MjhiYjliOTU2ZDc2YjI2NDY1N2RmNzE4NjIyNDU2YmU0MDJhYTAzNTYxNWIzYmNiYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmVjNTRlOTgwMTNlYzA2MjhiYjliOTU2ZDc2YjI2NDY1N2RmNzE4NjIyNDU2YmU0MDJhYTAzNTYxNWIzYmNiYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDYzMGM3ZTZlMmI3MTY5MzFmY2VmMTYzNmQwMzVkYWY3N2MxOTA3YzU4MTM4M2Y0NzNjOGM4MTM4MDY3OWNjYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmQ4NjdhYjAzMGU1YjYyMTA1YjRkZDBjNGJhZjk5NjE5MWQ1YzI0YzQ1YTJhNzU3NjY5YWE4NTliOTRmOWQ2NyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L449-L488",
+          "version": "repo-lines-v1:sha256:d0a76c03365ca3244c37162945a9bbb34b7efd996ec0c2dead2084424231b7a1:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhN2NmYmUxNmM4MzU3NDhjODdjNjgxNjQxYjJjMDhmZmZkZGQ1OTc3NGNmYzlmNmY3NTMwMDMyYTVjMWU3OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmMWU3ZWQxNWQzYTEzMmMxMWVmYTkwNTJiZDI4YWI1ZjRlYTkxNDU5ZGIyMmE2Y2E2OTk5NDkyYmExYzU3YjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ODAwNjI0YjMwODlmOTQyNDI3NjUxMjEzNDE0MmFmYmJkNWZjMTdkNTRkMzM1Y2NjYWZhNmJjMWQ4ZTQ5YzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_90442d0daad54cbebef9b0e58ef36a7f",
+      "statement": "PhotoUploadModal converts upload failure into apparent success: after client-side MIME and 10MB validation it calls uploadMiniaturePhoto, and on throw it keeps the URL.createObjectURL preview, shows the success banner and calls onPhotoUpdated(previewUrl), so the card displays a blob URL that cannot survive a reload; only the revert path logs the failure while still resetting the UI.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/PhotoUploadModal.tsx#L45-L59",
+          "version": "repo-lines-v1:sha256:d4fedabbf87d3d13e97cc53d690defc25aa90ba5a1f02d35191419beae0cf80d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YTcxM2NjNDBjZTYyYmU4M2IyNjg5ZjllNjRmZjA5MTA5YjE2Njk3MzQ1YmE2ZTA2NWRiMTVhNGJiNGE3ZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMxYTVjMzRjODU4NGQwNzU5YzI5ZWM5YzIwZWNiZTg1ZmRmYTAxNDg0ZmRhODY5ZTgzZmIwYWVhODAzNjMyOWQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/PhotoUploadModal.tsx#L70-L112",
+          "version": "repo-lines-v1:sha256:bc91e716f6797617d8f50071dd9bf4656e3c1b741c8712be77c7be803dd4be17:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2YzNiZGI3YzQ3NzE0MmQ2MjJjNzc2MWZiNzEyYzQ2NmVkYTIyOTY5YzhjYjljM2ViZjg3M2ViNjM4YzdhNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxZTM3MjVkYTAwMmI0NmVkOGI0ZGU4ODAwM2FkOTcxMGRjYWYxOGQ1N2M0NzAxZGMzYmVmZjBiMmM1Y2IxM2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMxNmZkMmFkYWIwNGM0Y2I5NGFmZmUyNDliM2M5NGIxMDRkMjhmMmI2MWE0ODVlYzRhOThiNGMyZTk2MTU1MjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_86bb95135e284d1d85c17dd7c4b3eb7a",
+      "statement": "StratagemPanel (whose file begins with a duplicated 'use client' directive on lines 6 and 8) installs the built-in seven-entry CORE_STRATAGEMS whenever fetchStratagems returns nothing; because fetchStratagems already catches its own errors and returns an empty array, the empty-array branch normally runs and the error-bearing InlineError notice rarely appears, leaving the amber 'Core Rules' badge as the only signal that the list is built-in data.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L166-L173",
+          "version": "repo-lines-v1:sha256:d12e354d60b1236e7b3e2e7bb8528b820269018173d2b206dd89b094b300c2e3:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWMwMDY4ZDcyYjRkYWE5ZDZmNmRmNDMwNGUyMTlhNGYzYTNhYjVhNmQ0MTY1NDE4YTYxMzg0Y2U4YjMxZDQ5NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEzMDA0ODQ3ZTA0ZDg4NDEyZjk0ZWFiNmIwNTY0OWQ2MmIwNDIzZDA0OWJiNGIzMjdhODE2MzE2ZDY0NDNjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzlkMTM0ZWEyMGFjYWRiOGQ5NzNkZTM0NTMxMWE5NWVhODQwYzEyYzFkMDhiZjU0ZDE4NjllN2JhNDJkMmQ0YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDYzZDY0ZWFjYmQwMzA0ZThjOTUyMTkxMmFhNzdlZjhmMjEwZGI5Y2Y4MmQ2YTA0NGU1ODY0NDRhYjBmNDYyNyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L36-L44",
+          "version": "repo-lines-v1:sha256:452ea1a67a96e1f980e9b11dfe3ec34060e5d36c970ad2619e15d5c30e9e78d1:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzJkMjNjYzRjNDBiYTI5OTkxZTU3YmZlNzE2OTMyNmIyZWQxNDBiMDk0MzA2ZTVkZjM2MDdhY2FlYmE1MDBmYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjAyZDJjMGQ2ZGM1ZTc0ZDkyZmExNGI5MWRiZWEyNjQwOTBiZWIzNWZkYjkxODhkOWIzNDExODFkY2U5ZjRjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDFlZTk0MDgyMDFjNmUwZjViOWQ1YzYxOTE2MDE1ZGJjNzM2MmZiM2JlNWQwNWVmYTE0YmQ1MzNlOThkN2IyMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODMyYjdiOGQ5NTU4YTc3Zjg4MGQ3YzkwNmNlZjNmODQ2ZTE1ZDVjNzQ2MzMzNDk1MmVjNDM0NmQ4MjkzN2I5NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L6-L8",
+          "version": "repo-lines-v1:sha256:d093ea8846f199fca60a67b72621c59596325bbc525c939aa858e95f16bfea08:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YzN2RiMWI4ZGIzZmJlYTM2YTVkMmE2ZmZkNWYzMzkzYTUzZWYwNTA0N2UwYjVlNmUxNGE0MzRlNDA2ZmRmYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YzN2RiMWI4ZGIzZmJlYTM2YTVkMmE2ZmZkNWYzMzkzYTUzZWYwNTA0N2UwYjVlNmUxNGE0MzRlNDA2ZmRmYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjA5NTNjZGEyZDllM2M2OGYyYzExZjdjMjQxZTIzYzdiN2RhYmM3NDRkZjFhZDllYjc2ZTVhM2U3Yjk0NDQyMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjZkMmQyYjE3MmIyMzgxZDM5OWNkZmZlNjc0YThlNDU3MGJkNGIxYjg1MDM5NDI2MThlOWU5ODM5Y2FlMjM1ZiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L65-L100",
+          "version": "repo-lines-v1:sha256:5ca78896ad4c6bebe644a4ffbee4f16f9caa0d09b37627803f412d8a9d41591d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiNDM3YjkyOTkyMzZiOGU5MTk5ZDU5MzdjNzdmOWU5ZTcyMmYyYWNlMDYwMzgxNjE2ZmZiYWQ5MDQ3ZGRmNGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwNDdjM2ZmMzEyOTY1NWVlMmUyMWQ2NGZhZGQ5NGZiMWM4MzFjODhkNGIyOTkzMDJiMzg2NzViZTk4ODEwYTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDg5YTJjNTdiMjMyZmQ1MjA1YjA4YWI4YTA0MDY5NTU4ZDYwM2RhNmJjMTA0ODcxMGEyNGNkODg1YWEzMmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM4YjMzY2E1MTEwOTNmOGUxYTU0NmZhMjFkYmU3N2U4ZDM5OWU4NjRhNmZkY2FjZmM0NzllNTEzZDgwZjhmOWUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L224-L239",
+          "version": "repo-lines-v1:sha256:a34836627b4f8ae85e2ac9c8d1ea2d46b3a188f17d019c0be0e5b5f73e11342d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZTMzYmNmNDdmNDgzZTA1ZjEzNzRmMTllNGFlMzBmYjEyZjczOTdiYzI5Njg5MTQwODlmMjRmNDVkZTM0ZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNmNmZmYTFiMDliY2Q3NmM3NWZlZGE5YTMwMjUxODc1NTI4MmY1ODBhZjcyZmUzOWYwODY1MWZiZjQxMzM0NGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0MmNjZjFiZTVhNTU5N2MzYWQ2MjJmMTQ1NGMzM2MwNGE5ZDM4MTMxNTNjMWNkYWNkODhlMWQ3NGFhN2UzNTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a5dfa7bc21874909bd0d04dc8127136b",
+      "statement": "StratagemPanel filters with a six-tab phase dock (ANY, COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT): a stratagem passes the phase test if the active phase is ANY or its own phase is ANY or equal, and passes eligibility if it declares no requiredKeywords or the unit carries at least one of them case-insensitively; detachment stratagems arrive only via the never-passed detachmentStratagems prop (id-deduplicated append), and the panel fetches on mount because the console passes isOpen=true unconditionally.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L510-L517",
+          "version": "repo-lines-v1:sha256:c1bb64c837fbd04ab7d5ffb4511293aa5a13909af82814fb3bb1b7aa64afd246:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODJhM2Y0NTg2NTFlYjU3MWFjMzJiNjE2ZDM3OGRjMjlhOWRlZTU4YjRkOGRjZWM2Mzg3NjY4NzFmMGMyYTYwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjliNmUwMmUxODE4ZTg2MWM5Y2I0ZjYzNjBjM2ZlNmE0MmQwOGFiODFhZDE0MmU5MzZmMzAyOWZkZjU4MDA0ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTEyMThlNDJjZDY4MjRmZjgxMDlmYzQ4OGU0MjZiMGIyYzAxYzRjZDE0YmYyZDdjYzAwM2ZlNGFmZTkxODI2MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTBkNmQyZWJhMjljYWQ4NDM1YjAzZWQ3ZGVmYjQzZmU3ZTdiMTQ0ZmQ1NDJmMjM3YjUzNWU1ZDVmMzUwYmU0YSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L586-L606",
+          "version": "repo-lines-v1:sha256:c72f09ff948dbab44faa18f92652355cd40dd921946a553a98ad5e053fac0b7e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmOTY5NjJkN2UxMjc1ZDE5ZmRhMGJhYTM3MWRkZGU2ZDNhM2VhYTVkZjU1NGNkNTQ4NTYyYTEzNThkYmEzZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMzAwNDg0N2UwNGQ4ODQxMmY5NGVhYjZiMDU2NDlkNjJiMDQyM2QwNDliYjRiMzI3YTgxNjMxNmQ2NDQzY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiZGMyOGYzYmQwZWY2ZGFjNDE3NDA0ZGUzMmFiY2IxNjNkNGQzYjI5YWUyZWFiZGM2MTRiZThjZTNkYTFiNjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVlZDY1NDViNzQ5NGRjM2NlODg0YWUxZjA2NmQ5OGM4MWM3NDU3ODAzMzYwMWFmYjllMmU0ZGI2NTk2MTJjZmMifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L16-L23",
+          "version": "repo-lines-v1:sha256:719809e86790924600247d2d45c72aaccc4eb89b49a6d3fddd67cfbdb62e465f:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWNhYWZkYjE2N2U5OGI0NWIzMzBkNmYzMDdhMWRhYzM3MTQxYWU1YjUxNTMwNGM1MmE2ZjBkNTAzNjc4MDM5MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjAyZDJjMGQ2ZGM1ZTc0ZDkyZmExNGI5MWRiZWEyNjQwOTBiZWIzNWZkYjkxODhkOWIzNDExODFkY2U5ZjRjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzZkZTFiZjljOWRjZDA1NDUzMmRhNDgzMTY1NTE3NGEwODI2ZDg4MWNlZWU4ZjRjMTI0ZTYzZTcxZDU1MGNiYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2IwODNlNzlhZDYyNmJkOTVlNGY3MDViY2M4YWNjMGI3NWNkNmFhM2E3N2JmZGM3NDI3M2E1N2U3NTVhY2VkNyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L96-L125",
+          "version": "repo-lines-v1:sha256:10d799101a612527aeb31d6990ee41d8307cc07c96666484c963e8bda7f0ef44:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NjZmYmZhODg5OThkYTc0NjU2YzUwMTk0OTU2YzI1ZjA4NDk0NTc2NjBjMDA5ZmU2M2QxZTlmYTlkYzkzMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNjk4OWFkYzU5OTJjZWJhZTRkNmZmMzM3YWZjZjZiY2I2YmJjYmYzNjI0MGMyYTA4NjUwNWE2NzdkMmZlZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViMzk3NjNlNjdlNzJkMmNlNzNjYzM5NjJjOThkMDUwNGIxYTAzOWQyODZmMzMyNTUxZTQxZDAwZDQxYTc2MWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a822427663104d91a2f2106145e7c19a",
+      "statement": "ComplianceDashboard owns the audit modal and tries the server first: runAudit fires when isOpen becomes true and on Re-Audit, calling auditRoster(rosterId), and only when that throws does it compute a client audit emitting a RED POINTS_SHIFT discrepancy for currentPoints over pointsLimit and a RED DP_VIOLATION for currentDp over dpLimit with a hard-coded ruleset version '11.1.0-2026-Q3-MFM'. Because auditRoster already catches its own failure and synthesises a result from the localStorage roster, the modal normally shows a verdict even with no server.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L41-L92",
+          "version": "repo-lines-v1:sha256:b90fa5a24b16bdc8e77d18e82fe62e79b3899d9d62ca9a63cc9ce08863e0fc78:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1YTM1MzZiYjhlYzBiNTA4OTZmYTVlMGYyMTVjN2Y5ZDY0ZGZmNTQzYzE2MzhkZGFiZjYzMzNjZDU5YTIyYTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhYTkwZGY1MzQ4NDUzNmQ3YTQ1M2Y3YmNiNDE2MjdhYWYyY2ZiMzQ3NzQ5M2FmMGY4MDdiMjA4ZmUxNWZmM2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyMzM4MjU3YjNjMWU3NzhkODcwN2U1ODI1NDkyNzhjMDk2NDNhMDFhY2RmMzU3YzgwZDYzOTBkYzNlMzA5ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L390-L419",
+          "version": "repo-lines-v1:sha256:db6e52816b56f1e78dfc5a034e88d4b79c44710fffe14aa04efdedf09450803e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkOWVkMGMwN2UxYmY4ZmEwYmFiZTYzZTVkMzNhYTFkZDczZjJkZDA5YWE2MjdjZGFiZmFjNjQ4NzkyMDY1ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3OTVhYmRkODk0M2VlZjYyMWZiOWVjMTEzOTE2MGM0MWVkNWVjYjFkN2RhZDVkZmIxMGMyNDIyMGI5ZWUzNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_244f6e2a1fd54d4eac5d28cf82dfbe8c",
+      "statement": "ComplianceDashboard derives its verdict purely from discrepancy severity (isFullyCompliant = zero discrepancies, isBattleLegal = zero RED) into three banners plus RED/AMBER summary tiles and ALL/POINTS_SHIFT/DP_VIOLATION/INVALID_LOADOUT tabs; the 'Sync Active Points (1-Click)' action renders only when a POINTS_SHIFT discrepancy exists AND onAutoFixPoints is provided, and since no call site supplies that prop the fix path and the file's updateRoster import are dead code.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L160-L226",
+          "version": "repo-lines-v1:sha256:c5390a337b06e2c26fbbe4131469dd6115c2be711a02eeee5076ffc30c8c411d:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMWVhMWYwOGZmYTU5NjEyZGExZDNkOTk3MDlmNDMyZWFhZmQ5ODBhNjk3NDc2MmZkYmVlOTI0ZmYwNDEwZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2NTFkNmE2MGMyM2Y5NDFhMzI5M2VlOGNmMGU1MDgxMWU5Zjc0ZDdhMGU3Yjg5NGYyYmNlMWY1NjhiNGZmMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmZDVjMTQyOGQ2NjBhNjJjMjYxZTU4M2Y0OGQxOWRhM2Y1MGM3ZDdlYzk5ZmFkOTAxMTljOTcxZTc5Mzk5Y2YifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L256-L283",
+          "version": "repo-lines-v1:sha256:77438e00387a8d490b6153100fceffa01fe36aeabeaabfd9d787553758205951:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMjljZjlhMGQxMGVkZjU4ZmEzYTkxZWVjMDJkYzAyNmJiMjIwNWI4ZjJjNGI0ZmIyZGU5NTg3ZjA0ZjVlZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczN2RhODVkZDgzYzM1MjcxOTkwMGNkMWFjN2ZmNzA2OWNiZGM0YjBhNmVjNTVmZDNjMTgxMzU3ZTgwZTVlOTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjNzg1MGE1MmY1MTNhMjBhZmNiNWZhNDIxNWVmY2JjZWQyYWE3NGMwYzkyNTRiYzAxNmJjNDNkMjIzM2FjNDQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L369-L381",
+          "version": "repo-lines-v1:sha256:b4deb16c3ceaa43e144b10c2ce126180f41e462d026ceda2424cbc105552b8ea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjYWYzM2UzY2M1MGU3ODFmNjA2MjBmZWQ3NThkMzIwZDAxYjJhOTU1Yjg0Yjc1MjJhNWM0MGZkMjcxYzMzMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ODNlODNhNjM2NzFlMjhjOTVmZmVmZjA2NTA3ODE3MzU1Mzk3OTBlNTU4MTU1YTk1ZGZiYzJlYjA0ZTQ2NTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmMDViYWQzNTVlNjg5N2U1MDdkNGQxOTJhM2VjOTlmNmE2YWJmYzIwN2U0YzkyMjk0MzFiODVmNjNkNTc0ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNDVkY2QwYTAyZmEzMTYzYjY4ZGQ0MmJiOTM0N2I0ODU5NTBiOGU3ZTJlNTZkOWMwMzEwMjAwYTA0YjU0MzUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L9-L9",
+          "version": "repo-lines-v1:sha256:4ba9cbc8404ced3a63cbc84145371ad0eb1d25ab2a84dc09d288ebe11b8025b7:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJhOWNiYzg0MDRjZWQzYTYzY2JjODQxNDUzNzFhZDBlYjFkMjVhYjJhODRkYzA5ZDI4OGViZTExYjgwMjViNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJhOWNiYzg0MDRjZWQzYTYzY2JjODQxNDUzNzFhZDBlYjFkMjVhYjJhODRkYzA5ZDI4OGViZTExYjgwMjViNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTg3ZWFhZDljNTgzOGZlNWVlYTEzYTBiMzhiZmY3YWM5ZDVmMjU1MTM0ZGJmZjQ0MDQwNmM0YjUxYzIxZTU3YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDZiNjZkOGI4YTRkNDZhNzFlYTIyOTgxYmRkMjAzMTNjMmVmZTI4OTNiZGUyZGI1YjY0NjUwODQ5OTRmNDc3YiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L96-L123",
+          "version": "repo-lines-v1:sha256:43f05b7a2b9d6afa34cb6ca648760e6afe04b313c25744ba7884efc40de1ea37:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY3MWM0MWNhN2E3MTY4MDNjZmU0NDA1YzYyZDU4MDBjNGMxZWIwNTU1MGQxZDkyNTI1OTcwMzU3YWUxYTQ3YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MGVlOWViYmZlNTUyMGIwZTAyZmEwYWM0YmYwZjNhOWIyN2VhYTZiNjg4YmU0NjI0MmUxNDg3NzMzMzI2NGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a5255db3a22543fd9403e0fef95e9166",
+      "statement": "The three ComplianceDashboard hosts feed it inconsistent inputs: the dashboard passes payload totals for both points and DP, the console passes only its computed totalPoints (so currentDp defaults to 0 and the DP tile reads 0 / 3), and the studio passes a total reduced from currentUnitsRef during render, which is not reactive and can lag the editor.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L282-L290",
+          "version": "repo-lines-v1:sha256:58cbc01366719236794606a820c88a6fff57f097fbb2a921787a925436e182bc:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTBmOTIwNjdjN2EyMDcxMzkxOTZlNmExOGU5YTY2MGI4MjlmYTU0NzU3NTRjNTlhYmFhNjZlY2Q4YmQ0NWZlZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIxMDYzYzRkZWE2OGEzODE2NjExMGJhZDJkMzM4YjRkNzJlMDJkMzdiZTA4MTVhNzg0NTFlOTkzMzJkNmRmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmJkYzI4ZjNiZDBlZjZkYWM0MTc0MDRkZTMyYWJjYjE2M2Q0ZDNiMjlhZTJlYWJkYzYxNGJlOGNlM2RhMWI2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDgxMGZhYThmYmFlZmFmZmFjZDBkOWIxNjdlZGVhNmRlYzExMDU4NTNhMWM1YTJlMGE4ZTQyY2QzMGQ3ZTk2NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L608-L616",
+          "version": "repo-lines-v1:sha256:9e9250e227b160ae779004433900039c56b012cde7cec67aac927480bcec08c0:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTBmOTIwNjdjN2EyMDcxMzkxOTZlNmExOGU5YTY2MGI4MjlmYTU0NzU3NTRjNTlhYmFhNjZlY2Q4YmQ0NWZlZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIxMDYzYzRkZWE2OGEzODE2NjExMGJhZDJkMzM4YjRkNzJlMDJkMzdiZTA4MTVhNzg0NTFlOTkzMzJkNmRmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjViYjQ3MjEzNzE3MTE2MzVjMzdjMDRmZWZhZTMxOGNlY2QwNmFmMjYzYmNjYzQ3YjE2Zjk3MzcwMzZiOTczMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDgxMGZhYThmYmFlZmFmZmFjZDBkOWIxNjdlZGVhNmRlYzExMDU4NTNhMWM1YTJlMGE4ZTQyY2QzMGQ3ZTk2NSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L433-L442",
+          "version": "repo-lines-v1:sha256:1b9ce0d6bebd39ccdce10473086b88442c8c4692f93ec5c64c4660b7e901622d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ODBlZmJiZWJkMjE1YzU0OTY2Y2FiNTM5YWQ1OGI2YmRiMWU4NTU3NTdlZjk2MGY2M2Y2ZWY4YjVhNjY5ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMTA2M2M0ZGVhNjhhMzgxNjYxMTBiYWQyZDMzOGI0ZDcyZTAyZDM3YmUwODE1YTc4NDUxZTk5MzMyZDZkZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlMTMzY2QyYjQ3MjhkMGM5NWM2YWU3ZmIyMjVmZTdhM2JhNzI1OTMxYzg2MDg4YjE4YzAxMGZhODFkNDRjNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4MTBmYWE4ZmJhZWZhZmZhY2QwZDliMTY3ZWRlYTZkZWMxMTA1ODUzYTFjNWEyZTBhOGU0MmNkMzBkN2U5NjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_85305bbee7714f1bad74688c9ae994ba",
+      "statement": "The catalog page renders instantly from eight hard-coded FALLBACK_CATALOG_DATASHEETS and only swaps in server rows for a non-empty fetchDatasheets success (which itself already returns a three-datasheet fixture on failure), so demo cards are indistinguishable from real ones; selectedFaction is hard-coded to adeptus_astartes with its setter never called (the header FactionSelector changes only the theme), and the detail modal's 'Add to Army via Studio' is a Link to the dashboard, so the catalog cannot add units to a roster.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L134-L156",
+          "version": "repo-lines-v1:sha256:f72ee2245943c258e4a620790f01be3600c091086450d129b13d149854cbd4e4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4NzNlNDRiOThhNmM3OGMzMjcyMDEzMjMwMWY1YWQ1OTYzZDk0YWUzYjEwMjM3Y2NjMGZhODdmMDc2Zjk2OGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMTE4MGJjMzU5ZWQ2YjA2NjMzMTFkYTg0NWJkM2M0MzBhNmU4NWI0YzBiNThkZGRiMTQ3MmUxNDIyYmU2NDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNmZWZjOWYzZmRiOTI4MTg2YTIxODhhN2ZmMzg1ZjVhMjJiZDFmYTE5OGUyYjEyZDFiNTBmYzY0Njg2NTU5YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1MmVmNzU2NjIzOTYyZTBkMWQwNmJmNmMxMGZlMDk2YjY1MWU1Zjg0NmZjNWI5MTQwOGMwZDEyYmU3ZGI4ZjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L17-L114",
+          "version": "repo-lines-v1:sha256:ad235925a49dd29aeed1e85b4eb408d097636ffc215ba4b1c4d0e890bfa21028:eyJzZWxlY3RlZExpbmVDb3VudCI6OTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxYzgxMjMyMTg0OWFlNTg4MjVlMzJmMTZmYzhjMjM1ZWJmMTE0MzdiZTIyNWY4YmFkMGM5YWVhY2MwYjcyM2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0MmQxZDZjNmZjZTBlMzMxOTg1OThjODZjMGQ2N2NmNmE3NWIxYTBlMGRhZTYyZGU1ODg1MzQyN2UzYTVjOTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMmFlZDZiNDY1ZmE3MWIzMzc4MGU0YmJhYWUxYzk0ZTc4ZTgyNThiNjgwYmFiMWVjZTNkYjU5NWFjYTNhNjgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L545-L560",
+          "version": "repo-lines-v1:sha256:f1f2a226618f6b9497785a318b303e15dbd4f1b6ce392cc1275a3ec4a98c5715:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyZmU5MzNhNjZkMzQ4OWUxZmI5NWU4YTYxNWExZGI0OTY3YTVjNTMxMDJkODdhNmYzMTNiYTcxN2RiNGJmYTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDlhNjFiNGM4ZDc4ZTRkMThlMmZjODBmMjE1NWE5NTNiYWY1YWNlY2Y5ZmRiM2QyNDIwNDFkOTM4NmNiYTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjZjQyMmExYThmM2FlZjc5Y2M2MTdiNzExMzMzMDhkZjE3M2JlNzg2ZTA1ZWY4ZmI4MWIxNzVlNGQ1ODNlNDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhZmM3MzZhOWM1NzE4MWJhMDBjZDVkMWJlOGYwNTViNDkxNDEyYjY0ZmNlYzg3YTMxY2IxNGU4Y2Q1NmZhYTYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L162-L210",
+          "version": "repo-lines-v1:sha256:c6ff9c2be58300d78c1991c001c80e232253d901c839a398e3aa3a824583a7b9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NTk1ZjRlZTVmZjYzZDUwOTUwNDE5ZGMzNDQxNDUxMzg1MWRjOTczNmZkMTdhNGY3YmZhOTMwYjI2MWI2ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGIzOTllZTdhZmU3ODAwODc4YzUyMGYwMWRmYTBiODZlMzA5YTk2YzhmYTc0Y2ZkOTAyNDliYmI3ZjAxNzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxMDgwYWU1MjNjMTUyZjE3ZmE4NjNlNmEyMjRjOGUwM2NlM2JmNTFmNWMxNzVhMTE2NDllMTgzZTQxYjYyMDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f577d770ea42491e9a08bb0d5e4781ef",
+      "statement": "Loading and failure presentation are component-local because no route-level loading/error/not-found files exist: FullPageSkeleton is the route-level loading state for the dashboard, studio and console while RosterBuilder and StratagemPanel render row-shaped Skeleton primitives; ErrorBoundary mounts once in the root layout with a 'Try Again' button that only clears stored error state (and catches render, not fetch, errors); and InlineError appears in exactly two places - RosterBuilder's catalog notice and StratagemPanel's core-rules notice - always beside a working fallback, never instead of it. UnitCardSkeleton and RosterListSkeleton are exported with no call sites.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L135-L137",
+          "version": "repo-lines-v1:sha256:ca818ffa572c37be76967935f36051cd8f2f14c6e548ff746be2d8161c3d1506:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmIyYjdiOWVmODYzNTYwNDMyZTE3ZTk1MWI4NGYyYTRhMDcwYmQ0NzExYzUxNzY3ZTdlMjA4ZDcyNDVmM2ZhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTMxMzk5MWMxZWZhNGUwMGFkMDgxZjE1MjdlYjE5MmM3ZTZhNzFlZjMxMmUzMDgzMjkxNmMwMmIyOGI0NjNjYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzFhNWM5NWM5ZjFjNDllNjkxOThhNTk5ODRjNjBkY2FkNTM1MDVhYTFjODY1YTYyMTYwZTA2ZDNhOGNmOWQyNSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L290-L292",
+          "version": "repo-lines-v1:sha256:ca818ffa572c37be76967935f36051cd8f2f14c6e548ff746be2d8161c3d1506:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmIyYjdiOWVmODYzNTYwNDMyZTE3ZTk1MWI4NGYyYTRhMDcwYmQ0NzExYzUxNzY3ZTdlMjA4ZDcyNDVmM2ZhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGQ3MDRiNDk0ZjliYTk5NzVkY2NiNzRjNGNmZTcwZTZmNjkzZjFhODgxNzdhYjUwNzQwMjNlOGZmYWE0ODQ1NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2FmN2UxYjYyMDJmNWZjZjIxYmE2M2FiOTc2OTc5M2Y4YjZlN2RhZjhhNjdlZDM5MjFlOWZlNWEzMzA2MzFhNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/layout.tsx#L36-L48",
+          "version": "repo-lines-v1:sha256:6f89674f8ffc794e623ee46c2d1cfd537ca825882c95329dece60e1bb32ee912:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2Y2YyYWUwODA1NGU4OWJhNWViNTYzOGJkYWQxOWZmNTRiNjc5NWVlODY3MjIzZjAwZjhhNWIwMzhkZDc4ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjMjkxMDVmYjM0OTYzODc3YzI3ZWI1NTMzNmRiNWYyMTU4ZDI1ZDA1ZjVlNWJmYzZiZDNiNWFiMGUxZWQ3OTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ErrorBoundary.tsx#L20-L91",
+          "version": "repo-lines-v1:sha256:07101302f9555d80325fe1d6ebb5199d5f92ea272bbded1e8abeaec42e772e70:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkZGZhMjQzY2ZmZDE5MmUxZTM0Njc2ZGJmNmJlMTM1YmRhODAyZDdlZmU3NzNmZmM3ZjAzMmU4NWYyYTI1MDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMxMzAxYzdhN2MzY2VlZTNjMmU2NjU0NDUxNGZhYjU1NzNhNmYwOGJlNzQ4NGNjZGMzMmUxMjBjZjdmNWU5NDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/Skeleton.tsx#L25-L122",
+          "version": "repo-lines-v1:sha256:f1fa6c4bbb5fc075ef5b88d117acd0ebb4837f406d752d035cf814392f9c0586:eyJzZWxlY3RlZExpbmVDb3VudCI6OTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczYzU2NjAxMzRhZGFmM2I3ZWZlNTZlZWYwZjg0NDFmYzBkYzQxYTExNzc2YmE0NzAyZDY2YjdjMGEwODE0NDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhhMWZlZWJlYjEyNGQ2ZTQyZDhhN2RiZTNlMDU1Njc0NGM4YmQ2NDg4M2RlMDRiZGZiOTAyNmVkYzkwYTY4NTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_984bab5c7c37465994fbf5d89054dfa6",
+      "statement": "Because every fetch failure on this surface is converted into fixture data plus a console.warn, no page in the builder/console surface has a user-visible failure state, and the Playwright critical-flow suite depends on that: it asserts the console shows a 'Captain in Terminator Armour' heading and that the audit modal shows a Battle-Ready/Advisory/Action-Required verdict without an API.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L56-L89",
+          "version": "repo-lines-v1:sha256:81978a1f433bc0df47b875ef2773783cb56142bf42402342b54d010464267f1a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA5MDBlYTc0Y2I4MzdlZGVmYzhiZmJlODZhN2E1MzdkNmZlY2U2ZDRhMTI0NTQ3OTRkYjg2OWM1N2JmMmM4NDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5NmQ4MGRmMDRlZWIyZmM5NGJjMjhhZTk3NzA4ZWEyNTg3NTQ2ZWY1NDg2NjM1YzkzNjdmODkzM2ZmYTMwNzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L164-L200",
+          "version": "repo-lines-v1:sha256:2fa0bd6c6b2a5a0841b09614bb5b8ebd7a81808976f3296fe488842e27102618:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyMmI4OGRjMGI0NGJmMmI5Y2QzOTZhOGQ5NWViNDBkZjcyZjc1MWIyYjFjM2IyNDZlZjkzNmIwM2RkNjM4NzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2Y2EwNjNhOGZjYTcxM2NiNWU5NDIxMmNjOGY4ZmEyYThmZmZmMjI3NzcyYmE1OWViYjcyZDU2M2E0NTdhNDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUyODRmMjI4NWY4ZjI3ZjQ4MzBkZDIzYzU2NGU0Zjk1NjY5ZDMyN2Q5YzdkMWUyN2Y2MjY0MTc5NjkwNDg5NzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_50f621c49cf242d5aa3c4c9f9a463eee",
+      "statement": "The console renders only layout-desktop and layout-mobile containers while globals.css hides layout-desktop below 1280px and hides layout-mobile in the 768-1279px band where only the unused layout-tablet class is displayed, so console main content is display:none at tablet widths; the same route also requests and releases a screen wake lock for tournament play, silently ignoring denial or lack of support.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L119-L144",
+          "version": "repo-lines-v1:sha256:8b579be834c96c18f5a7fa0906a34ae752494f3bcc654366264b4e2a7f57530e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4NWZiZTJkMDJlZjU2ZTcwNDA5ODVkZTBlZWUyNDk0NzcyMTI4N2FiNTRmYjA2ODMxZGNmNDQzM2YyYjZlMTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2Y2IwOTAzMjU1NTMzOTkzYTRlY2M1MWJkOWIzZmE5NTdhZjExODg2MjE4YTBjYTQyYzczMzhkZDJjOTMyN2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNkNDUyNTEzMWJlNWM2M2YwNDJhODk4ZDc5Zjg1YzljYmU3MThmNTM3ZTBmZjFkOTk0NmNmZjk3OTM1Y2M4YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1YTNiY2FlMWQxM2FhNjMxZWExZTZmMWQ1ZDc5YzJkZDBmZGIwZTkwODE5NGM2MTc3NmE1MGJmODQyMDJlMWIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L433-L433",
+          "version": "repo-lines-v1:sha256:7cff1133930ff77b5d911eb48eac9cc825acec6f603dc61f5c3a8c074f9d4ca2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2NmZjExMzM5MzBmZjc3YjVkOTExZWI0OGVhYzljYzgyNWFjZWM2ZjYwM2RjNjFmNWMzYThjMDc0ZjlkNGNhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2NmZjExMzM5MzBmZjc3YjVkOTExZWI0OGVhYzljYzgyNWFjZWM2ZjYwM2RjNjFmNWMzYThjMDc0ZjlkNGNhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM0YzhhOTc0ODcxNjNkMGRiMGY3NTdmZWEzMzFjYWQwM2NkYzA0NDRiYzZiOTVlYjY5ZjYyYzE5NTg3MTJkOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2U4Mzk3MmExNzY4NTMxNDFkOTZlMDRmMDc3OGRiZjViODNiNDFmYTU2MGQ5YTJlOGQ4OWQxYWRjNzVkNjkxYiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L521-L521",
+          "version": "repo-lines-v1:sha256:a5a5efd4b63ba87b04923499886fafd622149989ebe4d5a9671f9d48e6f4fcc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTVhNWVmZDRiNjNiYTg3YjA0OTIzNDk5ODg2ZmFmZDYyMjE0OTk4OWViZTRkNWE5NjcxZjlkNDhlNmY0ZmNjNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTVhNWVmZDRiNjNiYTg3YjA0OTIzNDk5ODg2ZmFmZDYyMjE0OTk4OWViZTRkNWE5NjcxZjlkNDhlNmY0ZmNjNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTBkNmQyZWJhMjljYWQ4NDM1YjAzZWQ3ZGVmYjQzZmU3ZTdiMTQ0ZmQ1NDJmMjM3YjUzNWU1ZDVmMzUwYmU0YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmUwOTA2MWFiMzUwNjBhMzMzOGQ0NmU0NTk1NGI4ODFjNWY3YzAxZDhlMGUyZGQ5MzA4OWM3YWE1NDRkOGQwNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L318-L333",
+          "version": "repo-lines-v1:sha256:5220dcb1b2649ca33ccbb81d315804ef46c0d0308fe7b3cbd1c12e7fe2395574:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MTk0YjNkZTE4MGE3Y2NmNmNhZTY5OWE3M2M4ODQyNWIzNjRlYWQxNDUyNDkxNjkxOWIxN2IwMzhkY2MzYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjMTJjYzVmMjVmMGY3NGNkNjY0MDhlYzgyMTUzMDEzNDI1YTIzZDczMzdmZmU1YjVhYmE4NTE1ZmRkYWJhN2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwN2U1NjMxYzMyZTAwMThkOTg2M2U1OGQzMzAwZGNmMjUwMmY3MTRmNzA3MzIzZjdmZGI1YmE5YzhmZjdhYTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fe9eeb5e6fb94d909729447fbb4b32d3",
+      "statement": "CreateArmyModal is the pre-studio entry point for roster metadata and hard-codes four factions with their detachments and subfaction theme keys rather than fetching them; submitting always sends detachmentPointsLimit 3 and one of 1000/2000/3000 points, and because createRoster itself synthesises and localStorage-persists a local army when the POST fails, a 'created' army can exist only in one browser while the modal navigates to the studio as if it were a server resource.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CreateArmyModal.tsx#L144-L190",
+          "version": "repo-lines-v1:sha256:764a7d1bd6aef101917886c61bdc9e00cb5d013298f20963926c2341c1886cab:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NTVlNzE3NDIwMTEyZjUwYmU2YjA1M2U0YjYyM2VmOTMxZmUwZDhlODc3ZTJlZmU4Y2JiNzY4NmQ3NDIwY2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxZTM3MjVkYTAwMmI0NmVkOGI0ZGU4ODAwM2FkOTcxMGRjYWYxOGQ1N2M0NzAxZGMzYmVmZjBiMmM1Y2IxM2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3NzJjMzU4N2YwYWIxZTg0NjJhYzU3NWIzOWZhOWRlNzljMjU0NWJhMWY2ZWM1NTQyMWEwMTYyODBhZTNjNGUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CreateArmyModal.tsx#L28-L108",
+          "version": "repo-lines-v1:sha256:b3f8889a7c694d193c3913bc2743790f55ae1eb44bf9883ea8d51032d537775c:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NTc4ZTdjNDg4M2Q5YzA1YjkxOWQyM2QyMDEyMGU2ZGRhODM5OGU3NGExZDI4N2U0NDZjZGQ2ODYwMzI2NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRjZjNkODQxN2VlOWUxMTg5YzZjMzk5MDg5NWE4Y2Y3MTc0ZmQwYWE4M2JkNTQ5NmNhN2M5MDdkZTYzNTRlZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwN2I3ZWM5NGY5YTZjYTY1NmQ3MjA3MjIxMzMzZjY1MTAxNjE4MmI2M2E1ZmY3ZmQwZDRmM2YxM2FlYWM2YTIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L285-L325",
+          "version": "repo-lines-v1:sha256:c99f9ec36e781e9cd3db8c7afc7a2c650eb696ffb54713423374ce9d8c92dede:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5NDI0N2JjOTJhYWZlYTc2OGYxMjg0ZDgwYmY1NDAyZmE5YzczM2M0YTdlNjc2MDFlMDRiYTE4MTJhOWY1NTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmNDVkNWMwZjBiOWEyMGY3OWQ0MjUzYjFjZGIzY2Y2Y2ZhYzIxNGJhYWQwNjBlMzZjNjYwOGYyYTkzZDRmOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3ZTBjYjVlYjljZDIxMWIwZTYyYTM1YzliMzM3MDM4OGQ2MDBhYWEwODg2ZmIxMzQwNDUyZTJlY2E5ZDVhN2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9528dcea715b45cbaaad8341eb2b328f",
+      "statement": "Both CompositeUnitCard call sites pass canonicalImageUrl '/assets/models/default_placeholder.webp', an asset absent from apps/web/public, so the avatar renders a broken image frame - the ChapterIcon placeholder branch requires an empty prop and the onError handler only clears customImage, which is already null.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L504-L504",
+          "version": "repo-lines-v1:sha256:aae4edaf64a923fc57b135805a852dc9b44f66e84add19375a13d81b520f1825:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWFlNGVkYWY2NGE5MjNmYzU3YjEzNTgwNWE4NTJkYzliNDRmNjZlODRhZGQxOTM3NWExM2Q4MWI1MjBmMTgyNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWFlNGVkYWY2NGE5MjNmYzU3YjEzNTgwNWE4NTJkYzliNDRmNjZlODRhZGQxOTM3NWExM2Q4MWI1MjBmMTgyNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDJhZGZkNjhlZGI2MzBjZjJmYjZjMjIwMzAwZjJhYTRjYzk3MmFkMjYwNjAzMzU1YmZkMjkyMzVhZDFhMjQ1NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2YzMWYzMjdjNjBjMDVjY2JkZTBkODU0ZmZhODQ3NTIyNzE4NWFiNmQ1OTY2MGMwY2JjZmQyZWU1N2JiOTE2MyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L553-L553",
+          "version": "repo-lines-v1:sha256:838bd2f2eefd834cf3a68260e7c6ff1a53e68973da5694cd80b7262de31aefb0:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODM4YmQyZjJlZWZkODM0Y2YzYTY4MjYwZTdjNmZmMWE1M2U2ODk3M2RhNTY5NGNkODBiNzI2MmRlMzFhZWZiMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODM4YmQyZjJlZWZkODM0Y2YzYTY4MjYwZTdjNmZmMWE1M2U2ODk3M2RhNTY5NGNkODBiNzI2MmRlMzFhZWZiMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjI0YTc0ZThjOThjOGU2Yjk5OWEzNjhkYzdkZDM0ODUyOWE0NmVkMjY2Zjc0OWQ4NzU0ZmMwZDFlZDZkNjk1NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVkYTUzNWQzNzFhOGM4YTA5NGY4ZWE2Y2JhNmM5NWEwZWYzZGM1ZjZkMDEwNzAyZjdhMzkzOGEyZTExOTI3YSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L165-L176",
+          "version": "repo-lines-v1:sha256:0fb4879914147a451cfb7cc417824c4ec5d0b309fa1112b04c8c5f11044c0886:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5MzE0YjQwMzQyNzA0MTY5ODMzOTQ3YmRiZjRlN2EwZDEwNzVkZmQzMmJiMmVlNjkzYWFmNzI0Njc3ZWU4MDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5YzFhNjg0ZGQ1NzM3ZGRhOTc5ZmY3ZmVkMzQ4ZWM5Mzg3NTMxZTc3ZjBlMDU5YmNhNGVjZjE4NmJhNjEwMWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2OThjNzdkMmU0ODcwYWU1OTJiOTZkMTZlZGExZmQzMDY2YjFhM2NjZjc2MzFlOTg1N2JhZGE4ZWUxYTVlNWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZiZjgxNWY1MWNmNDcxMTBlYmQ1OGY2MWJhODFjYzJhYTIyMmUzNmMwYmI0ZTUxOGFlYjhhYjA5Yzc0YTk0YjMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

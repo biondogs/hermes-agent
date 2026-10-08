@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:9b9a9dc98cd762cf7073b3710467bc78248865aefb1b9e96a295fa23ac0e8266",
+  "claims": [
+    {
+      "id": "claim_350ae14e53584ef1bd37849e5354765a",
+      "statement": "Attachment legality between a leader and a bodyguard datasheet is data, not code: leader_compatibility_11e stores one row per legal (leader_datasheet_id, bodyguard_datasheet_id) pair with a composite unique index and CASCADE foreign keys to datasheets_11e on both sides, is public-read with writes reserved for the sync-worker service role, and is populated idempotently by prisma/seed.ts.",
+      "evidence": [
+        {
+          "resource": "repo://packages/db-client/prisma/rls-policies.sql#L29-L29",
+          "version": "repo-lines-v1:sha256:ac4aafe9f9ce77eec7e71eed2739ac8f77305b8f4e0c978b5f0041c04b9db5bd:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWM0YWFmZTlmOWNlNzdlZWM3ZTcxZWVkMjczOWFjOGY3NzMwNWI4ZjRlMGM5NzhiNWYwMDQxYzA0YjlkYjViZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWM0YWFmZTlmOWNlNzdlZWM3ZTcxZWVkMjczOWFjOGY3NzMwNWI4ZjRlMGM5NzhiNWYwMDQxYzA0YjlkYjViZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGM5ZWI0ODM4ZTZkNDlhNTBlZWQzYmExYTA0YWIzNDE1NDEyZjdkMmM4MzI2MzQyZDE1YWY2OWUyNmY5NzczMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjQyMTU4YmM4YjU1MjBiM2VjYjdjZWQ3ZmJjM2JkYjZiZDEzMDEyMWI3MDhmMDc4YjQzNmUzMWFmYjgxN2EwNyJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L146-L160",
+          "version": "repo-lines-v1:sha256:c7d1a8c77fe4be0ec1343085075b009f1e56cfe0049da5cf595e44a75118bbf4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZWEyOWJmYzE3NTJlM2IzY2U1ZmQ0OWVhN2Q3OTQ3YTM4OWJmYmNlZjk4NGY0MGEwMGE5MDY4Yjg3MWQ5NTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmYmJiM2M1ODU5OWYyMzY1MWExM2RiM2QyMjUyODQ4ZTA5ZjcwMGYxYTY5NDBjOWEyYTZhNjE2YzgyMGYxZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFiNmNiYmIzMDU0ODcwMjlmNmNiNmQ2Y2Y3ODM4NmRhOWQ5ZDIzZDY5ZTE3YWJlYjkwNzBlMTllZTIxNTU4YTIifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L170-L182",
+          "version": "repo-lines-v1:sha256:5d7e07a544cc91fcf3374bf235f858b68e2bf82ca76020b22999f0324f8057ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5OGNmZTBmMTBkMDMzNjhkZjQ2NDJlYmY0NTA4YWZlN2I4OWFlZTg4OGI1OThlYzRlNGZiODlhZDQyOGU4NDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxOTY5NzMxYThiOTA2OTBkMDllOTRiNzY2MDkxY2ViOGYyOWI0NzA3Y2E4NDUzODI1YjE2ZmQ5YWNiYzNlYTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwOTQ1OTcyOWU0ZWRkOTg0YTFiNjYzZmYwMmQ0MWY0NGM0NjM0NzU2OTQ1NmQzMDQxOGVjMzhjNjU4OGUwMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlYzZjYzkwMzEyNzUyNzcwMGZjOWFiZjg2MjFmY2NmMThlNDEwYjU3OGU4YTE4NWJmMDg5NTliODAwOWU2YWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_90ae792a3fc141c3864b4018cc898439",
+      "statement": "isAttachmentValid(leaderDatasheetId, bodyguardDatasheetId, compatibilityTable) matches the compatibility array positionally on both ids, so a reversed leader/bodyguard pair is invalid; the caller must supply the LeaderCompatibility[] array, keeping the resolver free of database access.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L20-L32",
+          "version": "repo-lines-v1:sha256:d15441b9d54b8da72c8e381459df03869c740d119d1fb3112774e53bb1322df6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlYzUxMzIyODI3ODQ2YjQwYTNiOTlmMTcxNTBkODE4NWMxMGI5ODU3NmQ0NGNlYzY0Y2E5Y2NiYTQyZjU2Y2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJlMTFlMDBjMjBhNTBmYmMxMDY4ZWVkOWUwMzUzNTZiOWQ0NWU4YWMzOTVmYTVlZmYwODIyNTNjZGFlNjhiMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1NzRmYzk1ZmJhNWNjMzJjOWQ0ZjlmMmVkODY3M2E2Yjg2YTY0Mzg5MzkxZjAwMWI4MWUwNDg0N2IyYTM5NDUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L20-L30",
+          "version": "repo-lines-v1:sha256:4ca7ab2c188191ea22229d5f52d99de144a95eab27cb38242fc9c6b6efe2d91b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlODZhOTY2NTI3Y2VkYTNhMjBiYjUzNzMyMjc1YjE2YjJjZWY3NTczMjc2MTQ1NTRmYzk3NzA2ZDFkMjM2MzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzMmVlNjc2MTNiYzlkZDk1MjY5MDRmMGRmYjdjZTE4NDM5YjE2MzA1NDIzMTUzZTA4NWUyZDdmYzM5ODljZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMjNiMGMwMjI1OTE1MjYxZGRjZTg1MGYwODJiZTgxYTU4OTYyYjI5ZjViZGUxYTllMTU5NDYwYzZiODc1YTIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_68143f2562bb414a8e2496e780559954",
+      "statement": "resolveCompositeUnit is the composite build entrypoint and returns null when isAttachmentValid fails; otherwise it assembles combinedKeywords, effectiveToughness, mergedWeapons and mergedAbilities into a CompositeUnit.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L93-L114",
+          "version": "repo-lines-v1:sha256:4a27a9ac8ea50a658798439af66f3de54b6945b9062b183a89effdcf6079362d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0OGFiNjBhNzcyZTBkZmRiNDNjYmU1ZGI5ZmQwM2QyZWMyOGZiZTczMTc2YTFiOWE0OWFkYjE5YTI3ZGZmODkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQyNzVjNmI0YjQxN2ZmMWNhOGY2OTY2NDljNTI1Y2Y2OWE5YzU5NDY0YjI3YmJhZWEzNGJhMTNhMjRjZTIwM2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVhMDgxMjEyMDc5Mjg4ZGEyNjBiOTY5NzY2MjcyMmMxNDBlMjM3ZDc5MmEwMWJkMzAyMjY3M2I2NmE4NTBjNWQifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L155-L162",
+          "version": "repo-lines-v1:sha256:19587a603badb1499b8f6aedcab0f3034cd0ebaebae08b30f5d961202479cc51:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzAwYjY4ZTg1YTdhZWE5NjhiZTlhNWJmMjc4YWJiNTQwMzUyNjExNDkwMTY2NmRjOTg2ZjQ5NzA0YjUxNDJiYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2I2ZGRjMzc1ZDBmYmI2ZTBlMjE4ZmU0ZDYwODVjNzczYmU0ZTMyMTY1MmYwZmFiNjI3NGU5ODNiMjQ5MDdmMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTk2NzY2MWNkNjVlNDg2N2MzMGRhMTU0NjZkZTIxZDk4MmIzM2ZmOTVhN2I3N2I0ZGIyZTg2MDQ3ZDFmZDY0YiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_588c4253fa8b41319faca676bba6c175",
+      "statement": "mergeKeywords unions keywords through a Set and returns them sorted; mergeWeapons concatenates leader-then-bodyguard and keeps the first entry per weapon.id; mergeAbilities is a plain concatenation with no dedupe, relying on each Ability.source tag for provenance.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L47-L62",
+          "version": "repo-lines-v1:sha256:1c70fe17f677c9caa68d3c3a8055cb7747ce51b0380d5500aed45aa4053fdab5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwN2ZkZTA2NGUzYjRlOWRlOGJiNmNhOWRhNTBiOGE4YzFlMDcyYTI2YzRkNTE4MzM4MjUxMWE0M2YzZmViNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3NzlkMTE4ZDZlM2NiZjQ1MDUzOTc0OGRlZTdhNDMwN2FjYmU2NDQ2Y2JhMjk3ZjI3NjBmYTVkMGJiYTFiYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5Yzc2YTViNGU0MmM3Zjg2N2NmYWQ0NGVjODMyZWZiMDc3MTQ4ZmI0Zjk3YjA1MjhhZDk0NDY5MzAzN2UxZmEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L52-L88",
+          "version": "repo-lines-v1:sha256:ba108deb75422ff198b197de5d2ccda94a03a8ed26209218e4d31d06bdd4e3f1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0NTQ2MjhlNDgzMWNiMmI2OTkxYjE5NjkxNWRiZjY5YTgxNDFiZWM3ZmJhNjgyN2EyYTViNTE0OWNlNTM1YmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNDI1NDY0MDI2Yjc4YmU0OGU3NWNmMTlmZGU3Y2I5YTA2MzczYWU5NTNhODYxZGRiOWZiYmJlMzRhYWM5MjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNDYxMDY3YjI5OTMwMGU4ZGY0MjU4ODk2MzNmZDU5YWIzNjc4NWUxY2E5MmVlNzJhNDIzNzc5YmNjYTk0YjIifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L23-L23",
+          "version": "repo-lines-v1:sha256:961e3009267032cfc4d3bed681f3ea7b81622d23fed3b4ad33c85db40e77b84d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTYxZTMwMDkyNjcwMzJjZmM0ZDNiZWQ2ODFmM2VhN2I4MTYyMmQyM2ZlZDNiNGFkMzNjODVkYjQwZTc3Yjg0ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTYxZTMwMDkyNjcwMzJjZmM0ZDNiZWQ2ODFmM2VhN2I4MTYyMmQyM2ZlZDNiNGFkMzNjODVkYjQwZTc3Yjg0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzAwNDQzNmNiMzRmMzIxNDFhYzY2ZGUxNDczZWYyY2VjYWRkM2ZiYWJjZjMwOTUxMGM3NzkxMzNlYjdiNGFjYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2ZmOTU1ZGUxZjNkNTU5OWM3YmZkMGIxNTBjMDc2YzA4ZTcwNDU0MGVmNzdjN2I4MjVkOWZmZjE4YmM0ODY2OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3cb6d1b7ff3049a18dbc2f6db92c52ea",
+      "statement": "resolveEffectiveToughness returns the bodyguard toughness while bodyguardModelsAlive > 0 and falls back to leader toughness at zero, so a live composite must be recomputed as resolveEffectiveToughness(leader.stats, bodyguard.stats, countAliveBodyguards(models)).",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L34-L45",
+          "version": "repo-lines-v1:sha256:d0578b05b31ae77b1747319bd552c0bf35f383a4babfdd6b51d67d4ed657319a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4MmU0YzYxZmU3YTRmN2JhM2VmOWU1MmEyNWRkMmMxZDQ5ZjA4ODllNGIxMzBkM2ZlMTMzYzA0ODhmZTZjMzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3NzlkMTE4ZDZlM2NiZjQ1MDUzOTc0OGRlZTdhNDMwN2FjYmU2NDQ2Y2JhMjk3ZjI3NjBmYTVkMGJiYTFiYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImExNmYyZmRkZDI5NDE3ZjdhYzQwNjkxMDgzYjAwNTg2YWVmY2Y0NDc1M2I4MTFiZmFhMGUxODFkZmZhOGRmOWEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L176-L178",
+          "version": "repo-lines-v1:sha256:8c167304c601fa31221219dbb18ed1218722e21d4a207e95858afd4470e38375:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDA2ZTE3YjZmNTg2YjEzMjYwNTQwMzYzZmJhNzlhMDNkZjViNzc0Y2MxZTM4ZWQyMTY4YmZlZGJjNWE3OGU4NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTIxNDFjMDM1MjhiZjkyNjk2NDQzNWZhODFlNTM2NjBjZWY4ODJhMjJkOGQ0YWZmODhlYzNhYTQwNmFjNDM2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L32-L47",
+          "version": "repo-lines-v1:sha256:2c38db026459605bd9be9f081b638e941895805c8eedd3d266e89e71cf65a8c9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5NGZjMGMxNzNkMWVjM2ZjNTAxZDdkZmE5Mjg1NTAxYzUyN2NmYjQ3MTI1ODNkYTNjYzM2MTgwNTY2YjRiZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiNDE5NWI5OGVmYmZmYjI2YzU5OGU3YjgyMTBjYTU4NTEyY2FkMmYxNjAzYmYyYjFiZmU2Y2UyOWY4YWJjYTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_870845bd773a4e8892e22acd5febec1e",
+      "statement": "resolveCompositeUnit hardcodes bodyguardModelsAlive = 1 when computing effectiveToughness, so a freshly built composite always reports bodyguard toughness; it is a build-time default, not a live value.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L106-L113",
+          "version": "repo-lines-v1:sha256:56ddb42efd3f0b78ea462a4e2fd82d5391b3c23d2989f772de39c837aeab579c:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDk1ZmEwZjExMTdiNWVhNDA0MzQxNDBkZGUxYTM0MGM3MjBkZGJmMzI2MjEyZTE5MTgzOGQ0YjE1NmQzMTZiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDJhMmNiMjVhMTIyYjQ0MjIxYTYyMzRlYzY2MGE3YjVmYjdmOWJkZTdiM2I5ZTJiM2M1NTlhMGQ5NmZhYzczOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmQwMjE0ZmVmMzliYzRlMzk2Yzc5OTdmMmQ5ODEyMDVhNjk1MWNjMjdkYWFlZjJlYzQ1MjQ5MmQxMjcxZmZkYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzc5MjllOTFlMGY5OWMzZTgyNWRlNjliNDM1ZmI2NDg0ZDFiMGExZGYyZjQ2NTYxYWJmMWEyOWYwNDE4OGI4OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_578300442342400cb8a3a09b79ef82b0",
+      "statement": "allocateWound applies exactly one wound immutably and encodes 11th Edition targeting: a PRECISION attack with an alive leader targets the leader, otherwise the first alive non-leader model, the leader only after all bodyguards are at 0 wounds, and null when nothing is alive (unit destroyed). Callers must supply the hasPrecision boolean; the resolver never inspects weapon keywords.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L64-L103",
+          "version": "repo-lines-v1:sha256:61ad286eabcb4835ca596190074635fc9d09f35c3ff98abc8f1ff2ba749a050c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiN2EwYjYyZjljNjdjZTQ2ZTJiNjkxYWMyZDU1YjgzYjIwMWZmOTg0NjI1YWYzMWVhZjEwYjRlM2JkNWY5ZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3NzlkMTE4ZDZlM2NiZjQ1MDUzOTc0OGRlZTdhNDMwN2FjYmU2NDQ2Y2JhMjk3ZjI3NjBmYTVkMGJiYTFiYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ3YzZiMTAwYmE0ZWQyZTM2MjFjNTY2MDUwZDk5MjY3NjE2MjYwZTZhY2Q5OTQxNjUwNzMzNjJlMTI2NGFiMDEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L116-L164",
+          "version": "repo-lines-v1:sha256:018e714aec985eda35248fce0e7bced6e4d8dd0c75bd66422d6d1cff53bc4e86:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNjOTkwNjkwYmYxNGFhYmRmMTYwYTk5Y2U4NmJiMTRhYzA5MTZlNmFhOTcxMzkyZWM0ZGQ2ZmUzNzZkMzAxMzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b0c43552eee4488a951ec5566cf0b172",
+      "statement": "isUnitDestroyed requires every ModelHealth entry (leader included) to be at 0 wounds, while countAliveBodyguards counts only non-leader models with currentWounds > 0 — the exact input resolveEffectiveToughness consumes, linking damage state to the defence characteristic.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/attachment-resolver.ts#L166-L178",
+          "version": "repo-lines-v1:sha256:fbf41a9d2b22b416920b912fb7bf9aaa19f608dc0e0bb31b0b63def0f064d2fa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU5ZjFiZmNiZGUyMzdhMTIxNDEyMDUyNDRhOWNhNDAzM2I4OGVkYzAwNTlmNmQ1YzAzM2U0MTcxMmRhYTEyMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c5c9c524de0c44d2a8ae98d031745186",
+      "statement": "filterStratagems admits a stratagem only if all three gates pass: isPhaseActive (ANY is always active, otherwise exact phase equality), unitSatisfiesKeywords (empty requirement is universal, otherwise ANY single match after upper-casing), and detachment scope where CORE stratagems are always available but a DETACHMENT stratagem with a detachmentId is dropped unless the player's detachmentId is present and equal.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/stratagem-filter.test.ts#L49-L117",
+          "version": "repo-lines-v1:sha256:bb6bb548beda6a21b377c51be75fd5d3e51fa3eb5cd4484b7b2f33537e2caad7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3MjVlNTNmMjI3NzIxMTA2OWMzMWFmNDNlYmMwYzY4Mjk1YWFkMjkzYWRiOWRhYjM1NjE0YWI5Mzk0ODc0NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxNjQ4YmMyYWEyODlkNmM2YzcwZmQ2ZjIxMmY1OGQwMDU5YmYzMjUzMWU0YTQ1M2RlNzc2NjMyOTZmZDE1MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZhYjRmMTRjOTFkYjMyMTAwOGQ4ZmM2ZjQ2YmJhOGI3ODZhOGUwMDc2OTRlZDI3OGIxMThiYTI3NmQwYzU5ZjcifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/stratagem-filter.ts#L15-L60",
+          "version": "repo-lines-v1:sha256:bd39ea37c5eaf12a86a5070165d7f16ce715b4563c0d266dca9bc759d5106fc5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4MDRiZmJmYjljMWNmMjNhMTM1YWFlZWFlMWU1OWFhNzBmMzkwZjdhZjNiZjlkNWE3YTI1OTAwMDdkZGVkN2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZTc2M2Y0NGFlMGUxMDFjZDMxZDhiNjVjN2NkZTNlMGEwNDQ3OWM4ZTJiMGFiNzYwMmI4YTUxY2FhMjE0ZjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNjMGQ5Yjk0ZTU1MjlkMWE5YWMzNWU5MzEyZTA2NTM1ZTA1OTQ2YTllMDk1OTk3YTQ2MWRiYzJhNzY1MjdjZDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9afe7f666b44454e93e8497a680b7546",
+      "statement": "Because the detachment gate is guarded by category === 'DETACHMENT' && strat.detachmentId, a DETACHMENT-category stratagem seeded with a null detachmentId bypasses the check and is always available.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/stratagem-filter.ts#L52-L57",
+          "version": "repo-lines-v1:sha256:70bf84ac3deb1311d5970f4ce072ff9102b7258db5499d235cf1da30996b5170:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmQzNTY5OWVkMjc3YTBhYjA5NDVkYmY1ZDM1MDgyNjkzYzk2NTlhNmE5MDM3NGVhMmNiNjU4NGVmZGVhYTAyYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTQyZTQ3ZTJkNjM5MjhkYTJmZTQ0MmZlM2ZlMzBhZGE2YWM0ZDQ5YWNhNGE1OWRjYmM2YTc1OWRjY2UwNmU5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWE5ZWNiNzZlOWRlMjJkZWJlMTdhMDk1MTE1YmMxYzJlMzY3ZDFlZTA3NzA0NTJkMDJlMjVjNzYzNzg0ZjczOCJ9"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L105-L115",
+          "version": "repo-lines-v1:sha256:185374bf136b36f21d94611d7eccf66d4297c855f7d6574b212a093ff4829f65:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxZmY5MzhlYjVmZTNmZDU5ZjUzOWQ2Y2MxMmRmMjc4NWM0MzlhOGQ1OWYwOTlhZjE1NzYzN2YyMzE4NTVhODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0ODkzYjZlYzJkNzZlYTBlMTVmODNmODY0NzhhZGMxOWIwYmZkYWIzZmU1M2I3YWJkNTBjMzJiNDdkNDkwMjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1YWY3ZTViZjY4M2QxM2MwYjNjNDJlZGNhNDYxYTYzYjVhZjViYzc5ZDI1MDE2ODRiMzQ0M2E2NGIwZGUzMjEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_740f68f46ade41c4a317fc75476ee2e2",
+      "statement": "groupStratagemsByCategory partitions stratagems into { core, detachment } for display, mirroring the CORE/DETACHMENT badges StratagemPanel renders.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L228-L263",
+          "version": "repo-lines-v1:sha256:457103f0c6a5ee1db9c99e05132074f5a1e20678ca402508a040e7104af3f890:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyNTMwYTMyZDlmNWIxNGQwYWFhNGNhODZhMDQ0NWE3ZDI2MjlhMmU4OTJmMGNiYzgzNmFiMjZlYjFlM2E4ZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2MDhjYWY4OWM4YzIwMDBiYTAxNDlkZmE5Y2MwNjk3N2Y4ODFkMmIzNGI2MjQ1NTI3NmU5OTNkODdhM2MzMTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzZTFiM2M4YzgzOTM4MmQ1ZTVlZjBjNjM4MWU3YTAwYmY2ZjZjZjA2OGY3NjY3OGMxNTAwZGU4NGUxZWNmZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQyMzdiYzRhY2I3Y2Y3MTYxNWM2N2FhMDhhMmEzMmFmMzQyM2U4OTMyNmFiOTRhOTliY2M2NmQ3MWEwZDdiOGEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/stratagem-filter.ts#L62-L72",
+          "version": "repo-lines-v1:sha256:bc974caa8f14d8273e06df86fbe6964af962cd6263de811ded4fcad765a10ec2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkMGYyZDNhM2FhZGEyNzU4NjQ1NzhkMGE0MzkxNTYzOGQ1NDNmZWNhMmM5NDg1OGRiOTQxMjExZTg2Y2VmMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_82d7370c72df44459e04c0a2edaa8b60",
+      "statement": "CompositeUnitCard copies the ModelHealth[] it receives into local React state and renders a per-model Wound Allocation Matrix with leader marking, clamped +/− controls, a colour-graded wound bar, haptic tick/death pulses, and an onModelWoundChange callback.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L216-L269",
+          "version": "repo-lines-v1:sha256:4368f0d02248500b744a592de3ad2f8c8fd91be2d8141785f916282a801c3957:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjMzA4ZmY5ZjVjNzk4MWIzOTdiNDFjZmMxNTBjYTA4OGU2Yzg5MTY1YjcwMjNkZGY0MWJmYjU5N2RjYjgyZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRjZGZjZjBiNGUxZjExZDY1Nzk2ZWQ4NTU1MDg2OTNmNmIyYjU4YzA1MDI1NzNlYzZkODgwMGQ2MDI1ZTJkNDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NzQwYmUzYTlkMjUwOTIyNDMwMmNlZTc5MGQzMGI4Y2E0NTNjMTBjODQyMDBiNzIyMTA4NGRmNDM5ZjY0Y2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmNzQ5ZDA4YzU2Y2UwNDQyNjYyZjdhN2U0MzY2ZGQwMTdjZjQ5YTdmM2YyOWRiOTMyZWRkYTdkOWU2NjUzYjEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L87-L113",
+          "version": "repo-lines-v1:sha256:2528baeeb29d39649afc865077aafb75f9de30145da0c069659623d64dbbcde1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjMjYwOTIyZWE0ZmZjMjI2NTg0ZDYwNTk1Nzk3NWZlNmM2NTk3MTE1YTkxYzNlMDM5NzY3NmJiNWMxODdiNTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhZTEzMmZiOWRhYmQ1YTQwOWY1NDk2NGQ3NzdiZTNmODcxOGIwYWRlYTYzYjNmZWI1ZjI2NjAzMTc0YzFhMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkMWQzNmI1NmJkODdmZDBiZjJkMjFjZDNkMmExNGFjODQxZWMyODdhMzcyYTBjYzc2NWEzNzYzNzQwMjdhNmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8feb32457ecb46dc89a04cb29a815115",
+      "statement": "The composite card renders the bodyguard-first toughness rule statically: the T stat pip prints stats.bodyguardToughness rather than calling resolveEffectiveToughness.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L190-L213",
+          "version": "repo-lines-v1:sha256:4077aba8408a54acc24737ac711846731526104d8a75e2c62bdbecd8ad545436:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjNjU5Y2YxM2MwODU5ZDIyYmY4ODFjMmZiNGJkYWYxODAyNmRiOWVmMGUxYmU5NzEwZjU5YzgxYzU2MzE2ZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTAwNTlmNDhjYTU2ZjZiNTBmZGM2OWExNWM3YjdlNjMzY2MxZTEzNjA4ZGFhNTBlZDkyM2JlYjBmNjM2ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4OWI3Yzk0YTdlMmE2NGQ0NjE0OGFhNTFjZWY2YzYyOWRkMDdiMjQzNjA2ZjNhNjhhYTU3YTVmYTliMjcxNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MTY3Y2EyN2IzY2JhNjlmYTI1ZjAzODA0ZWY3ZTZhYmI5YmMxYmE3ZThlNTMzNjMzYjRmMjMyNWM1MGVmYmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f337b9a455654f299b7124ba9868dbcf",
+      "statement": "The Tabletop Console is not wired to the resolvers: /army/[id] passes no onModelWoundChange and no key to CompositeUnitCard (so wounds are session-local and leak across unit selection), infers ModelHealth heuristically from modelComposition (isLeader from 'sergeant'/'captain'/'leader' in the name, maxWounds 3 when wounds||toughness>5 else 2), falls back to DEMO_FALLBACK_UNITS on an empty roster payload, and imports no wound or composite helper from @forceorg/rules-engine-11e.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L196-L282",
+          "version": "repo-lines-v1:sha256:45a83ada39765dfb0f304278709c9f4b7471645fec85d1cf74b5264c98d45292:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzZWFmNjQ1YTk0YTE1ZDViM2E1NWQyMjk4NzJlNWEwY2IxZmI5ODIzOTBiMmI3YTA2ZTJhMDIyOWJmZWE2N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2OTgwZjI1ZGU1MWQ3N2FlYzdhOWZmZTUxZTExNWZhM2E1NDExNjNmODFkZGY4MjYxNmQzZjFkNWZlZjkxMTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5Yjc4YWQyMjExNjkwZTNhNjc4MDM3YjRkYTdjZDZiNDc1ZGViZDljY2YyMWZmNTNjYjM2YTI3NjkxNThjMjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBjNDI1YTBiYTdjYzFlZTY1NDIzNDIxNTg3MzhmMDhlNTk3NDk5ODMwMmVlZWNmZGRlNTg4YTgwYWU0ZWExMjcifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L23-L103",
+          "version": "repo-lines-v1:sha256:ab9fd9889c5862b6df558cb5ca2c15662b19db92c3c04a14385d59fda99cba0c:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2NGIyYjczOTczZTNiZmY2YzY5ZDAyNGI0NDIzM2RmMWYxM2I1NGIyYWViMTUzN2YyZGU5MzdiMTUxZDk4N2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEyYjZiMTI2ZDhmMGMzNGVjZGU5NGFlN2E0ZDYzZjZhMDQ0YmIzMGEwM2Q5NDNmYzBiNjU3MWIyOGQ5OWQzYzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjY2IzM2RkMDVhZmFlNDZlNjBhMDU2MWQzNGQ0ZGI2ZWMzYzRlYzhjNDlmZWY1ZGNjNTNmODFmZTViZTE1ZjEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L493-L507",
+          "version": "repo-lines-v1:sha256:ff5e219718fd638fda9471143e07e0538896b56dde0f2d7d6a086c5de4e231d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjNWE3M2I0YjdjM2U1ZmQwNWYzZjViOThiZmJmMDIyNmYxNTFiNTNiN2RiZGZmZDU0YzBmNmUwZDBjZjg0MDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhNDE0MzY3NjZiMmY4YzRmZDcwNzZlOWE3YmUyZmIzYzI0NTcyODIyOGJjYjlkYzNhNzZmNTFhNWE0MGMxZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY2OTE0Y2QwZTQ5ZTVlOTc0MmQyY2RhNDJiMmYzZTlmNDAwMjYxOTdlYWViNjllNjhiNzEyMGI2MzlmYzgwZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3NjQyMGVlZDgxZjFjYmQwMWY4Y2Q1NGZiNDhjYmM4MWFhMDg4NjI3NzA5ZjNlOTAwOTJlMDJkMjI4ZDdkN2QifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/index.ts#L9-L26",
+          "version": "repo-lines-v1:sha256:9c3a86b3cf16699bd3b559b352af999b5cada7759692f624b62289beeb0f339f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjExNzQ0MjkwOTg3MDNlNjM0Y2M2NjRlNDk3NWQxNGFjNDkxMjc0OWU1MTYyNGFiMWEzNTNiZTI0NzNmOWMxMGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0OWY1YjlmNjJkMGYyZTY0ZWMwNWNmMjhhOGFjNDVkMjJhYjYyZTdkOTA2N2U1MmIxOTViYmFhOWRlMmZkZjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzYWRjOWEyMzY2NmZkOTlmZWVhNzA2OTNmYzUyZjlmMjgyN2RiMTI4MDFlOGU3YjhhMDZiNmVkODEzZTQxNmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmZWEyYzVkMDFjYTBiNmIyODIwZTM2N2NjOTUzOWE3YTcxYWM1ZWM2ZTZmYjVmOGViZDM0M2I5ZTE3ODAxZDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bd65d86f9f584273b64015f09390ff2a",
+      "statement": "CompositeUnitCard redeclares its own ModelHealth, WeaponProfile and UnitAbility shapes instead of importing the @forceorg/types contract, translating the uppercase AbilitySource enum into capitalized 'Leader'/'Bodyguard' labels, so engine and UI wound shapes can drift without a type error.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L274-L279",
+          "version": "repo-lines-v1:sha256:4ed74c15b320a0f7561eee72f5ea1e99bec3e7cca375912cdd404d9423a7c1c3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODA2YjE1YzlmOTYwMDVjNjI1MmM1N2Y2OGU2ZTJhMjJmZDJiZmRlNzUzYmM0Nzg5MDZlNmZjOTY1NmFmYWUyOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTkzNGRjMjk3MTg0OTE2ZGYwNGRiMmFkNGJjNWM4YTUwZDFjZmJhZDFlZmYyMDQwYmE0NjBmNTIyMWM2OTZkNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTdlYTk1YTNlMGU4NjNiODFhZmUyNGU2ODNhOTFjMzUwOGY3YzYxNGFmY2IxMzE1ZDllMDM4NzliMmQwOGVhZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWQwODRhZjljZDY3NzM4M2RiMTQzYmYxMTRmZjc4YmRlMzEwNTAyYzRmMWY5NDc2MmI5Yzc2YTJhYjQ1ZTQ1YSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L14-L67",
+          "version": "repo-lines-v1:sha256:c3552b3c811c8d6f97a5b64290c999a0f0687e71b47c1d890ad9161627dcf34d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhMTgwZjY5ZTIzODNjYWNkYzQxMDVkNDAwZmQ1YmMzMjZkZDQwYWYzYTZlMTdiZjkyZjY2NjA4ODFmMTQ2NTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5NmYxNzRmN2Q1MzYyMmI2NGRiOGQwYzNhYWU0MGYxNjMzY2FkYWM3YjNlNTNjOTc3YmQyYThhMjQ1MjVlZjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxNmY2NmEwMDQzOGUxODY2YTBmOTgyMWYxMWI5YzIzYTRiNWE3MmI2N2U1Y2I1NzNkMzUyNjk4Yzk0ZjVjYzQifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L196-L213",
+          "version": "repo-lines-v1:sha256:b91140068f9c1f0c2f211f9d6b63dab146c97a1e9d121268641b7b0efd75bc6f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNiNzY5YjFiMDQ4ZThmNDIyZDA2YjI5ZjVkMTBmZDgxMTBjMWE5ZjZkNmU1OTdhZjc4MDQxNWVkZDJhNDdmMmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlYTVkZjFkMzQxNjc0ZDM0YTg4ODdlMDZhMWIwMDBiNzI5OTE2N2ZmYjU3MzExNDRiY2MyMjM0YmQwNzk0ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFjZTlhOGM4MjQ3ZThmZTNhMjAzOTQ3NmEzNmQ3ZDVhNDhlNTljZTE2Yzg2ZjdlZDRjYjdlODNhNDY2NmY2ZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a87198c0d29e40f995a3f9bd38248f27",
+      "statement": "StratagemPanel implements its own inline phase and keyword predicates over the fetched catalog rather than calling stratagem-filter, applies no client-side detachment gate (relying on the detachmentId query parameter), appends a deduplicated detachmentStratagems prop that no page currently supplies, and shows a hardcoded availableStratagemsCount badge of 6 on the unit card.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L505-L516",
+          "version": "repo-lines-v1:sha256:3f262c59bd29a635035f8a1643821fd51f5e00794aaa4b361e34e114c8f94038:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlNjYxZGRiMjE4YzJlZGUxMzI4ZmY2YmE4NGNlZDk3ODJhNzJlYmQzMjAxYTk1OWIwMGQwNWMyYmI4NTU1YWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhNDE0MzY3NjZiMmY4YzRmZDcwNzZlOWE3YmUyZmIzYzI0NTcyODIyOGJjYjlkYzNhNzZmNTFhNWE0MGMxZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjZWRjYWFiNDFjZWFjMzlmMDRhODM0YjhmNjdjNTI2NWU0MjkyZjE2Y2Q1ZjA3ZDZkZjZkZDBhZGMwNzFjMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MDlkY2FhZThmNGVmMDQ3ZmU5YWIwM2UzMTZhZWQ3MTJmNWFiNmRmNDY0NDdlZGM5NTU0NmIxZmQ4YWU5N2EifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L102-L125",
+          "version": "repo-lines-v1:sha256:4e4eacb1a4c7cbc4d3b12728b7207c864090f9290e38f79dde915ce01cf842ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxZDEzMzIzN2NlNmY5NjZmYzkyNDNlYjFiMjEzNjFiNjQ3ZmI2YmJjYWIxMTc1N2IwNzljZGU4NzZmYjZhOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNjk4OWFkYzU5OTJjZWJhZTRkNmZmMzM3YWZjZjZiY2I2YmJjYmYzNjI0MGMyYTA4NjUwNWE2NzdkMmZlZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIyZGEwYjA2ZWU0ZmY5ZDA3ZGE0ZDAxMTJlODU1YzhhMjc3MTQ0ZGE1MWFlZTkzYjcyNzVjZmUwNDkyZjZlMDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L46-L58",
+          "version": "repo-lines-v1:sha256:5150bdb259b05161be0443e836a7abe53de1d19865e59f4836a581da11e62651:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyZmVlZmE2NjRlMzNmYjQ1ZTY5ZDk4ZWFjOTg4NzFkOTllNjlhMWU3Y2FhODQ2ZGFjYTU4MGMzZDQ0ODA2YjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhZGFlMTdhZGFkMTYzZWI4Y2FkYmFiODhkNjg3ZjRhZGIwMzVmZjNlZGI3OTZlNDViZWFlNTM5ZjY0MTNkMjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2ZWZjYTJkYjk0NzA0ZDNhN2NmOTEyYzBiY2NiNmVhNDM0YzFmMzgzOTY1NDhjMzdlNjllMTczZWI5ZmY1YjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlhOTlkMGQwZWFlM2RmMzIwOTY4MjVmNTc2NzgwMTI1NGIyMzM2NjI3ZWRmMjg3OGUzYTAxNjk5MDVkMmJjNmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9487d6313db94669a4198e629ffc2235",
+      "statement": "GET /api/stratagems filters stratagems_11e by exact equality on phase, category and detachmentId, so passing detachmentId also excludes every CORE stratagem (whose detachment_id is NULL) — the inverse of the engine's CORE-always-available invariant; since the seed only creates CORE rows, the console's detachment-scoped request yields zero rows and the panel falls back to its hardcoded CORE_STRATAGEMS with a 'Core Rules' badge after fetchStratagems swallows the failure.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/datasheets.ts#L84-L102",
+          "version": "repo-lines-v1:sha256:b413f918458411bb87807a32e2ea5654e8ec1781f3b609156e6eb0e74b4d736f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViMWVhMTVhMGY3YjFkNzc0MWMwOTJkZTgwMmQzOWZkYTQ0MzRlY2YwNWY5NDM1OGM2ZjM2OWNhOTExNmUyMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkYzYxZjMzY2EwMTZkOGQ4MzI1NzNlNDJlNDg5NTA0ZGFiZDI2M2U2NWFiNzY2M2MxZjQ4MTk3M2ExZjNiMjMifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L65-L94",
+          "version": "repo-lines-v1:sha256:0027df6256534eb6c5a371c2b9bfb2dba8764efaf62702dbc089bf099187af9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiNDM3YjkyOTkyMzZiOGU5MTk5ZDU5MzdjNzdmOWU5ZTcyMmYyYWNlMDYwMzgxNjE2ZmZiYWQ5MDQ3ZGRmNGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3YTVhOTM5MTNmZWY1ODBhNzMzMTBmYmZkNDc2MmJmMGJiMGQzNzRjMjQ5YjI3YjM4NDU1ZjhiNjU0NDIyYTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDg5YTJjNTdiMjMyZmQ1MjA1YjA4YWI4YTA0MDY5NTU4ZDYwM2RhNmJjMTA0ODcxMGEyNGNkODg1YWEzMmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiMzI1M2RiZDlmYmU2NDQwMzE1OTVjZTk5NThjMzRjYWU3NGUxMDQxOWRiNzY2ZmMxYTIyNThkYmQxOTRkZmQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L224-L239",
+          "version": "repo-lines-v1:sha256:a34836627b4f8ae85e2ac9c8d1ea2d46b3a188f17d019c0be0e5b5f73e11342d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZTMzYmNmNDdmNDgzZTA1ZjEzNzRmMTllNGFlMzBmYjEyZjczOTdiYzI5Njg5MTQwODlmMjRmNDVkZTM0ZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNmNmZmYTFiMDliY2Q3NmM3NWZlZGE5YTMwMjUxODc1NTI4MmY1ODBhZjcyZmUzOWYwODY1MWZiZjQxMzM0NGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0MmNjZjFiZTVhNTU5N2MzYWQ2MjJmMTQ1NGMzM2MwNGE5ZDM4MTMxNTNjMWNkYWNkODhlMWQ3NGFhN2UzNTEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/seed.ts#L19-L34",
+          "version": "repo-lines-v1:sha256:f3fdca89c05136e617a1087f8af92b11b13b08cd706875d6ef74dcc61d36ad81:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExOWFjMDczZDY0ZGU1ODYwZDA0NmJlMzhkZWI5OGQ2NWRlYWRkODUxNTBjNjQ5ZmJkYjUyZmEzZmNmMTAwM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjZTJkN2FlODUwNDQ0MDE1NjY4MGJmODAzMzE1NDI2YjQ5NWM0OTJkZmQ1MjY5MTYwZjFiYzNlMzY1OGZjMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzN2M5MjA2OWZkODM0NzIwZGU4NzU4NzM4MGI4ODlmZjMyMzQ2N2I4MmIxM2NkNThmZTAwOGZmMTE5YmIxODUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlODY5YTM4OWRlYTI5MjU5ODlhMWIzOGVkNjU5YzcwNGIxN2EwZmM1MTI2NmU5YTVmZDUxOTFiM2E5MTliNTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_169e899ef81c48c7a1c10c0feb196e12",
+      "statement": "@forceorg/rules-engine-11e is a pure vitest-tested package whose only production consumers are RosterBuilder (wargear parser) in the web app and validateRoster in the audit route; apps/web aliases the package straight to packages/rules-engine-11e/src for type resolution, leaving the composite and stratagem resolvers exercised only by their focused unit tests.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L9-L9",
+          "version": "repo-lines-v1:sha256:6bee070e7af6632da9713f6f35e7351deb8e1f1ee1414462c0fec27154b46723:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJlZTA3MGU3YWY2NjMyZGE5NzEzZjZmMzVlNzM1MWRlYjhlMWYxZWUxNDE0NDYyYzBmZWMyNzE1NGI0NjcyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJlZTA3MGU3YWY2NjMyZGE5NzEzZjZmMzVlNzM1MWRlYjhlMWYxZWUxNDE0NDYyYzBmZWMyNzE1NGI0NjcyMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDljNzFiYWI0OGI5YWNjYTU2Nzg5OTJiNTI3NGNhODljOGI1YmNlNTExOTAyNzlhZjYxY2ZiOThmNjM5OWZjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmQwNmQ5ZTFkODEwNzEwMTIwZmY5N2M4MzQ3YjQyYzUwYmYyOGU0MmI3YTI1Y2E3ZjBhZjQ1Yzc4MmI3NGI5NyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L9-L9",
+          "version": "repo-lines-v1:sha256:d091bd04240f3d16fe599c7e508e2c87cc1d1d7d1cad376dbfb47d07b8c6b6c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDA5MWJkMDQyNDBmM2QxNmZlNTk5YzdlNTA4ZTJjODdjYzFkMWQ3ZDFjYWQzNzZkYmZiNDdkMDdiOGM2YjZjMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzNkNGRhMzdlN2VkZjkxYTRjYzJkZjlhZDk1M2M3MTFmZDNiODNjZjA0YTA5N2M3MDM3OTViMDE3NzYyZGM1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQyM2NjZGIzNTkxOWI0MGY4MzM4YjIxZDYyODNjZjQzYzE0NjJkODRiMGE1MDNmNjdlNTU4MGM5YmM1ZGRiOCJ9"
+        },
+        {
+          "resource": "repo://apps/web/tsconfig.json#L14-L27",
+          "version": "repo-lines-v1:sha256:63eafa632b61fb366f84b0df03063f5514c5e5e03e03e6ffb163a61e8a5352ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyODM2YmM3NGZkOWEyMmM2OWE4MzMzNWQ0ZWJjM2Y2MTgzMDZlNTJlMDBmZWNlY2U0NzYzMzkyNWVjMDA3NzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTFkZjVlYjMzNWZlOTBlYjMwZDEzZTk0YWZjNDEzMDUxM2QzODdmMzAxN2EzYzQ3NjNhMDcyMzg5YmNjYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkOGE4Yjc5OGJlMTgwNzAxOWE1ZDY5NTFmNGE5YmI0YTljZWZlYTlkMzU3NzIxZTZhZWQ1MDFjOWJkYzFlNmUifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

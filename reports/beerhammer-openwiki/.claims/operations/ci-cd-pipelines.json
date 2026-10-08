@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:e2c954450128c248ba79985623ebe0a7165ae268149aa0066ee674053f41eae8",
+  "claims": [
+    {
+      "id": "claim_c0cf4fcb95bd4fadabf887e81eeaf988",
+      "statement": "The repository carries two independent CI definitions for the same monorepo: four GitHub Actions workflows under .github/workflows (deploy, e2e, wahapedia-sync, openwiki-update) and a two-stage GitLab pipeline in .gitlab-ci.yml (test, then build-images). Because production compose pulls the GHCR forceorg-* images, GitHub Actions is the pipeline that publishes what production runs, while the GitLab pipeline pushes to $CI_REGISTRY under different image names and only runs against a GitLab-hosted copy.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L1-L1",
+          "version": "repo-lines-v1:sha256:7a4997d2224b78e4ec8227f6c37cca4bcae68692b2ca8e756a3af772ab5e38e3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E0OTk3ZDIyMjRiNzhlNGVjODIyN2Y2YzM3Y2NhNGJjYWU2ODY5MmIyY2E4ZTc1NmEzYWY3NzJhYjVlMzhlMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E0OTk3ZDIyMjRiNzhlNGVjODIyN2Y2YzM3Y2NhNGJjYWU2ODY5MmIyY2E4ZTc1NmEzYWY3NzJhYjVlMzhlMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzdiNmEzM2U4OTkyODNmYTg4MTdlMDI5ZjRiZTQ3MjBlNzYzYzNkNmYwZmQ4ZGJlYTUyY2NiYzAxZGUzM2VjYyJ9"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L6-L8",
+          "version": "repo-lines-v1:sha256:c5a8084aaa3bc03782df7471a19763c51c8eccebe3eff35fadeee96344d8eb1a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTRhNWVmZGIzNmUwMDNhZjc1NDM0ZDM5ZmI2ZGJhZjRkY2NmMWRlMDlhNWY4NzRlMWZjNDQ3MDg2NzZlZDJmZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjUxMmNlOGIzMGEwMWU2NTUzODUzN2NjMzQ5YzJiN2U0ZjRlMTYzY2Y4MDExYWM4NTFiZWZhMGRjZTg4Nzg0ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODA2YWVkZWEzY2VkYWIyNmNlMTcwNWY2MjQzZjk5NGE0OTFkMzBiMTdmODdkMDg2MDg5MDFiMWQ1MzlhYTQzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTliNDU3ODU3NTgzZmFhN2Y1ZDRlZGZhYzA3YjVlYTAxZTc5MmE1YTMxZmQ1YzQ3ODM4N2JmOTk5Zjk0Zjg4NSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L47-L47",
+          "version": "repo-lines-v1:sha256:4aae5f8c14ffe0485c0c387fa14b5255ce4dfbfbc93cdf506f4ce9276a8da432:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGFhZTVmOGMxNGZmZTA0ODVjMGMzODdmYTE0YjUyNTVjZTRkZmJmYmM5M2NkZjUwNmY0Y2U5Mjc2YThkYTQzMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGFhZTVmOGMxNGZmZTA0ODVjMGMzODdmYTE0YjUyNTVjZTRkZmJmYmM5M2NkZjUwNmY0Y2U5Mjc2YThkYTQzMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGI0MjliOGM4M2E2NDNjMWFkZDUzNWU2NjJmYTU3ODg3MzRiZGQxNzQ4MzMwYTU2MWFhNDM1MGY2M2Q4MDMzNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2RiYTI4YjY3NTIwNmU1ZGJmYzY0Y2I2OGQ3NjM0ZTJmYmM5Y2IwZWUyNTFkZmYyODc2ZjdmYjI4MmZjYmExOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e72a76781e924ad1810bba1ba301c67e",
+      "statement": "deploy.yml's single validate-and-build job runs the same validation prefix on every push and pull request to main: setup-node 20 with npm cache, npm ci, explicit `npx prisma generate --schema=packages/db-client/prisma/schema.prisma`, then `npm run lint` plus `npm run test:coverage --prefix packages/rules-engine-11e`, then `npm run build`. Any of these failing blocks the merge, and because the root scripts are `turbo run lint`/`turbo run build` the gate covers the whole workspace graph (lint is `tsc --noEmit` per package plus `next lint` for web).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L8-L41",
+          "version": "repo-lines-v1:sha256:086beb0e275f2d3e1c06f0870ba504b89ae4748a8808cc24e1ae77b2afcbc2c5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5MjBlZWVmZWMxNzJjNzgxZjY0MWJmNjk4Yzk2ZWNiYzRjYzA4M2MwNmMwYmE5MDQ3MGRiYWVmYzAxNTY4NDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4M2JiZDRhZDAyM2Q3OWNjYzdiNjdmZTZlNGRhZDBmYjJmZTJlZDI3YTc0YjQ0YzhkY2NhNzRmMTkyYmMxM2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU4NzMzMWYwZTkwYmQxMWExY2YxMDE0ZTAwNjlhMTY2NDFhNjhlODFjODg5NzhiYzk2YmNkMmMxMjNmNzc3NjgifQ"
+        },
+        {
+          "resource": "repo://package.json#L10-L21",
+          "version": "repo-lines-v1:sha256:ffa07a31adf1fc76f7bb06538861851a83248341508eddf01ca620225f984b1b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODMzZDU5NDljMDNhNDBjYTk1MjQ5MTYxMGE2NjU5NjQ0YjNhYTQ2NjM2MmY3OTkwMjBkYmYxOTgxNTQ3ZGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmNzk4ZTAxOWJiNTNkYWM4ZTIzN2YyYWQ3ZGMwMTYyNzRlZTNjYWNlZGM0YTBjMzRiNWYyNDg0NjNjOWU2NGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdjYmQyNjY1MjlkNTc1N2Y3ZjdlYjFmNGVlMzQ2ZDBhOWU3NGNkZGY0NjkyMDAwNzMzY2EyMmU2ZWQ2YThmZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1ZWFiZWZlNzJjYjJmMjU2Mzg0MWZkY2FjNzk4ZmJhYzk4MTFmNTU3MTljNjlhZDA5NDEzNTMyMmI1OWUyYjAifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L4-L22",
+          "version": "repo-lines-v1:sha256:f40332c2e684f0aa8b671187fa72f27bc16d35ff55cfbfd9b9abbd9410af30c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZTIzYjQ5ZWQ3ODBkMzgwMzk3YWVhNzllM2NkZTgwZmU5NGM4YzU3YmZmODc1MjJjODMxNjM4MDhmN2M3OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlY2ZlMzAzYmI2MDQ1N2E3MGNiZDI2ODQxMThjYTAyZDU1MjQ3YmIwNTIyMTBlMmU3MmZlZDIxY2I2ZWZmODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkMWViZWE3YjBmNmI2MmFmNjBmNDNjYjY5NzhkYmQ5OGU5YmUzYzJiYzE0YzlhZDNjOTg4YTU5N2IzNWJjYzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b803e2420b734cfda7eced7146e44024",
+      "statement": "All publishing steps in deploy.yml are guarded by `if: github.ref == 'refs/heads/main'`: only main pushes log in to ghcr.io as github.actor with GITHUB_TOKEN and push the api, web and sync-worker images; pull requests validate but publish nothing.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L43-L89",
+          "version": "repo-lines-v1:sha256:862d0e61a271851adbfeeea077416a5e15177dbc2dcd38f4e78b1e959535610a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyZjQzOTNlNTk4Y2QzZjRkYjc0MzVlYTE1Y2I4MzgxMWUxOThlMjcwNWJhMWRlNDU2MzhhOWU2YzcxYzRiNWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwNmQzMjUwNDY2YzQ5NGY4OWE1ODNjMjFmMjgyMjZkNzgxNDczOWM4YjYyMDk4MjMyYmQyNDZiMTY1NzYxNzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f9b67aff9a274fd1b1c7d0da5fadfe49",
+      "statement": "Because GHCR requires all-lowercase image names and this repository's name contains uppercase characters, deploy.yml first computes `ghcr.io/${GITHUB_REPOSITORY,,}` into the `imagename` step output; all three images (forceorg-api, forceorg-web, forceorg-sync-worker) are tagged with that lowercased prefix plus both `latest` and `github.sha`.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L51-L89",
+          "version": "repo-lines-v1:sha256:ef324ede16e9308f83bc57be0cd43f83bfe205e24d69c0f92762e0cceb521c73:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzZTc3NDAwMDQ2ZWVjZWIxYzIwMGFmMzgwNWZjNTRkYWRkZmY5NzNiNmYzZjU2NGNmZGEwYTlhMGJmYzZiYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzMzEyNzI1OGYxYTFmMzE4NzJhMTZmNjk5NDIwZGNiYWRiYThlYmEyMTIwNmE0MWEwOWY3ODVlMWVmMTRiZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_415468b2397b43379a82a639c1779193",
+      "statement": "No CI workflow performs a deployment: publishing is the terminal step, and the published images are consumed by docker-compose.prod.yml, which pulls ghcr.io/fatpat81/beerhammer/forceorg-{api,web,sync-worker} with FORCEORG_TAG defaulting to `latest`. Because every main push also leaves an immutable commit-SHA tag, rollback is an operational act on the host — set FORCEORG_TAG to a previous commit SHA and pull again — not a pipeline.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L58-L89",
+          "version": "repo-lines-v1:sha256:8fe2b4e577eb2dab7154ea91975eea349220fd025e4fc17f457e0af3817f6296:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjNzNkZmIxOTZkZDNlODJjYjRjMjRkNTkxYzlkYzY4NDM3MDdjOGZkZTczNjU4OGEzN2E2N2VkZWI3NDE3ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmMjkyNTYyZjFiMWNjZmYzY2UzNGQzODQwOWJhNzViMTU0ZmEzOTAxMTJlMzcyYzllYjg1N2E5OWE2OTgyM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L47-L87",
+          "version": "repo-lines-v1:sha256:7a046e5ef6bb7dd20da43bda17ef532f2a3633ea9801d4e6d94ce844825341bf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhYWU1ZjhjMTRmZmUwNDg1YzBjMzg3ZmExNGI1MjU1Y2U0ZGZiZmJjOTNjZGY1MDZmNGNlOTI3NmE4ZGE0MzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzZjQ4MzIxZTQzZTg3NWI2ZjY4NWFiNjc1MDkzMzcxZTNiYTQyZjk5ZmYxMWM2NmE0ZjFlM2YzOTI0NWFiOTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRiNDI5YjhjODNhNjQzYzFhZGQ1MzVlNjYyZmE1Nzg4NzM0YmRkMTc0ODMzMGE1NjFhYTQzNTBmNjNkODAzMzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRlZDljMzM2YzQxNmM4MDU2MWI4MTJjODA2ODZmNTU5MmFhNDAwMDEwODBkODNjZGM1ZGE4MjY2NmI2MmYzYWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ccf8c65178fb450c97bc0a551448f423",
+      "statement": "e2e.yml runs on push and pull_request to main in a 20-minute job that does npm ci, prisma generate, `npm run build` with NEXT_PUBLIC_API_URL set to http://localhost:4000/api (Next.js inlines NEXT_PUBLIC_* at build time, and apps/web/src/lib/api.ts reads it once as API_BASE), installs only Chromium, runs `npx playwright test --project=\"Desktop Chrome\"` from apps/web, and always uploads apps/web/playwright-report/ for 14 days.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L8-L49",
+          "version": "repo-lines-v1:sha256:ef21dbd4762a55508a6dc05e0010ac2ddb10937c528718c70a991555feb5f01b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2NmQwNGZhNzkyMDQxYWEwNGMxY2ZmYjZkN2IxNWFkYTc1N2UxZGU4OTFlNDY2MzFmYmZmYzU2YTFhZThmNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEyMWI3NzNiMjBjMmFhMTZiYzZiMGNlMGUzYWI4NWQyM2JkNzdmM2ZhNzRjYzQxMWU2ZGJhZWZlOTRlMDBjNjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L16-L16",
+          "version": "repo-lines-v1:sha256:7124533ee687487fcf474a3376ae082aadad83ff02ef05156e985ce85c07954d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGY3ZTMxYWEzOTZiNzczY2E1MmY3M2I0ZDEyYzNlOGU3ZTU4NTRlNDc5NTAzOGYxYzllMzZjZGNjM2RjOGNmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjBiMjZjNWYyOTRiYWFlNzI4OGVmYzYwMzYyMDczMmMwNjc2YTU2MTNmYTk5YWYxOGE4MDMzMDlmYTA5MWQ4YSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_23b7e4c09c5b407484f462d3d7a7fe94",
+      "statement": "apps/web/playwright.config.ts declares two projects, Desktop Chrome and Mobile Safari (iPhone 14), but CI selects only Desktop Chrome and installs only Chromium, so WebKit/mobile coverage exists locally only. Under CI the config also sets forbidOnly (a committed test.only fails), retries 2, workers 1, and reporter html.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L37-L42",
+          "version": "repo-lines-v1:sha256:c8d75219399ff1b9ce2631c62ce796023cb13ace22d736f0982f71ec5700c643:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Q5MmE5OThiMDJhMTc5Yjk2N2UwYjg4MzhhMGY4YjFjODU5OGFjMThiNWYxZjYzYjdjODk5MmZhZjJkNTlkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTdjMDViYmI3MjQ3NjkwZjk1NDcxNTdlM2YwYTVjMmU2OGIwYWE0NGUzNWU1MDc3NmZmNWU1MGJjZjZjMTEyZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGI2ZWE0NmY1YjNlYWQ5OWE2ZDYwNjYzMWJlYzcwY2MyMDQ3ZGQzOWVhMDVjMThkODZmYWVhZjY2NTA4N2VjZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWQ2MGQ3ODYzNmY2ZTY3Nzk2NDVjMzUxOGQ2ZTdiZWIxZTQzY2RhM2Q1MDQ0YTExM2M3N2UyNzJlNDI4M2ZiNCJ9"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L9-L28",
+          "version": "repo-lines-v1:sha256:c275ea79c49f3935c73eea6f76df5d7be031ec8a1078be7e526a67af15f13736:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4YmYyMzBiMzg1MTY0ZmUxN2Y3Zjk2Zjc0NWQxYWQ0ZDk2NTg0MGZlNDhmYWIyYTBhZmNkMTBiMzA2ZWRhYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NGQ4YzA3MzQyOTg5MzEwMTU3NmQ4OGQ5OTEyN2U4OWQ2ODkxZDNiMTdlODlkZjAyZWM5YWU3MDcwNWQ4YmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3MDU1OGEzNTU5NzEyMjlmNzIwNzRhMGUzMDFlYjEzOTY3NTNlNjM2YjBlOWM5YzA0N2IyNDNjOGFlNDZjYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmNDAwMzQ2NDhjZTQwYjYyNTZiZjlhOTc4MTg2MWY5Nzc5NWFlOGRlNzNjYmE1MWJiYThlYmVlMjYxZjA0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fc93fae1a75241d88260d3d36d3bd039",
+      "statement": "The Playwright webServer config starts only `npx next start -p 3456` with reuseExistingServer: false (so the suite can never adopt an unrelated server holding the port) and baseURL http://localhost:3456; the e2e job defines no services, database, or compose step, so calls to the API base URL fail during CI runs.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L14-L42",
+          "version": "repo-lines-v1:sha256:3eee7a1a25183755f14f442a0003cacf5977e944f237a00a20e6b43c9461da19:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3YzA1YmJiNzI0NzY5MGY5NTQ3MTU3ZTNmMGE1YzJlNjhiMGFhNDRlMzVlNTA3NzZmZjVlNTBiY2Y2YzExMmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlMmM3MjFiM2RjMjBmZjczNGQ5N2NmNWI5OWU1NWU4ZDRjNzJmOThiZWYzYjk5ZjkwM2NjMWYyYzRjZGM2ZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFkNjBkNzg2MzZmNmU2Nzc5NjQ1YzM1MThkNmU3YmViMWU0M2NkYTNkNTA0NGExMTNjNzdlMjcyZTQyODNmYjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L29-L39",
+          "version": "repo-lines-v1:sha256:5fb40c3f6d4a60d178ea2d83fb7cdb66903cd906088002e0ffc0b6ae33e10594:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNWMwYjBkYTAwMDIyN2JiM2YyMGVkMjI3MDRiOTFkM2Q3NzhlZmMzYjEzZjY0YzBjOWFmYzczNzM2MGEwNjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3YmVmNDRiNWM4OTA4YTZjMTBkNzUwNjVmNDY3NjA5OTY3NjBiZTA2NDQ2MjdiNGM0OTU5MWIzMWE4NmE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_51f9f292699b4700909e71f526b0bc6b",
+      "statement": "Because no API is running in the e2e job, the five specs in apps/web/e2e/critical-flows.spec.ts pass against the pages' hardcoded fallback datasets rather than real persistence: FALLBACK_CATALOG_DATASHEETS on /catalog, FALLBACK_CHANGELOG on /changelog, and the fallback army plus DEMO_FALLBACK_UNITS on the tabletop console. Specs requiring real writes would fail in CI, and removing fallback data from a page changes what the suite actually exercises.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L1-L90",
+          "version": "repo-lines-v1:sha256:f7e19d9b0f0c46363d2026a68c04df949623d60ef4add20cb8fe536b7c892c33:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L151-L200",
+          "version": "repo-lines-v1:sha256:54c18e0680ed40512557283a3e8a971532f48b380a246b252f9f862d40d99d01:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkNmIyYTA4ZWYzN2I1NDgyZDM2NDdlNzNhMTQ4Njg2MzJiMTFkMTg3MzNjMDg1MDY1MGYzZTQ3ZDQ1NGQxNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0YWVkNGI3NjIzYzFmZTMwNTJmMjlmN2Q1ZDU4YzE0MDU5MGIxYjM0NjU3YTU5MTY4NzQ0ZjlmZjRmZDQ1N2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUyODRmMjI4NWY4ZjI3ZjQ4MzBkZDIzYzU2NGU0Zjk1NjY5ZDMyN2Q5YzdkMWUyN2Y2MjY0MTc5NjkwNDg5NzkifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L137-L156",
+          "version": "repo-lines-v1:sha256:4af3a4d00ee39c88d30f165af768fd038bd103d129675f533805a2507eed8c92:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5ZGM0NGU1MDA2MmYzMDUyNGFkMTQ1NDQ2NjkxN2I5Y2I4NGU1NTkwNGZiNTIzOWQ1ZjRkNzIyOTRiZDI0YjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMTE4MGJjMzU5ZWQ2YjA2NjMzMTFkYTg0NWJkM2M0MzBhNmU4NWI0YzBiNThkZGRiMTQ3MmUxNDIyYmU2NDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE4ZThhM2VhOTExMDc4ODc2ZTUzYmIzZTQyYzMwZTkwZTcyYjk3ZTdkNmE5MzBjYThmYThjZjVlMWYzMWNhYWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1MmVmNzU2NjIzOTYyZTBkMWQwNmJmNmMxMGZlMDk2YjY1MWU1Zjg0NmZjNWI5MTQwOGMwZDEyYmU3ZGI4ZjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L120-L143",
+          "version": "repo-lines-v1:sha256:bbce3c41a4387cc4be2672ee39e14d42623ca3c00093720d6e5d754bec8692bd:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzYzMwZjZkMmVhNzYzNTJlZDA5YzU4NGY3OGZkNTY0YmRkZDI3YjU1YjhhZTkzZTZhMWM2OWE3ZWNlNTZlYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5NDY5NjY1ZjkxYjg0N2E4YzZlNWU0MDQ4NWNiNGJiMTlkYmNhMDJiYmU4ZWE3YWJjZTAyYjMyMWY4MDliMzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NGZkOWU2NWUzYzIzNTUyZjFjNTA0NWEzNjAwZDRmNmRjZTUyN2Y4YWFjODdhYWUzZjkzZTJlNTk4NWJkMzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9694b4857006455dbef118a9d475b500",
+      "statement": "wahapedia-sync.yml is triggered by cron `0 2 * * *` (daily 02:00 UTC) and workflow_dispatch, and is the production ETL runner rather than a merge gate: after npm ci and prisma generate it explicitly builds packages/types, packages/db-client and packages/rules-engine-11e, then runs `npm run worker:sync --prefix apps/sync-worker`, which executes tsx src/index.ts directly instead of a compiled dist.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L8-L41",
+          "version": "repo-lines-v1:sha256:15099c25f4172a194439ef7b803840e1c954a53ee85ace0dc8e9ce4515467827:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlOWMzMzczOTk2ZDZkNDcwN2Q5YWIzZDBhYTQ3ZTgzMWI4ODcwNjQ4MDNhZmFkNGVkZWQ2N2JhZWQ4OWExZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNkY2NiNzk2ZGJmYzU4YjIxNDg3YWRhZDgzMzNhZmQ4ODEyNDkwNDFlYjg5MGUxZmM3ZTcwZjMxOGZlODZhMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/package.json#L5-L11",
+          "version": "repo-lines-v1:sha256:ae716620834c87dfdca2d976bf5627d2ca0b7570f8ffb90d033c6d8b55676574:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmNiNDRlNjk4OGU3OTcxMjVkMWJlYmIwMzQ4MjNkZTQ0N2EwYmQ2MTU1MzEzNzIzMjFkMDBmYjJjYjMxZGM1ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTg0OGY0ZjJkY2Y3ZDI1NzM3MjM2MTY1MWUyYzk5MTY1OGRhYjQ1OGFhY2I1ZDM1MmVkN2IxNTc0ZmJlMzdiYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzk1OWRlMDcyOTBhOTNlYzc4YWZkMmUzNGNmZDM1NjA1OGVlNTg3MGVkZTUyMzI4ZDM5NjYxYmZiYTg4YTU3OCJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/index.ts#L1-L18",
+          "version": "repo-lines-v1:sha256:abd936e6e79db8026d0d5e39506ed3c62a0a6c77f142ec9fd9e90f2f852f7e25:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyN2VlYTcyMmIxMTQ5MjM0MDg1MGM5M2VhZmVlMzQ5ZDc3N2MxYTE0MGU3N2FiZmFhOTQzMDU1MzE3ZDg0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1f940fec39a44b47ad38c207d2ec598b",
+      "statement": "The scheduled sync run receives only DATABASE_URL, DIRECT_URL and ALERT_WEBHOOK_URL from repo secrets; the two database URLs back the Prisma datasource's pooled url and directUrl, and ALERT_WEBHOOK_URL is consumed by sendAlert(), which returns immediately when unset and is called only when updated > 0 || errors > 0 — so a clean no-delta run emits no notification.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L36-L41",
+          "version": "repo-lines-v1:sha256:cb4baa4fa70ebdf461f68ecb3f929099b6a22ef5f5e285f807d76793bc4e5143:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzZWViYTRmMjBkMGZkZjFmYTVjMTIyOTU5NDk5NjhlMDE5ZWM1NmFkNmEyOTYwMGI3MDExNzZhMzZjMzhkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWU5YzMzNzM5OTZkNmQ0NzA3ZDlhYjNkMGFhNDdlODMxYjg4NzA2NDgwM2FmYWQ0ZWRlZDY3YmFlZDg5YTFkZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTYxYjBlZGY3ZGVmODM0M2UxNGMzZTNiZmM2ZGQ4MmViNmI5ODZlMzEyY2UxNTc0MDk4NWI2YWI2MTI1YjE0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L166-L184",
+          "version": "repo-lines-v1:sha256:de167e145e07a46abb3fffcab92aab51324745ae43a2aa0d58fa0e15cca758b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4MzNjZGZjN2IyZjg3NzY3ZTZmNGM0ZGM5YTY2NjMxZWYzMDEyZDI4Yzk5MmM5NjEyMWEwZGE5NGM5MWZmN2QifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L208-L225",
+          "version": "repo-lines-v1:sha256:4b2a5a0e7ee18c4c8731c7103c63c4535e116f069344dce1389466c5e4fe8bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzM2Y5MTYwNmI3YTk2MWExYWNkMTE3NTFkNDhhN2I1ZjJlZTk5NjQ2ZWEzZWRmZDU1NWI2YTEwMmU4M2Q0MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3NzMwODVkYjhlNTRhOGQzNWQ5YzU2NzgyNzY4OTlhNTQ1ZmNlYmM1ZDdkZTAxNGMyMGQ2M2ViYzkzMmY1N2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L6-L13",
+          "version": "repo-lines-v1:sha256:649ebee9c18e5217b3ea4ee3a08a18e133afdb9c4e41ec955b556d3cc78f95cb:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDk2NzA0ODliNzdhYThlNzUyY2VlM2Q1MzFhOThkMTA1ZjgzOWQyMTU0ZTM1NjI5ODhiN2M1NGQ5Yjk3NGQwMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDhiZDA5Zjc4N2ViZjFjM2YwMjU5ZDYzYjZlY2UzOWFlY2FiOWRmM2MyZWYzMmY0MzhlZTk0MDQxOTkwNjU3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWU2YTJhM2I3ZDYzNDRlYjBmN2ZjOTU5NmIwZGEyZDJmODI4MDM4NTNkZjVmMDVhNWFkY2E2MjNjNmI2NmU5OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7c09f8a226c44fe3b7c856a09b641e53",
+      "statement": "A caught per-endpoint ETL failure is recorded as a SyncMetadata row with status ERROR and does not propagate, so the workflow stays green while only a thrown top-level error makes apps/sync-worker/src/index.ts exit 1; errors therefore surface through the webhook summary, not the workflow conclusion.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L150-L163",
+          "version": "repo-lines-v1:sha256:3722363172c3f1e21341c6322502604e460fe2276a2db76b1021b71fc082be84:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAzNjcyYTk0MjUxNzVjNGY4ZTZlNThiZWNhNjQ1YjE1OTU5Y2IxNDdjNWUxNWNjNWQ0ZWIzNTc4NGIxYTViYWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjY1MmExYjRkMDUyMDJiMzgzOGVhYzc5ZGVkMTZlMzMwNzgxZTFmMGY4NGE5Y2M3YmE5NjJhMzhkODlhNmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTI5ZTkxZTBmOTljM2U4MjVkZTY5YjQzNWZiNjQ4NGQxYjBhMWRmMmY0NjU2MWFiZjFhMjlmMDQxODhiODgifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L208-L225",
+          "version": "repo-lines-v1:sha256:4b2a5a0e7ee18c4c8731c7103c63c4535e116f069344dce1389466c5e4fe8bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzM2Y5MTYwNmI3YTk2MWExYWNkMTE3NTFkNDhhN2I1ZjJlZTk5NjQ2ZWEzZWRmZDU1NWI2YTEwMmU4M2Q0MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3NzMwODVkYjhlNTRhOGQzNWQ5YzU2NzgyNzY4OTlhNTQ1ZmNlYmM1ZDdkZTAxNGMyMGQ2M2ViYzkzMmY1N2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/index.ts#L8-L16",
+          "version": "repo-lines-v1:sha256:b78a0fb142cbe152995c2ea222671896f9eea9b4cbedd02306c7d4ff243f0139:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2U4MjAwZWJkMTcwOWI2YTY3NWJlY2IzYmU5ZjM5ZTUzYmJhYzAyY2M5MjcyMzQ2MmMwNTQ2OGViMGRhNmExNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGYwNGNlNjJhMzg3MTUwMThiODFhNGFhYWFjYWJkM2RiZGIzMmFhZWRiY2E3MTFlZmNhZmUzNzY3NTM4NzUwZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOThlMDYzMDQwZmUxODg2ZWMwMDdkYTMzN2E2YTcwNjA4OTU4NWRiNmMwZjM0YzM4OTk4NjJjNWVjMDY3ZjhkZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2fad679b5b4946c99036c2d793891a49",
+      "statement": "openwiki-update.yml (cron `0 8 * * *` plus manual dispatch, running on Node 22 while the application pipelines all pin Node 20) is what regenerates the generated pages under /openwiki: it clones with fetch-depth 0 so `openwiki code --update` can diff against the last documented commit, installs openwiki@0.7.0 with optional mermaid/jsdom for diagram validation, and runs `openwiki code --update --print` against an OpenAI-compatible endpoint configured by OPENAI_COMPATIBLE_API_KEY, OPENAI_COMPATIBLE_BASE_URL and OPENWIKI_MODEL_ID. Generated pages should not be hand-edited; change source code or authored docs instead.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L24-L27",
+          "version": "repo-lines-v1:sha256:622df59ba5e25b3de573585a4835a282ed7f75a841775c0c649ce016099b9668:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTJjODViNDk2MGZmNzMzNzZmNDI2NGMxMmU2NDJiMmYxNWEyY2I3OWY5ZTg0YzM5YmQyMDYxNDc1YmJkZjU4NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNkZTUyOTE3MWYxODE1N2QzMGI5ODc3MDdkNTk1Y2JhZjhhZjM0YmQ4NTYzMjQxN2JkYTBmY2Q5NzY5OTJiOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWY3N2U4ODYyZWMxZDQzNjk0MjZmY2FmYWQ5MTBhOGM5MDQ0MTAxMDQzZmE1MmZhNjQ2MWY3NWJmY2RmMDlkYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWUyOGI4MTQ4NTY2MTUwODA1Y2Q2MjZjMmY1YWI5YWU5NjI1NThiMjcxMjQwMjU0YjY3MDQ2NmQwMGMyOGE1OSJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L3-L49",
+          "version": "repo-lines-v1:sha256:d479c9aba63299bab4b5b2172fc9fc715ac7190b28a11dcb6d480ccd876d864b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4ZjhiODAyNzQxYWZjN2ZiMzg0MGZlY2RjNDNkN2Y4ZTQwMjNiYmZjYjViN2VjNjVlZTA4ODc5OGQ4NTE3MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM1YjFmMjRlNjE4MDVlZTFhOWJjNzgwNDdlMWU0YjNkODYxNTdkNmUzN2Q4YWMwYmNiZWJkNWU2NWU1ZWYxYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0ZTc5NGRkZjMyYTNlMmRhYWFkODgyNjMxM2MyNGY0ZTRjZGE2ZjYxYWJmNDE3ZTQ4OWJlMzlkNWI5OGE1NTkifQ"
+        },
+        {
+          "resource": "repo://AGENTS.md#L14-L14",
+          "version": "repo-lines-v1:sha256:ab53953bfb72c1262bbae2eaca72cabf1af49927a0bba1157b2d5bdb285c4bd2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWI1Mzk1M2JmYjcyYzEyNjJiYmFlMmVhY2E3MmNhYmYxYWY0OTkyN2EwYmJhMTE1N2IyZDViZGIyODVjNGJkMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWI1Mzk1M2JmYjcyYzEyNjJiYmFlMmVhY2E3MmNhYmYxYWY0OTkyN2EwYmJhMTE1N2IyZDViZGIyODVjNGJkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjZjYjMwYThmOTQ4MTMxNDkwODJmM2RjYjkxOWRiMTJmMjIwYjMxYTI5NWZiZWU5NTM1MWNmOGYxNGJhZGEyZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzA4OWRmOTNmOGJhNTdhNGRkYmZkOGYwMTM5NjJjMzk3OGNlNGRiNjgxOTljNGRhNjY2NjQ5YjA5OTZjZWRhOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_653787b203154cc1b1f0598b6fab162e",
+      "statement": "The OpenWiki step is continue-on-error, transient state openwiki/.run.json is deleted before committing, and the job opens or reuses a pull request from branch openwiki/update adding only openwiki, AGENTS.md, .github/workflows/openwiki-update.yml and CLAUDE.md when present; only afterwards does it exit 1 on failure, so a partially completed run still yields a reviewable PR holding the pages finished before the failure as the next run's baseline. Changes outside those paths are discarded by the run.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L33-L36",
+          "version": "repo-lines-v1:sha256:d58ef5f498c02b45776d67452c92ddb307313815a56beddaf62b0c62e897fa58:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzBlOGY5ZmE0MGU3YmQwNDk5ZDFjMGQ4M2ZkNzU4YWE4NWIzMDg0MmRiZDYxZjBlYTZiN2FlMTBlZmVjNzZkMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTQxYzYwZDgzNTk3Yzc2Y2NhNjk2YWFjNzRkZmI3YWM1ZGMzMzYyZmU2NTFmOGNhYjVhMzA0OTk2MzAxN2Q0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTViMzM2YmI0MDk2ZjYxMDEyY2NkMGQxOGRmNjExODMzMmU3NWNlOTg4OGQ2ZWNiOWZiNmQyOWZhMmM2N2FiMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmY3ZTQ2ODM3NDgxNGViZTgxZmFjOTBlMDY2NWNhOTBkMzg3MTliNTE0ZmMyZjFlYTEzOWM2MjkwZjA1N2M4NCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L51-L89",
+          "version": "repo-lines-v1:sha256:8a16c25992e382f80a5b31b3d85e8d23224696724c52368fb8e668084ee2430c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3OWM4ODBmNjJkNDIyNTM4YmNhODRjYjU1ZWNlOGZlMTBlOTY1OGIwNjExMTVjM2ZhYmNkYzdiM2JlY2Y0NDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2NzE4ZjA2N2I1ZTVjMWYwOTkxYTZlNzQ3MjZmZTJhMjNkMjY0MzQ1ZTA4ZTRlYWQwNGZhZjczYzI3ZWQ0NDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQxOTEzNzMyNTgyYzNlNjAzNTkwNzg2Yzg2ODM2OTUxZmYzNWU5YjJkMGY4ZDMxMDY3ZDRmNGM4NzQzZGIyYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ecd45ea058b24b929183101264c3437b",
+      "statement": ".gitlab-ci.yml sets default interruptible: true (a new push cancels the in-flight pipeline) and runs a node:20-alpine `test` job on merge_request_event or the default branch that installs git via apk, caches .npm/ and .turbo/ under ${CI_COMMIT_REF_SLUG}, and executes `npm ci --cache .npm --prefer-offline`, prisma generate, then `npx turbo run test build`.",
+      "evidence": [
+        {
+          "resource": "repo://.gitlab-ci.yml#L10-L35",
+          "version": "repo-lines-v1:sha256:2dd2eacdef803538e5689ca24957ca4608e63c6c43751bae907f23ac30ae4287:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2NzNlOGIwMjRiZGVkYTM5OWIwNGUyMTg2YjRmZjc3OGZiODMxMGYzMGM1OTc0MTkyZWM3NGY1YWYwN2JiZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmN2ZmZWY4MTdlNGE5NzNlZmQ2NDkzMjY5ZmE5ZDI2M2Q1MDQ5ODc2Yjg1ZGM3MmQ3MTUxNDBiMGFhNTk4MjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ0ODE0OTA0OGYwYTBhNGU4MWU2Y2MzNDliNmRkYTVhMTNkNzc1YzgyNGY4OGQwNzA1OWNiY2Q4MjRjMzg3N2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIzZDY2Y2QyNjQxMzIyOTcyYTJkOTBiZjFmMmI0ZTQ3ZWZmYjc0ZGY1YzJhMGNjN2FkOTZmMTQyZjgwYmVlYWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a74615367d004f69a6bd456aeaad8a69",
+      "statement": "GitLab's build-images stage runs on the default branch only, in docker:24.0.5 with a dind service, logging into $CI_REGISTRY and publishing $CI_REGISTRY_IMAGE/web and $CI_REGISTRY_IMAGE/api tagged latest and $CI_COMMIT_SHA. It never builds Dockerfile.sync-worker and does not use the GHCR forceorg-* names, so the sync-worker image exists only on GHCR — which is what production compose pulls.",
+      "evidence": [
+        {
+          "resource": "repo://.gitlab-ci.yml#L37-L65",
+          "version": "repo-lines-v1:sha256:52a4f89989ac60e1d0b8aee10113f02614af4b9c95c361e557f635ce91aa2da3:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhNmU4ZTk5OWM1OWM3ZDIzMTk2M2ZjNzViYzQyNWFmZmE0NjkzZjlkNDA2MWRmOWQ1MzU2ZmNiZjY5NTQ2ZTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzMTE1OTZlZTEzN2M0MGE3YjVmMjhjOTAwYzdiN2UzNWEyYjJlOGQ0ZjVjMzI3NGEwOTFkYzI3NTYyOTcwMzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiYmFhYThjNGUxYWUwOTY1YWE5MWM5MGEwYTYzOTE0N2E1MDAwZTFjOWJmMWE3YTQ4YWUzNzYzOWM2ZDFhMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L87-L87",
+          "version": "repo-lines-v1:sha256:23f48321e43e875b6f685ab675093371e3ba42f99ff11c66a4f1e3f39245ab95:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjNmNDgzMjFlNDNlODc1YjZmNjg1YWI2NzUwOTMzNzFlM2JhNDJmOTlmZjExYzY2YTRmMWUzZjM5MjQ1YWI5NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjNmNDgzMjFlNDNlODc1YjZmNjg1YWI2NzUwOTMzNzFlM2JhNDJmOTlmZjExYzY2YTRmMWUzZjM5MjQ1YWI5NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTM2Njg2YmI0OWU1NTZlZmQ3ODJmOGNjZjI5M2FkOTE5OWZlZDA2MjY2ZTk5NTM0YWJjOTBhZjZjNDE1NDA5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGVkOWMzMzZjNDE2YzgwNTYxYjgxMmM4MDY4NmY1NTkyYWE0MDAwMTA4MGQ4M2NkYzVkYTgyNjY2YjYyZjNhZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c745c4d6f4af4311874da9ff02103837",
+      "statement": "The two pipelines gate on different commands: GitLab's MR check is `turbo run test build`, while GitHub's PR check is lint + rules-engine coverage + build and never invokes `turbo run test`. Since packages/rules-engine-11e is the only workspace with a `test` script the unit coverage overlaps today, but GitHub additionally enforces `turbo run lint`, which GitLab reaches only transitively through the build.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L35-L41",
+          "version": "repo-lines-v1:sha256:4ffda466cf5902b189ac22e30f4281f13057a680628acffcf9428c9854a18975:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjMzMDRmYWNlZDEwZjU5NTFhZDgyOGRmNjI3YWM0MGE0MTYxNGQ0NjMyYmI2MGNiMWIzYWVmYzVlNThiZmYyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkyMGVlZWZlYzE3MmM3ODFmNjQxYmY2OThjOTZlY2JjNGNjMDgzYzA2YzBiYTkwNDcwZGJhZWZjMDE1Njg0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwYjQ4ZjE0OWJkMDhkYjRkOGY3YzU4YjBkZmI4ZWQwNDQzNTE5ZWE2YzgzNDUzZmFlYzkwYjQ3NGViZDFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTg3MzMxZjBlOTBiZDExYTFjZjEwMTRlMDA2OWExNjY0MWE2OGU4MWM4ODk3OGJjOTZiY2QyYzEyM2Y3Nzc2OCJ9"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L29-L35",
+          "version": "repo-lines-v1:sha256:54a5ba31c2ef006cb1dac3348cb1461787353c5ba509fac5833b373c92120cab:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2E0MTk5NDY0ZDE5ZWQ5NmZjYTI0ZjZjYTc2MjgxOWM5YmQ3MTdjZmVhYTNkOWY4MDhmYjU0MmM4NTk2OTVmMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWY3ZmZlZjgxN2U0YTk3M2VmZDY0OTMyNjlmYTlkMjYzZDUwNDk4NzZiODVkYzcyZDcxNTE0MGIwYWE1OTgyMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM1MTg3MmZkYWE4MmI2ZWM1YTg2NmY3OGU0YWFjMWEwNTdhNzBmYTJlNjg4NzhkMmJkNTc5ODQ2MjgzOWNmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjNkNjZjZDI2NDEzMjI5NzJhMmQ5MGJmMWYyYjRlNDdlZmZiNzRkZjVjMmEwY2M3YWQ5NmYxNDJmODBiZWVhYyJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_eb9a6d603f0346d0a837841e72934aef",
+      "statement": "Every CI entrypoint regenerates the Prisma client explicitly even though the root postinstall script already runs `prisma generate --schema=packages/db-client/prisma/schema.prisma` during npm ci; the explicit steps are redundant but harmless, and at least one of the two must remain in any new workflow.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L32-L33",
+          "version": "repo-lines-v1:sha256:90b2ec8f347be3b23cec0d9bb157e5396ab857ce789fff753ee2af69cd40deca:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEwMWIyMGM5ZTg0YWZmNjM5MjNhZTM5Mzc1YzQ5ODdlNzNiNDVlNGQ5MmY0NTcwYTQ3OGIzNTJmNjg3MGZhYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmZjNTIxMDFlOWM5YzdjMGY5NGE2MGI4MWE0NGNkZGRjYTI5MDEwMWEzZjRjZWQ3NDM3YzQ2OTY1MWRjMDNmNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzE1MGNjMjYyYWY4ZmFhNmVhNjE2MjJkNjBhNWU2N2EwYjcxNWZmNTZiNmJjMDgzYzJhMzM5ZDVlMDZiZjFkYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTY4YjE4Yjc3NWU3OTFmYTlkZDIzMDYxZDU1MWU1ODJhODczMmE0ZDAwYzUxMzdhYzRjYWNiODE1ZTAwODQ5NyJ9"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L31-L31",
+          "version": "repo-lines-v1:sha256:2a3fad07ff84391fd24296d44f8a2c6c31c7e68350772d079c15e8c173de4453:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmEzZmFkMDdmZjg0MzkxZmQyNDI5NmQ0NGY4YTJjNmMzMWM3ZTY4MzUwNzcyZDA3OWMxNWU4YzE3M2RlNDQ1MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmEzZmFkMDdmZjg0MzkxZmQyNDI5NmQ0NGY4YTJjNmMzMWM3ZTY4MzUwNzcyZDA3OWMxNWU4YzE3M2RlNDQ1MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTM2ZmYyZDI4MjllZGEwM2QwMjRhOTdmODZkMTVmOTZmMDFjNzVlYzBhODMwMjliNTM2OTNmYzNlODMzYjhiOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVkYzRiYmU1ZGM4OWNmZTYyMzJkOTk5NDA5ODU2NWVmN2IyN2MyNWU3M2ZmMjUwYTRjZjVlMTk4MmNlOThiMiJ9"
+        },
+        {
+          "resource": "repo://package.json#L21-L21",
+          "version": "repo-lines-v1:sha256:df798e019bb53dac8e237f2ad7dc016274ee3cacedc4a0c34b5f248463c9e64a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDBiYzI1YzAxNDQxMjdjNWYyMWM1NTI5YTgyMzk2OGM3OTNiMGE0NTRhNjdlYmVkY2MwMTYwYmZlN2FjOTU1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlYWJlZmU3MmNiMmYyNTYzODQxZmRjYWM3OThmYmFjOTgxMWY1NTcxOWM2OWFkMDk0MTM1MzIyYjU5ZTJiMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_06a040b26ac341d09296c83539993582",
+      "statement": "The committed CI contains no deploy, rollback, migration or release workflow, and no branch-protection/required-check configuration is stored in the repository, so which checks actually block a merge is enforced in hosted GitHub settings outside this tree.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L1-L18",
+          "version": "repo-lines-v1:sha256:01708bf58bac00bc428aa98bd227989d9fc523bf3166e8fc66c6fc0cb0b95ae8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiZDgwZmI3Y2FiYzJjOTk5NzUxYjA3ZDc2NWNmZTcwMTc3N2Y1ODNjZWU5YTEwMmMwNTkxNTNlZjAzNjljYzgifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L1-L1",
+          "version": "repo-lines-v1:sha256:7a4997d2224b78e4ec8227f6c37cca4bcae68692b2ca8e756a3af772ab5e38e3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E0OTk3ZDIyMjRiNzhlNGVjODIyN2Y2YzM3Y2NhNGJjYWU2ODY5MmIyY2E4ZTc1NmEzYWY3NzJhYjVlMzhlMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E0OTk3ZDIyMjRiNzhlNGVjODIyN2Y2YzM3Y2NhNGJjYWU2ODY5MmIyY2E4ZTc1NmEzYWY3NzJhYjVlMzhlMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDk4ZjlmMDljNzdjMWM5OTgxODM3M2ZhYTZhMTkwMjg2ZTAxMzQ0Y2NiNjllMzhhNjE4ZjE2ZDc0Yzk4YTRhYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_35cdaa4e8434481eb05f5a5261183793",
+      "statement": "Database schema migration is not a CI-stage concern in either pipeline: no workflow runs `prisma migrate deploy`. Migration happens at container start in the API image's entrypoint (apps/api/entrypoint.sh), which defaults DIRECT_URL to DATABASE_URL and applies pending Prisma migrations before exec'ing the server, and skips migrations entirely when DATABASE_URL is unset. A bad migration therefore surfaces as a container restart loop on the host, not as a failing pipeline.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L1-L89",
+          "version": "repo-lines-v1:sha256:2a5ca452edf20c0058e99353364e77ee012cd644b0f49da98a30be77e35d966b:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMWEwZDQzYTAxMjNhYjFhNTMyMmQ4Y2FkYWQzNzQ0MTI2MzdmODQxYTQ4ZGI2YjI0OTIxMDQ0OTIxNzNhZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://Dockerfile.api#L45-L56",
+          "version": "repo-lines-v1:sha256:1b7ddc09d5d68cc8d0473a12a4569d1e11af60597f44289f1645ddef39a87d69:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmOGUwOWQ4Yjg1MGMxMGJiYjljZTg0MzBkOWMzOTY2YTQ5YzgxOTNiNDMyNDIxODU3Yjk5ZjliODQyYTcwNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiNDA2OGNmYTgyMWU4M2I3ZWIzYTRhYzgxOGQxYjA5NDE0MjY1MmI0ZmNiNGUxOTRjY2MxMWIzN2YyZjI4OWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5ZmJjODVjYjcxYWQ0NjEyZDNlZGUzODFjY2Q0MjdmMzQ4Y2NhNzIwYmI2YTNlZjlkNjk1YzMxMzhmNGRlNjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlZGQ4MmZiYTEzMTM3YzY0MjVlYTY3NzA2MWY2MzlmYzdlMzM4N2E4YWU4NWE3MWE2ZDEyYWZjYjAxZjYxMDcifQ"
+        },
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L8-L20",
+          "version": "repo-lines-v1:sha256:6ff9088d8e6f1bb075f90132e8ad8e887b153d4a71038e427cbb0d0a9b599149:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhOTBhZmQ4ZjE2M2ZlMGJhODY1MTFlYjRhODA4OWMxNzIzNjk4ZGNhZGE4YTExMjc0N2UwZDdmNmQyNWUzYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmN2I5YzQ5YzYyMmE3MzA3MzE1YmYxMGY1ODVlOTM1NmFhMmU4MmU3YzEyMjFmMGQ5YTU3MDcyMWVmZDJmYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

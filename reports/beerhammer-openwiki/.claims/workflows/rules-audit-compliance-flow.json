@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:5047bbdbba8a2fc11aae8cc70708fe992dd2a02b26079de403522c22479dfaaf",
+  "claims": [
+    {
+      "id": "claim_0952aeb656f1411cbce5237257ab786a",
+      "statement": "The ComplianceDashboard audit modal is mounted by three host pages — the dashboard (apps/web/src/app/page.tsx army card), the Tabletop Console (apps/web/src/app/army/[id]/page.tsx) and the Roster Studio (apps/web/src/app/army/[id]/edit/page.tsx) — each keeping its own open flag, and only the dashboard passes dpLimit/currentDp, so the console and studio hosts rely on the defaults dpLimit=3 and currentDp=0.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L236-L290",
+          "version": "repo-lines-v1:sha256:176896233e5c19fe3d870a5cf35722478800b063bddb4b30ad257d82b022ab4c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyNTBiYjNmNzRhNWU2NWU5YzExM2RlOTI1MWVjNTg1MDQyN2NmMjFiNDkzNjY1YmRjNWFmNzIyOWJjYTdhYjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMTA2M2M0ZGVhNjhhMzgxNjYxMTBiYWQyZDMzOGI0ZDcyZTAyZDM3YmUwODE1YTc4NDUxZTk5MzMyZDZkZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczODljZWU1MDExOTBjNjNiMjBlOGYzNTJmZDYxYjU5YjE3OTczNTU4YzNjNGNjNzFmZDBjNTgzOTgwY2JjMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4MTBmYWE4ZmJhZWZhZmZhY2QwZDliMTY3ZWRlYTZkZWMxMTA1ODUzYTFjNWEyZTBhOGU0MmNkMzBkN2U5NjUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L369-L389",
+          "version": "repo-lines-v1:sha256:54f8983f9ca9a0ed9d7ed23085ba560b47a54622ab817c68fad2ed4979c55a88:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyNTBiYjNmNzRhNWU2NWU5YzExM2RlOTI1MWVjNTg1MDQyN2NmMjFiNDkzNjY1YmRjNWFmNzIyOWJjYTdhYjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhNWIxNjk2OTAwYzE0N2QwOTk5ZTAxOTYyNzg2M2M3ZDQ4MzBkYjEyNTQzODY1YjgzZTcwOGZlMDc0ZTcxMWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAyNmUzNDYwYTYwZDI0OGY5NjQwNjIzOTMyMDA1MzdiN2YxZTcwODUwY2RhM2RiMzRmOWE5NDZmZWEwNDZiMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxM2RkODZlZmE2ZTZmMjY0MTJiZGI1MGM5Yjc5OWY1N2E5NzQ2ZWQxOTRjN2ZmMDc2MjQ3YTU5ZGM5OTY1ZWYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L372-L442",
+          "version": "repo-lines-v1:sha256:745f4b471dbbcd630a70507c8171057c1557092e0e1dbc51cad7f3b08656f2c8:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNWM3MTJhYjZjMTIwZjRlNWE0MWU0MjEyNThlNTU4ZTE2ODUwMGM0ZmYwYWViZDU2OWM1MjgxNTU5YzYxODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMTA2M2M0ZGVhNjhhMzgxNjYxMTBiYWQyZDMzOGI0ZDcyZTAyZDM3YmUwODE1YTc4NDUxZTk5MzMyZDZkZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVhNWIxMzg2NDdhZDE1YjIyNWUwZmI4ODhlOTJlM2I5YTNkZjk5ODhjOTlmNjZlYjM4YTcyZWIxNDQzMjkwNTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4MTBmYWE4ZmJhZWZhZmZhY2QwZDliMTY3ZWRlYTZkZWMxMTA1ODUzYTFjNWEyZTBhOGU0MmNkMzBkN2U5NjUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L24-L34",
+          "version": "repo-lines-v1:sha256:6427a1fecfcd5f2549a0b09312840b694deb07a10f7c80024a4634b2fa537855:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkMGYzMjA3YjA1MmU3NTNmNjQwMWUxOTAwNjhkZjVjNGMzZDdjOWVjNjExMWQ5MzAwNmQ2MjFlNDY1YTY4OGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhZGFlMTdhZGFkMTYzZWI4Y2FkYmFiODhkNjg3ZjRhZGIwMzVmZjNlZGI3OTZlNDViZWFlNTM5ZjY0MTNkMjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNzIyYzA0OTZlYzRmYmVhMzRkZDVlMTIzNzVjMDBkNmI3Zjg3ZmQwNzNhMDI4ZTAzZDA1NDY0OWNiOGIyOGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmM2QzMGRmODFmMTUxYjY1NDUwZWY1ZGY1M2ZjY2VlZDkwMmY5NDRjYTE4YTVlN2I4NTUxZGVmNDZkYjcwNTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cbf155f36571486582a21dfef38872f4",
+      "statement": "ComplianceDashboard runs its audit automatically: a useEffect calls runAudit() when isOpen flips true (and again whenever the rosterId/currentPoints/pointsLimit/currentDp/dpLimit-derived callback identity changes while open), and the in-modal Re-Audit button calls the same runAudit, so results are always recomputed rather than cached.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L217-L225",
+          "version": "repo-lines-v1:sha256:2d1b39ef9132b5e2d07239b6c875cd24ede9a2b9cf0376c886c401410cc54c3b:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmZmNDZhZTNkOTRjYzAwZGIwMjc0MjQ0ZTk1MzQxZWQ4ZTg4MTRhNzc4YTE4ZTU2Y2I0MGI1YWRkZmYwMzkxNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDM3M2FkYjFmMTYwNTM0YzY0NDg1ZTEwMWQ2ZTQ1M2E2MTU4YzZlNzFiYTIxYTJmMzZlYjljNTA4NDc1Y2JiNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDI2ZTM0NjBhNjBkMjQ4Zjk2NDA2MjM5MzIwMDUzN2I3ZjFlNzA4NTBjZGEzZGIzNGY5YTk0NmZlYTA0NmIxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzUyYzhjMmQ1YmU2NzhlNGVkNGNhMzBhOWUyNTIxZDAzYjRkOGJmOTFhODA1NjljZjZkMTg3ODg4YmUyYmE0YiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L41-L92",
+          "version": "repo-lines-v1:sha256:b90fa5a24b16bdc8e77d18e82fe62e79b3899d9d62ca9a63cc9ce08863e0fc78:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1YTM1MzZiYjhlYzBiNTA4OTZmYTVlMGYyMTVjN2Y5ZDY0ZGZmNTQzYzE2MzhkZGFiZjYzMzNjZDU5YTIyYTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhYTkwZGY1MzQ4NDUzNmQ3YTQ1M2Y3YmNiNDE2MjdhYWYyY2ZiMzQ3NzQ5M2FmMGY4MDdiMjA4ZmUxNWZmM2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyMzM4MjU3YjNjMWU3NzhkODcwN2U1ODI1NDkyNzhjMDk2NDNhMDFhY2RmMzU3YzgwZDYzOTBkYzNlMzA5ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9781d4c514384e1696bcc3454fc36922",
+      "statement": "POST /api/rosters/:id/audit is mounted on /api behind requireAuth and its first action is an ownership-scoped lookup userArmy.findFirst({ where: { id, userId: req.userId! } }) that answers 404 NOT_FOUND on a miss, so an unauthenticated guest receives 401 UNAUTHORIZED and a locally synthesized roster id that was never persisted receives 404 — server-side auditing is structurally impossible for guest and local-only rosters.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L55-L60",
+          "version": "repo-lines-v1:sha256:60e68e83d35ba9b7af78100cc1c54a0ad5ab33fe6649a6476c8414ae0fc9e5f3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGUxYzcyNjQ3M2QxMTJjMWY1MzljMjRhYjQwYjc2ODgyNzNhZDM4MDM5MjA2MGEzNDI4YmU1MzI3NDgzMzBkMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTNmZGZhOTU4MjlmNzZiNWQ0ODI1OTk1MDAxOTA4ZWExNGU5YWU5YzYzNzg1ZWQyMWQxZThiNzI5YTUxZTU1NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjc3OWQxMThkNmUzY2JmNDUwNTM5NzQ4ZGVlN2E0MzA3YWNiZTY0NDZjYmEyOTdmMjc2MGZhNWQwYmJhMWJjMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjk3ZjQ5Mzg5ODc3NzE0NGYwMzk1Nzg5OWMzZGZlYzUwYTFjZDQ3YWM0NWNmOTRkOGU4MjI0MzZiZGQwMDY0MSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/middleware/auth.ts#L19-L49",
+          "version": "repo-lines-v1:sha256:c654293f6d94c4f8e1404a254611bf3239dc953d343d000b15b5330048ab574c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxYTQ0N2VjMzRhMzE1NmM0Zjg3YTRiYmMwOTRhMGVmYzMwOGVhMzhlZTdjODA5NjFjMzhkZGMwNzY4ZDE5NTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM5NmU2Yzg0YWEwNDNkZmM3MjJkNTM1MjE0OTAyZDU3N2U2OGE5NmMxMzFlMmQ4MmM4YTFjNDA0NmZjMjA5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU2MmNkNGQ5NWQwMDBhYTRjNWM3NThkZjQ2NTg3NjYxNTdiODc5ZmI0NzU4YjViYzg3OGVlNWUzZDU5NTc1MWYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L25-L34",
+          "version": "repo-lines-v1:sha256:c0eeaf515626bf5d321ed47b2c7a66ef21d3a89716c04d0ea39390dc823d33d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1OTRiMTQ1ZDdiOGQxYjUxNjI0MGMzOTFlZjZjOTg2OThjMGM0MDhiZTM1MzllMTMwNTAwZjY0NzQ5MGM0NDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNGEzMDY1NDRlYmU5NDRkNmEyZjVhOWE4OTJhMzAxMDlkMWE3YjNjNzFiNzlhZGMxZWRiNmMyMWIzZjQ4MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyMjA4ZmFjMTA2YTIwZWU1ZDJhYTg2NjMyNDBhMTk3YTc3MWIzYmRmMGRhYTQ5ZTJiY2ZmMWMzYzVlZmRjNjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_25ca2cf95b6147ee90674cc8f5c19836",
+      "statement": "The audit route performs point-shift detection itself: it collects every unit's datasheetId, issues a single batched datasheet.findMany({ where: { id: { in: ids } } }), and flags a missing datasheet as RED/INVALID_LOADOUT and a stored unit.pointsCost differing from the live Datasheet.basePoints as AMBER/POINTS_SHIFT with oldValue/newValue, never rewriting the roster snapshot to match current costs.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L39-L75",
+          "version": "repo-lines-v1:sha256:705112d304394048a59e094a0bc8be8338269741af7ecde127a503623309277a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMjcxMzk5ODJmOTlmNWYxZjdjMWU1MmMxMmYyYTNiYTllMDM2MGE0NGIxMGVlZGUyNmI1ZDY4NGYyOWQ3MjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlkODU2NDhmYTQ5YWZkODMyNWU1YTBlMjc2ZjNiMmY1Y2U0MTMyNjFhNDEyOWU1ZDk2MzU3YWRhOTQ2YmM0ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmYjMzYWRlMjE1NGU5MzE1N2M0NDU2NmVkYWQyYzFmMTUwOTcyM2YxMDEzMzQ0ZDk1YzMzYzQ4YzVkYmU2MzEifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L118-L144",
+          "version": "repo-lines-v1:sha256:15a471670ce6d40652857f80b3d9733a9e61d53274b246a325f8e10c9ca3d122:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjOGZmMzk1NjFjYzcyZjk1M2NjYjRmNjRmNWFkZmM5ZTlhOTk3ODYzODkwMzM2NjJlNmJlZjdhOGYyZmUzNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0ZWVhYzc0OGQyY2M3ZDU0Njg5Y2M4NGIxMDY5MTY5MzE1M2E4NTg1ODA5YTZkMzIxZTE5ZTZiZDMzNzY4ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUwN2YwZjFjNWIwYzM3OTkwNzk4YWFhNzM4MjVmNTM1MzZlMDI1NTg4MmM3NDM0ODBjYTdkOGYzYmUxM2RkNjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_19fc04d5bdc648329c3d66af4b7429be",
+      "statement": "Audit discrepancies come from two producers: validateRoster for structural checks (points limit, DP budget, Rule of Three, orphan attachments) mapped ERROR→RED / otherwise AMBER and code RULE_OF_THREE→DP_VIOLATION / any other code→INVALID_LOADOUT, and the route's own cost-drift check which alone produces POINTS_SHIFT — so category is UI navigation, not rules semantics, and a real DP_EXCEEDED or points-limit breach surfaces under Loadouts & Rules.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L77-L93",
+          "version": "repo-lines-v1:sha256:2e4a0495e1c20d8c5c97754a93036c11626d6e378c3805414a9bba80199ba5c1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxNGE0NTIwYzgxZTVlNDRmOWNiMTgyZDdmNmRhNmQwMzU5NDFjNzE2ZWQyNWFlZWVlMGQ0ZTU0YjU3ZWI4YzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0YjlhMGIxNmI5OTEwYmFhNWQwYTRkY2FmZjhhNjBjNDI5NjMzYmYyYWUzY2JhY2M4MjAyOTA3NTgwZDEwY2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzYWVlZGJlNTg2OGVjNTdhZGJhMDUwODZlZWE4Y2I1MzY1MmQwZDcxYjc0OTQ4YzcxN2I5OWM5MDc1Mjk1NjMifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L18-L136",
+          "version": "repo-lines-v1:sha256:d57b1fe938e1cfdab0cc49f828d91587a092da3139a68908baf2a7280b2d25e8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3NWU1ZmNlYmU2ODAwMzgyZmZjNDIzOTAwM2U1OTc4ZmZhMmJlODM2ZWFmY2FiZDMwZDI1ODFhZTk1M2M1MDk2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5ZmVkMWM2MGZhMTNhMTZjOWE5ZGJlNDkyODY1NjViOGFlMDRiYzRkMDhiMTExNGZkNjgzYzRjOTg3NTdlOTRlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_7011243122ad40bcba8f17115ffa1dfc",
+      "statement": "Engine-derived audit rows lose unit attribution and deduplicate: the route pushes them with unitInstanceId: err.unitInstanceId || '' and an empty unitName (so the modal shows the category name as the row title), and the engine checks skip datasheets the route already reported as missing, so a retired unit is reported once.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L52-L62",
+          "version": "repo-lines-v1:sha256:bb0d7a00ab3683fd7bade4088dca881f649b97dea9f888074431eb762067b8aa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhNDcwNmZkYzU1MTJlODE1YTdkMzBiMGEwNTYzYWUwMDcxMGUyM2IwYzEwNzk4N2IwZTNlNzM5ZGZjZTA3M2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkZjg3ODExZDc2ZDI2NTIwZmY0NjYzYTA0ZWU3NzVmZTJhNWEwOWQ0OTJhNDQ0N2RhN2ZmNjBlNzMwOGI3MGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxYjU5NDFlMGVmMjIxNTU0OWRjMGMwYjE3MTUyYjdmMjU3MjA3YWEyMjAwYmNjMTYwYzJlNzRlYWQzNWFiOGYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L85-L93",
+          "version": "repo-lines-v1:sha256:32bdbd74382196fb9d79428da9551c8da39bcb74de5e53d0b234adf9c74b01ad:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDVhNTUwYzQ3MWVjOWI4YTUxNjE5MjU1ZGU2N2RjNzdhNjE2ZDFjYmMxZGQ1ZmYwZGUwNDZiNTJkYWJlNzM5ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzgyYzlhNDc1MmM0YmM4ZjFlMmRhMTVjZmUyMTBkMDUwNjY1MzNmYjM2YzUxMTFhYTkxZGY3MjM1OWYyMzY5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDNhZWVkYmU1ODY4ZWM1N2FkYmEwNTA4NmVlYThjYjUzNjUyZDBkNzFiNzQ5NDhjNzE3Yjk5YzkwNzUyOTU2MyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L311-L314",
+          "version": "repo-lines-v1:sha256:6c3aa218e63f27a8982d0ccdd05ccd27a0b4abb4f26618350970a6bbf2eb0437:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDIyYWMwYjA0YjQ3ZDIyMDQwNmY3MmM4ZTFkOWFhZDRiNzQzOTZmOWQ2N2ZiZWJiMzc5MTZlM2FlNzBhNDI1ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGViZDI2YzYyNDBmYjYwOWFmNjlkNjdhMDFlMjQ4YjE1ZjA4MDcwOWJhMzdjMWQxNzZmODFhYTBlNGZkY2U2NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTZlMDAyNzBlZGQwYTdiNTk2NmZkZmEyYjIzMDQ1OTQ1ZTFmZjFjOTBlMTBlODZjY2U2NWNhZmRiMTZjYWI1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODg1ZmFkZDQ5NmJiZWVlN2E3Nzc2MmM2OGFjNjk2NTJiNzhiMTRiMmVkM2M4M2NjYzg1ZmI4NTcyZDU1N2VlZSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/detachment-validator.ts#L62-L64",
+          "version": "repo-lines-v1:sha256:75c29a4f48c00a30bf381ea7e04d2dcc0d090a5ae7b2946d5a19ef3d2c0ed768:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJmNWU5NjE4M2IxNzFmMDIzNzU4ZDc2NjJlYzI1YzJiYmRlNTUxMDJlOTRmNDhmM2NmNWYwM2Q4MDA2NDBiYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDdmNDFiMmZjZjQyMmU5ZGViNTcwMzE4ZjFhMGI4Nzk2OWYwNWM3ZTM0NWFhNTFkOGJhZmEyYWYwMDE0ZjFjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjZiOGZmMjg1ZWEwMzE5NWVmYjc2M2Y1Y2VlZDFmNDJiMzFhZGU3MWFlMWZhZTlhODQ3YzM2NTcxNjYzZGRmYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTY5NWU2YzVkOWI2MzM2MDA3ZmZiNGM3ZGNmODkxYTk1YjIzOTRmOWQ3NWM2ZWFjNDgzM2E0M2VlYTRkOGMzNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_87565272bf6f43ec87ddd8d4293aa30a",
+      "statement": "The audit response is an AuditResult { rosterId, rulesetVersionCompared, discrepancies, isCompliant, auditedAt } where isCompliant means 'no RED discrepancies' and rulesetVersionCompared is the hardcoded literal '11.1.0-2026-Q3' rather than the roster's rulesetVersionId; unexpected failures collapse to 500 { code: 'AUDIT_ERROR' }.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L95-L107",
+          "version": "repo-lines-v1:sha256:629ef5b6be5c41e03391f0cd7c99a54465fb91cbb29ae8961649bd97953160fa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliZWNmOGU0NTk5M2M3MTA5NjQyOGYxZWRhY2Q2YTI1YWM5ZTQxNWRkYWE5MWNkNDRiZmM1ODBlODgzODFhNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwNjNiZjJlNzlmMDBjMDliZmUwNGExMzVkZmRjNmY4NTk1ZjUyODU2MmIzMWFlNDIzY2ZkN2MxNGI2MDlhNWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NDMwZjg5MGRjZTdkODNiMGQxNTUwYWQ1ZTY5NWY1NjMwZjkzNTViNTJiNTljYjY0MmExYTBjZDIyODA4MjQifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L215-L235",
+          "version": "repo-lines-v1:sha256:d41f59143ce06bd3f759810de75ffef265b97b65a44c8a137194a9159a7e77cf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyNjkwODA4NTEyOWYyZjE3NGViY2MyOTk3YjlmZjE2ZGE0ZWUxNGFlNGFlYmMwNDExNTYxYTVkZWZmZmExMGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViYzNkOWJiYjNlZjZiNDhlYzU4NTZjZWZlNTI4NGIwZDU5MTA2MzAxMmFiZDdmZWIxNWI2NjBmZDk5MjU2MmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5OTQ1MTJmY2JjZTRiYzIyYWZkZDA1NGJmOWUzNzViYmU2ZmU2Y2JlMWY1YTZmNTI4Yjg4M2JkMTY5N2Y0NmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_761001afec7d41dfb48087d06f65cd1a",
+      "statement": "Offline auditing degrades twice and only the first layer runs: auditRoster never rejects, catching any ApiError to synthesize a points-only audit from fetchRoster(id) with at most one army-total RED/POINTS_SHIFT row, while ComplianceDashboard's own catch (which would add a DP_VIOLATION row from currentDp > dpLimit) is effectively dead because auditRoster swallows its errors internally.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L47-L82",
+          "version": "repo-lines-v1:sha256:9b3c35df8d13c495b753b5cb4dfe956d6a5650eb975186ca0b294311a0983c84:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNGE0ZmQyNDhhM2RmMDFkN2ZkNjM1YjkwMmJhOTBkYzc5ZThiMTllMGEzYjRiMTQzZjA3NWMxZDQzMGExZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkNjM4MDAxZTcxYjkyZjZlYjZlMTY2ZGI2NDE1MmVjODE5ZTFlOTQzOTU1OGI2ZTdhNzQ0MWMxZTliMDA3MDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiMTYwOTJiZmYxOWE2NmU1NGQ3NmY4ZWZjYWYzNzVlZmYyNWQyZDk5NTQ4NmNlM2I0MzQwMjBkOGNiY2Q4YWQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L390-L419",
+          "version": "repo-lines-v1:sha256:db6e52816b56f1e78dfc5a034e88d4b79c44710fffe14aa04efdedf09450803e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkOWVkMGMwN2UxYmY4ZmEwYmFiZTYzZTVkMzNhYTFkZDczZjJkZDA5YWE2MjdjZGFiZmFjNjQ4NzkyMDY1ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3OTVhYmRkODk0M2VlZjYyMWZiOWVjMTEzOTE2MGM0MWVkNWVjYjFkN2RhZDVkZmIxMGMyNDIyMGI5ZWUzNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_80e2aa32cdce405f8b347dafbf476854",
+      "statement": "All modal presentation state is recomputed in the browser from discrepancies — redViolations/amberWarnings by severity, pointShiftDiscrepancies by category, and filteredDiscrepancies by the ALL/POINTS_SHIFT/DP_VIOLATION/INVALID_LOADOUT tab — and the three-state banner (Battle-Ready / Legal With Advisory Warnings / Illegal Roster) is derived from emptiness and RED count, so the server's isCompliant field is never consulted.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L160-L212",
+          "version": "repo-lines-v1:sha256:787f2f5b52301d29e359db3207bf90c2bbefc84f438633dc7abdd0a50adf7a36:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMWVhMWYwOGZmYTU5NjEyZGExZDNkOTk3MDlmNDMyZWFhZmQ5ODBhNjk3NDc2MmZkYmVlOTI0ZmYwNDEwZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkZTcxM2M0MDRjNzNmYThjNjAzMWNiODRjNmQ3YjliOTJmNjY2N2ExMTJkNzA4ZDJmNTE2YzQxNDhiY2VhMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2NTFkNmE2MGMyM2Y5NDFhMzI5M2VlOGNmMGU1MDgxMWU5Zjc0ZDdhMGU3Yjg5NGYyYmNlMWY1NjhiNGZmMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZiODNjMTMwMjUyMGIxZTVlOTY5NzMyMzhiOGIwZGU1OTkyYTc2NmQ2OTM3NjczM2JkZGEzMTQ3MWI1MGM3ZDgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L256-L283",
+          "version": "repo-lines-v1:sha256:77438e00387a8d490b6153100fceffa01fe36aeabeaabfd9d787553758205951:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMjljZjlhMGQxMGVkZjU4ZmEzYTkxZWVjMDJkYzAyNmJiMjIwNWI4ZjJjNGI0ZmIyZGU5NTg3ZjA0ZjVlZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczN2RhODVkZDgzYzM1MjcxOTkwMGNkMWFjN2ZmNzA2OWNiZGM0YjBhNmVjNTVmZDNjMTgxMzU3ZTgwZTVlOTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjNzg1MGE1MmY1MTNhMjBhZmNiNWZhNDIxNWVmY2JjZWQyYWE3NGMwYzkyNTRiYzAxNmJjNDNkMjIzM2FjNDQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L96-L107",
+          "version": "repo-lines-v1:sha256:9aed11397158bdfbcf0874b3a7df4c2d372d69ca4a941e0e875ab6428e78b364:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY3MWM0MWNhN2E3MTY4MDNjZmU0NDA1YzYyZDU4MDBjNGMxZWIwNTU1MGQxZDkyNTI1OTcwMzU3YWUxYTQ3YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlNGFiYjRkOTE0NzIwNTNiZTUxMDJhOWQ1NTY5M2VmMjhhM2VlNjM1YTUxYmRlOWMxNWFjYzhjNzE3MDgyMmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlNTcyOTIyYmFkYmQ5YTFhYzI1NWIwNmNhYmI2NTJjMTZjNzJlMmM4YzgwMWFmYjMzNjA3NzdmYTM2ZGE5MTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxNjkxOTk4ZTg5ODU2MzYzNjJjN2RlYTRiYWU3OWI5YjY5ZDZmMjJhMTBhM2Y0ZTc4MTIzMjYxYzdiZDU0NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d0a1342abb274c0e8939ff4f502ed78d",
+      "statement": "RosterDiscrepancy permits a KEYWORD_CHANGE category that nothing produces and that has no filter tab, so such a row would inflate the All Issues count yet be invisible in every other view.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L256-L283",
+          "version": "repo-lines-v1:sha256:77438e00387a8d490b6153100fceffa01fe36aeabeaabfd9d787553758205951:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMjljZjlhMGQxMGVkZjU4ZmEzYTkxZWVjMDJkYzAyNmJiMjIwNWI4ZjJjNGI0ZmIyZGU5NTg3ZjA0ZjVlZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczN2RhODVkZDgzYzM1MjcxOTkwMGNkMWFjN2ZmNzA2OWNiZGM0YjBhNmVjNTVmZDNjMTgxMzU3ZTgwZTVlOTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjNzg1MGE1MmY1MTNhMjBhZmNiNWZhNDIxNWVmY2JjZWQyYWE3NGMwYzkyNTRiYzAxNmJjNDNkMjIzM2FjNDQifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L219-L227",
+          "version": "repo-lines-v1:sha256:d0e3a6a243805aef672748fa82af139f03dbeaa3a9629f9a2eeaa1115942e6e4:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmNkMzFlNDVlODdmZWYwYjIzYTE0ZjQ2MWQzODEyNWY3ZWQzZjQxOTYyYjE1MzczOWY5NmEzZWZjZDE2MjM2ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjQ0ODc4OGE5ZDUyYTc0ZTZmNWE0Zjk4Y2ZmYzZkZTc3NTBlM2M0MzhkZTAyNzg5NjZlOWU1OTBkYWMzODRlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGI0YmVjNGFlY2ZjOTZjNWEyNzQyNDA4YzJhNjBiZWNiN2I2NTJlNmQ4Y2E3ZmIwOWIxOTg0YTU4ZDQzNWE0YiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d356fa942d114aa59ef74dc714b86b1f",
+      "statement": "The audit UI has no write-back path today: the 'Sync Active Points (1-Click)' button only renders when POINTS_SHIFT discrepancies exist AND the optional onAutoFixPoints prop is supplied, no host supplies it, and handleApplyFix merely invokes the callback, shows a success banner and re-audits after 500ms; updateRoster is imported by the component but never called, so corrected costs reach storage only through the Roster Studio's debounced performSave.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L86-L123",
+          "version": "repo-lines-v1:sha256:89db9e39bb010c9f399e7d6b7b27cfc581eb055658023e9597c32c2e54d24a6a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZmJkZDBhZjM5ODRhMjQ4NGU2MmZiYWQ0ZmMzMzljNDQ2ZWJmNWRjNTVhM2VhZGNjOGQ3NDEyNjdiYTAxYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4NmRiN2M3ZTY1MTM3OTc0NmMxOTkwMTRiZDI5OWI1MmFmODdiMWFhZjk0Y2MzMGZkNWFlOTI3YzU4ZDM0MzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyNWE3NjMyNjUyYTIyZTM1Y2M4ZDM2ZmJhZjM1MTU2NjMxZGM2Y2Y3Njg2NGNlNDM2ZThhMTIzMmE3M2IwMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTgwZDgxZWViNjEzY2FhNzNjMTBkM2YzOWUzZjE4MzFmYzY3NGFmNzI4Yjc3M2UxMDg2ZDM5MTVlZDI3MzEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L109-L123",
+          "version": "repo-lines-v1:sha256:e5b693b1f94dd37c6e36ed635ea4cd25b75bd609b94d82df1648583f4ab4b825:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhYzUyMDk2ZjQ2ZDBlMjExZDIyZTE4MTM5Y2RlODRkNTlmYTZhYzdjNTBlMjU2ODQ2YWY2MjVmZjllYTMwMjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZkODUyMzQ0OTlmOThlMjA3Y2RjOWQ3MjczODk5NjMyZWIxODMyNTA0NGE2ZjA2Y2IzMTY3YjZiMjU1M2E2ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MGVlOWViYmZlNTUyMGIwZTAyZmEwYWM0YmYwZjNhOWIyN2VhYTZiNjg4YmU0NjI0MmUxNDg3NzMzMzI2NGQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L367-L381",
+          "version": "repo-lines-v1:sha256:8a2e6710c8673ce9a3c916698f25c42c13945dc3d37a1830a5b45f7475b1515a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViMTQ5ZTZkOTM3MzRiNDFkMDQxYWYyMzJmZGJhMTk5MzQ5NDY2MzhhNTE3MDlmMjAyMGNmNmVmN2IzZjZmOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ODNlODNhNjM2NzFlMjhjOTVmZmVmZjA2NTA3ODE3MzU1Mzk3OTBlNTU4MTU1YTk1ZGZiYzJlYjA0ZTQ2NTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjYTgxYmNjMjM1YjI4YTg0NTY1Zjk3YmIyNmM0NDI0NGI0NzcyMWI1NTg2MjM4ZDY4MThhODQzNzAxOTA4YWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNDVkY2QwYTAyZmEzMTYzYjY4ZGQ0MmJiOTM0N2I0ODU5NTBiOGU3ZTJlNTZkOWMwMzEwMjAwYTA0YjU0MzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dcb67e392f2c42e3bbc3e73fee0b2761",
+      "statement": "Audit results are computed on demand and never persisted: the route performs no Prisma write and the schema has no audit or last-audited model, so compliance is purely a function of roster payload plus live datasheets plus engine code, no audit history exists, and a rules sync silently changes the answer for every roster at once.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L25-L108",
+          "version": "repo-lines-v1:sha256:4baa2558bc33ed8a411dcc69031b4b57d358b4a68b22321c72cc500fc68da559:eyJzZWxlY3RlZExpbmVDb3VudCI6ODQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1OTRiMTQ1ZDdiOGQxYjUxNjI0MGMzOTFlZjZjOTg2OThjMGM0MDhiZTM1MzllMTMwNTAwZjY0NzQ5MGM0NDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNGEzMDY1NDRlYmU5NDRkNmEyZjVhOWE4OTJhMzAxMDlkMWE3YjNjNzFiNzlhZGMxZWRiNmMyMWIzZjQ4MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjODNhYWQ5OWYwYjdjOWFkZDdhZmFlNmFmZmMxYTNkMjExMmM5ZjgwOTNjMzZmMjEwZTc5ZmJmN2QyNGI3YzAifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0e41e4c0cb85420bae9a20d8accd0bd3",
+      "statement": "Each audit costs two database queries and is subject to the shared /api limiter of 300 requests per 15 minutes, and the modal re-audits on open and on prop churn, making audits free in storage but not free in quota or query load.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L26-L41",
+          "version": "repo-lines-v1:sha256:1f5f9ce7c802ff85a68afe5e1bd391b8288b72cee7aadb1f8285dacb7f6912a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZTljMmQ4MzIwMmY4MTFmNWQ1ODYxZjgyNmUzMTkwZjYyOGYzNjc4YmUwM2E3NDhjNTBkNzEwMzdhNzJkZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlNWNiMTY3NDE4YjYzNzAxNTE2YmJjNGI0MTRiNGQ3YzMwMzhmZmU0ZWI4YjU3MGJjNzYzYTUwMDg4Zjc2M2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3NGQxNTExMDkwY2NmYTA3M2YzY2E4ZDIwN2VjYTc2NTIyZWY0YjFmMjQ0NjkxNGM2NDlhMmEwYzg0NDQzMWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1Y2VmYzI0MDE4NzBjYjE5NDBmNTIxOWM3OGFiZmU0YjM0OTg1YjBkNDM3MTQ5ZmQyM2VkMTNkNTgwMzM5NDYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L40-L43",
+          "version": "repo-lines-v1:sha256:bca1a981bbfe2ad50bb4d0e03c41f835c61ee9eb59ca3d267b50220a606cb8c8:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODZmNGVhZjc0OWY2ZDA2ZjJjMDlmN2I1Zjc1Y2U5NDJkMmE1MTYwZTYxOTdiZDI0YzU4YjM2MDVjN2QzYjZhYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjJkMTFjYWY0M2U5N2VmMzY5ZTZiZWVkMWEyNjhiZDA1ODM4ZjI5YjlkZDI1NGJmNjliYTY0ODg0MTQ3MjM0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWViNjRhMDBmODNjMGUxN2VlNDIzY2RmN2I1MzZmZTI1YTcwMmRkZmEzYzMyYTM0YjhmNmUwZTc5ZTZjYWMxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjMwODZmNmZhNDIwZGFkNjkzMGNlZWU0YTY1ZjFmZjk3NjA0NjljYTEwZGFmZDZlZmY3OGUwYzRkNTY0OWQxZSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L88-L92",
+          "version": "repo-lines-v1:sha256:092ddcbf85cc89f943bad218c3728fc5db9ef91e7efff6c6bd5ece1821ac79fe:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTk2NmZiZmE4ODk5OGRhNzQ2NTZjNTAxOTQ5NTZjMjVmMDg0OTQ1NzY2MGMwMDlmZTYzZDFlOWZhOWRjOTMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmFhOTBkZjUzNDg0NTM2ZDdhNDUzZjdiY2I0MTYyN2FhZjJjZmIzNDc3NDkzYWYwZjgwN2IyMDhmZTE1ZmYzYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmU3NmI3Y2Y1MTYwMzAyNmJkMTczNDAzNTAxMDZhYjhiYTRkYzdjMTk3YzNhMTg4NmYxYjliN2YzZTViZDYzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWU1NzI5MjJiYWRiZDlhMWFjMjU1YjA2Y2FiYjY1MmMxNmM3MmUyYzhjODAxYWZiMzM2MDc3N2ZhMzZkYTkxOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_cab05e6a9b13414eb57182db49b319ac",
+      "statement": "Playwright test '05: Rules Audit Modal checks 11th Edition compliance' in apps/web/e2e/critical-flows.spec.ts is the only automated coverage of this flow — it clicks the Audit/Rules Audit control after guest Quick Launch, asserts the 'Rules Compliance Audit' heading and one of the three banner strings, then dismisses — and it runs unauthenticated against next start on port 3456, so it exercises the 401 client-fallback path rather than the route; its body is additionally wrapped in an isVisible() guard that lets a removed trigger pass silently.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L76-L89",
+          "version": "repo-lines-v1:sha256:cd3bea9d975daf1bd9ac3606a082ad2959008675735db0b797408967061cdc8a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNjg0NDMwNDY2MzdmODg0OGViMWNiYjEyMjUxNWUzMDMzYWYxMTIwYjI0NzI5MzNiZDYzNWQ2ZTc4MjIwNjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiZmM2NWQxMTRlMmUwYzU5MTllNmNkZjQ4YzhlMjRlZGJkYzAyYThmYzEyYjg3YjdlN2QxMjRlYWIwNjA0NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L29-L39",
+          "version": "repo-lines-v1:sha256:5fb40c3f6d4a60d178ea2d83fb7cdb66903cd906088002e0ffc0b6ae33e10594:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNWMwYjBkYTAwMDIyN2JiM2YyMGVkMjI3MDRiOTFkM2Q3NzhlZmMzYjEzZjY0YzBjOWFmYzczNzM2MGEwNjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3YmVmNDRiNWM4OTA4YTZjMTBkNzUwNjVmNDY3NjA5OTY3NjBiZTA2NDQ2MjdiNGM0OTU5MWIzMWE4NmE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

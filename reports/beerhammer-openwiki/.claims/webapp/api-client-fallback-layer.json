@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:f8d678065c7f41bfcc960fe88ae927e5df7ce4ab640679eb952bf7fd5dcde816",
+  "claims": [
+    {
+      "id": "claim_44480c0adf084e5288b5592db3a47d3c",
+      "statement": "apps/web/src/lib/api.ts is the sole network boundary for the Next.js frontend: pages and components import its typed functions (fetchDatasheets, fetchStratagems, fetchRosters, fetchRoster, createRoster, updateRoster, deleteRoster, auditRoster, uploadMiniaturePhoto, deleteMiniaturePhoto, fetchChangelog, checkHealth) rather than calling fetch themselves.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L18-L18",
+          "version": "repo-lines-v1:sha256:787fd2bdf2f410ddf5328e4bc65f49d1ce6f6971974f5805f03753ae31beae61:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzg3ZmQyYmRmMmY0MTBkZGY1MzI4ZTRiYzY1ZjQ5ZDFjZTZmNjk3MTk3NGY1ODA1ZjAzNzUzYWUzMWJlYWU2MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzg3ZmQyYmRmMmY0MTBkZGY1MzI4ZTRiYzY1ZjQ5ZDFjZTZmNjk3MTk3NGY1ODA1ZjAzNzUzYWUzMWJlYWU2MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDVjZWQ1YmJhYjRkZTJiYTA1ZDQ5MjYxNjJiNWY2YmVhNDZkYzZjZTA1MGVjNjUzZjkxYmFhNTU3NjNiYmJmMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzI2ZjNlMTEyNTg5YWRlNmVlZjZmYzIyZWVjNzA2YWFlNjAwZTcwZWVlNDM5MGNhOTczMzZmYzRiOGEyYzFjZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L9-L9",
+          "version": "repo-lines-v1:sha256:4ba9cbc8404ced3a63cbc84145371ad0eb1d25ab2a84dc09d288ebe11b8025b7:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJhOWNiYzg0MDRjZWQzYTYzY2JjODQxNDUzNzFhZDBlYjFkMjVhYjJhODRkYzA5ZDI4OGViZTExYjgwMjViNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGJhOWNiYzg0MDRjZWQzYTYzY2JjODQxNDUzNzFhZDBlYjFkMjVhYjJhODRkYzA5ZDI4OGViZTExYjgwMjViNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTg3ZWFhZDljNTgzOGZlNWVlYTEzYTBiMzhiZmY3YWM5ZDVmMjU1MTM0ZGJmZjQ0MDQwNmM0YjUxYzIxZTU3YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDZiNjZkOGI4YTRkNDZhNzFlYTIyOTgxYmRkMjAzMTNjMmVmZTI4OTNiZGUyZGI1YjY0NjUwODQ5OTRmNDc3YiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L154-L504",
+          "version": "repo-lines-v1:sha256:68efdc9c82e6035f5d7262a2a2ed4ab2f22ea23b2bbdc45c54ab03de83efa871:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkN2Q1Zjk0ODFjOGU1ZDBhYTkyOTJhOGRhNjBhODM0NDFlNDQwZWE1MzI5MjViNTRjNGI4ZTc1MWM5NzVlM2UwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiYTFjMGYwYWFiODgzMGJkMGY0NjEwZTQzMDhmNzU0NzNkZDQ5OWZkMmVjN2I0NmM2MjA0N2ZlMmQxM2YyZjY3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJkMGY3Yzg3NzEwMGU0YmZhNjRiN2M2MmJkMTdjNjExNTJmNTNiNjgyNTdmNWU2YTNiM2Q2M2JkNGU0ODg5MDM1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_2f164f9bf0d140329987aeb61ffc662f",
+      "statement": "apiFetch prefixes every call with API_BASE (NEXT_PUBLIC_API_URL, default http://localhost:4000/api, inlined at build time), obtains a Supabase access_token via getAuthToken() which collapses any auth failure into null so the Authorization header is simply omitted for guests, parses the ApiResponse envelope, and throws ApiError(body.error?.code || 'UNKNOWN', body.error?.message, response.status) when !response.ok || !body.success, otherwise resolving body.data.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.web#L33-L33",
+          "version": "repo-lines-v1:sha256:611eb5fd770f664c90263ea42fce4052457fea43c61d629e62677370e70ed5c6:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjExZWI1ZmQ3NzBmNjY0YzkwMjYzZWE0MmZjZTQwNTI0NTdmZWE0M2M2MWQ2MjllNjI2NzczNzBlNzBlZDVjNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjExZWI1ZmQ3NzBmNjY0YzkwMjYzZWE0MmZjZTQwNTI0NTdmZWE0M2M2MWQ2MjllNjI2NzczNzBlNzBlZDVjNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2Q0NGM3ZjI1YWUyN2U2NjUxNTc3ZTgyYjM0MjQ4YzBhMzI1ZmZiMmEzNGY2YjcwMDExNDg5NDQ5ZDY5MzAyNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmIxNTQwMWEyZGJiM2MyYjFlNjhiOGIzNzA1ODYzMzM1NzdjNDRlYTllZjQ5ZTNiZDRhNjBmMTA1ZWIzY2U1NyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L16-L72",
+          "version": "repo-lines-v1:sha256:0e0b681e5c8ef38299d96cd7e38180091a85700f45006305355a3eb66a5fa92c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMjQ1MzNlZTY4NzQ4N2ZjZjQ3NGEzMzc2YWUwODJhYWRhZDgzZmYwMmVmMDUxNTZlOTg1Y2U4NWMwNzk1NGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRmN2UzMWFhMzk2Yjc3M2NhNTJmNzNiNGQxMmMzZThlN2U1ODU0ZTQ3OTUwMzhmMWM5ZTM2Y2RjYzNkYzhjZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdhM2M2M2FlYTZlNDUxOGU0NjFhNjRkOTU5Y2Q1YTE0YjI2ZGRhNThmYTIwMjQ4ZjFlYTYzMTNhOTA5ZTJjZTcifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/supabase.ts#L9-L18",
+          "version": "repo-lines-v1:sha256:c2cfd968c5ee83276c136bed647fe9c96b083d840e8da885e73ca8f11ca42b9c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0MWIwNzVkYTM2ZTA5ZDBlNzhlNDZmNWVkOWE4Y2JiZmE1NjMzMDUyZjFmN2QyYjlkZjhkYWM1YzE5OGUzZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NzVlYmVhOTljY2MwNTRkYThhODYxODRjMzVjNDE4YTkyY2NmNGRjYjExMTRiZTJjZGFjNjgxNWEzNTIxMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L307-L319",
+          "version": "repo-lines-v1:sha256:de4bbdf7e4cdcefb2a69633c1fc16f06c66c41fb0a04597792655daf7fc6a276:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwYzYxZWQ3YjljMzcwZjAyZDZiZTQ2NzY5NmM3ZGUyZjVkNjU5MTg4ZGI3YjJlNDc5M2EyMjlmMGM4MjJlM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0NWE0NDU3ZTBiMjc5NmI1YzAxMjNhYmNiOWZhMDlmMzc4MmEwNDVmNmUxZmY3MGY0YzY2ZDFlMGI4ZTI2ZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3c5f8acc117842a1bdf23bf97cb634ca",
+      "statement": "Because apiFetch awaits response.json() before checking response.ok, a non-JSON error body (proxy 502, HTML rate-limit page) rejects with a SyntaxError instead of an ApiError, and wrappers that swallow all errors cannot distinguish the two.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L56-L69",
+          "version": "repo-lines-v1:sha256:ac1de69e019983e2ab08dccfef353c4d0f8b3cf623f603d5f0cc1ea026923fd0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiOTU3OTc5MTZmYjNmM2YzYjg5NmU5YmQ2YTg3ZTJkMjE2ODE4ZmVhNzJjZDA0MDhkYTVmMTlhNTMzOWU2ZWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkZTZiYmUxNGRiNDZiZWQyZTExODAwMWNiMzdkYTFhYzQ4MThiYjM0ODNmNjMxOGNlYmZhNzYxMTRmNjg3OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQyMWM2ZGZkN2U4OGNlY2Y4NjNhMjJlMGEzZDVmMDI5MmQxZDI3YjU2MjZmZjA3Y2QwZmU1NjVlOTk3M2ZiZDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_113f82d315664d77881b08ae5cf9aa4b",
+      "statement": "All roster, audit and media routes sit behind requireAuth, which returns 401 UNAUTHORIZED without a valid bearer JWT, so a guest or unconfigured client takes exactly the same degradation code path in api.ts as a dead network.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/middleware/auth.ts#L19-L49",
+          "version": "repo-lines-v1:sha256:c654293f6d94c4f8e1404a254611bf3239dc953d343d000b15b5330048ab574c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxYTQ0N2VjMzRhMzE1NmM0Zjg3YTRiYmMwOTRhMGVmYzMwOGVhMzhlZTdjODA5NjFjMzhkZGMwNzY4ZDE5NTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM5NmU2Yzg0YWEwNDNkZmM3MjJkNTM1MjE0OTAyZDU3N2U2OGE5NmMxMzFlMmQ4MmM4YTFjNDA0NmZjMjA5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU2MmNkNGQ5NWQwMDBhYTRjNWM3NThkZjQ2NTg3NjYxNTdiODc5ZmI0NzU4YjViYzg3OGVlNWUzZDU5NTc1MWYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L16-L16",
+          "version": "repo-lines-v1:sha256:9ee1395676c757abfc3d440413cb295558f171391e55270a9713f7c022ce3d9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWVlMTM5NTY3NmM3NTdhYmZjM2Q0NDA0MTNjYjI5NTU1OGYxNzEzOTFlNTUyNzBhOTcxM2Y3YzAyMmNlM2Q5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWVlMTM5NTY3NmM3NTdhYmZjM2Q0NDA0MTNjYjI5NTU1OGYxNzEzOTFlNTUyNzBhOTcxM2Y3YzAyMmNlM2Q5YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmViYmNlZWIzZDE2ZTdhNmNjMTExNzA2ZTM5ZGJmZTc2ZmIyNDIwNTcwNWQ3NzI0MGJlNzBiYTRiNzIyNzM5ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWEwZWZmODdkZjhhNWQ0ZDJhOGFjOTA1MjM4YjVkOGVmN2I1YjkxZjRlZjEyZTY0NmRlNTI3ZjYwMzNjYTNlNyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L243-L255",
+          "version": "repo-lines-v1:sha256:aeb4db800b028d221c3ac4455dd18c22b4a2dd3d6cbb237230902b976531cb80:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZmJhMjhmY2EwZmFhNjcwNzE1YzBkZTNhMGRmOTQwYTVjOTExZjhlOGM5Y2EzMmI3ODg0Y2VjZTc4NDczNTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE0MmNjZjFiZTVhNTU5N2MzYWQ2MjJmMTQ1NGMzM2MwNGE5ZDM4MTMxNTNjMWNkYWNkODhlMWQ3NGFhN2UzNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5OWNlNGUzMDFmMGFkMmQyZDM2MmZjYzJjYzcyYWMyNjcxMzZiMTZlNjBiN2VjYjNkMTMyMWZmOWI1YjY4NmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0d795e6f555a429a9ff54ecf2c67f359",
+      "statement": "Roster persistence uses localStorage keys forceorg_local_user (owned by AuthProvider, read by getLocalUserId for .id) and forceorg_rosters_<userId> (owned solely by api.ts); getLocalUserId returns the sentinel 'commander' during SSR, when the key is absent, and when the stored JSON is corrupt.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L161",
+          "version": "repo-lines-v1:sha256:6f4654541487b1f26fea8179dc743c91088ced665d5ce3e2b0c13ebd7f5548f4:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NTg5MDc2MTA2ZTA4Y2FkYjYyYjg1ZWJhNGM5MjRkNjQ4MmJjMzdmNjFjNTlkZjJkNzc0ODEwN2Q0YThjN2MifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L121-L150",
+          "version": "repo-lines-v1:sha256:597403b74a5a97d8b2819877f38a2996684e60acde303fe288bedbd08f82fd83:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhNTUzNjdiZmI3NTJmMzUyYTIxZDhhYmEyMWUwZjk2YmJhMTU3OTI5MTU3ZDdhYmIxMTRhMTRjM2RmNjRjOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxOGZmZDFiNWY0ZTU2MmQ1ODQyODQ0MzhiMzRiYzZmZTYwMGFmNWUwMjU4NmNkNDM3MzFhY2I4Mjc3ZWIzMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMWMwZjBhYWI4ODMwYmQwZjQ2MTBlNDMwOGY3NTQ3M2RkNDk5ZmQyZWM3YjQ2YzYyMDQ3ZmUyZDEzZjJmNjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ac56c752460644beb680d6074c6f13bf",
+      "statement": "getStoredRosters returns [DEFAULT_STARTER_ARMY] on the server, for an absent key, a non-array, and an empty array; DEFAULT_STARTER_ARMY is a complete UserArmy fixture (starter-ultramarines-roster, ruleset 11.1.0-2026-Q3, 2000-point limit, three Astartes units totalling 355 points) rather than a placeholder shape.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L76-L143",
+          "version": "repo-lines-v1:sha256:70f2e49a35fd271f4494d755509efe2f2a4c32f1d668b15c58b15955a1c61912:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMjdjNDIzMGFiYzdiYWViMWM4NzM4NjkwMTViMDE5NDNkMzdjM2U0OGRiMGI1ZTRhNDYwYWIxNmQ4NmExYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhM2M2M2FlYTZlNDUxOGU0NjFhNjRkOTU5Y2Q1YTE0YjI2ZGRhNThmYTIwMjQ4ZjFlYTYzMTNhOTA5ZTJjZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkODM1ZDUwNTE0ZjEzMzBkNzZmMWNlMDBlZGI1N2IwMWY0NDFkOWJmYWE4MDZhODkzZWE2ZWFkMDYzZGJhNzQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6f5a8091fccb4b78898c7a2e1ab28258",
+      "statement": "fetchRosters mirrors a non-empty remote array into localStorage and returns it, falling through to getStoredRosters on error or on an empty remote list, so a signed-in user with zero rosters can never see an empty list; fetchRoster upserts the remote roster into storage on success and otherwise returns the stored match or a clone of DEFAULT_STARTER_ARMY carrying the requested id.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L243-L283",
+          "version": "repo-lines-v1:sha256:5bd136a8c03199163bf9d3c86ff082886c1bbf20d5a28dbe0470f569706fba6b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZmJhMjhmY2EwZmFhNjcwNzE1YzBkZTNhMGRmOTQwYTVjOTExZjhlOGM5Y2EzMmI3ODg0Y2VjZTc4NDczNTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE0MmNjZjFiZTVhNTU5N2MzYWQ2MjJmMTQ1NGMzM2MwNGE5ZDM4MTMxNTNjMWNkYWNkODhlMWQ3NGFhN2UzNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcwNDMwOGY1MWMyYjVlZDczNDcwNWNlMTczN2JhZTgzZDBiOTE3ZGE0ZjVlNmRjNTU2N2RjOTI2YmU1MmM5NGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f59e25e2f00541758282d6818662fa63",
+      "statement": "updateRoster merges the patch with stored state, writes localStorage via saveStoredRosters BEFORE issuing the PUT, swallows any PUT failure, and returns the locally computed UserArmy (browser-stamped updatedAt), discarding the server response; deleteRoster filters and saves storage first, swallows DELETE failure, and always resolves { deleted: true }.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L86-L108",
+          "version": "repo-lines-v1:sha256:f4a37d8686509031eff907e6b186133c17c828a2da0a6f6ebe207a823d9bcf9b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZmJkZDBhZjM5ODRhMjQ4NGU2MmZiYWQ0ZmMzMzljNDQ2ZWJmNWRjNTVhM2VhZGNjOGQ3NDEyNjdiYTAxYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyNWE3NjMyNjUyYTIyZTM1Y2M4ZDM2ZmJhZjM1MTU2NjMxZGM2Y2Y3Njg2NGNlNDM2ZThhMTIzMmE3M2IwMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlkM2M2NWUzNWU0ZWZlNDU5NzMzMTVhNjI4YjJmMzRhMzA3NjhmZWJlZjQxNTE3MmQ3NmUzYmU3NmNjZDcxNzUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L327-L386",
+          "version": "repo-lines-v1:sha256:2e4c204c4b931dd03501797cdeb93bcd432182521524a0a68e2f1550930c8af1:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZjQyNDcxNTViMjY0MDQ3NDQ0NDA4MDczNWFjY2ZiODBiZTc3ZDkyYmMyMDM0ZjE3ZGQwODViMTlhNzY5MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4OWZhYTBlYjgwMTdmNmM1YjZkOTE0ODkzZDQ2ZGM2NzA3NjU5NjkyMzA3YzIzMWIxODIyMWI0ZGZlNzk4ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_391f5d996add4d0e89776db003ede320",
+      "statement": "createRoster POSTs /rosters and on failure synthesizes a local army with id army_<Date.now()>_<rand>, ruleset 11.1.0-2026-Q3 and an empty rosterPayload, then unshifts it into localStorage regardless of origin; because that id was never created server-side, a later PUT/DELETE for it gets 404 NOT_FOUND which the client also swallows.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L95-L146",
+          "version": "repo-lines-v1:sha256:fd67085c82282d62bb8b391ea360b91e23b72b40f16fe6c29074dc3e51d1ac7c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZjEyOGI0YzNmOTIyMzA0ZGEyMGQwYjQ2NGE1NzJhYTI2ZWU5NGUwN2E2NjAxZjRhYmFmYjdlNjllNGQ2MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1ZTk0NzZlMzBmM2IyNjFkMDY5YjNhNGNiOTU1YmM1OWUwNGI2M2Q1NjQ4ZTExZWMzZjRmYjMxYWZmNGU2MGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjNDllM2M4Y2UzMmEyYWE5NmM1ZmJjZmNkNDE1YzJiYjUxNDE5YjZhOWI0ZDNhOTgxY2Y4ZTA0OTM5MjE5NjcifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L285-L325",
+          "version": "repo-lines-v1:sha256:c99f9ec36e781e9cd3db8c7afc7a2c650eb696ffb54713423374ce9d8c92dede:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5NDI0N2JjOTJhYWZlYTc2OGYxMjg0ZDgwYmY1NDAyZmE5YzczM2M0YTdlNjc2MDFlMDRiYTE4MTJhOWY1NTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmNDVkNWMwZjBiOWEyMGY3OWQ0MjUzYjFjZGIzY2Y2Y2ZhYzIxNGJhYWQwNjBlMzZjNjYwOGYyYTkzZDRmOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3ZTBjYjVlYjljZDIxMWIwZTYyYTM1YzliMzM3MDM4OGQ2MDBhYWEwODg2ZmIxMzQwNDUyZTJlY2E5ZDVhN2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_15b0a3f9bbce44619d2e1ec9d8750951",
+      "statement": "saveStoredRosters swallows localStorage write failures and remote write errors are caught and ignored with no dirty flag, sync queue, conflict detection or retry, so local and server roster state can drift (local-ahead edits never persisted, a later successful fetchRosters overwriting unsynced local edits, and ghost deletes where a failed DELETE leaves the roster server-side) with no repair path.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L145-L150",
+          "version": "repo-lines-v1:sha256:0235183c2ea5b99fa9a1eca10d527aec24e01aaafcadafd468f5d5121d7ccd3c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUwM2EwN2I3Njk0NThiZmQ0MjcxMmFmNDUxYmI5NWVjZWMyMjdiZDM0YmI2YzA1YTA4NjczMmFlMDMxN2U2MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwZTQzMTIzMTVjMmE0NjQ2NjRjMDIwNjRmMDk0MTc1YTk3Zjc0MjQwZmEzZDE0ZGEwY2Q0ODU5NDk0MGNjMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmExYzBmMGFhYjg4MzBiZDBmNDYxMGU0MzA4Zjc1NDczZGQ0OTlmZDJlYzdiNDZjNjIwNDdmZTJkMTNmMmY2NyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L243-L386",
+          "version": "repo-lines-v1:sha256:81678d970bbf975ef6b19099691a08f0e117382de68fb46d5eb003871ef08965:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkMmZiYTI4ZmNhMGZhYTY3MDcxNWMwZGUzYTBkZjk0MGE1YzkxMWY4ZThjOWNhMzJiNzg4NGNlY2U3ODQ3MzU5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhNDJjY2YxYmU1YTU1OTdjM2FkNjIyZjE0NTRjMzNjMDRhOWQzODEzMTUzYzFjZGFjZDg4ZTFkNzRhYTdlMzUxIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmNDRiNmY2MmFmY2FjYzlkM2U3N2IzYzcyOTg4MGQwODJjNTBjYmQyOGIyMTk5ZDRmNWJkNjQ3OTgxN2QzMDIxIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_20f2fe7d030f4f0086c1cfc8bf5e2947",
+      "statement": "Catalog fetches degrade to hardcoded fixtures: fetchDatasheets returns three Ultramarines datasheets on error (factionId only echoed back), fetchDatasheet falls back to the list match or list[0] so an unknown id silently yields the Captain, fetchStratagems returns [] leaving StratagemPanel to substitute CORE_STRATAGEMS, while fetchChangelog and checkHealth are the two read exports that rethrow with no client-side fixture.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L128-L143",
+          "version": "repo-lines-v1:sha256:2cd24837d8c84f2468852dc83d4a19ce49915eb2d1b0fd848c55349b30daa5db:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NjZmYmZhODg5OThkYTc0NjU2YzUwMTk0OTU2YzI1ZjA4NDk0NTc2NjBjMDA5ZmU2M2QxZTlmYTlkYzkzMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU3NGU5ZWJkYmY3NDc1ZWQ4NWIwM2FjMjU0ZjdiMDg1MWZhMTg5ZjEwYmNiYjNiMzYyM2Y3OTEwOTNjMWUwMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NGZkOWU2NWUzYzIzNTUyZjFjNTA0NWEzNjAwZDRmNmRjZTUyN2Y4YWFjODdhYWUzZjkzZTJlNTk4NWJkMzIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/StratagemPanel.tsx#L65-L94",
+          "version": "repo-lines-v1:sha256:0027df6256534eb6c5a371c2b9bfb2dba8764efaf62702dbc089bf099187af9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiNDM3YjkyOTkyMzZiOGU5MTk5ZDU5MzdjNzdmOWU5ZTcyMmYyYWNlMDYwMzgxNjE2ZmZiYWQ5MDQ3ZGRmNGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3YTVhOTM5MTNmZWY1ODBhNzMzMTBmYmZkNDc2MmJmMGJiMGQzNzRjMjQ5YjI3YjM4NDU1ZjhiNjU0NDIyYTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDg5YTJjNTdiMjMyZmQ1MjA1YjA4YWI4YTA0MDY5NTU4ZDYwM2RhNmJjMTA0ODcxMGEyNGNkODg1YWEzMmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiMzI1M2RiZDlmYmU2NDQwMzE1OTVjZTk5NThjMzRjYWU3NGUxMDQxOWRiNzY2ZmMxYTIyNThkYmQxOTRkZmQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L154-L239",
+          "version": "repo-lines-v1:sha256:a39bfc44fd8493d25de7aa6033b3e7d8f2fdd208efe45e3c1ee3a4513c47a98e:eyJzZWxlY3RlZExpbmVDb3VudCI6ODYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3ZDVmOTQ4MWM4ZTVkMGFhOTI5MmE4ZGE2MGE4MzQ0MWU0NDBlYTUzMjkyNWI1NGM0YjhlNzUxYzk3NWUzZTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhMWMwZjBhYWI4ODMwYmQwZjQ2MTBlNDMwOGY3NTQ3M2RkNDk5ZmQyZWM3YjQ2YzYyMDQ3ZmUyZDEzZjJmNjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0MmNjZjFiZTVhNTU5N2MzYWQ2MjJmMTQ1NGMzM2MwNGE5ZDM4MTMxNTNjMWNkYWNkODhlMWQ3NGFhN2UzNTEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L492-L504",
+          "version": "repo-lines-v1:sha256:75854d4159ff86d31669ce852f85c2879bde5a098ee8a929ec312580ec280122:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhMWMwMmEwNWU2ZTk3NmZjZTg3M2JjOWMzZjJjOTZjZTkyNmVjYzJkMmE0YjRlODdiZDU3YjU3ZDQxYWNlZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY2ODAwNjI0YjMwODlmOTQyNDI3NjUxMjEzNDE0MmFmYmJkNWZjMTdkNTRkMzM1Y2NjYWZhNmJjMWQ4ZTQ5YzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwZjdjODc3MTAwZTRiZmE2NGI3YzYyYmQxN2M2MTE1MmY1M2I2ODI1N2Y1ZTZhM2IzZDYzYmQ0ZTQ4ODkwMzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cd5b4a9977584f0ea811903dd4c20103",
+      "statement": "auditRoster degrades to a points-only local audit computed from fetchRoster(id) that can emit exactly one discrepancy (army-total, RED, POINTS_SHIFT) and never checks detachment points, quotas, loadouts or Rule of Three, unlike the server route which calls validateRoster; the extra DP_VIOLATION branch in ComplianceDashboard's catch is effectively dead because auditRoster never rejects.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L77-L103",
+          "version": "repo-lines-v1:sha256:52ca21cb46761e48a33f1fc75741695deb079b3e2b61555db4cb6c813edfebc0:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxNGE0NTIwYzgxZTVlNDRmOWNiMTgyZDdmNmRhNmQwMzU5NDFjNzE2ZWQyNWFlZWVlMGQ0ZTU0YjU3ZWI4YzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1MTRkODZlYmRmOGE4MGI3NDA0N2FkZDdiYzZhMzk2MmMwNWNjYWVlYTVlOTgwNzM0N2E1M2UwY2VhYWE5OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0YjlhMGIxNmI5OTEwYmFhNWQwYTRkY2FmZjhhNjBjNDI5NjMzYmYyYWUzY2JhY2M4MjAyOTA3NTgwZDEwY2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiMzFkYmZkY2Y3OWE3OWU2NGY0NzgzMDBkOWVmODliZjVjMDk1YmQ4YTU3NTZmZjE1ODFjZmNjODZiMzZmNGMifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/ComplianceDashboard.tsx#L41-L86",
+          "version": "repo-lines-v1:sha256:019b2e91939a65f1a9983b46017b64db385be5ac16279881e055b24171f0a6a7:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1YTM1MzZiYjhlYzBiNTA4OTZmYTVlMGYyMTVjN2Y5ZDY0ZGZmNTQzYzE2MzhkZGFiZjYzMzNjZDU5YTIyYTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlYjMyZWZhYTIxOWFlZjg2OGE2OGEwNWVhYTg2OWZhNzc2ZmNiMzE2YzM1MzVmNWU3NzBkZjU3YTk5ZGJkZGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgyMzM4MjU3YjNjMWU3NzhkODcwN2U1ODI1NDkyNzhjMDk2NDNhMDFhY2RmMzU3YzgwZDYzOTBkYzNlMzA5ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiMzI1M2RiZDlmYmU2NDQwMzE1OTVjZTk5NThjMzRjYWU3NGUxMDQxOWRiNzY2ZmMxYTIyNThkYmQxOTRkZmQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L390-L419",
+          "version": "repo-lines-v1:sha256:db6e52816b56f1e78dfc5a034e88d4b79c44710fffe14aa04efdedf09450803e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkOWVkMGMwN2UxYmY4ZmEwYmFiZTYzZTVkMzNhYTFkZDczZjJkZDA5YWE2MjdjZGFiZmFjNjQ4NzkyMDY1ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3OTVhYmRkODk0M2VlZjYyMWZiOWVjMTEzOTE2MGM0MWVkNWVjYjFkN2RhZDVkZmIxMGMyNDIyMGI5ZWUzNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a3a5a07d1b4e4068af828e88fe519a68",
+      "statement": "uploadMiniaturePhoto is the one function that bypasses apiFetch, issuing a raw multipart fetch with FormData fields miniature_photo and image plus rosterId/unitInstanceId, only an Authorization header, its own envelope check defaulting to UPLOAD_FAILED, and unwrapping of body.data.media; it throws on failure, and PhotoUploadModal instead keeps the local blob-objectURL preview as if the upload succeeded, so the photo disappears on reload.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/PhotoUploadModal.tsx#L70-L98",
+          "version": "repo-lines-v1:sha256:9e4b87536d8604d42d6f01c3719bbc20b666f8f03c1f2c94f38f887035bb1a26:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2YzNiZGI3YzQ3NzE0MmQ2MjJjNzc2MWZiNzEyYzQ2NmVkYTIyOTY5YzhjYjljM2ViZjg3M2ViNjM4YzdhNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxZTM3MjVkYTAwMmI0NmVkOGI0ZGU4ODAwM2FkOTcxMGRjYWYxOGQ1N2M0NzAxZGMzYmVmZjBiMmM1Y2IxM2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NjkxMDU3YzU1Y2QwNzFkODc2ZTdkZDExMTlmYjQxMzIwOGExMDhmNDk1ZTUwMTgwYTYyMWJkYWI3MmU5YTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L449-L481",
+          "version": "repo-lines-v1:sha256:d44bc6ba2f7ce0d9ec62514d722c63ce429227e7061f6d79a95e2004e04063db:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhN2NmYmUxNmM4MzU3NDhjODdjNjgxNjQxYjJjMDhmZmZkZGQ1OTc3NGNmYzlmNmY3NTMwMDMyYTVjMWU3OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmMWU3ZWQxNWQzYTEzMmMxMWVmYTkwNTJiZDI4YWI1ZjRlYTkxNDU5ZGIyMmE2Y2E2OTk5NDkyYmExYzU3YjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4ZjNiZTdiYTYzNTk5ZjRkZGJiYzU1ZjY0NmRiNmFhZjg2MTQ0NTc0NmY0MmJiOGRmZWUwYjRiM2RhZDZmODQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_17f6836c38e64d5fae294202f3adb175",
+      "statement": "Fallback fixtures are duplicated rather than shared: the same three Astartes units are hardcoded in api.ts, RosterBuilder's DEMO_CATALOG, the console page's DEMO_FALLBACK_UNITS and the catalog page's FALLBACK_CATALOG_DATASHEETS, while the dashboard and changelog carry STARTER_DEMO_ARMY and FALLBACK_CHANGELOG, and RosterBuilder re-joins live API rows to DEMO_CATALOG by unit name to recover wargear text.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L24-L103",
+          "version": "repo-lines-v1:sha256:7aa34a1f7815214b731770e42395a96d02b71e8f9d53afe90c2c56b26873f3f4:eyJzZWxlY3RlZExpbmVDb3VudCI6ODAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4MThmYTBiNmFhMDEzNTZiYTlmMTI5ZmM5OTA3YzIwZDRjMWNhYmY2ZGE4NDE5ZTY4YzFkOTQ5OWZlZmU2ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkZWIwYTZiNjMwYTJkMDc3MTVkNjgzYzk1NDczZTZhNTQzZjUyYzc5MmZiYTljMzUzZDdhMGFkNTVhMGJiNzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjY2IzM2RkMDVhZmFlNDZlNjBhMDU2MWQzNGQ0ZGI2ZWMzYzRlYzhjNDlmZWY1ZGNjNTNmODFmZTViZTE1ZjEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L17-L17",
+          "version": "repo-lines-v1:sha256:e1c812321849ae58825e32f16fc8c235ebf11437be225f8bad0c9aeacc0b723d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTFjODEyMzIxODQ5YWU1ODgyNWUzMmYxNmZjOGMyMzVlYmYxMTQzN2JlMjI1ZjhiYWQwYzlhZWFjYzBiNzIzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTFjODEyMzIxODQ5YWU1ODgyNWUzMmYxNmZjOGMyMzVlYmYxMTQzN2JlMjI1ZjhiYWQwYzlhZWFjYzBiNzIzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjQyZDFkNmM2ZmNlMGUzMzE5ODU5OGM4NmMwZDY3Y2Y2YTc1YjFhMGUwZGFlNjJkZTU4ODUzNDI3ZTNhNWM5NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzliZTdmNTFmNTY2NDM4N2UzNDJjMzBkMmFmMTk5ZDYwZjNmZTkxZTMxM2I2YjI2MTBlMTY5OGI4MWNjMTJlNiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L176-L186",
+          "version": "repo-lines-v1:sha256:2bbfed91d6aa78d1272cfcf2dfa7f2e50f662545b27e39f5160a408ebab6abfd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NzMyOWFmMDg2MTc4YzU1YWUwYjg3MTk3NzhiNWYyZmNjNmY0ODU5MTM5NTEyOTE3YTI4ZGZlMjE5Njg5MzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2OGE2Yzk4MGNkOWRhNDIyZTYyNmJiNDBjODBhZjA5YmYyMzBjYjc1NzllZWRhYzIwMTE2MDgzZjdlYTRjYmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhZTM2OGIzOGZjMmE1ZjA5ODY5OWFjZDRkZTRiY2FkNTExNWQ3ZThhNzNlODJiODk5MThkNWJjZTA5NTA0OGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyZmY1OGJjYzg2MDJjN2Q2MjgyM2NlNWViNzRlZmQ4YjNkMGU5MzJkODIwOTBkNDIxMWNjMGI3YWNhMWYyNWYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L40-L107",
+          "version": "repo-lines-v1:sha256:46231bf717d31d15eb760d3af768444aabcaed5ba24140a1dbf3e2e24932177c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0ODAzMjFmMjAzM2M3OTU3YmQ3NWE2M2U3YWY3Mjc2Y2Q4NzZiNGE1YThhYmM2ZDE1ZGFhYzA0NDhkOGQ1ZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMyMjM3NjljNjZhYTc3Y2M5YjI2Y2M0NDViMjE3OTYyZjA0YTgxNjdjZDIzN2VjNmQ2NWNjYzU0MDE5ZGJkNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVjZjE4YmU2NWYxMmUyZmYxOGFmNzM1YmZhYWU3YTQ2ZGY1Yjg2ZTRjY2M1ZWJjZjQ3ZTlkMWZlNWEzZjliZmQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L166-L209",
+          "version": "repo-lines-v1:sha256:e3213e977e240825b5dab070d6f57be0ba5db5cbbfcb38657375e941a402ff86:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0NzRiYTFiYjE5NWNlNTc2YTFhZGRkNGRkYzIyMDI1NjllMDhmYmM0YzUzOTRjMmQzNzI1ODIxMmU2ZDIwNzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5NTkyODBmNjE1NmMxZjY1MWI1MjJiMWIxODYxNjNiNjZkYjQ1YWRiZmE5YmM2NzFiZWQwNzM1MjllZWMxZDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczNDkxOWI4YWQwMmViZmEzYzlmNDJlZWJiMzc5YWE5MmM5NTQxMDIxYzM3MDUzYTdlYjAxOGI0NmY3ZDNhNjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2f632f872707435fb369d32190a72598",
+      "statement": "The tabletop console substitutes DEMO_FALLBACK_UNITS whenever rosterPayload.units is empty, so a newly created roster renders the demo Ultramarines force instead of an empty list — the behaviour Playwright test 04 asserts when checking the 'Captain in Terminator Armour' heading in a guest session.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L56-L64",
+          "version": "repo-lines-v1:sha256:8f1412c1ff5f2fc62d29bf5cb750c934565b9abf0e1e13d864cb640dbd32d37c:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDkwMGVhNzRjYjgzN2VkZWZjOGJmYmU4NmE3YTUzN2Q2ZmVjZTZkNGExMjQ1NDc5NGRiODY5YzU3YmYyYzg0OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGU1YjllYmVjNThlMzNhZTE5MGIwOGUzZmY4YzllZTM3NmY2ZWJjN2YwZGZjOTJhNjdmMTgzMGNjZmY2OWE2NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDk2ZDgwZGYwNGVlYjJmYzk0YmMyOGFlOTc3MDhlYTI1ODc1NDZlZjU0ODY2MzVjOTM2N2Y4OTMzZmZhMzA3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmQ2ZTI3NGNlMjMyYzIxMzU3MWE5NjM0YjEyMmQzMDU3N2VkNTAxNDQ2NWI5Zjc0OGIzOTZiNDJhYTBkY2ZmZiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L196-L200",
+          "version": "repo-lines-v1:sha256:45c3352571dfd18c27af7e94832b3f1439f0c63b9d1769fa0c89f71b8b8178fb:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTNlYWY2NDVhOTRhMTVkNWIzYTU1ZDIyOTg3MmU1YTBjYjFmYjk4MjM5MGIyYjdhMDZlMmEwMjI5YmZlYTY3YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTliNzhhZDIyMTE2OTBlM2E2NzgwMzdiNGRhN2NkNmI0NzVkZWJkOWNjZjIxZmY1M2NiMzZhMjc2OTE1OGMyNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTI4NGYyMjg1ZjhmMjdmNDgzMGRkMjNjNTY0ZTRmOTU2NjlkMzI3ZDljN2QxZTI3ZjYyNjQxNzk2OTA0ODk3OSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

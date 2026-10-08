@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c76cadf67d7861bf446c3f0b0ab70c101edfb579c2a6c787a3befabf5541e100",
+  "claims": [
+    {
+      "id": "claim_9ea0d7f376de413fabcb0849290863b5",
+      "statement": "@forceorg/ui-theme (packages/ui-theme) is the monorepo's only shared UI package and owns faction appearance end to end: a five-channel palette registry, a chapter SVG insignia registry, and ThemeProvider which maps a theme key onto CSS custom properties; apps/web is its only consumer, importing everything from a flat barrel with main/types pointing at src rather than dist.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/package.json#L14-L22",
+          "version": "repo-lines-v1:sha256:b0e7bea6c3bf003d7b24d52831af891dae0a88ba10e96d0746061c3ab40c79a0:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzYjQ2OWQ5ZTA5NzU3MjI0NjY2NzM0YzllZjdiMjU0ZDg4NTM0ZjVkNWJiNzA5ODk2MDgwNWM1NTNkYzMwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzNiODkxZmY0YjVkODAzN2NlNDZjZTE0MWNjNzdlM2NlYjFjZGJhNDc3MmMyM2VlMTcwNWM5ZWFkOGY4MjhjOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWNjOGNmNGIyMDE1NDQ0MmE4NTg2MTZmNmZhZjcxNzNjMDNmYzhkZmUzNDZiMDliYzhkNDRiMmUzZmI5ZGU3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWI1N2FkM2ZhNTYwZjYyMDI1ZWM4YmZjZmIwYzEyMjliMTRlMjQwYzNlYmE3ZTE5NDM2YTNjYjE2MGUwNjllYyJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/package.json#L2-L18",
+          "version": "repo-lines-v1:sha256:015be26e8b660964b8cba19a23ba6a7e3ddcac3e5b185a68cbf596be7f5285ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkOWQzNTQ4Mzk0YTk5OTRmN2Q0MjY3NmY4MmM0MzE0OGFhOWU1MjI3MmM3Y2I4MWVlMjBlZmFjMzgxODExMTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoxLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE0MzVjN2RhOTZiZjhjYzFjZTJmMjZlYjAyZWFlMTRiMDdiYjkxNDJlYjY1M2VjZDUzMTI1ZDQwMGY1MDRmMmUifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/index.ts#L1-L14",
+          "version": "repo-lines-v1:sha256:527f6f9be11f32f28b2acfeca4a1621486f054daae5c11a6598ab51ee1a399dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImViNDllYWI2YjMyN2RhNjA3ZWQwYzEyY2Q5NTRiYmUyYmExYjhiNTc5YTI5OTE2MTI4NDIyYWY4MTViMDA4N2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlZjcyNjRjNjY2YzAzYWZjMGRmYTdjMmIwNjQ5MDE4NzE3MTdjMmJiZDlkNDMwOTE5MWEyNWMyM2RjYTE4MGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_980787b764f84e82a70acc210a280899",
+      "statement": "apps/web consumes @forceorg/ui-theme source-first: apps/web/tsconfig.json maps the specifier to packages/ui-theme/src and next.config.js lists the package in transpilePackages, so palette and heraldry data edits take effect on the next web build without running the package's own tsc build.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L2-L8",
+          "version": "repo-lines-v1:sha256:04a0725b9241f2758cee4d597e681bfc8b797f3f3891133831344df3d219e5b9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhhOTYwNjczODZmMDgwMDBjNmE0ZDYwZTVmZmQ0M2MzZjY5NjVlNzA5YWMxODI1NDA3ODIzMzlmNGYyZjBiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjNiMDA0MWYzYzUzZjIxYzljY2U5ZjBhYWM4YjU2N2Q4NjU2NzI0MDVmYjllOTYwNDVmZDljMmMxZWQ5MjI3ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjU0MGJjNjllM2I3NzY5YTVlN2NiM2ZjY2Q1YmFkYzU3MDI5OWQ2NWE0NWY2ZjZhOGJhOGQ1ZDA4OTdkNmRkMSJ9"
+        },
+        {
+          "resource": "repo://apps/web/tsconfig.json#L14-L27",
+          "version": "repo-lines-v1:sha256:63eafa632b61fb366f84b0df03063f5514c5e5e03e03e6ffb163a61e8a5352ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyODM2YmM3NGZkOWEyMmM2OWE4MzMzNWQ0ZWJjM2Y2MTgzMDZlNTJlMDBmZWNlY2U0NzYzMzkyNWVjMDA3NzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTFkZjVlYjMzNWZlOTBlYjMwZDEzZTk0YWZjNDEzMDUxM2QzODdmMzAxN2EzYzQ3NjNhMDcyMzg5YmNjYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkOGE4Yjc5OGJlMTgwNzAxOWE1ZDY5NTFmNGE5YmI0YTljZWZlYTlkMzU3NzIxZTZhZWQ1MDFjOWJkYzFlNmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_20a94134df434eba9064af14b501f32b",
+      "statement": "ThemeProvider.tsx carries a 'use client' directive and react/react-dom are peer dependencies, making the package React-coupled and unusable from apps/api or apps/sync-worker; ChapterIcon.tsx declares no directive of its own.",
+      "evidence": [
+        {
+          "resource": "repo://packages/ui-theme/package.json#L13-L18",
+          "version": "repo-lines-v1:sha256:0185a83bec9ad8b08da21f46ac8dffb1dc307a0c19d66fde5577df13533f39ca:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDM3YmNmZDQ3MWY5MDU4ZjFiNGZhZTc3YWIxZjI3YWNhOGY4MmU2YWY2ZGY3NDllMDViNWMyZTgzMjY4Njk0NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjNjNGE4NDBhNGYzMWQ1MzkwMWVkNDY3YzM1ODgzNTZkM2E4NTQzZTdmNTJhZTJmZmVkZmZmNjYzMjI3ODRkYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTQzNWM3ZGE5NmJmOGNjMWNlMmYyNmViMDJlYWUxNGIwN2JiOTE0MmViNjUzZWNkNTMxMjVkNDAwZjUwNGYyZSJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/ThemeProvider.tsx#L6-L10",
+          "version": "repo-lines-v1:sha256:f06ab4b1124e2a655ca0b7483c8975694d86a87486b6e5ff0c8b9e44ffedd5d6:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YzN2RiMWI4ZGIzZmJlYTM2YTVkMmE2ZmZkNWYzMzkzYTUzZWYwNTA0N2UwYjVlNmUxNGE0MzRlNDA2ZmRmYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjZjZmRkZjQ4YjYwMjg1Nzk5NzNiMWQwMTc2NjYzOWRlODE5NGUzODZjZGUwMjI3MmQzMzJjZmQ2ZWUwOTI4MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZThlOGI4NmU0NDZmOGFhM2M1NzE2N2U5NDg0YjY1MWVkOTVjZmRhYjg2YzhlZmQ4OWU5ZTBiODBjNjhmZDZiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2QwMmZjM2ZjNmJhZTA2NzgxM2YyNDM3NWU3OGFmNDgzNzBjY2ZjMjFlNDU5M2YwZjFmYjM5MjI0MmFiZGFlOSJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/ChapterIcon.tsx#L1-L6",
+          "version": "repo-lines-v1:sha256:94be6176b00e35870b5e4aea03c63c180af56cf914dc1f49d408a40eb34da9e4:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTViNDVmZTNiMjZiNzBhNDI4N2MzODY1ODYyNzMwODhiZDYwNDJjMWZjZDA0MGQ0MGY4MmRhZjBmZTk1MjEwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDY0NzljNzNjYjBmNTMyNjYyMTE5YTY3MzcyMTc3ZDU0MWUyYmMyMzliM2JjNjMwMTc2ZDJiYzlmOWQzN2RhZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2RlOTdkYWUxYmVlNDM4MmM4NGI1ZDc2MjYyMjc0M2M2NThiN2VhN2Y3MDllOGVlMmRlZmMyMDJkYTdmMGE1ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_54d655154a614269a8ca0361d006f84b",
+      "statement": "The FactionPalette contract declared in @forceorg/types is key/name plus five colour channels primary, secondary, trim, detail, glow; key is simultaneously the registry lookup key, the value persisted on the army row and the themeKey passed to ThemeProvider, name is display-only, and no code validates colour format or contrast. Source comments still call it the 4-channel Dawn of War system despite five colour fields.",
+      "evidence": [
+        {
+          "resource": "repo://packages/types/src/index.ts#L237-L247",
+          "version": "repo-lines-v1:sha256:39c1646f6a5bde2608da699a25c0c34d66f88e9b3489471e6ed5a0a35226728a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhN2Q0MjBiZTBkMzE3NTc1Y2UyYjk3OTk3MDU4ZmMzY2I1NGYwZDQ2MzI2ZjM0ZTJkOTBmZTk2MjlhMDcxNzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkMWQ1NDFhNWFmZDk1N2Y0NWRkYjBkZTYzZWIzZDA2NjRjYTNiMDVkNDQ3MjJiYTdlMGQ4Y2Q0ODJlYjlmMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlhZjc2YmVmNWI5MzJkNmVjNzVjZDA1NDZlYmNmZDQyMDk2Y2Y5MWY5YWVkY2ZkMGU5YzFiYTBhOGUzMmQzZDEifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L1-L14",
+          "version": "repo-lines-v1:sha256:b9f55bb7195f48fa7a4697fe0aebdf2f1fd34b3ec8ab77031dfbcfd4a7ebcb8f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3ZWY4YzEyMTZkYjMwZjAzNGFjZTc3ZTFhNzMyYzkyM2UxNjZjNGM3YjhlNjllZjliNDZhMTRmZTliZGQ4NTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzM2Y4OGJhMDM4MjBiZTVmYjQ2NTMzNzMxYTI5ZmRlYjRlODU2ZGY4OTAxYWQyMzY3YWI3MDJhZGRkMTAyZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_df958a1fb8f24418b80dbc55a33b3731",
+      "statement": "The palette registry is three hand-maintained arrays (13 Adeptus Astartes chapters, 14 Chaos factions including four chaos_daemons_* entries, 29 Xenos subfactions with namespace-prefixed keys such as necrons_szarekhan and tau_tau_sept) spread into ALL_FACTION_PALETTES, and it is subfaction keys, not faction ids, that select palettes; CreateArmyModal re-declares those keys by hand as subfactions[].key/defaultTheme.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CreateArmyModal.tsx#L28-L108",
+          "version": "repo-lines-v1:sha256:b3f8889a7c694d193c3913bc2743790f55ae1eb44bf9883ea8d51032d537775c:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NTc4ZTdjNDg4M2Q5YzA1YjkxOWQyM2QyMDEyMGU2ZGRhODM5OGU3NGExZDI4N2U0NDZjZGQ2ODYwMzI2NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRjZjNkODQxN2VlOWUxMTg5YzZjMzk5MDg5NWE4Y2Y3MTc0ZmQwYWE4M2JkNTQ5NmNhN2M5MDdkZTYzNTRlZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwN2I3ZWM5NGY5YTZjYTY1NmQ3MjA3MjIxMzMzZjY1MTAxNjE4MmI2M2E1ZmY3ZmQwZDRmM2YxM2FlYWM2YTIifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L10-L93",
+          "version": "repo-lines-v1:sha256:6dff3a648672197a63b7659033f8932f54b9febd24f1e8f98b165c1d8a87d63f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlNWQ3Nzg5MTU0ZWFmOTkxNGE5Y2MxNWJiNmU4ZTg2NTgwMTViOTc3NmUzMjI2Mzk5MDBmNGFmMTkzZDJmZGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBjZjIzZTM1Y2M0NWJlZDE1MTM4MmFmOTdkYmMyMDFkMDVmNzczNjg5NmJjM2EzNzQ4MDFmMGIwZjVkYjdiYzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlZDQxYjgyNTcwN2FkMmJmZTM0N2JkNjc2OWJlODc0ZjMzZTFiMDQ1YmU1ZGVmMmU2ZjQyNTNmZmM3MWU2MDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0b46c3463de54c47b6690be1f5f040d6",
+      "statement": "getFactionPalette never throws: an unknown key silently returns SPACE_MARINE_PALETTES[0] (Ultramarines), which is the stack's only defence against an unvalidated factionThemeOverride value stored in the database.",
+      "evidence": [
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L95-L100",
+          "version": "repo-lines-v1:sha256:9f1a9451ffb6c37e738c261ae6ab62cb027c3d6752da4a4771fa99829e44bad4:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFmMjJjZjA3MzI1OTJjMjQ3MTQxY2JlNjFlZmExMTAxMjYxMmY1YTMxMjJiOWFmOWJiYWY1MmY1NzI0ZDE5NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGU1YTZlZDNjMzk4OGFlMzMxMDY3NTgyN2ZjYWU3NWY2NzJkNzVlOWQxZjgyN2I4MjIzMmQyMDI2ZTczMzM0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODI2NGFiZmUwMDJmNmVkNGRiMjBiNDA3NzZjNGMwMGI4OWE5YWIyMTNlZTgwZjI2YmE2OGVjZTkyNWM5MWYzMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4ea5ae2dd42f4277bde1a0784c9e440c",
+      "statement": "paletteToCSSVars emits ten custom properties per palette: the five --c-* channels verbatim, --surface-header as a derived 135deg primary-to-secondary gradient, --surface-card reusing the secondary channel, --surface-border as the trim hex with a hard-coded '33' alpha suffix, and fixed non-palette --text-primary/--text-secondary values, so text colour is palette-independent and no light mode exists.",
+      "evidence": [
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L102-L118",
+          "version": "repo-lines-v1:sha256:e9f01be80d37cedae7dc017beee94a5c9ff855cebfa47478e81840667500dd8b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhZjIyY2YwNzMyNTkyYzI0NzE0MWNiZTYxZWZhMTEwMTI2MTJmNWEzMTIyYjlhZjliYmFmNTJmNTcyNGQxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZDg0ZDMxNThiNzU3NDJjZjk3MjZjOTQwMGM2NmIwZmJiZTQ1N2IzNWFlYjhlZjBjNjAwYzRkZjRjZmM5MTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_974e88b219774d1fbfdc461370a07db1",
+      "statement": "Pages theme through CSS custom properties rather than the palette object: globals.css styles headings, borders, focus outline and progress bars with var(--c-trim)/var(--c-glow), and CompositeUnitCard.module.css uses fallback-bearing references such as var(--c-trim, #c89d3c) and var(--surface-header, linear-gradient(...)) so the card still renders Ultramarines outside a provider.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L94-L155",
+          "version": "repo-lines-v1:sha256:1be35b26776e05d21182f96469d1ca1c80da71bbf189f38616713dbf97d48a57:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiYzA4YWMzMTFhYjVjYzgyM2U0OTc3ZWUwYWY5YjY3MzIyNDY0NzUyMmJjMTM5M2VhNTU5MTQwZTFhMWNmMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzNjE0MTM2NTc3MzlhZjY0NzViZjhlNmYzNGYxMjhlODgyZGY4NWNjMGZlODU3MmUwNDczOTM3NjhiYTNmZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3ODQzODdhMjczNjgyYzc3MmNlZGZiMjNkY2I2YTNlYzgyOGNhODI5ZTJjNTVjY2FkMDFlM2MzNWY0N2M0MTgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.module.css#L36-L62",
+          "version": "repo-lines-v1:sha256:42a2d67691b89339872e55b29644a588c32f3386f8129d360246b916f1e84550:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhiY2RkMGFmNGEyMWIxZGM3ZTU1MjJjMTMyZjc5YTdmOTQzYWJlODg1NjNlYThhMDc5ZjNjNTRmMzRlOGM0OTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0ZTA5N2E2ZTdmZjIxYTJkM2Y1MjBhYmNjMzU3NzE0YmIyNzIwNWYyOWIwNDg3ODMyZjgxZWVmNWY0ZTFmZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmZTU4ZjUxYzhkNTA5MGE0N2RhYzQwM2FiNDE2YzE0NjQ5NGM3YjM5YWEwN2M5Y2YyZjQ5OTMzNTk1NWQxMDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmNTAzOTdiYzMxMGQ2NjExZDE4MmZlOWQ1ZWQxM2U2YTRlYzBiMGE3MmIyMTYyZTg3ZDNiZmQ3NzZiZmE0OTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_59c32e7275234ea4994ad457d72e9364",
+      "statement": "The detail channel is effectively decorative: --c-detail is injected and declared in globals.css but never read via var() by any stylesheet, reaching the screen only as a literal swatch stripe inside FactionSelector.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L8-L14",
+          "version": "repo-lines-v1:sha256:da0648cff790c338a24fde96b0fc8d20347e3da8c2f5144e14854bb65aacd202:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2VlYTUwNGJmMjBiNDFjNDcyOWQzY2NlNDBjMjM4NTFkM2FlOTViNTAxN2U2YjBhMWE4Y2EzODVlYjMzNTdjOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTBlZmZmYzRhYzk4NDk1MTZmMjAyNjRjNDg3YmE1OWM5NGJkNjAyZTA1MmIzYTM5MTExNjM4ZDNlMjcxNmIyMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWY3MmJiZjRiOTBlMWVkMTViMWUxNzQ3MWJjNDE2NDNlMGEzY2Q4ZTNkNTI2NGI0ZTMwOWE3YWMwOTI0NmNhOSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/FactionSelector.tsx#L149-L160",
+          "version": "repo-lines-v1:sha256:199557fae93b352a5c7550afeb3d83954ba1bba688259ccf58c83e98cdf6e5bd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmNjNjNmRmOTM1YmNmYjU2NGNhZjE0MGQ3YWRhZGQ3OGYyMWIwNjYzMmZmNzk3OWExMTI0ZTJkY2M0MDVlNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlNWM3Njk4ODIzMzhiYzY2OWQ4NDdkZmI2Y2FjNjAyYmIwNGQwYTdkMjZmZjM5MmJmNmYxZmVkNjE2NGVlN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiZDQzYmVjYWZmNjcyYTRkMDIzMmEzYzBmMzg4NTYwNzkzZTczZTI3OWZkODYyYTIyZTk2NzkyZTM3MjI5ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFjMWM3MjI5M2I1N2ZkNzk5MjJiOTQyN2ZjMmIwOTRmY2FhMzIxMmJkOTFmZTBmY2Q2YmRmMDU3NzU4Y2E1YjEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_abe8db9147f44120a3bf8570b8df376e",
+      "statement": "ThemeProvider supports both control modes but derives themeKey as controlledThemeKey ?? internalThemeKey, so when a themeKey prop is supplied the context's setTheme becomes inert; every apps/web route uses controlled mode with its own useState('ultramarines'), making each page the authoritative theme owner.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L142-L142",
+          "version": "repo-lines-v1:sha256:979b689f628bdd5063f61d574af39a2b33a944d567e50687faf9051978e66b7a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTc5YjY4OWY2MjhiZGQ1MDYzZjYxZDU3NGFmMzlhMmIzM2E5NDRkNTY3ZTUwNjg3ZmFmOTA1MTk3OGU2NmI3YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTc5YjY4OWY2MjhiZGQ1MDYzZjYxZDU3NGFmMzlhMmIzM2E5NDRkNTY3ZTUwNjg3ZmFmOTA1MTk3OGU2NmI3YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDgxYWM3NjY5NzNhOTMyOTA2OWIyNjg0YzAyOGU1YmUxZDQxZTFjNjMxZThkNjI3MmY2YzI3MDAyYjg1N2NjOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWJmNDcwY2VjNzQxODlhNzRjNjEyNzVjZmYxOTA4YTI2N2NkN2IyNDEzYTQ1NjMxYmZmMjI3M2FkNzhkZTc3YiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L30-L30",
+          "version": "repo-lines-v1:sha256:b7c9a16960823809a8fe208f15ccdc59f8b06662b973ca2183b1e1a45242ab64:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGViYTY5ZDNmNmMwOGM1MzQ3YWQxMGQ5MGE5ZDQ4ZmEzNjRjODJhOTgwMTFhY2FjYTc1YjBiZjY0NDBhN2U0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODY1OTgzYTg5MDI4OTA2ODI1MjNkMjBlZTFmNGI3MzUyYmU4NWY1Y2Q1OTQzYjQxZDk1MmM1NjkzYzA4YWI2ZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L129-L129",
+          "version": "repo-lines-v1:sha256:b7c9a16960823809a8fe208f15ccdc59f8b06662b973ca2183b1e1a45242ab64:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTAzMmZjNGE5MTE3MWZkNjZlZWFkM2I4MzEyZjBkNGRmYzEyMDMzMDQ4OGQ5YjdlOWY2ZDdmN2Y4MGM2ODQ5OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmZmMWM2NTc3NzQ4OTVlNDExMWRmNGYwOTUxOTE2ZjE4ODMxN2MzMTNmOTk0N2NjOTIwNTMxMmM5NTVkZmMyZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L121-L121",
+          "version": "repo-lines-v1:sha256:b7c9a16960823809a8fe208f15ccdc59f8b06662b973ca2183b1e1a45242ab64:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjdjOWExNjk2MDgyMzgwOWE4ZmUyMDhmMTVjY2RjNTlmOGIwNjY2MmI5NzNjYTIxODNiMWUxYTQ1MjQyYWI2NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmY3ZWRmZjAwM2I2NWFhMTVlMGY3ZmZkYjIxZGU0N2UyYTVmMGJiMzdiMmM5MTI3NDc4NjQ4NDM4ZGIzYmM5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGIxYmI0ZDQ2N2ZiZDhhNzMwODkyOWUxYTdmMTBhZGRiYmQzM2EzZjUyMDU1MWE2YWYxNzcwNjcyOWE5M2MxYyJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/ThemeProvider.tsx#L27-L51",
+          "version": "repo-lines-v1:sha256:b3a4a796fc52c39d099e476969e7bf379cf19ff8fd404f8bf3de649c4511f5ab:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3ODFmNjk0MDZkNThhNzg5NmYzYzY0MzE0Y2M4YTY2MmJlZjRhZGE1ZGI2MDliNTk5NTMwNGM1NDUzMTRjZWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZWYwMWJjMDhkYmMzYjYzZTRlNzVlYTNkMjZhNWI5NDE4OTE4NzdlMjdhZDg5MTMyOWM4NDExZDdkOGRjNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhYWRiYTA5ZWE2MzI5ZDc2OGZkN2YyOTk1MTExN2RiNjFiMmI4ZmQ1MTAzZjRhYTg0MzZjYzhmNWU3MDljMGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0OTc1OTRiNTJiOTk1NzQ2MzZiZTRlYmU5NzAxOGE1NmY5NWRmYjM4ODZiYjc5MTg2NjQ4MDU1NmIzNDk4M2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_25afe35b07cf4befb87011551b3d1df9",
+      "statement": "useTheme() throws 'useTheme must be used within a <ThemeProvider>' when no provider is present — the package's only hard failure — yet has zero call sites in apps/web, because pages read colours through CSS and FactionSelector bypasses the context by importing ALL_FACTION_PALETTES directly.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/FactionSelector.tsx#L8-L11",
+          "version": "repo-lines-v1:sha256:e9af0a8ec9c43273a32e4a949ac992639eca612b16d7e1fb59da812aeb93c7e0:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWIzYzU5YzcwZGFjNDY5YjA4ZWUwYTE1YTFlZDljOGZlMGMxYTc2NDhkYjE4ZWU5ZWM0NDI0MDIyMTNmMzg0NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3N2Q0ZTJmMDM4MmVlOWIyOWRhZmUyOTE5MWRiZWVhM2JkM2IyOTFhNTNlYmQwYmFjMzhlYjFjMjdlYzdlMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGQ4Y2U2NTdiYzE3YzhlNzUyNDNmYzdlZWY2MzQ0MTQxZTJhMzk5YTJkZTlmMzE0OGFhYzgyMmNjMDM2NTgxNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjU3YTMzM2RiYThjOTgzMDNjODE2M2RmYmJhMWZlOTlmMDVmMjgwMDgyMTY0NjYyMmM5NWI2OWZmYzRkNThlOSJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/ThemeProvider.tsx#L19-L25",
+          "version": "repo-lines-v1:sha256:7919927c867f170736acd32455b9463ead49e47d5906fc8f3c68b4a1bfa699b4:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTNmNDIyYjY3MGMyMzAxMzhiZDk4ZTE2ZTRiNTFiZmI0NGQ4N2M4ZGQ0ZTkwNzFiNGYwNjdlZjhlMzMzOTUxMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzdhNjU5NDRkMzgzMGNhYzA0ODkxODM3MjA4ZGZiNTM3NzUxZmQwOTkzNDAyY2EwNWUxZmQzZjIzYzNkNmZiZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzYwYzMxNmNlNDg4YjFlNTUxMDBjNGM2M2VjNTI2MjFhNmFlMTVkMmJlZTM1MjkzZTMxMzg2ZTMzNTFkYTRhNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_73b065bbe16b4b46af118a637cca7e68",
+      "statement": "ThemeProvider theming works purely through CSS custom-property inheritance from an inline style on a wrapper div (style={cssVars}) that adds no class or layout constraint; everything inside resolves var(--c-*) against the palette and everything outside falls back to :root.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L8-L45",
+          "version": "repo-lines-v1:sha256:ce718c050c965865b6813c774ba0117f77d317440418f5e16c672a968f48779d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZWE1MDRiZjIwYjQxYzQ3MjlkM2NjZTQwYzIzODUxZDNhZTk1YjUwMTdlNmIwYTFhOGNhMzg1ZWIzMzU3YzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZWZmZmM0YWM5ODQ5NTE2ZjIwMjY0YzQ4N2JhNTljOTRiZDYwMmUwNTJiM2EzOTExMTYzOGQzZTI3MTZiMjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwODFhMzc3MjZiNzcwNmY1YzEwZjBjMDZjMGQwOTViN2Q0ZTEwYjcxODhmMDc4ODBmNDkzNGM2ZGI5NTlhNDgifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/ThemeProvider.tsx#L53-L62",
+          "version": "repo-lines-v1:sha256:a996a76ea706341392855efa05b6bf0b881350b917683c7edac79fc52c3647e1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MjE2ZThlOWMwYTFhNjhkMDZjMmZiYWE1ZmQyMTM5NDgyYjhlZmQwYTE5MzE1YjkxNWU2Y2NlODQ5ZDg5ZGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZWYwMWJjMDhkYmMzYjYzZTRlNzVlYTNkMjZhNWI5NDE4OTE4NzdlMjdhZDg5MTMyOWM4NDExZDdkOGRjNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM4ZDg4OWI1OThkNjljMjNlNmQxMTQ3YjdjY2M2ZTJiYmMyNzIwYTYyMWMzYTdmNmI4NGI1YzNhYWViYTI4ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e7a1f9bf6551441197fdb17fbe8928b0",
+      "statement": "The data-faction-theme attribute is emitted by ThemeProvider but selected nowhere: no stylesheet in the monorepo keys off [data-faction-theme] or any per-faction attribute selector, so it currently serves as an inspection/debug hook and as the extension point for future faction-specific layout rules.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L237-L256",
+          "version": "repo-lines-v1:sha256:aa9b8e115de2e856113b58183bbc4d685f4bb9517794e258c4caab7ef1022eee:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0N2JiM2ZkMGI0ZDE0Y2NkZmVkMTFhYmIwZTJjMzI1YzYxZjZhZGZmZWZkNmJiODgxODM0YzhkMDBiNGNkNTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM4YWRiZGUxZjJjZjRiZGYyZTgwZWQ0MTgwYzJiYzA3YmZiNTE3YzhhMGQ4M2E0ZDg1ZTA4YWI1ZmQ2ZmVmMmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU3MzgwZmRjOTEyZjQ1YzViZDE4NjIxY2YzZTAwNDFlYmI2MWNlOWVjNDA4YzE2NjRkNmMzZDdlOGRlMTllNDAifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/ThemeProvider.tsx#L53-L60",
+          "version": "repo-lines-v1:sha256:553826966643ba257dd83bac6a5249e0a3d1ce243bf618a326953101f5f6fd79:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTcyMTZlOGU5YzBhMWE2OGQwNmMyZmJhYTVmZDIxMzk0ODJiOGVmZDBhMTkzMTViOTE1ZTZjY2U4NDlkODlkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODJmM2NmZDExZGE2MTUwMTk3YWNlZWQwODQwNmFjNjRiMDUwMzQwZGU3YmMwNDEyNGE0Y2I3ZWZhNjcxMzQwYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzhkODg5YjU5OGQ2OWMyM2U2ZDExNDdiN2NjYzZlMmJiYzI3MjBhNjIxYzNhN2Y2Yjg0YjVjM2FhZWJhMjhkZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWUyMDI5NjI4ZWViMWI5N2UzN2Y2OGI4ZDFhZWIzZjcwNDA0OThmMTRkMzQxZjAwZTk5Y2UwZGQ5OWJhNzI4ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6f6fd1037b744f27a03a8865d4534329",
+      "statement": "globals.css :root hard-codes the same Ultramarines values ThemeProvider would inject and is imported by the root layout, so markup rendered outside any provider is visually identical to an Ultramarines-themed subtree and pages render correctly before a roster fetch resolves.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L8-L20",
+          "version": "repo-lines-v1:sha256:54b35e19ad239e30e63558560f0f200a887da8e39873d00c9d73738c2e69b7f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZWE1MDRiZjIwYjQxYzQ3MjlkM2NjZTQwYzIzODUxZDNhZTk1YjUwMTdlNmIwYTFhOGNhMzg1ZWIzMzU3YzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4MDdiYjhjYmYzNDU1YmFkZjE0NjhkMDUwOTE4NWViMzZhMjZmMThhODA1OTUzMzFmYzJmMDMzZWE0YTlkMzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZWZmZmM0YWM5ODQ5NTE2ZjIwMjY0YzQ4N2JhNTljOTRiZDYwMmUwNTJiM2EzOTExMTYzOGQzZTI3MTZiMjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1NGQ3NDQxZGM4OTE3MzVjY2U4ZDZhZGJmYzI4NGYzNGY0ZjFmZGExOWI2NmIyY2JjZDJlNzg1OThhY2M1NjYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/layout.tsx#L1-L4",
+          "version": "repo-lines-v1:sha256:ba43a67029dbc8b47eb0fc7945afa14967563be030b3f203e9c395c82b8e9a10:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzE0ZDRmMDZmODkxOWJkMTg5NTY0YTRiMDdhOGZkNmU0YzVkYTczMmJjNzRhNmQ5ODAyMTZmYTYwMTg3Mzc5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQyNTRlMDE5ZDM2OWYwNjIxYjg5YWI0NTc3MzFhMDAyZGJhMDFiMmY5ZjBjZGNmNzg1OGM1YjE5YjY5OTU3NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjNiYmFhOWIxZDg2ZWFmMjhhYjk2Mjk5ZGMxMmJjZWRhYTVmYWRhNTFmMmU2NmZhNjE1NzI5NTVjNjRmY2RiYiJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L10-L12",
+          "version": "repo-lines-v1:sha256:14915e4ff6307aaad26ca6614c41add70cf153392e6d5342022c713aefad56b4:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGU1ZDc3ODkxNTRlYWY5OTE0YTljYzE1YmI2ZThlODY1ODAxNWI5Nzc2ZTMyMjYzOTkwMGY0YWYxOTNkMmZkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Y1OTUyZTdlOTFmODNhNDE0ODE3MTcxZDkxODgwMDg3OTIyNzVhYjczMDFhZDc0MzYzODdiOGM2NmViOGI4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGNmMjNlMzVjYzQ1YmVkMTUxMzgyYWY5N2RiYzIwMWQwNWY3NzM2ODk2YmMzYTM3NDgwMWYwYjBmNWRiN2JjMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTNkOGRmOGQ0OWFlNzJiYjBkMTY0M2M2YjNjMmNiMmRkODM5MzBkZjAwYWJmMTE0NzA4YTcxNjVkOWU1NWFkNiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_dc7d97ec15e94cc1ad6d1e5f9c21a20a",
+      "statement": "CHAPTER_PATHS declares exactly the 13 Adeptus Astartes chapters that also have palettes, typed by @forceorg/types' ChapterPathDefinition {name, viewBox, paths[{d, fill?, opacity?}]}; all badges share viewBox '0 0 100 100', multi-subpath badges use separate paths[] entries, and no registry entry currently sets per-path fill or opacity so every path inherits the component colour.",
+      "evidence": [
+        {
+          "resource": "repo://packages/types/src/index.ts#L249-L253",
+          "version": "repo-lines-v1:sha256:a0e9ff53715870d75e5ef62c6c23036107d058e6c308c9e23fa9ccba3aa33952:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTlkNzEwMTIzNDViOGQxN2M1NmNjYTcyNzYzNmM1MGU2ODQyYjNlZDE4NmZmMjZmYTE1Yzg5MTU5ZGI5OGZhNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmRkNGM1OWQyZWJmOGU0NTk4MDk5NDUzNzZkMDNlOGI4MTk0MjI1OTk4MmZlYTM1ODVjNjMwMGJmMTRjMzRmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDY1NjMwNzI2YjA4NmQ1YTVlNjY3ODI3NTU3NDU0MTAyMGMzMWI2MmMyNTc1ZTlhYjMzYzk1YWM5N2MyYWRhOCJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/paths.ts#L1-L92",
+          "version": "repo-lines-v1:sha256:6ca267fae52d950fa7d7805e716d3a03c9c09d8006f0e442abcb16d07d2ff6e5:eyJzZWxlY3RlZExpbmVDb3VudCI6OTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5bbafedfeb714528b5e3b0548a58d75b",
+      "statement": "ChapterIcon resolves its key as (chapterKey || chapter) with no normalisation and returns null for an unknown key with no placeholder or warning; since the registry covers only 13 chapters, most Chaos and Xenos theme keys render no badge, which FactionSelector guards with `palette.key in CHAPTER_PATHS` but page headers passing chapterKey={activeTheme} do not.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L330-L330",
+          "version": "repo-lines-v1:sha256:c9778815be70c71ba607627a3f3cb52f772c56fda50005daf9f72982edda1622:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzk3Nzg4MTViZTcwYzcxYmE2MDc2MjdhM2YzY2I1MmY3NzJjNTZmZGE1MDAwNWRhZjlmNzI5ODJlZGRhMTYyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzk3Nzg4MTViZTcwYzcxYmE2MDc2MjdhM2YzY2I1MmY3NzJjNTZmZGE1MDAwNWRhZjlmNzI5ODJlZGRhMTYyMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTViM2JiM2NjNTc1MGJiNWQxODZiNTQ0YTUzNjM5YzczYTRjNjRmMjIxMTUyZDE5NjJiMjhjZjkyNzIwMTg3OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTZlM2QwNWYyMzEzMGU1ODc3MTlkNDY3ZTBhMDEzMWEzYjRmMDg1NDVhNzZiZDQzNTYyNGU4ZmE0ZGQxYTNkMCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/FactionSelector.tsx#L122-L164",
+          "version": "repo-lines-v1:sha256:477c4f6f9c1f6fe6ed22bce6fc472d2acc71d5f42a7bfa9cad3a11e06efd5843:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0NTNiODg2NzBlMzU5MTI5ZTNkOTE3YmIxZTc4YTNhY2U4OTk5M2QzNTY0MjM4OGI3MDBiYzFjMGY1NzY0YTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5YzFhNjg0ZGQ1NzM3ZGRhOTc5ZmY3ZmVkMzQ4ZWM5Mzg3NTMxZTc3ZjBlMDU5YmNhNGVjZjE4NmJhNjEwMWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliYTBmMzM5NmE1NzE4ZTc4NjQzMTY1NWMyZjhlYWVkOGMwMjBhNDExMjEzODQ0ZTBiNjMzNjdhNGU3NDkwN2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4NjIwMmJjMTFjNTg5MzEyMDE2YzA1YWJhMjU4Yzc0N2IyOTk1NTBjYjcyYjI1OWVlZmY0NTU5N2U5YjVkYzYifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/ChapterIcon.tsx#L29-L31",
+          "version": "repo-lines-v1:sha256:73ef48cec03b1fc9519b8a4afff9a71cf141ed128ab240a3974741e1fbb3c3ff:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTg4ODI5OWU0NzY0OTI2MjRkODgwODI1MDRjYTVhZTNhODJkY2Y0Y2RhNWUzZjI2NDBiYzMwNTQ2ZmMwMjgzMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YzMDcxMGIxNzMyMWQ0OTM5YTY5NDQzZTQ0OGMwYWNmY2M0YjI2NzI0YTk2YzUzNTgyMWE1NTVmYWRjNmFiMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjg0ZGNkOTYzNjM5ZmFiODEzNTRlYjI4YjU5MzA3MmE0YmE2MjU1NWUwNmYzYzZkYWQ4Y2U5MjE2MmYzOGQ0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWYwYjkyNGFhYzUxM2M4NTJhNjhmYjExM2YyNDMxNWRjN2EyNmIyZmQ2NzgxMWYzODA3OWYwZDQ0NDZmMjAxNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d3db7c9f78f747b4a4567736b466e2f4",
+      "statement": "ChapterKey provides no compile-time safety: it is keyof typeof CHAPTER_PATHS, and because CHAPTER_PATHS is annotated Record<string, ChapterPathDefinition> the alias collapses to string, so nonexistent keys compile everywhere and fail only as a silent null render.",
+      "evidence": [
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/ChapterIcon.tsx#L8-L8",
+          "version": "repo-lines-v1:sha256:ed5b8e3bda6004627be8bf957b5edfc83684defe8e25a2e411c56cfa4d74869a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQ1YjhlM2JkYTYwMDQ2MjdiZThiZjk1N2I1ZWRmYzgzNjg0ZGVmZThlMjVhMmU0MTFjNTZjZmE0ZDc0ODY5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQ1YjhlM2JkYTYwMDQ2MjdiZThiZjk1N2I1ZWRmYzgzNjg0ZGVmZThlMjVhMmU0MTFjNTZjZmE0ZDc0ODY5YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWY0ZWU4OGYxNzkwY2VlZWM4ZWM1NWFiNTdiZTY0OGI0YWZkNzc5OGNiNThmZWE3ZWUwZjI1NTc1MDQzYTJlOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTYzOGQ1YjU3NTlmMjM1MTc5N2Q1NjFiMjk2MDc1YjUzZTFkYTRlMmFjZWI0OWRhYWUwZTM0M2U3YjBiM2YwOCJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/paths.ts#L8-L8",
+          "version": "repo-lines-v1:sha256:e70673ebc2466ff5ef08414a2f0863beb24e65d4b2686812adfa5cededffdcb3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTcwNjczZWJjMjQ2NmZmNWVmMDg0MTRhMmYwODYzYmViMjRlNjVkNGIyNjg2ODEyYWRmYTVjZWRlZGZmZGNiMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTcwNjczZWJjMjQ2NmZmNWVmMDg0MTRhMmYwODYzYmViMjRlNjVkNGIyNjg2ODEyYWRmYTVjZWRlZGZmZGNiMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWQxMjY2ZDhlMGVmNzY1YjEzYjUzY2EwYmVjZDMxOWIwYjJjYjBiYjY0MjRhYWFkNGVhYmUxMTE2NGUzMzg0ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTI3MzlkNzgxZDg2OWQyODliMmE1NWNjNmVmNDhkZTVkYjhiMjY4YmJhZDVkMWI4MjQ3NGI4YTk3YzlmM2E0NyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5d124f2c15354274ad765f75d1975968",
+      "statement": "ChapterIcon renders an accessible svg with role=\"img\" and aria-label '{name} Chapter Insignia', class 'chapter-icon chapter-icon--{chapter}', width/height from size (default 24) and fill from color (default currentColor).",
+      "evidence": [
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/ChapterIcon.tsx#L19-L74",
+          "version": "repo-lines-v1:sha256:359719ad6695b95980f8f1a81b45e94e971af19c7943b73ae9e5a142a41078b7:eyJzZWxlY3RlZExpbmVDb3VudCI6NTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFkNzFiYzA5ZjQxNTRmMGVhNWNmNTk0NDI5NWVhOGU2YmZlZjRjYTIzYzgwYmI2YTU3MTM2OGI4NjBiZDRlNGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZWYwMWJjMDhkYmMzYjYzZTRlNzVlYTNkMjZhNWI5NDE4OTE4NzdlMjdhZDg5MTMyOWM4NDExZDdkOGRjNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlkOTUzMTJkZDE4MmM4MjBkMjA1OGJmZDM3M2EzYWFkNTk2Y2VmNjMwZmNlMzUzYjE4NmM5YzVlNjI4ZDc2NzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_eb95f735dc1d4802b3d03e58dfd8fcfb",
+      "statement": "isWatermark switches ChapterIcon to parent-relative decoration: width/height are omitted and the icon is absolutely positioned at right -5% / bottom -10%, sized 70% x 70%, z-index 0, pointer-events none, with opacity var(--badge-watermark-opacity, 0.06); CompositeUnitCard relies on this plus its own position:relative and .cardContent z-index:1 to bleed the badge behind each unit card.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L43-L45",
+          "version": "repo-lines-v1:sha256:ccc888bea15edb45aaea345af5449636d256025267d34b58a9323f8f937eff82:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzYwZmRiYWFmN2QyZWYyNTBiNDMwYjI2NmQyNmU5NWFmYmI5ODkyZjJjZDliNDQyZmFkNGIyM2FhMzU2ODZmZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNkYjIzMDc3YWVmMmZlMzc1OTAwZTdiYTRlNzI1ZTM3OTRlZGNkNWY3MjA4NWYzYjYxMGM4OWZiY2JkYTg3NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjA4MWEzNzcyNmI3NzA2ZjVjMTBmMGMwNmMwZDA5NWI3ZDRlMTBiNzE4OGYwNzg4MGY0OTM0YzZkYjk1OWE0OCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/CompositeUnitCard.tsx#L142-L151",
+          "version": "repo-lines-v1:sha256:3cd046dd04872735e06459f10fe2f0281d8f3dccff91a44617e55d9d93c56f53:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MjE2ZThlOWMwYTFhNjhkMDZjMmZiYWE1ZmQyMTM5NDgyYjhlZmQwYTE5MzE1YjkxNWU2Y2NlODQ5ZDg5ZGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYTU5M2ViODNjNzlmZTljNmQyNjhkMWMxYjg3ODdhMDkyODEwODYyYjIxZmU4YTFkMTYyZjRmMWQxZjMxMWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2NGEwNDAzNjI1NzhlN2NhYjVhMzFiZmZmYWIwOTA1OTYyMzZkZmY3MzkwOTllNjMyOGE2MzgxYTZiMWQ1ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkNzY3OGRhZDU1YmE1YzVlN2NiNGRhMzhiOWY5ZmU0MDRiNDk0MjdjZjMzNmI4MzI2ZjYxZTYxOWQ5MjBmNDcifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/chapters/ChapterIcon.tsx#L33-L58",
+          "version": "repo-lines-v1:sha256:48a4a672bcd0eb20202b7d1652b1629579f50eb22857393eb1fa100ed93428a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZlMTcwNDRmMzgyMjUxN2FlZDQ1MTMzN2Y5OWEwNzk0MGQ5ZTg4OGUwM2VjOWI5ZDE2ZmY5MTA5N2NlNmZiNzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjMGM2ZTBmZGU4ZTczYjA1YzM3ZDAxNzA2YWVkYTg0NmZhMzM2ZTg2MTU1ZTdkMDRkYTAyNWEyYjJjY2Q3YTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZiMDkzYmJiODRhN2U4Zjc5NjI0MmI4OWRlZmI0OWNiNzMyZjEzNzYwNTJkYzg0MDQ3ODBkZDdkNzdjN2M1MTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxZTdjMDhlZDE5ZGVjNGQ0OGVlNzI4ZjQ3MzQxNjNkNmE4NmI5ZjM3MzY4YzE4OWU0Y2ZhNTE4NmIyNTk4N2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8cad32cc214648009cfd6ab58210b78f",
+      "statement": "The theme selection for a force is UserArmy.factionThemeOverride, a nullable VarChar(50) free-text palette key with no theme table, no foreign key and no validation against ALL_FACTION_PALETTES; POST/PUT /api/rosters forward req.body.factionThemeOverride straight to Prisma.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/rosters.ts#L56-L123",
+          "version": "repo-lines-v1:sha256:a0793cfd4e291c79aabf723a88b461c8497dc580f459b47126ed4d7fb132f794:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwNjQxNGYwZjkxMWM1NzM5NTcxNDc2Y2M2Nzc4ODVlMmZhZDc5YzJlYWRjNzQzOTJkNGEzNWUxYTZiNGEzMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyN2Y3MzliZTIyODBkYWVmZjExZDVjZDZlMjMxYjk4MGQxOTYyYjU3ODgxYmEzNGU3NjljMDU3OWQ2NTc2MjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZlZWMyMjUxM2IwNjRiNzRlNTg0ZWUyMzU1YWIwZWMwYzQzYmI4NmM1OTFkMmFiMmRiNzg2NDcxZWFmMzIzYTcifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L252-L273",
+          "version": "repo-lines-v1:sha256:6490631bb639c117807024f8673704b12fc5e5064e51f7b9ea05978cf2292f49:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0OTU0Yzc4Y2FhNGI3NDQwY2I3YzlmOTE3ZTJiMWIyNzZjNWMxYzMzYjBjZWU5NjJhMWQ5YmNjY2M3MWU1MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkOGYyZDRhOGM2YWViN2Y0ZWRmYjY2YTA5N2I0ZDEwOGU0ZDc3M2M3MDVmMTFjOWQ1YTM3MGY5ZTFjYjIxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEifQ"
+        },
+        {
+          "resource": "repo://packages/types/src/index.ts#L189-L203",
+          "version": "repo-lines-v1:sha256:55263650c4d0d5783bde7404e55876cd7828173f9329b49a2257141a4958205c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3NGI1NTdiZjc2NjU2MmM2ODBjODc4YzAxZDUzNTY4MDg4OWM4ZDk5YmRmNDU2NDg1NzEyMTQ0NjUzMWY4YWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRjYzMyZjIyYWIzNDk5OGIxNmMxNDE4MDhmMmFlZTJiMTcyZTgxMWE4M2UwMTM2MDc4NjM1NTQ0ZjM3NTQ5YTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlkMDViZTA3NjYyYTUyZTQ2ZGUwOWZiMGJmN2RjY2M1MjRlNjliNzM2YjRlMDM3OWQyYWQ4ZDliMjA4YmVhYjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e2b67ac2e8924050bd15215654856ea9",
+      "statement": "On load each army route fetches its roster and seeds local theme state from factionThemeOverride when present (console and edit routes both setActiveTheme from the fetched roster, falling back to a synthetic Ultramarines army when the fetch rejects), then passes that state as the controlled themeKey.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L39-L75",
+          "version": "repo-lines-v1:sha256:23c865c497566c2ca11f1d59a32e0ec8e3eacc1d46912e8f1f0f84613eb22367:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NjZmYmZhODg5OThkYTc0NjU2YzUwMTk0OTU2YzI1ZjA4NDk0NTc2NjBjMDA5ZmU2M2QxZTlmYTlkYzkzMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQyZGYwNGVlYmE2MTNiMWU3MDcyMTFiMzE2YzgzMzU2NGQ1YTE3MTBlMzgzMGUwZDcwNWRiNzQ5MDMwNTlhNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmN2I5MTMyYmJkYzU0ZDMxZTc2OTVjOTZjNDIwOGZiNjY2YTI0ODI3ZmZhY2FlYTRkZTVmYTQyZjZkNTczMGIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L146-L183",
+          "version": "repo-lines-v1:sha256:55efd14ff6e2b00368ae11ccc4dcaffe11b59b3d2a3cbe39c3186c642196bc0b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1NTI4MWUyMGJjMjJiMmM1MmU1MDUzOWE1ODBiMTQyYjE2YzY5OTMyZTE4M2RkYzhiNmQ5MjdkNDgyZDRjMmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2ODg2ZWZlNDhlODliMjY5OTIyZDUzNjVhN2I5YjE1YjExZWRkNmQ4MTFhYjA0M2VkZDdiYjExMTZjZjE4OGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NTVjNGNjZmI0ODQ3MTJjOTgyMGJiNDVhODdmMGEyZDBjNjdiNjhjMDQ1YThkNmMzZmJiZDI2N2UxZDYxZGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ee4f9d5d22a64fa9be09555fcdf5b103",
+      "statement": "Only /army/[id]/edit persists a palette switch: handleThemeChange sets state and immediately calls performSave, writing factionThemeOverride: activeTheme outside the 1200 ms roster debounce. The console, catalog, changelog and dashboard routes hand setActiveTheme to FactionSelector and persist nothing, making those switches per-session preferences.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L86-L133",
+          "version": "repo-lines-v1:sha256:c74b957ca508b6e61bf1d3b6d3a47e97ae2a08c4e35f22f8d8c66be482232400:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZmJkZDBhZjM5ODRhMjQ4NGU2MmZiYWQ0ZmMzMzljNDQ2ZWJmNWRjNTVhM2VhZGNjOGQ3NDEyNjdiYTAxYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyNWE3NjMyNjUyYTIyZTM1Y2M4ZDM2ZmJhZjM1MTU2NjMxZGM2Y2Y3Njg2NGNlNDM2ZThhMTIzMmE3M2IwMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkZGFjMGYxZWJkMzZkYTRiYTljNjAzOTkxYzdjNTgxMjE1N2Q1OGRmNzQ3MmNlNWMwZTE5MjdlMGZlYWM0NDEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L392-L396",
+          "version": "repo-lines-v1:sha256:f4a697458405a22d7b64b53d1f930388b194366f39357da3821d85eb772f3186:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmJmYWU4NzQzODdmZjE1NzllYmVlYjI4ODFlZmQ5YzY5OTZhYTNhMzQ1OTIwYWZlY2M4N2M3YzU2NTgzNDExYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1OTJlMDdiNGNmNTNhODM4NmM1NjgwY2ZiN2YzZTRlNzU0Mjk2OWM4NzI2YWM1ZWQzMjc1M2Y4Y2E5NTk3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjZkNmNjZjQ1Y2RhNmMzYzlmMjRjMjNhOGZhN2U3Zjg3ODQ5NDhhYzY5MWM4NTg4NjM2MDhkMWI1YzE1NTNkNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzBkZGI5NjVlOGE3ZDhiNzZhNTBkZmE2MzIzOWI0MWU4ZDRlOWIyYzFkZDg1YWZiZDk4Y2Q2NzI2NGJiZGRjYiJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L238-L238",
+          "version": "repo-lines-v1:sha256:d4034f55774448fd454820e7661a20b9c10c21bcbb5935548a266a4ee3813a84:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQwMzRmNTU3NzQ0NDhmZDQ1NDgyMGU3NjYxYTIwYjljMTBjMjFiY2JiNTkzNTU0OGEyNjZhNGVlMzgxM2E4NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQwMzRmNTU3NzQ0NDhmZDQ1NDgyMGU3NjYxYTIwYjljMTBjMjFiY2JiNTkzNTU0OGEyNjZhNGVlMzgxM2E4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjg5MjM0MzEwZDQ3MDkwNzIwNDEwNGUzMjg3OTE0OTc1ZDIzNzk4NWRiZjY3NDJjZGFlOTFkNWNkNDc3MDc4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2UxOWNlNjBiY2JhMTIzZTYyMzkyNzNjMTliMjBlYzhkMTNhODY5NjExZWE0MTcxMTU5ODljMWQ3Njc3Y2YzYyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L245-L245",
+          "version": "repo-lines-v1:sha256:d4034f55774448fd454820e7661a20b9c10c21bcbb5935548a266a4ee3813a84:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQwMzRmNTU3NzQ0NDhmZDQ1NDgyMGU3NjYxYTIwYjljMTBjMjFiY2JiNTkzNTU0OGEyNjZhNGVlMzgxM2E4NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQwMzRmNTU3NzQ0NDhmZDQ1NDgyMGU3NjYxYTIwYjljMTBjMjFiY2JiNTkzNTU0OGEyNjZhNGVlMzgxM2E4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjg5MjM0MzEwZDQ3MDkwNzIwNDEwNGUzMjg3OTE0OTc1ZDIzNzk4NWRiZjY3NDJjZGFlOTFkNWNkNDc3MDc4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2UxOWNlNjBiY2JhMTIzZTYyMzkyNzNjMTliMjBlYzhkMTNhODY5NjExZWE0MTcxMTU5ODljMWQ3Njc3Y2YzYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f542aeb9b975411db3b1863e5fe8ad0a",
+      "statement": "The offline/guest roster layer keeps theme optional: createRoster stores factionThemeOverride ?? null and updateRoster only overwrites it when the field is supplied, so locally mirrored armies can legitimately have no theme key at all.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L286-L358",
+          "version": "repo-lines-v1:sha256:d6c4f34b7c4cb1f3c8b023eaeee56b161f196d70e29e595322e9c51e8ea910a5:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2N2IwNTczNTBmODM2NGU5ODY3MmM0OTRhZDAxYzZmYjY4NjVlOGZlOGU2Zjc0MjUzYWFiMTI2ZTBmNTVlMzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTQ0MWNmNGU1MjEzMjcxYzhhOGIwNTQ1YWEwMGY1Y2I5NjYzMDI0NmZkOTRhZTM1NGVmYTc1ZjcxMmJjNWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5YjA2NWEzNjg2OGY3MjllMDZlNDg1NTgxZGVjYTY2ZWM2ZmQyOWRlOGJhZjlmNWY0MDRiZGE5OTI0ODk1MzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBkNWUzMzQ4YjRhMzExYmUxMzRhYzRkNzFkMjcyYjU2ODI5MWU4MzFjMDczYzRhZmQzN2Y4YWI2ZTFhN2ZjMmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_44fb5fcf876e4edda043d0a7d315a189",
+      "statement": "The armies dashboard resolves theme per card as army.factionThemeOverride || activeTheme, so armies with no stored theme inherit the page's currently selected palette for their badge.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L271-L292",
+          "version": "repo-lines-v1:sha256:fa38c391b30a62deed7c0b6ec99e0868e97d2607a3afd6b8312f103d1a6afd40:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4YWVjNTA4ZDllZjQxMDQ1OTQ1YWYzMTBhZjBiYzM4ZTRmNTFhMDFjN2JmZmE0OGM3Nzg2ODk1YTQ2MDI2OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZmIyOTg2ZDIzMDQ1NDQyOGNhYjhjYmY1Y2E5Y2IxMDhlMDg1ZmYyMmY0MzAyMGZmZjcxZTNiNDNmZjkwNjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlMzY3NTJkOGNjMmFkZGQ5NmYwNjYyYjYyNjdkZWFkZGEwMDRmNGM0Y2ZlNGZiZDQyOGIxMDgyZTcyODc1ZDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4ZDZkNmE1MDViNDk5MWU4MzNmZTQ4YTdiZDY0NDk0Y2NmMTczYjJjNzk2MzhmMjMzNDI3NGQ2NTlhOGE1YTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_673476070e064c6da001fd7761153da0",
+      "statement": "packages/ui-theme/src/styles/tokens.css and src/styles/composite-unit-card.css are complete, coherent stylesheets that are neither exported from index.ts nor imported anywhere in the monorepo; the effective token source is apps/web/src/app/globals.css and the effective card styling is CompositeUnitCard.module.css, which separately restate the same tokens, so editing tokens.css changes no screen.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/globals.css#L8-L45",
+          "version": "repo-lines-v1:sha256:ce718c050c965865b6813c774ba0117f77d317440418f5e16c672a968f48779d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZWE1MDRiZjIwYjQxYzQ3MjlkM2NjZTQwYzIzODUxZDNhZTk1YjUwMTdlNmIwYTFhOGNhMzg1ZWIzMzU3YzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZWZmZmM0YWM5ODQ5NTE2ZjIwMjY0YzQ4N2JhNTljOTRiZDYwMmUwNTJiM2EzOTExMTYzOGQzZTI3MTZiMjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwODFhMzc3MjZiNzcwNmY1YzEwZjBjMDZjMGQwOTViN2Q0ZTEwYjcxODhmMDc4ODBmNDkzNGM2ZGI5NTlhNDgifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/index.ts#L1-L14",
+          "version": "repo-lines-v1:sha256:527f6f9be11f32f28b2acfeca4a1621486f054daae5c11a6598ab51ee1a399dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImViNDllYWI2YjMyN2RhNjA3ZWQwYzEyY2Q5NTRiYmUyYmExYjhiNTc5YTI5OTE2MTI4NDIyYWY4MTViMDA4N2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlZjcyNjRjNjY2YzAzYWZjMGRmYTdjMmIwNjQ5MDE4NzE3MTdjMmJiZDlkNDMwOTE5MWEyNWMyM2RjYTE4MGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/styles/composite-unit-card.css#L1-L36",
+          "version": "repo-lines-v1:sha256:3c0232820b02b6a90f073f71a0ad2e9177bd755fe3219741c6c1d2edae937ae5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5YzYxN2U0MzJmYTI2MzE5YjExOTdkZjdlNGZlMmM0NGU2YmU1YzUyZWI2ZjRjMDFjZDEyYjc5YzZhMWI3MTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3ODE2M2ZiNzJiNmE3ZjBkOTM3OGMyY2I2NGE2N2NjZWFhMmZjOWY4ZDI4MWVjZDc1N2MyNGZlZTE0NGVhYWEifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/styles/tokens.css#L1-L74",
+          "version": "repo-lines-v1:sha256:44a92712a8e29b626baed17091b9d48dce8dc245e61964cd033a9c306dbe0b97:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5YzYxN2U0MzJmYTI2MzE5YjExOTdkZjdlNGZlMmM0NGU2YmU1YzUyZWI2ZjRjMDFjZDEyYjc5YzZhMWI3MTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJmYzMyMDQ1NjE5MjNlYjE1MGNkMjQ3MzQxZTliOWJlMTU0OTQ2YzU2N2Q3ZDM1YWVkNTg0ZjM0ZDA2MGQ5NDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1ba025de0cf2473e9bf134d4c158dc8e",
+      "statement": "Adding or retuning a faction requires only editing palettes/factions.ts (plus chapters/paths.ts for a badge) because FactionSelector, its swatch preview and every themed page enumerate ALL_FACTION_PALETTES; the exception is CreateArmyModal's hard-coded FACTIONS list, whose subfactions/defaultTheme strings must match palette keys manually or the palette is unselectable at creation time.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/CreateArmyModal.tsx#L119-L142",
+          "version": "repo-lines-v1:sha256:8ff8f2c63fde20e22e0e26cc786461c15612358f5c5ba433c7391f93db9738e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3NmMzMGM0MzQ2NjQ2ZDk4Yjg4MGUxZTIxMzM4M2NhNDk5OWMwNmEwMWJjZmU0YWRhZmFhZmVkYTIzZmRlYjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU0NDI5NTQ1MGQwMWI0MTBiNzZmYzA2YTAwYmVjYTJhMGYyZmQ5NDljMDkyM2NmZDE3NWUxMWVkYTg3NjEwNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3OTgwYjVmYmVmMDRkYzQ2ZGM5YjJlYmMxOTMyNDFkZTViYjQ4YjZhNmQ5ZTc0MTJmNDU1Njg3ZGJjNDQyZTMifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/FactionSelector.tsx#L40-L42",
+          "version": "repo-lines-v1:sha256:d0af4cabedb6349dc8505ea2dab7d9c380e155230dc7a8079f143e3f71669408:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzdhMjhjNTg3NGJlZGI4M2YzYmY3M2NkNzQ1YWU4MjlhYjU2OGFhM2Y5ZTMyMGZmNzY0ZjQwMjEwYjEzMTAyNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTVlZjAxYmMwOGRiYzNiNjNlNGU3NWVhM2QyNmE1Yjk0MTg5MTg3N2UyN2FkODkxMzI5Yzg0MTFkN2Q4ZGM0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjYyYmVlMjc2MGExNTFlNTQ1ZDVhOTRkYjljNTc3ZjdkNDg5N2JjYzFlMTU3MzFlZTZhMWQ4MDg3NzUzZDRlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzk0NTI1OTdlNTlhNDEzZjEyZWY3NzhjMTUzZDg0YzQxMjNiZDFjYzAxNDdlMTQ5OWJmNTBhNjBkNDYwMTEwYSJ9"
+        },
+        {
+          "resource": "repo://packages/ui-theme/src/palettes/factions.ts#L87-L100",
+          "version": "repo-lines-v1:sha256:3739ee46b468f445d9b6e0d9ea1e875aad7f63584554e87727e8df6184861324:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0NGU0ZjRiMTdiNjliZTE5MDdiZDg3YmNlNGEzYjA1YzdjMDc2NmRlMjM2ZDlkNDJiOWZmNGZjMTM2YTc2Y2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmE2OGY5ZTM1YThmNmM3NjNkZmExMDVjNTFjMzg3ZjNjZjgzMGEzMjYxODQ0MjM5MjRiZWFhYTIyOGE3Y2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyNjRhYmZlMDAyZjZlZDRkYjIwYjQwNzc2YzRjMDBiODlhOWFiMjEzZWU4MGYyNmJhNjhlY2U5MjVjOTFmMzMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

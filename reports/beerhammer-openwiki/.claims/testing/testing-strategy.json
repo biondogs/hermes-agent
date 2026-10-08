@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ccfbe9aa5e96ee4ff24a05e612c080034a322e44069f8f5ddcde48031037c407",
+  "claims": [
+    {
+      "id": "claim_d0c6f0e8bd794c2199bdbd9c1faa092d",
+      "statement": "Automated behavioural test coverage exists in exactly two places: Vitest unit suites in packages/rules-engine-11e and a single Playwright spec file in apps/web/e2e. apps/api, packages/db-client, packages/types, packages/ui-theme, and apps/sync-worker define no test scripts at all, so changes there are gated only by tsc/build.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/package.json#L5-L11",
+          "version": "repo-lines-v1:sha256:b27eaf1d4338899b3334d27dfb3e4a88f2cfd9387b910693779a19dfb501ae92:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzBkMTk2MWRhYmQ0NjIyNWFlN2IyNTE1NzE4M2NjYmIwNjZhMmQxZTdlMTI3MzkwYjUwYzg0OTBkNDY3ZmRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTEyMGZhMWZlOTIyODZjMTYxZTE3MzRjMjU3ZTgxZTE1YTk5MmFiMGM0ZDY4YmU0ZDc3MDBkN2ZjMmM3Mzg1MSJ9"
+        },
+        {
+          "resource": "repo://apps/sync-worker/package.json#L5-L12",
+          "version": "repo-lines-v1:sha256:57af5dcee3ad2e983e764a7f0ee32902010349670f5bdc28bcb6f8b16a30e299:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTg0OGY0ZjJkY2Y3ZDI1NzM3MjM2MTY1MWUyYzk5MTY1OGRhYjQ1OGFhY2I1ZDM1MmVkN2IxNTc0ZmJlMzdiYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmVhYzI0NzAzODc3MWY1MTY4NWRjOTYxYjY0OTU5NWJmZTJjZmNjNTMwZTZlZjM2MjU4MWMzZjI3MjdiZTEyMSJ9"
+        },
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L1-L8",
+          "version": "repo-lines-v1:sha256:81835eaf3b631b0f067ffcb627ee8c245262f5a26a61324e53319b41ef0969a2:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTViNDVmZTNiMjZiNzBhNDI4N2MzODY1ODYyNzMwODhiZDYwNDJjMWZjZDA0MGQ0MGY4MmRhZjBmZTk1MjEwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2Y5ZGIyMmVmODU1YWVkNGIzOTRlYTU0MzJjN2EwMDhiZTExNzYwMTcyNjVhNzlmYjc5Yzg0ZDQyOTM1ZGNkNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTJhNGZkNWJlMDEyYjcyOTlmZmExZjA4YmNkNmE5Njc1YWJhZGZjZmNmOTU4YmFiOTEwMTkyZGI3OTJmMTJjOSJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L7-L15",
+          "version": "repo-lines-v1:sha256:4438019ec0bcd2fc46d95bcc71bdb616ceb54781eda2ad0b14817aa0d9f2baff:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTEwMGQ0NDE1ZWVkZWEyMjA5YzkxNzEzMjRmNDkwMDkwMGQ5ZDljN2E2ZmYzODg3NTIzZTlmYTY1ZmZiMDg5OSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L1-L11",
+          "version": "repo-lines-v1:sha256:545df0e348b094ae33fcaaf87f29e25748d1550020642c2be022ee6d18d361ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwOGU0NjkxYmE2NTMxNDg4YmZlMTMzOTYzZTJjYzI1OTkzMGI0MWYwZjU1YWI1ZTVjZWEyYWQ2MTFkODQxODkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlkYTcxNzRlYzI2Mjc0Nzc1ZTc1OGI5ODFiOTRjOTM1OWZiZDFiY2MwYTZiNmZiZTIxMTg0Y2MxNGE1ZGU2ZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI5ZDgwYzRiNzhkOGE1ODg3MTU0NjhjNGZmOWRiZmQ2ZmVlNTg1ZTFhMjAwZWUzYzNmYjhjMDBmZjk5ZGQ1ZDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f31feef819eb42f4a7d993698a366a69",
+      "statement": "packages/rules-engine-11e is the only workspace defining `test` / `test:coverage` scripts, so root `npm test` (turbo run test) fans out to a single package and a green run proves nothing about the API, web app, or database layer.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/package.json#L5-L13",
+          "version": "repo-lines-v1:sha256:b9ec879f70dc13efe4555a51595abadaec7b8eedffeca5b62a4b3aa6b73ca7cc:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JiOWVkOWE5OGEzN2E3ZWUyNWZmYWQ4OTlmYjYwMjBmN2NmYWM1YjJjMTkyMGUwNWI0ZTFkOTUyNjA2Y2U3YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmM1NzE5NjYxMmJjYTJmODU3ZTM3N2M4MDRkNWRiZDEzZjU2OGY3MTFjZmU1ODQ2ZjY2YTRiNDI2OTMwNjExNCJ9"
+        },
+        {
+          "resource": "repo://package.json#L10-L23",
+          "version": "repo-lines-v1:sha256:746a4d8d68769fcdfaaeb85ac28f64f84b839dc24874f7f0b5b6cf5cdaeea722:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODMzZDU5NDljMDNhNDBjYTk1MjQ5MTYxMGE2NjU5NjQ0YjNhYTQ2NjM2MmY3OTkwMjBkYmYxOTgxNTQ3ZGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdjYmQyNjY1MjlkNTc1N2Y3ZjdlYjFmNGVlMzQ2ZDBhOWU3NGNkZGY0NjkyMDAwNzMzY2EyMmU2ZWQ2YThmZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFiMDg2Nzg4YjY5MGI0ZTZjNjFmYzdhNjQ4ZDUzOWUyNjMxODVmZmVmNjY4ZDEwZTYxNzI0NDdiZDgxMThiYTEifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_003f40650aba48a886ef8ba4e1f698a1",
+      "statement": "The rules-engine test layer is four suites totalling 53 `it` cases — detachment-validator, attachment-resolver, stratagem-filter, wargear-parser — all pure-function tests over literal fixtures with no database, network, or DOM.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/attachment-resolver.test.ts#L20-L119",
+          "version": "repo-lines-v1:sha256:3f1b44c606ff0040e5e3d105bede9bcdbb130a04fc0e83e7f102b30219cf9f5b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2ZWM1MTMyMjgyNzg0NmI0MGEzYjk5ZjE3MTUwZDgxODVjMTBiOTg1NzZkNDRjZWM2NGNhOWNjYmE0MmY1NmNjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiZTExZTAwYzIwYTUwZmJjMTA2OGVlZDllMDM1MzU2YjlkNDVlOGFjMzk1ZmE1ZWZmMDgyMjUzY2RhZTY4YjIxIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwNmVmMDI3MGVkZWJlZTdkY2I0YjM2YjIwZDU1YmE2MWQ0NTA5MjliZmY4NThlNDkwZmIzOTk4YzU2Yjg5MGViIn0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/detachment-validator.test.ts#L11-L188",
+          "version": "repo-lines-v1:sha256:46386fc65b8bb1fddd96df6479f2031ff111ae533ab64053c6d94fcba1259bd1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTc4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZGE3MTc0ZWMyNjI3NDc3NWU3NThiOTgxYjk0YzkzNTlmYmQxYmNjMGE2YjZmYmUyMTE4NGNjMTRhNWRlNmQyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmZGEwM2RhY2MzZmY5ZTE1M2M1Mjc2YmZjNTVlNTc5ZmFhZTkwNTlkZGZkMzFlYTdhMGYxNWJkM2Y0ODU3ZjY3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/stratagem-filter.test.ts#L10-L133",
+          "version": "repo-lines-v1:sha256:10d95a72e8e1989ada41ee34d3345946f8a3b29558947684fe96e6760251fd69:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlMGJhMGU4Nzk3YmI1MTYyNzAyMjI2ZDU2NTlhMTMzNTMzNWJlN2JjYjNmYmM3ODEyNGFhN2ZkNTdlMThhM2JkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzYTNlNDZmOTQyNzZiNmY2ZjRlZDFmMDJhZjc4YmVmNmEyZWUxYzQzOWRkNTU4NGI5NzM5NDgzMTMyMTRkMmI3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5NzQ0ZDI3Zjk2NjJiZmFiNWU4NmI2M2FlYzRlNjljZTY3YmE1NGY3MDRlOGI0OTg2Y2JiMDUzZjFkNmYzZDk2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIn0"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/src/__tests__/wargear-parser.test.ts#L9-L112",
+          "version": "repo-lines-v1:sha256:7000cf640d005565ea8377fc21e15ffcc160f8df76e893730e17d7ede343d5f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxYjI2N2IyMzFiNDFiMzgzODk2ZjNhNjJhMzhiYzFiMDgyNjc0YjgxNGQyNDViMTkxMDI4ZmRjNWU3YjA5OWYyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNmY1YjQwYjE1ODQ1N2QxNzg2NGYyMTc5MDc4NmRkNWEyZWNkYjY0YjY2YTY1MWY3ODhkNGUyNWNkMzMwM2QyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkYjhmMGM4NDMxMTdjYzAzZjJmMjRkMmU2MzZmMjY4ZDE0YWQyNWUxNzU4ZGYyM2NlMDU3MzkxMDM4MWRiNzM1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_96f6047aa50c41e7b5dc9d87a640c84b",
+      "statement": "vitest.config.ts enables globals and v8 coverage (text/json/html) over src/**/*.ts excluding test files, but declares no coverage thresholds, so the CI coverage run produces a report that no gate reads.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L35-L38",
+          "version": "repo-lines-v1:sha256:9fe2fdc834c34ad25149c78fd50819807fdf2c5730a5f18bac9be80022a8f0b3:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjMzMDRmYWNlZDEwZjU5NTFhZDgyOGRmNjI3YWM0MGE0MTYxNGQ0NjMyYmI2MGNiMWIzYWVmYzVlNThiZmYyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDQwOGMwNmUwNDNlM2FkOGNhMWM1MGRiZDhlZTQ0Yzg0ZmQ5NDI3NGVjNGIxMDNlY2RkYjRiMjY1ZWIzZWYzNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwYjQ4ZjE0OWJkMDhkYjRkOGY3YzU4YjBkZmI4ZWQwNDQzNTE5ZWE2YzgzNDUzZmFlYzkwYjQ3NGViZDFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWY3ZmFhYzYyZTk2NDcxZDUyOGE2YmYzODFjMzRjYzc4YjYxMDE3ZjEwMTE1Y2RhZWE3MDQ2MDg1OGEyNDc0ZCJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/vitest.config.ts#L3-L12",
+          "version": "repo-lines-v1:sha256:662104608e648702a59fa66ed268e385dfb53ab91d3b8fac63a2d6e9ed002856:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyY2VjYjE0NGE0NmY1ZGNmMTJhNjE2OWZjZWVkNzY5NWU4Mjk0YjA5MGRlNzZmMzY2MWNkZDAyNDkzMDAxNDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0MDAwYTAxZjhmODA4YzA2OThjMjlhMzNjMzczYmQ3MGJmYWYzN2VmN2IyNjI3NzAxMjY2YjM2OWQ2MGU2MjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4e0f9930d04a419f83ca65d13ce808ce",
+      "statement": "turbo.json gives `test` and `test:coverage` `dependsOn: [\"^build\"]`, so the root test task first builds every upstream workspace; running Vitest directly inside packages/rules-engine-11e (or `turbo run test --filter=@forceorg/rules-engine-11e`) skips the full monorepo graph.",
+      "evidence": [
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L11-L12",
+          "version": "repo-lines-v1:sha256:1fa6ac713337d1fc60fb3dc527ee1ea802641b1d0b60ecdd4d14dc195be3066c:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjQxZmMyNDllZmE3MWIwZTdhOTdmN2Y0ZWI4Yjg5NDk0YTU5Y2IzZjg3ZDcxYmU2YWFkNjNhYTNiYTVlM2QzYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI1MDk4YjQwYzkwYTNjZGI4OWFiY2E5YTI2MDk0MzI4YzliNjg2OWYyNmVkMzUyZjVlNjg1ZGRlYmRiYmUzNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTcxZDcwNDIyMzE0OTU4YzBlMzI0ZjY3MDgzYzNlN2ViMTFmNDM5ZGI0MjlmMmZlNjRkYmIzMDFkMTgzOWNjMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzE3ZWIwNDM5NmE4Njc4YTRiYWNjMjIxZWUxZDkxMzMyN2NjMDJiNmVhZmI4NWJlNGFmNWUxYWZkYWI1Mzk3NSJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L16-L22",
+          "version": "repo-lines-v1:sha256:f721cac983a3d49dbe9010b00263b55637783084730a75e89051b421a1d98b2f:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzgxZGJiZTM5NDc2MjY2M2VjYWZhNmIwMDc3OTI2MDc0MDU2ZmIxZTgzNDdhMDA4MmNkOTFiMTI1NDEzMWVkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWYwY2RiOTcyYTdiZmI3ZWQyNDZmOWZmNjcyMzg1ZTU1ZjQ5NjhmYzExMDQzZGM1YjY4NGQ1MWRmYTMxZGJjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDhhMjVkZDZiN2RkMGZmMDJiMDg4N2U5ZTIwYzEwN2E4NjdjODhmODBlMjRiMWE5NjQ0NWJmNjM0NjU0NTdkNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2QxZWJlYTdiMGY2YjYyYWY2MGY0M2NiNjk3OGRiZDk4ZTliZTNjMmJjMTRjOWFkM2M5ODhhNTk3YjM1YmNjOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_753b25d68fbd4fcb95a56cfd59dcbbe0",
+      "statement": "GitHub's deploy.yml runs `npm run lint` plus `npm run test:coverage --prefix packages/rules-engine-11e` on every PR, and GitLab CI runs `npx turbo run test build`; both therefore reach the same single Vitest package as the only unit gate.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/deploy.yml#L35-L41",
+          "version": "repo-lines-v1:sha256:4ffda466cf5902b189ac22e30f4281f13057a680628acffcf9428c9854a18975:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjMzMDRmYWNlZDEwZjU5NTFhZDgyOGRmNjI3YWM0MGE0MTYxNGQ0NjMyYmI2MGNiMWIzYWVmYzVlNThiZmYyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkyMGVlZWZlYzE3MmM3ODFmNjQxYmY2OThjOTZlY2JjNGNjMDgzYzA2YzBiYTkwNDcwZGJhZWZjMDE1Njg0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTgwYjQ4ZjE0OWJkMDhkYjRkOGY3YzU4YjBkZmI4ZWQwNDQzNTE5ZWE2YzgzNDUzZmFlYzkwYjQ3NGViZDFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTg3MzMxZjBlOTBiZDExYTFjZjEwMTRlMDA2OWExNjY0MWE2OGU4MWM4ODk3OGJjOTZiY2QyYzEyM2Y3Nzc2OCJ9"
+        },
+        {
+          "resource": "repo://.gitlab-ci.yml#L29-L32",
+          "version": "repo-lines-v1:sha256:17803eaa5b37be08cf6e0e9a65178464b4398a56f52b634b930b23fcbea0c7f0:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2E0MTk5NDY0ZDE5ZWQ5NmZjYTI0ZjZjYTc2MjgxOWM5YmQ3MTdjZmVhYTNkOWY4MDhmYjU0MmM4NTk2OTVmMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTM5MmVjZGI2NjJmNjZiOGRkMmM3Zjk2YjQ1MWVjMGQzYjNkMDY0MmEwNzBkNGUzNmIwMmE4NWE5ZDRjZGIxMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM1MTg3MmZkYWE4MmI2ZWM1YTg2NmY3OGU0YWFjMWEwNTdhNzBmYTJlNjg4NzhkMmJkNTc5ODQ2MjgzOWNmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGU0OTY2NDRkZjJjMDljODI3NmIyZTMxMGM2NWZjMzRjMWNkZDFhY2I0NmRlY2IwYjNjMDhkYmI2ZmRiMDhjZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6e0a6309bc834149a330f9908c6b2cf6",
+      "statement": "The entire E2E suite is apps/web/e2e/critical-flows.spec.ts: a beforeEach guest login via 'Instant Commander Access', then five tests covering the dashboard, catalog search plus detail modal, changelog MFM diffs, the tabletop console with the stratagems overlay, and the rules-compliance audit modal.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L8-L90",
+          "version": "repo-lines-v1:sha256:fc16ef01ee5ab21c8f2daf3abe2eca25e33e3e6ab6cd1eb94ee822f8d89d4800:eyJzZWxlY3RlZExpbmVDb3VudCI6ODMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmOWRiMjJlZjg1NWFlZDRiMzk0ZWE1NDMyYzdhMDA4YmUxMTc2MDE3MjY1YTc5ZmI3OWM4NGQ0MjkzNWRjZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0ZjgyNjZiYzZjNzA2MmI4ZDY0MDgyMTZhYjc5Nzc3Mjk1OGRmYWZkNWFiYTQyNTYzMGUwZGE5OWI5MDUzMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3331c5fcd2644ce0bd782b796118401b",
+      "statement": "The E2E login step needs no server: signInAsGuest synthesizes a guest User and persists it to localStorage under forceorg_local_user, so the guest journey is entirely client-side.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L9-L18",
+          "version": "repo-lines-v1:sha256:13a7f225aa08624e378c3d9e08a74908b07b4b5d25df02002edeaba72632f199:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1YjYyM2VmNjBiZTRkNzcwZmY2ZGFmNjM1ODhlYzNmNzdjOWIxOTM0OTEwZjViNWM1YzM2OTQ2NmFkMzQ3YmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjMjU0NjY5NGJjZWVmZGY1ZTNiMjVjNWUzM2FlMTQ1NWJiNmQ4OWI2ZDdiYzYxNDBlNjMwNWVkYmM3ZjljNmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNGMwOGI5YTQ5ZTY3YWJlNDg3YTUwMjIyNTk1NGFjZWE5Zjk3MTlhNTkyMzQ4OTU2MTI3ZDY2ZmNmZGIyYzAifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L151",
+          "version": "repo-lines-v1:sha256:4c84de5a42f7da57080ba934e9e8ba4c62bf35962f9ae760af331cda83c19942:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNGQ0ZWJjNzQ0ZGRhMGMwYTU5ZGJlOGU0MWQ0NDYxMjZmN2Y5MjAzODBhZTUwOGMxMTI4ZTg4NjNhY2NlNDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6913eded8760408ca1d78fa74e560a00",
+      "statement": "Neither e2e.yml nor the Playwright config starts the API, database, or S3, so every fetch to localhost:4000 fails and the specs assert against curated fallback data (FALLBACK_CATALOG_DATASHEETS, FALLBACK_CHANGELOG, the localStorage starter roster and demo console units) — tests must therefore stay satisfiable by the offline path.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L14-L49",
+          "version": "repo-lines-v1:sha256:3f6e2f9d673236094878718eecb05bba13c31372e744bb9527bf1480d5ca61be:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2NmQwNGZhNzkyMDQxYWEwNGMxY2ZmYjZkN2IxNWFkYTc1N2UxZGU4OTFlNDY2MzFmYmZmYzU2YTFhZThmNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlMmM3MjFiM2RjMjBmZjczNGQ5N2NmNWI5OWU1NWU4ZDRjNzJmOThiZWYzYjk5ZjkwM2NjMWYyYzRjZGM2ZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L128-L156",
+          "version": "repo-lines-v1:sha256:0ac74c6224a35fae6cf2c5fa4499c15e64eb6aa4a2020c9603e4acf1ebec2017:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3ZjVkMDE4NGQyODhmNDAzNDQ0OTY2NjI2N2IyNTJiNzE2OTgxYzI5NDM2NDE0YjQ4M2QxNGQwZDllYmU5NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMTE4MGJjMzU5ZWQ2YjA2NjMzMTFkYTg0NWJkM2M0MzBhNmU4NWI0YzBiNThkZGRiMTQ3MmUxNDIyYmU2NDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4MjNjMGMwMjQ2ZTAxM2QzMGJhODUyYWJkNjYxOTdkOTY2ZjYzY2FlMGQ0Yjk1NjBlMjU2NGYwMzBlN2FkNWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1MmVmNzU2NjIzOTYyZTBkMWQwNmJmNmMxMGZlMDk2YjY1MWU1Zjg0NmZjNWI5MTQwOGMwZDEyYmU3ZGI4ZjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L120-L143",
+          "version": "repo-lines-v1:sha256:bbce3c41a4387cc4be2672ee39e14d42623ca3c00093720d6e5d754bec8692bd:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzYzMwZjZkMmVhNzYzNTJlZDA5YzU4NGY3OGZkNTY0YmRkZDI3YjU1YjhhZTkzZTZhMWM2OWE3ZWNlNTZlYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5NDY5NjY1ZjkxYjg0N2E4YzZlNWU0MDQ4NWNiNGJiMTlkYmNhMDJiYmU4ZWE3YWJjZTAyYjMyMWY4MDliMzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NGZkOWU2NWUzYzIzNTUyZjFjNTA0NWEzNjAwZDRmNmRjZTUyN2Y4YWFjODdhYWUzZjkzZTJlNTk4NWJkMzIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L121-L150",
+          "version": "repo-lines-v1:sha256:597403b74a5a97d8b2819877f38a2996684e60acde303fe288bedbd08f82fd83:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhNTUzNjdiZmI3NTJmMzUyYTIxZDhhYmEyMWUwZjk2YmJhMTU3OTI5MTU3ZDdhYmIxMTRhMTRjM2RmNjRjOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxOGZmZDFiNWY0ZTU2MmQ1ODQyODQ0MzhiMzRiYzZmZTYwMGFmNWUwMjU4NmNkNDM3MzFhY2I4Mjc3ZWIzMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMWMwZjBhYWI4ODMwYmQwZjQ2MTBlNDMwOGY3NTQ3M2RkNDk5ZmQyZWM3YjQ2YzYyMDQ3ZmUyZDEzZjJmNjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8841141c2ebc46888d0b416f08af5ae7",
+      "statement": "Server-side audit logic is untested end-to-end: POST /api/rosters/:id/audit runs validateRoster against live datasheets, but under Playwright auditRoster's catch block returns a points-only client-side result, so point-shift, DP, and Rule-of-Three compliance have no integration coverage anywhere.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L25-L70",
+          "version": "repo-lines-v1:sha256:b62b6156363345dc4e6a84ea29cb149e026e1dde01a64be8b0daab82878599a5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1OTRiMTQ1ZDdiOGQxYjUxNjI0MGMzOTFlZjZjOTg2OThjMGM0MDhiZTM1MzllMTMwNTAwZjY0NzQ5MGM0NDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0ZjZhNzY1NDE5NzcwYzljNjE5OWYyMTk3YWU1Njc4ZWRlNjk0OWEyZjI1YTBkNmJhYmI1YTE5ODEyNGNiZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNGEzMDY1NDRlYmU5NDRkNmEyZjVhOWE4OTJhMzAxMDlkMWE3YjNjNzFiNzlhZGMxZWRiNmMyMWIzZjQ4MzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5NjkyZjMyYWUyZWM3ZjUwNWU5YWI4YWMyZTFjMWMxMmZmZjI0M2NhY2JjMmFlODkwNjllNjMxNjFjOGJlYzUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L390-L419",
+          "version": "repo-lines-v1:sha256:db6e52816b56f1e78dfc5a034e88d4b79c44710fffe14aa04efdedf09450803e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkOWVkMGMwN2UxYmY4ZmEwYmFiZTYzZTVkMzNhYTFkZDczZjJkZDA5YWE2MjdjZGFiZmFjNjQ4NzkyMDY1ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGI2ZjYyYWZjYWNjOWQzZTc3YjNjNzI5ODgwZDA4MmM1MGNiZDI4YjIxOTlkNGY1YmQ2NDc5ODE3ZDMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3OTVhYmRkODk0M2VlZjYyMWZiOWVjMTEzOTE2MGM0MWVkNWVjYjFkN2RhZDVkZmIxMGMyNDIyMGI5ZWUzNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1459c222738e41b9a2dee4b04a4934ea",
+      "statement": "E2E test 05 wraps its assertions in `if (await auditBtn.isVisible())`, so it passes vacuously if the Audit control disappears, unlike tests 01-04 which fail on missing UI.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L76-L89",
+          "version": "repo-lines-v1:sha256:cd3bea9d975daf1bd9ac3606a082ad2959008675735db0b797408967061cdc8a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNjg0NDMwNDY2MzdmODg0OGViMWNiYjEyMjUxNWUzMDMzYWYxMTIwYjI0NzI5MzNiZDYzNWQ2ZTc4MjIwNjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiZmM2NWQxMTRlMmUwYzU5MTllNmNkZjQ4YzhlMjRlZGJkYzAyYThmYzEyYjg3YjdlN2QxMjRlYWIwNjA0NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a3ca30b8911c45c884ef853f3a2395f1",
+      "statement": "playwright.config.ts boots `npx next start -p 3456` with `reuseExistingServer: false` (never adopting an unrelated process holding the port, 120s boot timeout) and does not run a build itself, so npm run test:e2e exercises whatever is already in apps/web/.next; CI (and dev-container.sh e2e) build first with NEXT_PUBLIC_API_URL baked in because API_BASE is read once at build time in lib/api.ts.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L32-L42",
+          "version": "repo-lines-v1:sha256:bba5211b4e12a2c5b052067840b801b9b8afe12781b2a65fdb60b37a314613ee:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5ZmNmYzZmOTg5OWRhOWNjYmIxNDkyOGJjZWE0ZjY2NDZkYzI5Zjc3ZjQ1OWRiMmMwM2EzNmE3MzhiZTQ1ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3YzA1YmJiNzI0NzY5MGY5NTQ3MTU3ZTNmMGE1YzJlNjhiMGFhNDRlMzVlNTA3NzZmZjVlNTBiY2Y2YzExMmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE4MGI0OGYxNDliZDA4ZGI0ZDhmN2M1OGIwZGZiOGVkMDQ0MzUxOWVhNmM4MzQ1M2ZhZWM5MGI0NzRlYmQxZDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFkNjBkNzg2MzZmNmU2Nzc5NjQ1YzM1MThkNmU3YmViMWU0M2NkYTNkNTA0NGExMTNjNzdlMjcyZTQyODNmYjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L1-L40",
+          "version": "repo-lines-v1:sha256:df85cb2270bc94c4569c0826e5b696db835af3b82b274dca60fbd71f8249e6e0:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmNThjMzMyMGM0Mjg4MjM0ZDVkMjZhMDk1YWEzZjY0ZmMxMjc2YWU0MzM0MDE3YzBkNzM2OTBhYTkyYTZiYzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L16-L16",
+          "version": "repo-lines-v1:sha256:7124533ee687487fcf474a3376ae082aadad83ff02ef05156e985ce85c07954d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGY3ZTMxYWEzOTZiNzczY2E1MmY3M2I0ZDEyYzNlOGU3ZTU4NTRlNDc5NTAzOGYxYzllMzZjZGNjM2RjOGNmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjBiMjZjNWYyOTRiYWFlNzI4OGVmYzYwMzYyMDczMmMwNjc2YTU2MTNmYTk5YWYxOGE4MDMzMDlmYTA5MWQ4YSJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L48-L55",
+          "version": "repo-lines-v1:sha256:ef1718943f85a64fab1707fb6820015da57933117ddafab5ba125e2226b9e63b:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWJlNWI5ZTBkOWU4NjJhNTljNThlYWRiN2ExNDY0OGYzNzQ3MWQ3ZTc2NDU4YzVjNTExNjQzYzhhYjY4YmJhZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDExNDM2ZTY3MmYxNmYxNzQwNDM1NWI2M2Y1N2QwOWI3YWVkYTc5NTQ5YWJkY2ZlOGJmM2VlMTMwMjY4ZWE0OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTJiNThjNjYxNmNjYjhkOWYzNDA4NDk1MDE3M2EwMzliYjI3OTY4NzRhNWQxZDBkNDg5YjBkYTliZThhZjE3ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_830c6834c21c4284abaaba4a5a4e6cd7",
+      "statement": "The config declares Desktop Chrome and Mobile Safari projects, but CI installs only Chromium and selects `--project=\"Desktop Chrome\"`, and under CI `forbidOnly` fails a committed test.only while `retries: 2` and `workers: 1` can mask flakes; the HTML report is uploaded for 14 days on every run.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/e2e.yml#L37-L49",
+          "version": "repo-lines-v1:sha256:c2185f0edc20e71a8d3d822c4a8de5ede4957719590ea04a8b7ecf85175dc7c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkOTJhOTk4YjAyYTE3OWI5NjdlMGI4ODM4YTBmOGIxYzg1OThhYzE4YjVmMWY2M2I3Yzg5OTJmYWYyZDU5ZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2NmQwNGZhNzkyMDQxYWEwNGMxY2ZmYjZkN2IxNWFkYTc1N2UxZGU4OTFlNDY2MzFmYmZmYzU2YTFhZThmNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiNmVhNDZmNWIzZWFkOTlhNmQ2MDY2MzFiZWM3MGNjMjA0N2RkMzllYTA1YzE4ZDg2ZmFlYWY2NjUwODdlY2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L9-L28",
+          "version": "repo-lines-v1:sha256:c275ea79c49f3935c73eea6f76df5d7be031ec8a1078be7e526a67af15f13736:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4YmYyMzBiMzg1MTY0ZmUxN2Y3Zjk2Zjc0NWQxYWQ0ZDk2NTg0MGZlNDhmYWIyYTBhZmNkMTBiMzA2ZWRhYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NGQ4YzA3MzQyOTg5MzEwMTU3NmQ4OGQ5OTEyN2U4OWQ2ODkxZDNiMTdlODlkZjAyZWM5YWU3MDcwNWQ4YmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3MDU1OGEzNTU5NzEyMjlmNzIwNzRhMGUzMDFlYjEzOTY3NTNlNjM2YjBlOWM5YzA0N2IyNDNjOGFlNDZjYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmNDAwMzQ2NDhjZTQwYjYyNTZiZjlhOTc4MTg2MWY5Nzc5NWFlOGRlNzNjYmE1MWJiYThlYmVlMjYxZjA0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_79a2c6154aaf4d4aa95d609e2956aa5a",
+      "statement": "./scripts/dev.sh dispatches containerized gates through dev-container.sh: `verify` = lint + build + unit tests, `test` = unit tests only, `e2e` = next build plus Playwright Desktop Chrome (aborting unless Chromium exists in PLAYWRIGHT_BROWSERS_PATH, which `e2e-install` populates).",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.dev.yml#L108-L127",
+          "version": "repo-lines-v1:sha256:f4e203b96e54d86a9a8cce40b2401b78422d0d256fc6c5d390638ab39562c117:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5NzVmNTAyZjlhYjk4OWNiMjUzMGMwM2FhYTczNjE2MzQ0NjRmNTEwZmI2N2RiNGNkNDEwNjAwM2FhZjY5MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTYxNmRkNDBkZGIyNjg1NjM5OGY2Yzk1NThiODIyNjJkMjhjMzk0YzkwNTQwMGU2OWQ5OTMxODYzOGVlZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4NzAxOTc4YWEwY2E1YTc4NmJhOTMyNDE1MDUyY2VhYWY4MWY1OTBkYWQxOTVlNzI4NGNiOGE4NTkyOWE5OGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzMjIzMzI4NDNkMmM3ZDk1YzhmMGE5NjUxMGRlNDhmYTQwMTdmNGFjZWQ5NDNmMWI3NGQyNmE1NjdkOTY0MTgifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L62",
+          "version": "repo-lines-v1:sha256:fc1942ada2f6ab0c420575784ec4f43afe911b1ab20fc5a0b5305eaccf8ffe4e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYjI1MzFhYTRhMGQ5ZDcwYzNiNmRhMzdmZjQ1NTYxMzNkZDk4OTY4ZTgxZWJhNjlkN2UyOGRlYjNkNTkyNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFlNWMwZGU0ZjE3ZWI1NDdmZjg5OTg0YzY0ZDMyZThmZWMyMWNlZjliMmQxZDUwZGE0YTQyZmMzNzZjYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzYTJiNmZhMWQxYTMxZjI0ZWIxNzU1YzI3ZDZhZWFjMDQ0NjY0YjgyZDE2ZjZmNjViYzY3M2U5OTk2YzhlMTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9debe96dceb84ff7937d95308aff6f46",
+      "statement": "The practical validation matrix is: rules changes -> vitest in packages/rules-engine-11e; API/UI contract changes -> lint + build + Playwright; Prisma schema, migration, or seed changes -> manual `prisma migrate` + seed against a local stack because nothing automated, including E2E, ever connects to a database.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L29-L39",
+          "version": "repo-lines-v1:sha256:5fb40c3f6d4a60d178ea2d83fb7cdb66903cd906088002e0ffc0b6ae33e10594:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNWMwYjBkYTAwMDIyN2JiM2YyMGVkMjI3MDRiOTFkM2Q3NzhlZmMzYjEzZjY0YzBjOWFmYzczNzM2MGEwNjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3YmVmNDRiNWM4OTA4YTZjMTBkNzUwNjVmNDY3NjA5OTY3NjBiZTA2NDQ2MjdiNGM0OTU5MWIzMWE4NmE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://package.json#L17-L19",
+          "version": "repo-lines-v1:sha256:760608e7617e8eef14cbe0896551911a4d7e265ce2ebfde865b7801aed552fde:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWY0ZTc5MDI5M2NlNzhlNWEzMWMwN2Q1MmViNzg0OGQwZTQxMGJmYzI5MWVhYzJiNTY1YTY1NDU0N2Q0ZmE3NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzQ2ZjNmM2Y5YTRlNmEwMjJhNmE2MGUxMWRkMDk2Y2Q0Y2Q1YTMwNTNjYjAzOTYxMWM1YTY2MTQzYzMyOTkzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDExODZmZjBlMWZhMTYzNzQwYWQzMjg1YWNkZmEwN2E0MmE4MTM2NzAwNzY1Y2JiN2M0YmY2M2Q1ODFjNGUxZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzQ4YjgwYzU3NzQyYmY1ODYxYTM3NTY1ZDZkZTgyMDlhOGQ2ZTMzZjgxNDBiZWM5ZTAxNzgwYzYwMjI4N2U4NiJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L7-L15",
+          "version": "repo-lines-v1:sha256:4438019ec0bcd2fc46d95bcc71bdb616ceb54781eda2ad0b14817aa0d9f2baff:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTEwMGQ0NDE1ZWVkZWEyMjA5YzkxNzEzMjRmNDkwMDkwMGQ5ZDljN2E2ZmYzODg3NTIzZTlmYTY1ZmZiMDg5OSJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L10-L21",
+          "version": "repo-lines-v1:sha256:b05104099a606a9afef25094ae7f10a8ec2b211ed55ed1d3e167f1f89181bf50:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyMGVhZmIyNDI2NDEzYzhjMWYyOWQ3NGRhOWU5ZTgyNmZhMDYxODdjOWRiYzY5ZmE4NTlmMWVhZGIzYzNkOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3OGNmZjRjMzViYmRjZmZjZmZiYmM4ZGU2ZmE5YzI2MDhlYjk1YWI3MTM1NDc3YTU5OTdhYjIzMGMyMDVhZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ2ZDEzYjZjZDYxMzVjNzk3MjAzNGQ0ZWQ3MjhmZjA2ZTg5YjZmZDE4NTQ4NWJkZTljNjgwY2QzMmMwOTMwMGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5cb859d75fd142f38e29a11f99ab619a",
+      "statement": "Changes to the shared @forceorg/types or @forceorg/ui-theme packages are validated only by the full Turbo build graph, since those packages expose no test script and are consumed through transpiled imports in apps/web.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L2-L8",
+          "version": "repo-lines-v1:sha256:04a0725b9241f2758cee4d597e681bfc8b797f3f3891133831344df3d219e5b9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhhOTYwNjczODZmMDgwMDBjNmE0ZDYwZTVmZmQ0M2MzZjY5NjVlNzA5YWMxODI1NDA3ODIzMzlmNGYyZjBiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjNiMDA0MWYzYzUzZjIxYzljY2U5ZjBhYWM4YjU2N2Q4NjU2NzI0MDVmYjllOTYwNDVmZDljMmMxZWQ5MjI3ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjU0MGJjNjllM2I3NzY5YTVlN2NiM2ZjY2Q1YmFkYzU3MDI5OWQ2NWE0NWY2ZjZhOGJhOGQ1ZDA4OTdkNmRkMSJ9"
+        },
+        {
+          "resource": "repo://packages/types/package.json#L7-L11",
+          "version": "repo-lines-v1:sha256:8821da70bb5163f45613fdb714b69c3ad2cf112c9e611fbe67026468a5539a84:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGY3N2I5YmVhNzBjZGQ3ZmI5YmNlZWE5YTVmZjQ1OTNlYzdkODYzOGYwOWViODQxZTgzMGE0MmJjNDQwYzljOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjI3NTljNjgyMzM3NGY2MzMzOGI2ODQwMTU2MDBlMjIzYTNhOTI0MjVjMWEyNDNiMzZiZDc4ZGViYzZjZjI3OSJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L4-L8",
+          "version": "repo-lines-v1:sha256:e5181c8b19080903c8e30212d036e9480f14da35c7259bf2af78912d000c0c36:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTZlMjNiNDllZDc4MGQzODAzOTdhZWE3OWUzY2RlODBmZTk0YzhjNTdiZmY4NzUyMmM4MzE2MzgwOGY3Yzc5MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWYwY2RiOTcyYTdiZmI3ZWQyNDZmOWZmNjcyMzg1ZTU1ZjQ5NjhmYzExMDQzZGM1YjY4NGQ1MWRmYTMxZGJjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWVjZmUzMDNiYjYwNDU3YTcwY2JkMjY4NDExOGNhMDJkNTUyNDdiYjA1MjIxMGUyZTcyZmVkMjFjYjZlZmY4NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWY0ODRjODE3MTIwOGMxMTNmZDY2MTNlOGRkMmQxMzU1MzAxMThiMGFmOWM4Yjk0MzhmMjg2Njk2YzJkZTk0YSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_52b5bb2d690f4da79b85d36508b28a93",
+      "statement": "Adding a `test` script to apps/api is a zero-wiring extension point: turbo run test, dev.sh verify, and the GitLab test stage all pick it up automatically because they invoke the Turbo `test` task rather than a hardcoded package list.",
+      "evidence": [
+        {
+          "resource": "repo://.gitlab-ci.yml#L29-L32",
+          "version": "repo-lines-v1:sha256:17803eaa5b37be08cf6e0e9a65178464b4398a56f52b634b930b23fcbea0c7f0:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2E0MTk5NDY0ZDE5ZWQ5NmZjYTI0ZjZjYTc2MjgxOWM5YmQ3MTdjZmVhYTNkOWY4MDhmYjU0MmM4NTk2OTVmMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTM5MmVjZGI2NjJmNjZiOGRkMmM3Zjk2YjQ1MWVjMGQzYjNkMDY0MmEwNzBkNGUzNmIwMmE4NWE5ZDRjZGIxMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM1MTg3MmZkYWE4MmI2ZWM1YTg2NmY3OGU0YWFjMWEwNTdhNzBmYTJlNjg4NzhkMmJkNTc5ODQ2MjgzOWNmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGU0OTY2NDRkZjJjMDljODI3NmIyZTMxMGM2NWZjMzRjMWNkZDFhY2I0NmRlY2IwYjNjMDhkYmI2ZmRiMDhjZiJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L44",
+          "version": "repo-lines-v1:sha256:c45573afbe1e34cebfa088f9560c64768fb318eae77286bb0b7fa02a6867235b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYjI1MzFhYTRhMGQ5ZDcwYzNiNmRhMzdmZjQ1NTYxMzNkZDk4OTY4ZTgxZWJhNjlkN2UyOGRlYjNkNTkyNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFlNWMwZGU0ZjE3ZWI1NDdmZjg5OTg0YzY0ZDMyZThmZWMyMWNlZjliMmQxZDUwZGE0YTQyZmMzNzZjYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMTQzNmU2NzJmMTZmMTc0MDQzNTViNjNmNTdkMDliN2FlZGE3OTU0OWFiZGNmZThiZjNlZTEzMDI2OGVhNDgifQ"
+        },
+        {
+          "resource": "repo://turbo.json#L16-L18",
+          "version": "repo-lines-v1:sha256:b30a1dd94e9048714ce28bc3205ced78b3ccb80129dcb56746d93b981fab55b1:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzgxZGJiZTM5NDc2MjY2M2VjYWZhNmIwMDc3OTI2MDc0MDU2ZmIxZTgzNDdhMDA4MmNkOTFiMTI1NDEzMWVkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWYwY2RiOTcyYTdiZmI3ZWQyNDZmOWZmNjcyMzg1ZTU1ZjQ5NjhmYzExMDQzZGM1YjY4NGQ1MWRmYTMxZGJjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDhhMjVkZDZiN2RkMGZmMDJiMDg4N2U5ZTIwYzEwN2E4NjdjODhmODBlMjRiMWE5NjQ0NWJmNjM0NjU0NTdkNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQ3Yjg3OTI1MjAyNmRlYmEwODI5YTBjZDlhMmRkMmViNzNkZjM1Y2JhOWYwYTRiNjdkMTFhODRkYzQ3YzZjNSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

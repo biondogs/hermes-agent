@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:596315d0207dcbcffb96796335bdf1f5cab411cddc5bd1d1174ebafd28704564",
+  "claims": [
+    {
+      "id": "claim_1550edd39a9a4466a5abffd9d489b8f7",
+      "statement": "ForceOrg-40k / BeerHammer is a self-hosted Warhammer 40,000 11th Edition force-construction and tabletop combat console organised as an npm/Turborepo monorepo of apps/web (Next.js 14 App Router), apps/api (Express), apps/sync-worker (Wahapedia ETL) plus packages/types, ui-theme, rules-engine-11e and db-client.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L1-L13",
+          "version": "repo-lines-v1:sha256:5e5ce07887da86eda48dce7a92c46e7dfd5ca82aab668bc4f57e726d3c743d00:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5Y2NiOGYyNjVkYmIxYTYyYjEyMzAxZTI0NDA3YjhiMWJlZjRhNGZjYzg1MTEzZjRlYmI3ODdmYWJiZThkYzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1MmQ3MTExMDNkNTBhNDM3ODMwYzZmYmNkMDRmYjRiYWI0OWEwZjgyZjZkMjZkMWM3OTFjNmU4NDg4ZGQwOTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjODMwY2M0NWQ3M2UxMGE3NmMxZDgwZmU4MzZlYzg4MjYzYTllZTUyMjJkZTZmNzVmODQ4NTViOGY1Yjc2ZTQifQ"
+        },
+        {
+          "resource": "repo://package.json#L2-L9",
+          "version": "repo-lines-v1:sha256:c65cbee682b09f196acd0a857645130e047ae3c1ab322c899f2b0e769bb017c4:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWM4Y2FmYzA3OGYwNDlmMTE1MGI2Njg2MWYzYmNiZDYyYTJkZTg5NzYwYjJhNGIwMzZhNmJiNTJkMjM3YmQ4NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTZmYjA4ZmRhMWFjYjk1N2I2MTE2YmQzNzgxMWExZmU0MWEwMTYxMWMwNjMxZWRiZjc4NmQ2ODg5YTI3YTU1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmVmYWY4ZDQ0YzU5MDk5YmVmOTM0ZWEzNjI3MTBlY2NkYTE1N2Q5N2Q4ZjM1YjIwODk1OTUzZDczM2FkNDVlMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_9030a9bcf77842bca98cbcb5fa85210d",
+      "statement": "The host-native boot path is `npm install` then `npm run dev`, where `dev` is `turbo run dev --filter=@forceorg/web --filter=@forceorg/api`, starting exactly the web dev server on :3000 and the API dev server on :4000 with hot reload; the turbo `dev` task is cacheless and persistent.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEV_NOTES.md#L38-L44",
+          "version": "repo-lines-v1:sha256:d6373e6a5a4555e774c36c655f251bb394de6d4434bf3e1d5c14cc3f703dae93:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWYxMTRkNmNjZDc0NTQxNmEzOTQ2YzQ1YmM2Nzk1Y2QzM2JjMGIwNzIzNGJjMTBlZjczYTljNWRkODg5NWU4MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDIyNTI5YTZiMTQ2YWNjNzUwZmY4MTMwZjE2YzkxMTM1ZmFhNWFkZGZjMDBkNWUzZmJkOTM0NWYzYmJkMjgxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzM3ZjFlMTRlZjdkODFiZjc2MzVhOWEwZDI0Mjc0ODJjMDUwMzZkNWM5NmYyODJmOWY1MjVlM2ViZWQyYTYwMSJ9"
+        },
+        {
+          "resource": "repo://package.json#L12-L12",
+          "version": "repo-lines-v1:sha256:7933f9c5525b6af0e52557a93f9a744f1d7eb43d5e5c355c48db3543b9798d2f:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzkzM2Y5YzU1MjViNmFmMGU1MjU1N2E5M2Y5YTc0NGYxZDdlYjQzZDVlNWMzNTVjNDhkYjM1NDNiOTc5OGQyZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzkzM2Y5YzU1MjViNmFmMGU1MjU1N2E5M2Y5YTc0NGYxZDdlYjQzZDVlNWMzNTVjNDhkYjM1NDNiOTc5OGQyZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGYwMWQ0MzNhMjkyZWZkODg3N2YyNzRlOTY2NTMyMWU2ZWEwYWJiODRmMzk2NmMwYmJiNWJlYjE3YjMxMjg0NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzdhOTE3NTY2NmM5ODY3NGM1MTk0Y2VlNTliMGExNGJiODU2OWMzOWYzNDk2ZTlkNTg4MDQ2OTMxZjYxZjFlZiJ9"
+        },
+        {
+          "resource": "repo://turbo.json#L9-L12",
+          "version": "repo-lines-v1:sha256:6163e3af98165e370c751dfa41de4f1ca525d57ccdc82dce420cbbf82a5272f4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDNmM2YyNDBlODk5MzVmNmVkODJlODY2MThmZGIzNDlkNjFiMTQzZTVhZTc1MjExZWI0NzdkNjYyOTZlOGRlYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWYwY2RiOTcyYTdiZmI3ZWQyNDZmOWZmNjcyMzg1ZTU1ZjQ5NjhmYzExMDQzZGM1YjY4NGQ1MWRmYTMxZGJjYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDYzMGQzMmM5MTY3OTgzOWJjZTg4ZTQ5OTQwYzJlNzhiODIxOTdiNDg3OTg5ODBhNjZjZmI1NzQxOWMwYTI5MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDhhMjVkZDZiN2RkMGZmMDJiMDg4N2U5ZTIwYzEwN2E4NjdjODhmODBlMjRiMWE5NjQ0NWJmNjM0NjU0NTdkNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a92b04311b8c40ad8335a0630f988985",
+      "statement": "The containerized boot path is `./scripts/dev.sh up`, the only host-side entry point (Docker is the sole host requirement); dev.sh shells out to `docker compose -f docker-compose.dev.yml` and dispatches subcommands (up, down, rebuild, verify, test, e2e-install, e2e, logs, shell, psql) into scripts/dev-container.sh inside the container, with WEB_PORT/API_PORT remapping the published ports.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEV_ENVIRONMENT.md#L1-L44",
+          "version": "repo-lines-v1:sha256:a07bd8b54100e1ba3fac100c92880d1ba83e59be975b9631e6530ad6ca3f45a0:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViNjE4OWZmZjY5YzViYzQ0MjAxMDFhN2QzMmI2NTkzOTkyZWY4YmYyZGY5NDFhM2NlZDM5YmMwNDc1ZTcxNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlZWRjN2NmMTFhM2U5MGQ0ODAzZWJiMWMxOGQ3M2MxYjhlZWRlNTcxNDEyMWQwMmI3MmVkYWFhNTA1ODg1M2IifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L10-L67",
+          "version": "repo-lines-v1:sha256:6a268648d725d39cf587510ed09a77169096321d041a780e988f5418f6b5faff:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyMGVhZmIyNDI2NDEzYzhjMWYyOWQ3NGRhOWU5ZTgyNmZhMDYxODdjOWRiYzY5ZmE4NTlmMWVhZGIzYzNkOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3OGNmZjRjMzViYmRjZmZjZmZiYmM4ZGU2ZmE5YzI2MDhlYjk1YWI3MTM1NDc3YTU5OTdhYjIzMGMyMDVhZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkY2VkMTk4ZGQ4YzY1MjRkNDY4NmExZWJhMzI2MzZkMWRmZWY0NmNjNDI4MWM1NGE4YzgwY2JmZjdjMTdlNDYifQ"
+        },
+        {
+          "resource": "repo://scripts/dev.sh#L17-L65",
+          "version": "repo-lines-v1:sha256:398d87c6a98065f1fd4595967e27e6a739ea90f076ae937e4679e97701835757:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmM2MzM2NjdkMDMwMDczMWJkZDg0NDcyZGM0MjRlMWY5YzY0MTc1ZWEyYmFkYjY2NjQ3MmQ5MWFlYjRlZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YTJiZWNmZjhhZmIzNGRiMjYwZGFiYzk2OTE1ZmZlY2ZkZTg0ODkyOTU0MWM2MTkzZGU2ZDE2NGMyMWU4ZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAzNTEyMWJjZjY3NmMwMzI4NGZkNmYzOGQyYWQ5ZWQxNTQyNDJmMDFlMTI3MWM1NGQyMDU5ZWRlOGI1ZTYyNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_31706817e7aa4af9adee21f11a4f5a29",
+      "statement": "Both dev loops execute the identical root npm scripts, so `./scripts/dev.sh verify` (lint + build + unit tests in-container) reproduces the host-native gate rather than offering a different one.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L10-L16",
+          "version": "repo-lines-v1:sha256:a639771b751cb23e6d34e327d86c92676f9312f078dbdb38430d694f13f94e07:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTY4MDg2NGJkYzk5NjhkZjJlNGZlYWE1OTM3MmE4NGU1OTY0MDNkOGMwMzI4ZTE4YzE5MTE0OGMyMDA4NjBjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2NiZDI2NjUyOWQ1NzU3ZjdmN2ViMWY0ZWUzNDZkMGE5ZTc0Y2RkZjQ2OTIwMDA3MzNjYTIyZTZlZDZhOGZmZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzYwNjA4ZTc2MTdlOGVlZjE0Y2JlMDg5NjU1MTkxMWE0ZDdlMjY1Y2UyZWJmZGU4NjViNzgwMWFlZDU1MmZkZSJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L39",
+          "version": "repo-lines-v1:sha256:c5b21512eade6f7f61d87560410eb99d1f660186d9fa32489681f5ba543ee7ae:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWNiMjUzMWFhNGEwZDlkNzBjM2I2ZGEzN2ZmNDU1NjEzM2RkOTg5NjhlODFlYmE2OWQ3ZTI4ZGViM2Q1OTI2YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGU2MWU1YzBkZTRmMTdlYjU0N2ZmODk5ODRjNjRkMzJlOGZlYzIxY2VmOWIyZDFkNTBkYTRhNDJmYzM3NmNiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmIyN2QzZjVmMDQ3M2M2OWUzMDQxMzFkN2RlNjY1NGVkNDZhYmU5OWM5MGE2NTM4M2IxOTA2NTZiOTM5ZjMxZCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_03103d486e124d97b3126ede314949f2",
+      "statement": "The app is fully usable with zero configuration: instant guest access stores the session in localStorage under `forceorg_local_user` and rosters under `forceorg_rosters_<userId>`, and lib/api.ts calls degrade to browser-local fixtures (starter Ultramarines roster, offline catalog) when the API is offline or unauthenticated, so no external service is required.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L61-L75",
+          "version": "repo-lines-v1:sha256:e5b4b01ec2ca2d96fb916fa5a1928326273ef5b704f26079f18fed74d16814eb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxZTA4NjIxMDAzOTA1OTNkMzkzMGU5ZDhjMTk3OTVmZTZhZTQ5NzU3NWVhN2IwNTJlNzBjYzU2YmUxNjdlMmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmMWFjYjVjMjYzMjY4ZTBiMjUwMmNjYTMyZmNlNzAwY2U0NDlkYjhkN2JmMTI0MmQ1YjNmZjFkYjM0OTUwMWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFlNTVkMjdlZTMwZDgzNTIyNDQxMTZiMjQ0OGUzYmYzNzM0ZWU2NzVjZmZkNzFlZDVmZTIxMTViZmQ5YzE5NWEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L74-L175",
+          "version": "repo-lines-v1:sha256:0a18daf8c1fb3d788ff19478ccb103882936783f42996c65a559a3af0d396abb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkYmQ4OWI2YTlhYTIxZjNhNjk5YWUxZmU2YTY1MDMzZDAwYzU2ODY2YTAwYThkNTJjOWMyOGJjMzE1NWZiYzEyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI2ODY1ODg2ZjI1MDVmZDRkMDdlMzJmZDJlZDNmMDNhMDZkYWZkZWQ1ODhhNTgxODQxMjRjNDMzOWU3MGJhMmYyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhNDY0NDUyZWQzZTI2MzZjMDMzZTQyZTA4OTczOTM4ZTgyODEyYzdmYjcyYWEwNGYzMzM0Njc3OTI5ODU1M2ExIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2MDU5NGZiMjc3MjBkMGQzNmI0NzBiNzJmOGZkNzQyNjA0Y2VhOTFmODgzZmUxMmM4Y2QxYjc1NDRhMGU5OTM1In0"
+        },
+        {
+          "resource": "repo://docs/DEV_NOTES.md#L142-L151",
+          "version": "repo-lines-v1:sha256:30acd25165d9a85249f519f75b72c894124e10c471caacdc402ac598d036f9d8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmZWJlNDAzZmM4ZDRhN2Q2ZDE0YWMxNmNjYmE5OWY1OWVmYjU5MDc4YmZjOWU3ZWZhMjRkNTUwNWQ5NTgyYzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1MzJlZmVhYWQ1MmJkNzk0YzUxMTMwNjU5ZWUwODIyYjgxZDMxMDE4MjFkMDIwNjdkMTU5YTA4OTczODNiZTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4YWIzMWFkOTNhMGJiMjZhNTYxZDIxOGMyOWZhNjIwZjVjZmNlMTQzYjgyZDZjM2NmMGZlYzZjYzA0OGEwODgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwYzc5ZTBkZWM3ZWVlM2FhODlkZDY4ZjM3NDJmMDkzODgxNTE5NjJiY2IwZGMyMGNjOWRkOWRmM2FkN2ZiOGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fc2936f5543042abb3b3d22d957d5a8a",
+      "statement": "The documented verification gate is `npm run lint`, `npm run build` and `npm test` from the repo root, plus the Playwright e2e suite in apps/web.",
+      "evidence": [
+        {
+          "resource": "repo://docs/DEV_NOTES.md#L82-L100",
+          "version": "repo-lines-v1:sha256:deb68561672f45f2f444e85edad7bf22ba24c165eeeeb874af11050f5ab55297:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhMGVkNGNkOGQwYTMyNGNiODc2MGEzZGU5MGVkMjE2ZGZhYmFkYzkwZWU5MWQyYmEzZWYxNDk0N2Q2YWRiOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiMTFjOGY5ZGNlYTljYWFkYmRlZTBkZjIxNTgzODkzZjgzZjU3ZWJmNzFhYjA2NjU5Y2U0ZDgwYmVkZmE5OWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiZjA2MzgzMTUyOThmZjE3ZGM3MzEyZDZhNGI2N2U1YmJiZDBjODU0NDI1YjQ2NTNiMzI3ZWYwNzUwOTRiMmMifQ"
+        },
+        {
+          "resource": "repo://package.json#L10-L16",
+          "version": "repo-lines-v1:sha256:a639771b751cb23e6d34e327d86c92676f9312f078dbdb38430d694f13f94e07:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTY4MDg2NGJkYzk5NjhkZjJlNGZlYWE1OTM3MmE4NGU1OTY0MDNkOGMwMzI4ZTE4YzE5MTE0OGMyMDA4NjBjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2NiZDI2NjUyOWQ1NzU3ZjdmN2ViMWY0ZWUzNDZkMGE5ZTc0Y2RkZjQ2OTIwMDA3MzNjYTIyZTZlZDZhOGZmZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzYwNjA4ZTc2MTdlOGVlZjE0Y2JlMDg5NjU1MTkxMWE0ZDdlMjY1Y2UyZWJmZGU4NjViNzgwMWFlZDU1MmZkZSJ9"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L39",
+          "version": "repo-lines-v1:sha256:c5b21512eade6f7f61d87560410eb99d1f660186d9fa32489681f5ba543ee7ae:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWNiMjUzMWFhNGEwZDlkNzBjM2I2ZGEzN2ZmNDU1NjEzM2RkOTg5NjhlODFlYmE2OWQ3ZTI4ZGViM2Q1OTI2YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmYzMDQ2OGU1OWJmNzdhNWVkZDllZWMzNDM0ZDU4NTQxNTcwODVmZTQyZWJjMTEyZTM5Y2JjOTk5YWI5ZWVmOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGU2MWU1YzBkZTRmMTdlYjU0N2ZmODk5ODRjNjRkMzJlOGZlYzIxY2VmOWIyZDFkNTBkYTRhNDJmYzM3NmNiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmIyN2QzZjVmMDQ3M2M2OWUzMDQxMzFkN2RlNjY1NGVkNDZhYmU5OWM5MGE2NTM4M2IxOTA2NTZiOTM5ZjMxZCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_45a2390a9a9842ab9ecfcf8837c1d02c",
+      "statement": "The Playwright suite boots its own production web server on port 3456 with `reuseExistingServer: false` (so it never collides with or adopts a dev server on :3000), and the config does not build first — the tree must already be built or a stale `.next` output is exercised.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L29-L39",
+          "version": "repo-lines-v1:sha256:5fb40c3f6d4a60d178ea2d83fb7cdb66903cd906088002e0ffc0b6ae33e10594:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNWMwYjBkYTAwMDIyN2JiM2YyMGVkMjI3MDRiOTFkM2Q3NzhlZmMzYjEzZjY0YzBjOWFmYzczNzM2MGEwNjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3YmVmNDRiNWM4OTA4YTZjMTBkNzUwNjVmNDY3NjA5OTY3NjBiZTA2NDQ2MjdiNGM0OTU5MWIzMWE4NmE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L46-L55",
+          "version": "repo-lines-v1:sha256:9d72bd6f8566f3a7a9d6b666375bb463e054eebe6100dc859cc8c12e4ea65c82:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1NDEzM2E4NTMwODQwNjM3OGQzY2EyMmRkNzA4ODk5YjcxNGIwNjY2NGI1NDM1MWRhYjM5ZjdhNjIzNDE4NTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhNjNmYThjZmE2ZDc1MThlMGE2ZWJjZWU5MTc0ZjhkOGE1NTExODEyZjk1YWI0MDY4NGZiYmVkYThmMDMzZDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyYjU4YzY2MTZjY2I4ZDlmMzQwODQ5NTAxNzNhMDM5YmIyNzk2ODc0YTVkMWQwZDQ4OWIwZGE5YmU4YWYxN2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6caa0682e0324c199701e0fc66e46215",
+      "statement": "Automated behavioural coverage exists only in packages/rules-engine-11e (Vitest, the only workspace defining a `test` script) and apps/web (Playwright guest journey); the API, Prisma schema/migrations, sync worker and shared packages are gated only by typecheck and a successful build.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/package.json#L5-L13",
+          "version": "repo-lines-v1:sha256:b9ec879f70dc13efe4555a51595abadaec7b8eedffeca5b62a4b3aa6b73ca7cc:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JiOWVkOWE5OGEzN2E3ZWUyNWZmYWQ4OTlmYjYwMjBmN2NmYWM1YjJjMTkyMGUwNWI0ZTFkOTUyNjA2Y2U3YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmM1NzE5NjYxMmJjYTJmODU3ZTM3N2M4MDRkNWRiZDEzZjU2OGY3MTFjZmU1ODQ2ZjY2YTRiNDI2OTMwNjExNCJ9"
+        },
+        {
+          "resource": "repo://package.json#L10-L16",
+          "version": "repo-lines-v1:sha256:a639771b751cb23e6d34e327d86c92676f9312f078dbdb38430d694f13f94e07:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTY4MDg2NGJkYzk5NjhkZjJlNGZlYWE1OTM3MmE4NGU1OTY0MDNkOGMwMzI4ZTE4YzE5MTE0OGMyMDA4NjBjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2NiZDI2NjUyOWQ1NzU3ZjdmN2ViMWY0ZWUzNDZkMGE5ZTc0Y2RkZjQ2OTIwMDA3MzNjYTIyZTZlZDZhOGZmZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzYwNjA4ZTc2MTdlOGVlZjE0Y2JlMDg5NjU1MTkxMWE0ZDdlMjY1Y2UyZWJmZGU4NjViNzgwMWFlZDU1MmZkZSJ9"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:498bc10b7478b93a7ff4000b9d9fadb47daf1de078292879d603b332bf61f014:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDVlOWJkZGRhNDU3NDIyMTdhY2JjYzYxN2YxZjQ5ZjExY2I1MjE5OWQyMmNjOTc5ZDEyMTcwMjJlNGY1MDgzMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_612678cd4ba248f58cdbc1f5870d0add",
+      "statement": "The HTTP API is the only integration surface for external systems: read endpoints are public while write endpoints require a JWT signed with the instance's JWT_SECRET, and the stack (PostgreSQL 16 plus S3-compatible SeaweedFS) runs as local containers on one host.",
+      "evidence": [
+        {
+          "resource": "repo://.env.example#L11-L28",
+          "version": "repo-lines-v1:sha256:06be39ad9b3f9cc8879ef0524f43ec2fbca8fe3345b5ceb200542c9e9161b4f0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1NjYyZTY3YmI2NTJmODVjODRhZmVmMDgxMmY5MGI3ZGIxOTE1OWJhYTRmMjUyNGFhMGFkNzRjYTlmOGRhY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxZDM4M2FlNjQxMDQzMDY0ZDU3YWU2ZmYxMWVlMTIyYjgzNjk4NTBiZmFhZjMwNzBjZmVmODgxZWEwNGVkZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxZjViMzczYTJiMzdkMDFhZTQ0YjhmMTc5YTI2YzUxOTdhMzQ5N2Q3MDEzYjYzYTc3MWY5ZDEwNzI5NTY2OWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3NGYwMTViYjBjMjI5NWYyN2NhODJhNzgwNzMwMmI3MjhkYmY2Y2U2OGNmMGU0YzJhMmQ1YjM5ZTRjMjg0NGMifQ"
+        },
+        {
+          "resource": "repo://README.md#L48-L72",
+          "version": "repo-lines-v1:sha256:3bc91130888961e543788c623a31996e74cc05e95b6c0fa21e992c6300717248:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4YjA0ZTc5MzgyZDZkOWYyZDAzZGI4ZmIyNmZmMDc3MGJlZjAyN2QxMTQwZjVkZTIxMzBkOTQ3OGFlNjljYWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5MWE2M2NkYjU5N2UzYjEyZWMzYTAwM2RkOGEwOWJiOGE0ODUzMWQ3YTMxZDIwNjEwNmZiOTAxMmMzM2NmNjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_aefdb4a96eb7499d8a435d166d5040e6",
+      "statement": "The quickstart routes every wiki page group (architecture, api, data, testing, operations, rules-engine, sync, webapp, workflows) to the kind of change it covers, keeping the page navigational rather than exhaustive.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L134-L150",
+          "version": "repo-lines-v1:sha256:1d7f59ef1c7446363d74b532ab63c32891bef171d918b75aa8294c9ffe98e889:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3YTc4Y2U3MGIxMTEzNGUyNGZmYTc4NGVlNDRlZGJhMmYxNjliMTA3OTEyYzVhODk0NTdiYTc1NGRhYWM3NzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docs/DEV_NOTES.md#L169-L179",
+          "version": "repo-lines-v1:sha256:0103e46ab4444a83fdcb753f5ea2485ee9465ae4d805935337bb47d7432bb165:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzU0MjE0YjgxMjFmNDVjOTAxNjc4YjgzN2NjOWVhNmQyYmY1MTA1MmYxMjNhNGNkOTZjOTYwZGU0OTg1YWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjNTc1NjE5YjEzOTE4MmEyNDAwMmU4NmJjNzE2MDE2ODFlN2ExYzJhNzQxNjkwMTlkOWJjYmNlZmI1Yjk4YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxNzM5MDVmYjFiOTQ2YjgzYjM3ODA4YTg2MDQ4NWIzNmIwZmQ5NTM4NGZkMGVlN2I0ZmMwNTFlNGQ4NjYwNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_be007b9e78a24cb693767a6e31356990",
+      "statement": "A third supported boot path stands up the whole stack from published GHCR images with zero configuration: `docker compose -f docker-compose.prod.yml pull && up -d` starts postgres, SeaweedFS, the API and the web app with no checkout build and no .env, because every unset variable uses a `${VAR:-default}` fallback rather than a required-variable guard.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L76-L99",
+          "version": "repo-lines-v1:sha256:70b249206d7cc3ad944468ca1e537863439b317544ff841cbfa47eb8ef4f103e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2ZTNlZjVlMjEzMmJkZjhkN2U0ZDhmYTY0YWQwNTc0YzEzZTQzYjMxYjM5OTk0MjEzNjE4YzFiYmNhNzA0OGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM2YmNlYWI4YTc1ZmM2OTlhM2FmMDM3Y2Q1NzU5YTkwYjYwN2RlMDk1ZGY2MGY4N2QzOTFlODI5NGM4YjU1ODEifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L1-L19",
+          "version": "repo-lines-v1:sha256:e0135822dc14d6a4da36847007fc792441abc1abbaa3d21e9f7bd006d7027fcd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhNDk5N2QyMjI0Yjc4ZTRlYzgyMjdmNmMzN2NjYTRiY2FlNjg2OTJiMmNhOGU3NTZhM2FmNzcyYWI1ZTM4ZTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0YzQyZTJjMGUwMjYzZWZiZGE2ZDQ4NDVkYTE1MzllMjlmYTI4YTQ2YTdjYzMxMjRkN2U2NGEzNDFiNTc4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L21-L82",
+          "version": "repo-lines-v1:sha256:d298e4630ac236f7b539dacb21bdbc37433d9bb6084a55ca68ee2ce2a9c19474:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNDBiY2QyODY2M2JkNDAxNjc0YzI4NTljZjdlZWE0N2M5YWMzZDBmNTUwM2QzZTBiOTg4MWEzZjM1NDQ2MzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNjljMTQ3NWMyYTc3NjVjNDRlMmNlZmNhYjA1NDA5ODc0ZjEyMzY1YWJlZmZiYWE3OGI2NzhmZjYyMjNkMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3ZDQ2MzM0M2E3YjMxN2QyNTc0NTFiMjQ2NGNjZDc5YzI3YmZmYWEzNjczYWRlMjFkN2Y2ZDA3NDU2NTMwMTkifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L92-L108",
+          "version": "repo-lines-v1:sha256:e77c5c36058afe9b87ded1bf13dfa5dfc1d79b278dc0ab940932f1788747bb14:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZjY1NGJmNTFiMDA5M2QxNWU2Y2MxNjY3MjE3ODEwMjFiMDdiZjdlNDgwYjg2ODJhMTA5NGY0NTk0MzViMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3MmEzZjcwOWQ3ODdkODQ2YWU3YWUwNGUzYTkxM2JhMTU2MTlkZDYxNGNiOTY4NTRhYzU2YTg4MWIwMTJhODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiOWEzOWQ1YTdhNmNmYTE5Y2U1OGNlZjVjMmRiMmFmYWYzOTZkN2YyMWMzMjgzMWYyMDM1NGViNmJhYTQ2MDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxYmI0YTNmNTZjNTEzYWIzZDc5YTE3OTcyNTI5N2Q1MjZmNGRmZTM2ZWZjZmVlMTY1MmYwMmYzMTAxNzc0NDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_81f9213490304055b4e35ef6826974f4",
+      "statement": "The pull-based composition boots with public placeholder credentials (`JWT_SECRET=please-change-me`, `postgres`/`postgrespassword`, empty-by-default storage keys), which is deliberate for local and CI test stacks and must be overridden before any exposure beyond localhost; the credential boundary is documented in docs/DEPLOYMENT.md §2.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L89-L93",
+          "version": "repo-lines-v1:sha256:fc2fac12d9c8db279683761f2ff6037338e916e821a90f7c10afcf58d0409612:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGViNzRmNzE3YTRlMDE4ZDNhZGVlNzQ3YzViNjg3MTg5NmZhNmE4ZjYyODEwMGZlODEzMzhmMTZkZTNkNDQ4YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjllZGJlMTFjNjJhY2U3OTk0NjJhNGY3NWY5MTc4OTZiYjg2NThkMjhkMmNlYjkxMzEwNjM2MDRmZWMzYmRlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWIzZGJhODc4MjI5YjMyNmEzNjhlOWJiN2QwNzYwMTM3NDUwYjE4NmI3YTAwODkwNjkxMzM1ZTEwMGEzZTNjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWUxZDA0Nzk4Yjg2YmQwZDYwYjZmMWUwY2IzYzkxNTQ2ZmNmNGUyOGU1ZDgzNjRlZjJhZThmMjIwN2ZlMDI4NCJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L14-L18",
+          "version": "repo-lines-v1:sha256:c30116381ae7b1caba405014199ffedb8c95d25cceb5c708f3742969ba79be3c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjljMGYyMjg3YzQ4ZDNmMjk5NWI5NDYxZGMyZmYxZDk1NDEzMGFkYWJhNmNiZTEwMmM4MjhhMjZjNWIyMmY4YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTE3M2Y4MmVkY2Y0MzY4MmMwZjk1NzcxMDMxN2M1ZGQ5ZjM4N2QyYjA5MmRhNThmZjE4MjM5MzFkNGI4OGJmNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWYxMjAzYzZhNjZlNWIzOWI3ZDExOGViZmVlNTM0N2QyNWQ2YzI3ZTAxNTExMTQ4ZjIxOWY2YjE5OGFkMjEwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTk5OTk0NGI4ZWMzYmRkMmU5ZWFjODczNjY0YWU0YjM0ZTA4ZGE4NzI1YWRjYTJjNDg2MTdjYTNlNWJmNzVhYSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L54-L67",
+          "version": "repo-lines-v1:sha256:fb9f8f8b171402cb8c681fcf619a5c0fa4be73e510223ec9a1275d38dcfb0782:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyZDU4NTkzMzUxN2E1ZGM4ZTNkODNlMDE2N2I3M2I4YzhkYWNkN2ZjZWRhMDZkYjYzZjQyNDViMDZmYWIxYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxZmJkYmM2ZDhiMzVlZmY2NTY3OTg3YjM4N2M0MDI2MTEyNGQ1ZmJmNmNmYzAwNjI2NTBlNDJiNjU4ZTY0ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU5ZDhjZDhkYmEyMjZhZDBkMGQ4NjQwNzdkMjljNDQ4NDgxMTFmYzRmMzFhOTUzMDgzOWE0OTJkZmU2Y2EzNGEifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L40-L62",
+          "version": "repo-lines-v1:sha256:25de3b58dc81dddcf1b8a5ca2c7f166f364308e215395a760e9cac33e7ead716:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3OWE1YWMyMDMyMGM1YWEyYzc4NmY5YmJhMWUxNGJlZmIyZTI4ZDU1MTk2MzRjODNiNTAyODMxOWYyMjJhYzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1MGRmMTZiZDA3YzFjYjhlMTM3MDgwZWEzNDA3MzcwOTMzMTE4MDdhMzhkOTRlMDZmYzc0ODZkZGJmYzQ5ZWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgzYTRmNzkxNjA1NzI3ZmQwZmQzNzhmNzA2Y2ZmMzc4OTc1NmExMTUwMzNhZjUyYTlkMDUwYzRjNmU0MmMxMGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiZWZmNWI0YjQ3OGU3YzI5MmVhM2Y4ODRjN2I4NGFhNmVkNmE0ZGE0ZjI2MjRmODEyYmZjNzBmODk2YTkzZTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_81b5195ce50d402ea5e258aca219b916",
+      "statement": "The pull-based test stack needs no manual migration step: the API image's entrypoint defaults DIRECT_URL from DATABASE_URL and runs `prisma migrate deploy` before starting the server, so a fresh postgres volume is migrated on boot, while the sync-worker image sits in the `tools` profile and is never started by `up`.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L10-L20",
+          "version": "repo-lines-v1:sha256:a4815335137468be891faeb5d841427da61cf4ff01da65a61aec2c623082a56c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0NGZjYzc5ODFkM2Y5ZTdjNmViOGQ2MWNhMDIxYmNiYTYyNjlmMWFmYzAyMTk0M2U3ZjRlYzYxNjI3YjY1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViNWZhZWZkYTE3OTkwOTBkODc5NWY4YzFiZGQ3ZGMzMzY2MmRmODQ5OTE0YjMxZmUxNmNjMGMzNTMyYTk5NDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L57",
+          "version": "repo-lines-v1:sha256:173c88f409564db8ef2fe01543a65c754c5f1ef76518e1d3ca12b41cf2b18b27:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwZTRkZDg3YmM1MzU0M2I5OTJhM2M0YTNlMmY4NzI5NTRmZWFlZDk2NzNhMDlhMjYyZWM3NGU0NWVhYWViNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiYTYzNWJlZWM1NDIxNzY1OTkxYzIwZjg4OWE0M2I1YWI0YzcxZGUxZjgzMzhiODI2NjZhNzc5NzJiMmUwZGIifQ"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L84-L95",
+          "version": "repo-lines-v1:sha256:a382fac2cdcd42daa28b4fb8db3de3fc5d4effb0348375a9bd28acc2cac27352:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYmEyOGVmZmY5ZGFiNjkxMjhlYzU0MWM2OWM2YTlkZjdhNTBkYWQ3MjlhODFlMzIzMDIzYzA2NzViNjc0ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc4MWQ4MzI3MTA3NTU3NDllMjNlNjkwZDZkYzgxNDRlZDBmZTgyZjFlYjU5NDcyOTg5ODU0MTM3YjBlMGJkNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L106-L130",
+          "version": "repo-lines-v1:sha256:0552a8ea4ffd870c4362aae25ee230a78d45118c3416246e70b3e612d1f800ee:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4NGFjN2UxZGY2MzAwMjhlODhiZWZjMjEzM2E5MmU5MGZiOTMwNGE3ZDJlZTA5ZTYyMjRkMDIyNzNjZmRmNjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiM2RiYTg3ODIyOWIzMjZhMzY4ZTliYjdkMDc2MDEzNzQ1MGIxODZiN2EwMDg5MDY5MTMzNWUxMDBhM2UzYzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkMmMyMjAyYzdlYzNmZmUxMjA3MWRjMzE3MDk3NjUxNTIyNWMzYTYzMDgxNGE0Mzk5MjdlMWRiZGYxN2FmZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bd7ef77586b246e4b91d76fc45941270",
+      "statement": "The three supported start paths serve distinct jobs rather than being interchangeable: `npm run dev` and `./scripts/dev.sh` are day-to-day development loops that carry the lint/build/test gate, while the pull-based prod composition (and `docker compose up --build` for source builds) provides a running full-stack test/hosting environment with no source toolchain.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L76-L105",
+          "version": "repo-lines-v1:sha256:89071e2df0a7dcd6af7af05cf849a9600eee8e370935fbb593b2d3fb3416ebf3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2ZTNlZjVlMjEzMmJkZjhkN2U0ZDhmYTY0YWQwNTc0YzEzZTQzYjMxYjM5OTk0MjEzNjE4YzFiYmNhNzA0OGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0MDY4YTQ1ZTE4MzBlZTA4N2MyYzM5MDkzYzk2ZGVjMDExOWUyZDMzZDM3ODNjMDIwZmJjNmM0NGFmNjFjNGEifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L82-L91",
+          "version": "repo-lines-v1:sha256:3e0d20655eb35cbfa2b7cfa587c20e213b8d9e21136acd0832dbbef299e0f574:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkMTY5MDIyYzA2N2FlYzc2MzEwOWZmN2Y4MWRlMmU4YTQ3NWIxOGEwNTk1YjA5ZGUyYjZiOTdkYTZlY2E0NDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1ZThjZjY4OTgyZDdhZDA3NjdmNWY5ZjM0MWIxYzlkNjE4ZjExZTIxNGZkMTVlYTUxMTA3M2ZlMDRkMTEzMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1ODc3YTdlNWMxMWMwOTMwMjVkNTlmYTMyOTc1MGY2N2VkNzQyZjUxMTdkYzBjZDU5MWFmYzYyYmQ5MWZkZDEifQ"
+        },
+        {
+          "resource": "repo://scripts/dev-container.sh#L33-L55",
+          "version": "repo-lines-v1:sha256:c70411df52920ac98b268f14975b8a0647c37c3ede66e36f864fb459b93bab7f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYjI1MzFhYTRhMGQ5ZDcwYzNiNmRhMzdmZjQ1NTYxMzNkZDk4OTY4ZTgxZWJhNjlkN2UyOGRlYjNkNTkyNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzA0NjhlNTliZjc3YTVlZGQ5ZWVjMzQzNGQ1ODU0MTU3MDg1ZmU0MmViYzExMmUzOWNiYzk5OWFiOWVlZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFlNWMwZGU0ZjE3ZWI1NDdmZjg5OTg0YzY0ZDMyZThmZWMyMWNlZjliMmQxZDUwZGE0YTQyZmMzNzZjYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyYjU4YzY2MTZjY2I4ZDlmMzQwODQ5NTAxNzNhMDM5YmIyNzk2ODc0YTVkMWQwZDQ4OWIwZGE5YmU4YWYxN2UifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

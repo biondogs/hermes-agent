@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ba71dac601cdea3dc4c526577743d7ad558f5446122b0ac09e7e2c9cfce07148",
+  "claims": [
+    {
+      "id": "claim_fd748913165045d9a90d963a0485a884",
+      "statement": "The miniature media API exposes each operation under two aliases mounted at /api in apps/api/src/index.ts: POST /rosters/:rosterId/units/:unitInstanceId/media plus POST /media/upload, and DELETE /rosters/:rosterId/units/:unitInstanceId/media plus DELETE /media/:id. Both run behind requireAuth, and the flat aliases take rosterId/unitInstanceId from the multipart body, returning 400 INVALID_PARAMS when the identifiers are absent from both path and body.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L58-L58",
+          "version": "repo-lines-v1:sha256:20a2837a6f026371775b7f17b019e5b72dda023e65f6dcf61a1aba50183e0b2b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjBhMjgzN2E2ZjAyNjM3MTc3NWI3ZjE3YjAxOWU1YjcyZGRhMDIzZTY1ZjZkY2Y2MWExYWJhNTAxODNlMGIyYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjBhMjgzN2E2ZjAyNjM3MTc3NWI3ZjE3YjAxOWU1YjcyZGRhMDIzZTY1ZjZkY2Y2MWExYWJhNTAxODNlMGIyYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmVkNGRlMDExNDk1MTI1ZjEyODNiZGE0MDg1YzdjODk1OTg5NmFjMWI0ZWI0OTY2MjQ1ZWE1OTAzN2I4ZTY0NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTJkMDlkZThjZDIyZmJiMWNmYTA0Nzc1N2IzY2JhMDk5NzlkOTVlYTVmNDRkOTg2NzQzZTFiNThmNTUxOTAyYSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L118-L141",
+          "version": "repo-lines-v1:sha256:f2bd537db9a3fc648a56a799cf9c72ced8b3f43e42c12f27f90e6698de87d9eb:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZDhlZTJiN2U3YWI5MjI1MWUyZDFjNDQ1MTg5ZGYwMDdlY2YyMmYzMjk1ZTgxYjczOTUwZTM4MTkxMDQyNGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU5MmIzMzcyMzE5MjgzMzYwN2YwNWI2NWEwZjc3MDBhNGE1YmE5YWI0YzFlOTg3NjBjNjE4YmI0MWRmNjhmNjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg2MzIwOGE2NjZlNjQ4ZGIwOWRhNjA0NTVhYjI3OTU2MDk2MTQzNTFhMWE2NzgwYmY4NzMzN2Y5Y2JlMzBmOWYifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L29-L48",
+          "version": "repo-lines-v1:sha256:fbc0de37b47ae5cf32547f8e4c99635135ffc3821a4f62227ddefd954e43b46b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmZjgwMmE4OTAzMDg5Nzk4M2I5MDE4ODU3ZGFiYjQ0ZDEwY2ZkOThmNTAzNWI2ZGZmOTg5MWQyMDNkNzQxMTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliNjJmNjBkODU5MGE1NzljZjQ2ZjhkNjczNzhjNGM1NzJiOTYyY2VjY2RiOTBjN2E1ZjdiNDJiOTYwNzgyYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3MTM0MTRlYjg1OGQxMzg0ODJjNTkwOWNhOGY4ZTMzMDI4MTFiODMzMjYzODgyYmFlZDVmN2I3MjI4MTljNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUyZTg1YTk4YjBhYzAwMzlkZWE5YWYyMWVkODRhNDY1MmJmMDM0MjU5NGFiN2EyNjAyM2I2MzZlODAxYTMwNDcifQ"
+        },
+        {
+          "resource": "repo://docs/API.md#L152-L167",
+          "version": "repo-lines-v1:sha256:4dfcf1797fbbbb3ff1bf26a1830c3f650167b84c0076803be7f519eb807fe60c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzZGQzYjYwZmUwMDcwZGE4MWU3ZTBjMzNlMTI1YTk0MmRhYzE4NWU1NzM0NGU4YWYyYTRiOTY1MzcwODFhZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNTRkNGQ2YmMyNThkMDA2M2U5YjM3YjgzNDhlNTdhNmM1OTk0ZDMwMTlhOGFhMWY0Njg1YWU1ZmQwMjM4NWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhNjcwN2JiZjI3YWQ2YWFhZDI2N2YxYWMyNDk2ZTY5NzI1NTJlNDI5YzU1NDM2YmJjNGM1NGQ5MzFmMjE3NDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4OGQ1NjA2NjA0Y2MyZTg0M2M0ZjdjY2VkMDgyN2Q1ODhhNWE1YmQwZmQ2NDBmODVjNjlmODg3MTZmZTZlMzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1bce8939284241cfa8975b76622f5ca8",
+      "statement": "Upload ingest uses a single multer instance with memoryStorage(), a 10 MB fileSize limit, and a mimetype allowlist of image/jpeg, image/png, image/webp, image/heic, image/heif, so raw bytes arrive as file.buffer with no temp files; upload.any() accepts any field name (the web client sends miniature_photo) and the handler uses req.file or the first entry of req.files.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L15-L22",
+          "version": "repo-lines-v1:sha256:361901486b2a878231a1dd02c00f55bd0891d572d6b17fda96e6b5aae26a62ff:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmJmYWQxMDYzNWJiNTI5MDBjNTQ0ZWUxYzk4MGU5YzlhNGJhYzkxZjE4MjdlMjRlYWE0ZWJkYWYzZTkyZDFiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjZmNWI0MGIxNTg0NTdkMTc4NjRmMjE3OTA3ODZkZDVhMmVjZGI2NGI2NmE2NTFmNzg4ZDRlMjVjZDMzMDNkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzE0NjIyZDgyNTRhMmRlYTQxNjJjMGZhNzUzMmZlNTE5OGJhZGNlYWQ2YWMyOTRmMGYxMGY4NTMyN2U2N2E4YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmEyZmQ1NWNmOTk2N2EyNjJjMmU1MjkwNjM2NGQ2YzkyNTI1NThkM2MxNTIyYjEzZjI4NDQ1NmU5NmM1MjEzNSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L42-L48",
+          "version": "repo-lines-v1:sha256:81ef1e6fd2b54b628292c479adb4ed3f9bc860eafbb711fbd636f2bc70dc7841:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWQzNjVhNmRlZTQ5YThkYjcwZjY1ZDZmMDBkYWMxNmI2YzFkYmQwZTUwZTM3NmYzODU5ZmIxOGE4YzRjY2I2YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWI2MmY2MGQ4NTkwYTU3OWNmNDZmOGQ2NzM3OGM0YzU3MmI5NjJjZWNjZGI5MGM3YTVmN2I0MmI5NjA3ODJhNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQ1YmM1YzE1MmI0ZmU4ZDJhMWE3NDkwYTRiYTVhYmY4ZGIwNGZkMDRkZjhiZTdkNDRlZmU5MTQzMDhkNTMxMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTJlODVhOThiMGFjMDAzOWRlYTlhZjIxZWQ4NGE0NjUyYmYwMzQyNTk0YWI3YTI2MDIzYjYzNmU4MDFhMzA0NyJ9"
+        },
+        {
+          "resource": "repo://docs/API.md#L154-L159",
+          "version": "repo-lines-v1:sha256:3967bc30982f3a2eca6eac6ff0ea7f5d489a6c21c9bf4f8b42cb74d3603df2cf:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzRkNDQ5MmExOTQ0MGFjNmJiYjVlY2M4OGRlYjdhYjNlMzRiM2U5OTY4YTc5M2M4NTEwMDg3M2E0MmU4MGU3ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmZhYmZhMDVjMDFkZjRlZTJmMjJlMDU4ZjFkOGUzMjRlODU3ZmNiZmE5OWFhMWIzYjFjMTBjZDA0ODRkYTAxZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjA5ODY1ZmU3MTJjMzZiM2NiODFmMDA2YzM2YjMwNThiMjRlYzQyZDM2Y2JhODcwM2UzMDY4YjlmMjdlNjE5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjE3NjE1NjM2ZTcxMWI3MTgxNDZmMTE4YjJkMDk5MGI1Y2EwNmYxMDljNTJjY2NhM2M2NDYyNzZjY2M1MTNjMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b53e0f7b4fbd44f8be762b662b4ea8a0",
+      "statement": "Because multer's fileFilter rejects disallowed mimetypes by skipping the file rather than raising a typed error, a non-allowlisted upload surfaces to the client as 400 NO_FILE ('No image file provided') rather than a mimetype-specific error.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L18-L21",
+          "version": "repo-lines-v1:sha256:ae34552c31ace831a8fcf661aca8edf6ebb772edbc9084dfe600a22ab7f8aa5e:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWJkYzdiMDU1ZTc3MmRmZGIxYzRmOTY1OGM0OGE0ODJmZmRhOTk3OTk3YTMwY2IwNWJkMTZiZGQxZDJiNjQwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTMzMGU3Y2Q0MWEwNDA1YzFhMjI4NjBmNzE0MjBhYzBmNTMxZTg2NmYyYjJiMDU2ZDFiNjcyNzhjOTNmZjI2NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDhiN2Q3ODMyYTgxNDBhMmFiMzBhMmNhMjQ5OTY3MTJhNzQ2MjIzMWE5ZjAyYzJhMDk3ZjM2Mjk2NmQ3NDNiMyJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L45-L48",
+          "version": "repo-lines-v1:sha256:6013855fcadc82b20624bfd0e595677aec6ed74e2c269f4c4d30627dd8b69aaf:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWJmODk0OWFlOGQwMDg5NGU1NjllZDZjMWNkOTU2OGI3NzRiNDQ1NThkYjI3YjFmODRiY2FjMTI4YTE5ZGMzNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWI2MmY2MGQ4NTkwYTU3OWNmNDZmOGQ2NzM3OGM0YzU3MmI5NjJjZWNjZGI5MGM3YTVmN2I0MmI5NjA3ODJhNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzE4OWRmMTJkZjMzNzg0ODk5NzEyZjdjY2U2MzE0ZDM4NGMwMzUxMGI5MGM1NWM1NjYyMWFhM2M0OTdhYzU2OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTJlODVhOThiMGFjMDAzOWRlYTlhZjIxZWQ4NGE0NjUyYmYwMzQyNTk0YWI3YTI2MDIzYjYzNmU4MDFhMzA0NyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6eb5dd49a5444a9baa2118ec5f1edbbc",
+      "statement": "processMiniatureUpload seeds one Sharp instance with failOn: 'truncated' and .rotate(), then clones it for two concurrent derivatives: a 400x400 fit-inside, withoutEnlargement card at WebP quality 85 (effort 4, smartSubsample) and a 120x120 fit-cover thumbnail cropped at sharp.strategy.entropy position, encoded WebP quality 80. Corrupt or truncated input therefore rejects before any object is written, and the card branch never upscales while the thumbnail is always exactly 120x120.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/services/miniature-processor.ts#L20-L34",
+          "version": "repo-lines-v1:sha256:7b0b312c84724c021b11e4ee640fe29acbd66fb0ceac2c4277aa17a6f3a8bd4b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmIzYzFjMGUyZGQ0YzQ1YzIyYmNiYzRlYWZiZDNhM2YxYTkxMDViN2MxOGYwMWVmZWQ2YzEzOGI0MTNlNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmOWRiYzdmMmYyNGI1Mjg0MzU3Zjk4NjMwNmZlZjA0MTdjYzZmODFhODNhMDJiZjgxNTBmNzExMmY4ODNiMDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkYjEyN2UyNTEzNmQ1MjM5MTQ1NzA1ODViNGY0OTYxZWMxN2VkOTYyZjViMTYzNzQ2MTE3OTNhMTY0OGMyM2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU3NzQzZmJjNTBiMDI0MjYxN2QzNTU3NzA2NzcwZTI1OTlkMjkwYTMzYzdmM2I2NjE0OThlN2I3ZmZhYzc3ZWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_babd149684444f24a47fcd1c02a75d80",
+      "statement": "The upload response returns the persisted media record together with a processing block carrying each generated variant's width, height, and sizeBytes as reported by Sharp.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L97-L106",
+          "version": "repo-lines-v1:sha256:ce89b4ec62344ca7de6d060693cb0dc644301220cf5fd8c28fadfbf693cb13f3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1YzQ2Y2FhNjRkMWMyMzVlOWI4NTJlZjU3MDQ0MmMzMjBkNzExZGM3MjFiZmQ1OTBhOTJiY2VkYzViODgzZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkwY2NhYzBkYmRmZTMwZjMxNWVkOTcyZWNlNzE3ODIzZDU4OGM5YmZjMzYyZjczYTczYjVkZjliYjY2NWMzZWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkNTFlYTBkYmFkYjQzMWZhZjc3MmM3Y2E0YzRkZjg2MmI2M2Q2OGY1MTM0Y2Y5ODA2YjlhNzczZjhiNjVhMzIifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/services/miniature-processor.ts#L36-L49",
+          "version": "repo-lines-v1:sha256:3518f48eeda42022a42595f4a9b780c5632c5fea156025b92e51292ef65c73db:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA5NWZhMGYxMTE3YjVlYTQwNDM0MTQwZGRlMWEzNDBjNzIwZGRiZjMyNjIxMmUxOTE4MzhkNGIxNTZkMzE2YmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNTI4YjkzZjM4NTYyZWEzNGFiYmU3ZjYzYWFjNDgzYzMxMmQ1Yzg2OTBkYmE3ZDI2Y2I2MDQzNTQ3NTA4ZWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0983bb7e22e946149ab92b042f911be2",
+      "statement": "buildStorageKeyPrefix returns users/{userId}/rosters/{rosterId}/units/{unitInstanceId}, and the handler appends /card.webp and /thumb.webp. Keys derive solely from identifiers the client already supplies, so a replacement upload overwrites the same two objects in place and deletion relies on the persisted storageKeyPrefix rather than the URLs.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L148-L152",
+          "version": "repo-lines-v1:sha256:f9d2b52b2fc93093c5d3cc9fea2beadc34130254e97ea059890078e69fd8a7ae:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGY4YWZhYmFkYzQ4NDJlZTU5Y2RhNDI5NjdhZmM1ZTg2MDYyY2NlMDQxMWU5YTJkMjE4ZTc5ZjZhMjUyZGIxMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2E1OTAwZDMzMDNkZTE2MTczNDQxOGRmNmIzYjAyMGQ2ZjUxYTQxM2E5MjY5YzJjYThkNjNkYjRkYjEzZTE1ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzQ1YmM1YzE1MmI0ZmU4ZDJhMWE3NDkwYTRiYTVhYmY4ZGIwNGZkMDRkZjhiZTdkNDRlZmU5MTQzMDhkNTMxMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzI5MjM4OWQ2MTVjYWEwNDkzOWRiYWM3MzZlYjJiYTE0MDA0NWE1NWFiMmIyY2JhZDlhMzI3NjI1MmFjMDNkZSJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L63-L72",
+          "version": "repo-lines-v1:sha256:324bc9aebdadc35c718254083b2918d269460d41fd77637b0ff431eeefc40eef:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyNzE1YzEwMDA4ZTQ1Mjk0YjhlZjJkZDRiZjk0ZTI5NDZmMzMxZmY5MWI3MWE5NzAzNDg0NzgxNWNhODQ1NjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhNTkwMGQzMzAzZGUxNjE3MzQ0MThkZjZiM2IwMjBkNmY1MWE0MTNhOTI2OWMyY2E4ZDYzZGI0ZGIxM2UxNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwNzI3MDhjZTE3MTY3NGJmZThhNTk5Y2ViZTc0YjNmYWRiYzlmYjU2NWQyMmNiZDhmOGVjYjBmMjdlMDM4ZjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhMzQwZjM0OThiMzI3OTNiMTFhNGNmNTQ3MTY1NTExN2JjMDE1MzgxNDM0Mzg0ZWI0MTExNTE2ZGNkMTE5YTAifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L94-L100",
+          "version": "repo-lines-v1:sha256:a496a175ce05f4d1944c4c272a1cc226ee02ab6b1bab6cdc06e4e3a561fcada4:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTBhYzUxZTJlZWM3Y2RiYmU3OWM3N2QwOThjZDhlM2RjNzQ5MDY3ZjY1YjVkMmM2YWFiYmViNGI2NDMwOTY3ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWUwNTdlZDQxOWE5ZDQ3NDZkOWJmOTU2MDdiZDVjOTE2YjFmM2E5MDAwMTVjNjliNzEyZDhjYzIwZWFiMDAwZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2c1af7e82ca54d80b0585c5bddb5b354",
+      "statement": "uploadImage puts objects with ContentType image/webp and CacheControl 'public, max-age=31536000, immutable', then derives the public URL with fixed precedence: CDN_BASE_URL/PUBLIC_CDN_BASE_URL base plus key wins; otherwise a configured S3_ENDPOINT/AWS_ENDPOINT yields the path-style URL endpoint/bucket/key; otherwise the AWS virtual-hosted URL https://{bucket}.s3.amazonaws.com/{key}. Because URLs are persisted at upload time, later CDN or endpoint changes do not retroactively fix stored imageUrl/thumbnailUrl values.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L44-L76",
+          "version": "repo-lines-v1:sha256:db93a66f6f175741a3f9cebef7ea515b9b478eae9f6dde4ce50daebf132aa326:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhNTZiNTFjMDgxYmYxMDJhMTA5MTIxZjllY2M3NGZhMjVhMzM5NjkwNDE3MWJkZDcxZDk5ODE4YjEyNmYwNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3OGUyNGJkNTM2MzZiNzNiN2FiOGY0OGJjNDExZGRlODcxNTMzMjdkMjQzNDQzNTRmYWRhMDM1ZGZhZDA2OGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4NThlNzA5YmY1N2Y1NzFhMDE2N2JjMTNkZmQ0YmJkYzI5YTY1ZWJjOTFjZjU1ZTdiMzJmNWY3NGI5ZWIxZDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f839927ad6a6466889c0bcd4999b4ed7",
+      "statement": "The S3Client is built once at module load from fallback chains (S3_ENDPOINT -> AWS_ENDPOINT, S3_REGION -> AWS_REGION -> 'auto', S3_ACCESS_KEY_ID -> AWS_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY -> AWS_SECRET_ACCESS_KEY, bucket S3_BUCKET -> S3_BUCKET_NAME -> 'forceorg-media') because .env.example documents S3_* names while docker-compose.yml injects AWS_* names plus S3_BUCKET_NAME; either configuration works unchanged, as DEPLOYMENT.md documents the pairs side by side. forcePathStyle is enabled for any custom endpoint and disabled only on the s3.amazonaws.com fallback.",
+      "evidence": [
+        {
+          "resource": "repo://.env.example#L22-L28",
+          "version": "repo-lines-v1:sha256:8487cc27011ee4d892ef5334e91b3aa9c64444151e8972bad5e6f142f9b41224:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzgyMjQzN2QyZDg3ZjllZjFlMTdmM2RkZWU2YjkwZWEyOWE2NjY3NDJiYTYzOGE3Y2I3MzZhNDUwNGFlNGU4NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjFkMzgzYWU2NDEwNDMwNjRkNTdhZTZmZjExZWUxMjJiODM2OTg1MGJmYWFmMzA3MGNmZWY4ODFlYTA0ZWRkYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTdkZTBlY2ExYjM5MzVkYTViNjcxMjJjMjAxNjdiZDRiY2ZjOTkyZDRkN2M0Y2VkOGRmOWQ3NmEzNTZmYjJkOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzc0ZjAxNWJiMGMyMjk1ZjI3Y2E4MmE3ODA3MzAyYjcyOGRiZjZjZTY4Y2YwZTRjMmEyZDViMzllNGMyODQ0YyJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L13-L33",
+          "version": "repo-lines-v1:sha256:3b4e5630efea0de9b78df1fba621ccd1edf139dc9239e32cd0b9b371622d289d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxMGI1NzNkN2VhMGEzOTlhZGI3M2UyNDY3NmQ3ZjA0MTcyNjFhMGY0ZmVhOWQ2NWRjZmViMWQwYzYzMTJlNjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxN2FmMDE1NmFhZDJkNmYxYmY1NDc5ZGYyNTJjZjMyZDY5MmNkNDFjNzhhNDk3ZWE0OTk3NGNmMWZjOWJhMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjExYzFhYmI5OWNkODdmYjY3MDFlMWViNDUyNmI3ZjU2NjIwZTY4ZDkxNDRlNDBkODJiYjk0MDdhYjZiNDk1NzAifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L59-L64",
+          "version": "repo-lines-v1:sha256:d98882386c4076be9796acdc1804cbfda24bc4f64bbaacf6c83aaa482121fcb4:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjExN2E4MDRiODczOTg2OGU2YTA0ZDNlYWQxY2RkNzcxZmYxMWVjNzA4YmJkNTRmNTljMTAzNTExNmE3YTY3NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I3YmNmYzkwYWU5MjZhMDEwNGY3NGE5ZDAyOWM5ZGU4MDhmMGFkZGQ5NTQzNTRmZTc5NjAzY2Q3YTM1MDAwZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2RjOGI0NjBmMzNkMTcyMWQ3ODAwMDE2MjdkYmE0YTZjMGZiMTcyNGZlNmM2MzE1MTEzNmUwYjVjYjI0MjEyOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjNlMmZhYTU3ZDhkZjYwNjE3MTVkN2FkMTY2N2JkZTYzNTUyZWNlMzdlZDFjOTM1ZTBjYzY0OTkxOGQxYzFiYSJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L55-L59",
+          "version": "repo-lines-v1:sha256:d2fbfc97121a0bcc0ac002821a5402d145df4292f36e8e3cdbe1ed62cf390708:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzVhNTE5NDE4NGIxOTc1OTY4NjlkMzUxODljMWUwZTg4YTc4M2RlNjY0ODNmMGI4MTIzY2VlMTc1YzgxZGM0NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmU4ODc4NDllOGRkOTYwNmFiMzhjOGYyMjdlZjIxMTVlMTg1MjM4ODNmMDIwNGI2NTBhZGNkZjU1NWRlNzA4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWZiYzQxMWY4ZGZkMmYwOTQ2MzNjNGU3YzRjZjJjYjkzOTViZWY2M2E2MTE2ZTVhYzMxOTZkMmQzOWRiNTI4MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjQwMjU3ZjFkNDIxZjg0MDg0ZTE2MTdkZWQ5MjYzNDNhMzhkOWE2MmExMzQwMTQyY2U3NTRkMThmNGY2MTUxNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e17f9ecb2d7148359bd24b2308f53db4",
+      "statement": "The default compose stack runs SeaweedFS (chrislusf/seaweedfs, 'server -dir=/data -s3 -s3.port=9000', service s3, volume s3_data) as the S3-compatible store because MinIO images were removed from Docker Hub/quay.io, and points the API at AWS_ENDPOINT http://s3:9000 with bucket forceorg-miniatures and PUBLIC_CDN_BASE_URL http://localhost:9000/forceorg-miniatures, so the CDN-base URL rule applies in the default deployment.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.yml#L28-L66",
+          "version": "repo-lines-v1:sha256:dfb6b1ea28bfbbbdf68094b89200a6f5898015c45ce8632426004f6bde40b43d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlNzdkOTU4YzUzMjNiZDdlOWU3NDkwZTA2YzY0Mzk0OWQwMGQ1NTY3YzUyZGE0ZDI3NDA5MWQzZjgzZmJmNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyMjI3NzkwNWJkNmUwZTZmZDg5MjQ1MWE4ZGI3MzU3NmEzMWI5ZjliOWQwNmQ0OGY2ZDIzOGNkOWYyYzQ4MGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNWNkZmUxZWFmMzE1ZjU1NWE0MWFkY2NhZjg1ZTI5MGExNTcwNTNiNjY5MzBjODk2Y2I2YmZiZGY0ZjY2ZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlhYWUzNGE4ZDhkNzg5YWEyZjM0MDc4MDliNjlkMTJiM2JkN2FlOTQ5NzJkZjBlZTg2NzE5NDg1M2I4N2Q3MDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_36a21b729b51426293edff9194df2f6f",
+      "statement": "Before processing, the handler verifies ownership via prisma.userArmy.findFirst scoped to req.userId and returns 404 NOT_FOUND otherwise; it then upserts user_unit_media on the composite unique constraint @@unique([rosterId, unitInstanceId]), so a unit instance holds at most one custom photo whose imageUrl/thumbnailUrl/storageKeyPrefix are replaced in place on re-upload. The row cascades from UserProfile and UserArmy, so roster deletion removes media rows without touching bucket objects.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L50-L95",
+          "version": "repo-lines-v1:sha256:8f68fa97426b796658d11326313ff0f6e945633ba28c187c2ee8c187d0ac9b8a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZGRiN2M0OGMzODNmY2M2YTJhNjEyZGE1MjcxMGFjNjJiZmFmNTVmZWVhOWY1NGNmYzkzZmQ5OTU2OWFlYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM0NWJjNWMxNTJiNGZlOGQyYTFhNzQ5MGE0YmE1YWJmOGRiMDRmZDA0ZGY4YmU3ZDQ0ZWZlOTE0MzA4ZDUzMTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MTBiZmFhODI5ZjI3Yzg2MDI4MDkxN2E0OTU3MjA0MzBhNzRlODU5ODQ1NGRmMGZiYzMzOGFiNWE0ZmViYzgifQ"
+        },
+        {
+          "resource": "repo://packages/db-client/prisma/schema.prisma#L277-L295",
+          "version": "repo-lines-v1:sha256:6e80eb74722ca1e59344ee37343b23e011d01ff3f0cdb2e7b5dacd30e4526150:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwN2NjMzI2NWJiODVjODVhZWUwNDkyNWJhOTMzNmExMThlYThiZjIyNGRhZDQzZjViMTNkZWIxNTNiZDVmMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmNWUwZDgxMzQxNWZjMzdkOTM0ZTdhMDY3ZjBkZWFmZTA4MDdlOGFhMmVjNjMzYTY5MDAyNWMzZGI4YzEzYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTMzOTc0ZjE2MDQxZWUyMWRlMWJkOWJhNmYwZGZmOWI1ZmNkZGE3ZDQwNmYwYmVmNDVmMzUzNzIyZTU2ZTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_077c2382ad384ddd8859b38203d41122",
+      "statement": "Media deletion resolves the row by media id or by (rosterId, unitInstanceId) always scoped to userId, deletes card.webp and thumb.webp from object storage in a Promise.all, and only then deletes the Postgres row, with no transaction or compensation across the two systems. A storage failure aborts before the DB delete (client sees 500 DELETE_ERROR with possibly one object already removed), while a DB failure after storage success orphans a row whose URLs no longer resolve; symmetrically, a failed upload upsert or partial PutObject leaves objects with no row, and nothing in the path garbage-collects them.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L121-L161",
+          "version": "repo-lines-v1:sha256:cd83045517bdcd2e5c70745e820635fdb0ded477a16c61a37ce97226a64c4219:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkNmMwNjJhZDY4MDlhYWUwNzE5OGY5ODRiNmUwYTRiMGVkNzk0NDMwNTUzYjViMjVjZDcyMTI4M2FkODRiZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRiMjAzMTM4MzBmMTRiOTNjMjNkM2M3NDkwMTRlZjUzOWFkNWY3NjE4YzBjNzlmYmU5MjBjNjQzZTdkOTZjOTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlYmMyYzgxNzljNTg2YTcyYzIwMzcxMmE4YjU5NTdmMzI1NjBkNGFhZTJmNTIyZDMwNzI3YzlhNzQ2NWQ2OWQifQ"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L69-L95",
+          "version": "repo-lines-v1:sha256:89e590928ae7cfd37c6d49182fb56c1b848ac9f5cdde6d5154959c6c0b89daec:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwOGEyOTBjZjg3MGUwMDg0YTI0NTU1NGE5ZWRiMjU5NjNlOWU1ZmE3ZWNjMTdiZDZiNTNhN2NhOWI4MzQ1NWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg1YzRjYTRjOWQ5MzRmZDE2YWY3YjdlNDI4ZTRhYjBlYWM5YjhmYmI1MjM5Nzk3MmQzMTBjZWZhNGU2NDFjNzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MTBiZmFhODI5ZjI3Yzg2MDI4MDkxN2E0OTU3MjA0MzBhNzRlODU5ODQ1NGRmMGZiYzMzOGFiNWE0ZmViYzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1cabc5fae25b4799b4ec0faa049bc252",
+      "statement": "The media handlers expose only INVALID_PARAMS, NO_FILE, NOT_FOUND, UPLOAD_ERROR, and DELETE_ERROR to clients inside the standard { success, error } envelope, logging internals to console.error under '[Media Upload]' / '[Media Delete]' instead of returning them.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L107-L110",
+          "version": "repo-lines-v1:sha256:54d97831a38fd9ff2c638c913c36b2a9df442a728e280b16a2bdb62711493c81:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDFiOWE2NmY1ZTQwOWJiZWRkMWNjZDVkN2M0MDdjMjI2NTk0M2NmMDA1ZjZkOGVlN2FmN2IxOWQyNWY2NzhhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGIxOWRmNTYzZWRjMWNjNmQ2NmM4YmJkYmVlYzczM2Y5MjliNDRiNmU3ZmIwNzM0MGQyYzMxNWY0M2Q0NDYyNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmViYzJjODE3OWM1ODZhNzJjMjAzNzEyYThiNTk1N2YzMjU2MGQ0YWFlMmY1MjJkMzA3MjdjOWE3NDY1ZDY5ZCJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L158-L161",
+          "version": "repo-lines-v1:sha256:b782d6be71e3f27e9f01550641b494cf149ca971238e2c6b03b40e75d2fdb998:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDFiOWE2NmY1ZTQwOWJiZWRkMWNjZDVkN2M0MDdjMjI2NTk0M2NmMDA1ZjZkOGVlN2FmN2IxOWQyNWY2NzhhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjU4NWFhNWUwMjI3MDU5MmEyMzM1OWM2MzUyOGM5ZjZhZmRkYjE2NGVlYWQ3YTkxZGEwZTY2ZmVlOWJhZGMxMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmViYzJjODE3OWM1ODZhNzJjMjAzNzEyYThiNTk1N2YzMjU2MGQ0YWFlMmY1MjJkMzA3MjdjOWE3NDY1ZDY5ZCJ9"
+        },
+        {
+          "resource": "repo://apps/api/src/routes/media.ts#L37-L47",
+          "version": "repo-lines-v1:sha256:9f7b50b55dd7d1a73f0d9eb6079ca2ae8097c474c43d967a9eac9779a2f2bb80:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5MzQyNTViZTFjMzVkMWU4Y2I0ZDQyMGMxNTNhYTEyZTlkMjY5MDVmZmI4OGQwYzcxNjk0NjUwZDNiNGZmYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyYjQwNWJhMWE0ZGQyMmNiZDc3OTBjMDczNzJlNDI3YThhMzk0OTJiZmU3NDIyMGQ4MWFiYTIxOWQ3MTZmNGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNhYjc1ZWMwZWYwYTg2YTUyY2MxZjlhOWUxYjAzOWIyZTA2NWFjOTU4YTA4MmFmNDk0MjMzNjdjZGNhMTE1NjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmNjAxYzdkNGM3MmY4ZDUxNjVkNzYzNTk4YWVkODk0YzE4ZGE0OGZhNTA3NWIzYjIzYmZlYWNlMjE5NTliZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_435086f50987490699ebc58b2e7d80ba",
+      "statement": "No automated tests cover the miniature upload/delete path; the executable-facing specification is the Media section of docs/API.md.",
+      "evidence": [
+        {
+          "resource": "repo://docs/API.md#L146-L167",
+          "version": "repo-lines-v1:sha256:564fef6f3ab15c18d411709aaa4168430c4f2841ed734dba8a0000717f6a3a7d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZGY2ZDJiODY4MDYwYzJlYzgyZGUwOThhZDAyNzY2M2I1Zjc2NWRjYzMxZjI2MGIzNzYzMzExMWFhMjUxNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNTRkNGQ2YmMyNThkMDA2M2U5YjM3YjgzNDhlNTdhNmM1OTk0ZDMwMTlhOGFhMWY0Njg1YWU1ZmQwMjM4NWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3N2UyNWZmYTZkMjk2OTQ5MDg0NTQ4NWVmMmVkYzhiN2Q0NjNhZTczYzM5YjFmMWIyMDNkNDNiZmQ0ZGE5MTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4OGQ1NjA2NjA0Y2MyZTg0M2M0ZjdjY2VkMDgyN2Q1ODhhNWE1YmQwZmQ2NDBmODVjNjlmODg3MTZmZTZlMzcifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

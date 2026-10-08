@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ce72601980eaae68cba9f7f7e6d0354b80d95cc7cce5392387aaebdd44e233f2",
+  "claims": [
+    {
+      "id": "claim_0cd20c3eff3e4a958a1750e870de71aa",
+      "statement": "apps/web/src/app/layout.tsx is the only Server Component in the web route tree: it exports metadata/viewport and renders every route inside <div className=\"app-shell\"><ErrorBoundary><AuthProvider>, so pages never mount their own auth or error wrapper but do each mount their own ThemeProvider from @forceorg/ui-theme.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/layout.tsx#L6-L48",
+          "version": "repo-lines-v1:sha256:3040b55c6a0451b63d66f29b92ba44f0835a5343e51da641822c387f342db387:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4ZDk2Nzg5NzY1ZmUzMDg3YzkzZjRkM2EwYTY3Yjk1NTViYzg1OGIwZjNjZDRkZWIwNGIzOWUxNmJmYmMwYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg1MWU3ZGMyNTM2MmYzMWIwM2JjMDg2MzVjMmIyNTkyOTU4M2U0ZTliN2RkYWFkM2YwNDhmYzdkZTYwM2NjMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L117-L120",
+          "version": "repo-lines-v1:sha256:fa3348d5b361ecb8dbd544d525a36319916185378bee251910c104888c075b47:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTcyMTZlOGU5YzBhMWE2OGQwNmMyZmJhYTVmZDIxMzk0ODJiOGVmZDBhMTkzMTViOTE1ZTZjY2U4NDlkODlkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjc1YTk1MGNiMDA3MDZjOTBkZDJmZGNmYjg2YjkzZmNmNTYzMjI5ZjJhYmM0YjU2MmUzNGQwYzJjZDA5NTI0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGVhMGZhYTI5Y2UyZDk0ZjhmODM5MDNjNGMyYWYyOTBhNzMxNTg5NGI1MjBjNDQ5YWJhODYwZDY2Yjc3MzBlZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjViNzllMzQ0NTRkOTg5Njg1YzkyNjhjN2JkNGI0YTgzNmE1OTVmNzMzOGU0YTU1OTMwNDVjYzFhMDFlYzczZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3fd3253fb7084e09b1159772043c4124",
+      "statement": "The global ErrorBoundary is a class component that logs '[ErrorBoundary]' with the component stack and swaps in a fallback UI; its 'Try Again' handler only resets local state (setState({ error: null })), so it neither remounts the route nor reloads the page. An optional fallback prop overrides the default UI, and the module also exports a non-boundary InlineError.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/ErrorBoundary.tsx#L20-L70",
+          "version": "repo-lines-v1:sha256:63ef8b09b729aef74c5637e1d26c3b62385e0873f0aaa9bc510f52b0bd53decd:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkZGZhMjQzY2ZmZDE5MmUxZTM0Njc2ZGJmNmJlMTM1YmRhODAyZDdlZmU3NzNmZmM3ZjAzMmU4NWYyYTI1MDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTY3ZWMxZWQzODM2ZjhlYjE3YWZmMTcyYjViZmVmN2RlNjA0ODVhNDM5YzZjYTExYzU5MWUxNzU1NzM5YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMxMzAxYzdhN2MzY2VlZTNjMmU2NjU0NDUxNGZhYjU1NzNhNmYwOGJlNzQ4NGNjZGMzMmUxMjBjZjdmNWU5NDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3NWEyMGUxY2JiOGUxNjkxNmJlOTc3YWI5Zjg4MDc5YzY5N2FjZjdjOWJhNjJlOGQxY2E2NjFmZThhMjM2NWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f1f2b862e3bb430bb199b9338beff556",
+      "statement": "useAuth() throws 'useAuth must be used within an <AuthProvider>' when the context is null, which enforces that every consumer of auth state is rendered beneath the root layout provider.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L27-L33",
+          "version": "repo-lines-v1:sha256:a267be8b7bc9838859f55784b35e31ec6e3a891c8f28030a88f712aba11bf643:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzMxMGExZjc2YzU2OTYyZGVmMWFmYTRlNzIwYTcyMTIwYzgxNzJkMTExOTI1YWYwODMzNDE3YTFmMDM4NWViMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTQzMDc3MDBkZGFhZjQzMDI1YTJiMzU4ZjZmMGU2ZWQxMzA2NmQ3MWE0ZDA2MWNmMWQyZmQ4OTM4N2FhOTNmOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjZjNmZiZjUxNmU1YWEzYmVmZTdhZTQ4NzM2OWU3MDRmZTY5YTNkNjIwNDAwNTQ0OTBkYzBkMTFkNDJlMzIzYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c759e685a80a401a91d950b98c680556",
+      "statement": "The app has exactly six App Router pages (/, /login, /catalog, /changelog, /army/[id], /army/[id]/edit), all declared 'use client'; there is no middleware.ts, so access control is per-page: only the dashboard gates on user (skeleton while isLoading, then renders LoginPage inline when !user) and /login redirects to / via router.replace once a user exists, while /catalog, /changelog and both army routes render for anonymous visitors on the API client's localStorage fallbacks.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/catalog/page.tsx#L1-L14",
+          "version": "repo-lines-v1:sha256:3411884b80ead8fd7aec2980ca54bd97f5367fcdd08918cb70d021a8e3caa4bd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzOTNiNjJkMjRhOTc3OGZlNjM3OWJiODFlODAxMjM1N2U0ODhmYWEyMWIyZGUwYjI1ZmZiZGExZWQ1OTNmNzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyZmRjN2U3ZjcxNWNmZGM5NTI0YzZhZTNhODIyMTNlMTM4NzJjNzIwNjAyNWI5Yzk0ZGM0ZTEwOWJjZjQ2ZmYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/changelog/page.tsx#L1-L13",
+          "version": "repo-lines-v1:sha256:e896eb028824feca8689f175d4276baa9a629740ab01055738b16b065979e517:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzOWMxM2QzZWEwZTc2NDEyZDgzOGUwOTAxYTU0ZTUwZTk4Yzg2NWM3MDJiN2YyZjQ4YjM4MjUwZDYzNTIyZWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyOTU0MzBkYmI0MjFjMWUxM2ZhODY0YTRmZjEwOTIyY2U0Zjg0NGU2OGZjZTVmZjVmN2ZhZjkzZjUzYzRhMDEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/login/page.tsx#L13-L31",
+          "version": "repo-lines-v1:sha256:5eb9e636b5bb5195f6129d17c2a1f00b89d7a6fdf0f51e13750b1a030b1ef27e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYTUwMThkMGEzYjM2OTMxNTEzM2Q3MGZiZGMwOTA5NDBkMzNjN2RhNzg0OTMzN2JhYmQ5ZjI2MmVkMWVkNzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxZDQ3OGM2MGYwNDcyMDMxODM2YWFjNzY5ODQyM2RlMTg4MjIxMmUwYWEwOGNmY2EwMTUxMDc5ZjU3NmUwZDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBjNTg1OWMyM2FlMWRhMDE3MmFhYzQzMzlkOWVlYzg1ZjhjODBhOGQ0NDVhOWM1ZGU4MTJkNDZkNDYwYWI2MmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L1-L21",
+          "version": "repo-lines-v1:sha256:14a2576c1ef69b288d159b07df32b6e4aa5c1248c50568d57fe40dd849a22c2d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwNWExOWY2ZDUyNjIwN2FkNzZmMGJhOWNmZmJkYTdiMDQwMmY2MWYyNWJkOGNlODkxYTMyNGQ5ZjU0YTdiYjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA0NzljYzZkMDBjMjVmODRlNjdiYjhhMWZkOWFmZTJhOTc5NzYyYWNkMzk3YmRmNmU3ZDVkMzhkZTQ0Yzc2ZjAifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L105-L107",
+          "version": "repo-lines-v1:sha256:1ec73f74e5acd6aa60d613620ff556df84d6a5ad202f9f386a25e7367fed7e96:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmIxOTJlOGU5ZjVlNDI5Yzc0MDE0NzViMmRjOGYwNzRhOTcwYTQwZjU1NWEyZjRmMjNkZDE0ZDkzMzUxODM4MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDBlOWZkZDdhMzRjN2UyNjljMjgyNTgzNmMzZjIyNDU5ZThjZTU0MGQ0YTgxMWVlZTM1NzlkZTBkMDk2YzI1YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjA5NWZjYTZhYmFiMWFlMWJiZmNiY2JmMDVkMWY4NjFiOTUzZWIzZWYxZWYwMGRlYzg5N2MzYzFmMzc5MzMyMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDRjNmU2NWZkMjZlYzc5NTI0NTRmYzJhZTIyZDIwNDE5ODhjNDgxODIwZmNlZDVkOWJmNzM5ZDRlYzhiNTc3YiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b199cf62546248baa531be3e3db0393f",
+      "statement": "The dashboard's army cards are the only links into the console (/army/${army.id}) and studio (/army/${army.id}/edit); both army pages read the id from useParams() and load their data client-side rather than via server-side route params.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/edit/page.tsx#L23-L27",
+          "version": "repo-lines-v1:sha256:38ae2652d0be2b4b8ff213d34e24e79fe5bbb1fe96a6de48cd7ad9da9c0babd6:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWZjY2IyZTU1MDIxNmI1YzU2M2I0OWI2MjU3MWI4NjVjMzAyMDM1MDBiNjc1ZmZlN2YzMDNhODIxNDBjNTA1NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzAzNWFlODZjN2QyOWQ3ZWMxOWJjOThjMWY2NjBiMmYzOWE3MDlhN2M5OTExMzBkMjE5OWEwZTFhYjZhZDRiMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmYxMTdjOWQzMmI5ZmJkYzQwZDQzN2U1NTNjNmY4ZmRkNWYxOGI0NDI5ZmFkYWIzYTk5MDk1N2UwNTAwNmU3ZCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L9-L21",
+          "version": "repo-lines-v1:sha256:6694be27d92e463215068cec53c059a338197a0d267ca4e7e92f1c11dad7f78c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4Njc5OTVhNGExNWZhZTBlOTAwNmU3ZTIxZThkOGU3YjVmZDM5MDdiNGUyZTRmZWU1ODliZDc4YzEzNjQ3NTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1YmFiZWNjNTczNTFlYWI0NTBiZjExNjBkNWU0ZGRiYjE2MzM1ZjY2MjFlZWE5M2ZhOTczMDQzN2I0OWRkMDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRkOGNlNjU3YmMxN2M4ZTc1MjQzZmM3ZWVmNjM0NDE0MWUyYTM5OWEyZGU5ZjMxNDhhYWM4MjJjYzAzNjU4MTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNhMmM3NWEyMGIwOThiMTQ2ZjVmMTc2Mjk5YzQ2ZjBhNDdmMjliMzRkYjhlZjY0MDkyZWFkNDA5MmY5NmI3NzgifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/app/page.tsx#L328-L370",
+          "version": "repo-lines-v1:sha256:7da0d47f6baed752202f7af0610fdc78e11608342a353a8a8fbbadc890d64b95:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZWNlNWJhNTcyMDUzOGU5NjViOTMzZWIyMThmMTQ0YWMzNGVmOTlhMTVlYjgwMTEwODUyNWQxM2JmMGM0MDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiMzBkNjhlMjlmNzUyMjhlYmEyODkyZTFlN2E2YzcyNTBiMzEzZGQwZDc1ZjVkODIzYTU4OGExNGE2NTdlOWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFkY2VkMzA5YWI1OTQ1MWMzZDhkZDVhYmU0ZDk4NzEwNzA5NDBjMjljMGQyNTgwN2IxZWQ1OTA2OGM5ODA2ZDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2ZTgxODI0MGU2OTdkZDE3MzY5NDEzNTNjYjEzOWMyYmZiM2MxZDJjNzNmOGRmYmQwYmM3ZTYyOTJhNzliNTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_66e376d52d8c43e384c31260fc8a91fd",
+      "statement": "signInAsGuest(callsign?) is synchronous (returns void, no error channel): it normalises the callsign to (callsign || 'Commander').trim() || 'Commander', fabricates a User with app_metadata.provider 'guest' and role/aud 'authenticated', id 'guest_<slug>_<4-char base36 random suffix>' where the slug is the lowercased callsign with non-[a-z0-9] replaced by '_', and a deterministic email '<slug>@forceorg.local', then sets user + isGuest and writes the object to localStorage['forceorg_local_user'], swallowing write failures.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L151",
+          "version": "repo-lines-v1:sha256:4c84de5a42f7da57080ba934e9e8ba4c62bf35962f9ae760af331cda83c19942:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNGQ0ZWJjNzQ0ZGRhMGMwYTU5ZGJlOGU0MWQ0NDYxMjZmN2Y5MjAzODBhZTUwOGMxMTI4ZTg4NjNhY2NlNDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1d68ea76ce8b429382fcdad02b2c1c74",
+      "statement": "LoginPage supplies the guest callsigns: Quick Launch submits guestCallsign.trim() || 'Battle-Brother', and an error banner offers an 'Enter as Guest Commander instead' button that calls signInAsGuest('Commander'); cloud auth failures are surfaced as copy pointing the user back to Quick Launch.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/LoginPage.tsx#L196-L219",
+          "version": "repo-lines-v1:sha256:9d8207bb9d7fd463bfe643b366e84fdd192885faf1685f0aa478f0826a02dbc7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxMGM3OGE3MzNkYzQ3M2QwYmQ3MzExYmY3MGQ4OGY1MGYyOGQzYTM0OWIwOWQ3MzZmNGU0NjljNzg4NWRlYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTAwNTlmNDhjYTU2ZjZiNTBmZGM2OWExNWM3YjdlNjMzY2MxZTEzNjA4ZGFhNTBlZDkyM2JlYjBmNjM2ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU5YmQ0Yjg1NDFlYTE5ODYyYjY5N2U1ZDMzMzZhYjJiZWYzMjRmZjkyMDA1ZGFkNTg5MGY4NzE3MTBjY2YwYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2NGI4NDRhNTNmM2Q5ZjY2MTBjOTg4ZGIyOGU2OTU2YzNjMDI5NWNmZDNhOGJmZjVmNmE0Y2FjMDcxMDhmOWYifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/LoginPage.tsx#L25-L66",
+          "version": "repo-lines-v1:sha256:f8365b31f37c871de7962289f855dcd28714f8d2c4ab25acbaffe76153a151ed:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NTVlNzE3NDIwMTEyZjUwYmU2YjA1M2U0YjYyM2VmOTMxZmUwZDhlODc3ZTJlZmU4Y2JiNzY4NmQ3NDIwY2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ODZjMTE3ZWMwMzhjMGNlNmY4NGMxYTRhYWY5NzI3ZTM1YjhhZjUwNDk3YjBiY2Q5NjM0ODBlZDhlMTMwOWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1MDhkNGM4YTY4OGZmMWFmNzgyMWEyM2VmYWU1M2RkN2Q3NzQ0NDFlZmU2NTU4YTdhYTRhNjE0MjkyYmQyOTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_708cbe65bec84cb49bbcff8f9913d65b",
+      "statement": "Guest persistence is keyed on the randomised user id, not the callsign: api.ts builds storage keys 'forceorg_rosters_<userId>' from localStorage['forceorg_local_user'].id, so signing out and starting a new guest session with the same callsign yields a different key and re-seeds DEFAULT_STARTER_ARMY, orphaning the previous guest's rosters.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L151",
+          "version": "repo-lines-v1:sha256:4c84de5a42f7da57080ba934e9e8ba4c62bf35962f9ae760af331cda83c19942:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNGQ0ZWJjNzQ0ZGRhMGMwYTU5ZGJlOGU0MWQ0NDYxMjZmN2Y5MjAzODBhZTUwOGMxMTI4ZTg4NjNhY2NlNDIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L121-L150",
+          "version": "repo-lines-v1:sha256:597403b74a5a97d8b2819877f38a2996684e60acde303fe288bedbd08f82fd83:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhNTUzNjdiZmI3NTJmMzUyYTIxZDhhYmEyMWUwZjk2YmJhMTU3OTI5MTU3ZDdhYmIxMTRhMTRjM2RmNjRjOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxOGZmZDFiNWY0ZTU2MmQ1ODQyODQ0MzhiMzRiYzZmZTYwMGFmNWUwMjU4NmNkNDM3MzFhY2I4Mjc3ZWIzMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMWMwZjBhYWI4ODMwYmQwZjQ2MTBlNDMwOGY3NTQ3M2RkNDk5ZmQyZWM3YjQ2YzYyMDQ3ZmUyZDEzZjJmNjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6556e1cc3a3f436786d5ad37141e10e1",
+      "statement": "Guest sign-in never populates session — only user is set — and api.ts's getAuthToken() creates its own Supabase client per request and collapses any failure to null, so guest-mode API calls go out without an Authorization header.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L151",
+          "version": "repo-lines-v1:sha256:4c84de5a42f7da57080ba934e9e8ba4c62bf35962f9ae760af331cda83c19942:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYzUyZjA4YjM5YjA4YjAxYzhkMzA4YmY4ODBiMGJlZjAyZmQxZGZjYzlkOWFhOTNhNGQxYjVmNGQ1OGI2Y2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNGQ0ZWJjNzQ0ZGRhMGMwYTU5ZGJlOGU0MWQ0NDYxMjZmN2Y5MjAzODBhZTUwOGMxMTI4ZTg4NjNhY2NlNDIifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L31-L55",
+          "version": "repo-lines-v1:sha256:60cddea4710535b5e4487191279f01fa7a336820a0d63738d66c6f665718ae65:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiNWY1NDBlMWZlMWU5ZTg3NDI5Yjc0YTNjYWE3ODUxZmU5ZTliZjQxOTE1Y2I2YzI0MTkzODEyYzg1YjQxYjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzMTRjZmUwMzk3NzJiZjgwMzI1YzU1ODFmNDhkMThlNjRiMmExOTU3MjI3M2E0NTdiMDVmNWQ5MmRiYWVhMWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3eb7bdee6ec44925837df4d175568fa6",
+      "statement": "signOut() clears user/session, sets isGuest false, removes localStorage['forceorg_local_user'], then awaits supabase.auth.signOut() inside a try/catch; it clears identity only and leaves any forceorg_rosters_<userId> payloads on disk under the old guest id.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L153-L165",
+          "version": "repo-lines-v1:sha256:20aef7da55af5c58c38bdb9ad9153b9e9f469a58dd6b4c9a140dea1262214f2a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3YjAwMGRjNzRjYTM5NGVjZmQ1MTY0YzdiNjI5YmNiMTViMTYyZDA3MjJhMTk1OWMxYzA5ZTI4NjU1ZjA0ZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZjAxOWY4YmJiZDM5NmY1ZTE1ZWU5ZmZmZmVkNTBlZjljYmU0MGZhMWU0YzM1ZjQ4ZDZhYjU4YzNkNDAxMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NjE3YzU5NWQxYzc0NjA2MDlmMGMyZGMxMDVlNDg1MmU0OWIwMWY4OWI2NTQzNDhhYWU1YWVmYjE0ODVmYzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZjYWE3NGZmYTAxNjFiNTQzOTllMGI4MmEyYTY1ZjdlYzc0YzU0OWU4YWM1YWZjMjFmMzFmZWE0NzU3YzM4Y2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_682b90afe1d54be99018e9756d91101d",
+      "statement": "AuthProvider's initSession awaits supabase.auth.getSession() first and returns early on a session with a user (isGuest false); otherwise it falls through to a window-guarded, try/catch'd read of localStorage['forceorg_local_user'], restoring it as the user with isGuest true only when the JSON parses and carries an id, and finally sets isLoading false. isLoading starts true with no timeout, so a slow or unreachable Supabase host can hold the shell skeleton open.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L43-L80",
+          "version": "repo-lines-v1:sha256:5b0618cee9e7b85ee6bd8efa39f98ea7245a81b565bad4f40404b2b5b4e81ebb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlYjhjZDA1NmM3YmUxMWM0NjM4OGI1NWU0ZDZiMDkwYjc0ZDZhYzI2ZjlhNTc1Njk5ZjE2MmZlNzU3ZTMyMzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViY2I3NzNhN2M1NGViNGE2YjUzZTczYzRhMTg3ZTcyNzFkNjc5OTUxODhhMWYyZmQ0MGE0Yzk5YjFiOGNjZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhlZTUyNDVlYmM5Y2QxZTQxNjA5NDlmYmVlMzQ0NDRkYzM0NmUzMjA5NDc2ZTU0OWMzMDQyZmIwNzMwZjAyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNTE4MmJkMmRiNTdmMmZjOWI1NTM0MjM0YjgwMzA4NmI0ZWFhN2IxM2FjMWQ2ZWU0NWMyYTAyMGUzZWUxYjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b815866173394fd3b2c54d2a9c56b02e",
+      "statement": "The onAuthStateChange subscription (created on mount against one memoised Supabase client, unsubscribed on cleanup) acts only when newSession is truthy and then forces isGuest false, so a Supabase sign-out or null-session event leaves the previously restored guest user in place; explicit signOut() is the only way to clear it, and isGuest semantically means 'this user came from localStorage' rather than 'no token'.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L131-L165",
+          "version": "repo-lines-v1:sha256:fa0173030b07e5d4c06b58ec4b1469c688e05a455797bfcfca711e04c61e9bc9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlNjVmMjA5MjRlZjliM2U3MzgxMjY3YmJhOTI1YmVhYzM1Y2RmODI1MTliN2VmNmRlMDFjZjBhODIzOTc4M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZjAxOWY4YmJiZDM5NmY1ZTE1ZWU5ZmZmZmVkNTBlZjljYmU0MGZhMWU0YzM1ZjQ4ZDZhYjU4YzNkNDAxMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxM2M1NmEwYTIxN2ZmYzZhYWFiZjg4NGM0OGIxMDM4YmU5ODRmMjNmYjE3NmIzNThjYWJiMDM5MjQ4ZmYzYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZjYWE3NGZmYTAxNjFiNTQzOTllMGI4MmEyYTY1ZjdlYzc0YzU0OWU4YWM1YWZjMjFmMzFmZWE0NzU3YzM4Y2UifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L82-L95",
+          "version": "repo-lines-v1:sha256:781ce0d986fdd27df7c1c83927fb6eaf0887198a2e39b37aac6d9e7e5b253f90:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYzViMzhkNGYwNzZmOTBkY2M2MTA0ZGNiNTE2ZGI0OTdkNDY0M2ViYmIzNzc2NDQyOTFiN2YxM2RmOWNiZDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZjAxOWY4YmJiZDM5NmY1ZTE1ZWU5ZmZmZmVkNTBlZjljYmU0MGZhMWU0YzM1ZjQ4ZDZhYjU4YzNkNDAxMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM4NTYyMjcwNjFkMTFmMThkYmQzZGYwZmM5NjRmMjc0NDQ2MzI0NWI0NmRlYjAyNjVmZWFmZDY3NzgxM2ZhYTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMyM2Y5YmE0OTFlZTlhY2U1YTJjZjcxZDJjNzM3NDVlN2QzNDQ2ODhhNDEwMTk1ZDgzMWJlN2I4NDIwNDMwMWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0dbf6c6a29a046f8be5f8e2f70c6ee35",
+      "statement": "src/lib/supabase.ts is a legacy optional auth client: createBrowserClient from @supabase/ssr with NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' and NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key', and AuthProvider wraps getSession() and signOut() in try/catch, so an unconfigured deployment stays fully functional and callers cannot distinguish offline, misconfigured, and signed-out.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/components/AuthProvider.tsx#L46-L95",
+          "version": "repo-lines-v1:sha256:7be5133220309d5fbb0bb18624462952026886deac5dd0ed1aa6cf52fcd1bdd5:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5NjZmYmZhODg5OThkYTc0NjU2YzUwMTk0OTU2YzI1ZjA4NDk0NTc2NjBjMDA5ZmU2M2QxZTlmYTlkYzkzMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZjAxOWY4YmJiZDM5NmY1ZTE1ZWU5ZmZmZmVkNTBlZjljYmU0MGZhMWU0YzM1ZjQ4ZDZhYjU4YzNkNDAxMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjNGRmNjRjNzVkNWVlNjU5OGRmN2UxMThhYzhmZDJkOTM1MjQwYjgwZGY0NTZmM2YwOWY3Y2Q1YzVlYWMxYjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMyM2Y5YmE0OTFlZTlhY2U1YTJjZjcxZDJjNzM3NDVlN2QzNDQ2ODhhNDEwMTk1ZDgzMWJlN2I4NDIwNDMwMWUifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L31-L39",
+          "version": "repo-lines-v1:sha256:ae89a736eefb3d465676488146d55a04286ffcb5bab20886ee600b3fdd4bb849:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1ZjU0MGUxZmUxZTllODc0MjliNzRhM2NhYTc4NTFmZTllOWJmNDE5MTVjYjZjMjQxOTM4MTJjODViNDFiNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmI1ODBlOTY0ZjgzYTQ3M2Y0M2Q0NDM4NDYyOTQ5ZDY4YjU2MDBmZGE3ODdmMTYzNzQ1ZDAwZGU4OWNiZjM2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjNhZmE4YTZhZjUzZDE4YjU1NzZkMjBhZWU2OWZlMTlkZDdiY2RiZTIwZGMxNDQ5ZWRmMDEyOTc3MTMzNzc4ZSJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/supabase.ts#L1-L18",
+          "version": "repo-lines-v1:sha256:f6b7bf965c827871b719ab26bf27d08b9486a8bf82ab77b8068089cb3d3589ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b78169b13bca401691c63b2f2542002b",
+      "statement": "next.config.js sets reactStrictMode, transpiles the workspace packages @forceorg/types, @forceorg/ui-theme and @forceorg/rules-engine-11e (matching apps/web/tsconfig.json path aliases), allows remote images from **.amazonaws.com and **.r2.cloudflarestorage.com, and serves /sw.js with no-store Cache-Control plus 'Service-Worker-Allowed: /' so a worker could control the whole origin.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L1-L25",
+          "version": "repo-lines-v1:sha256:ec6bb80de8fbacfd6e188c1334eb01f65b31ffe3e80c0cbcd2a5d2e22167b03c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzYjAwNDFmM2M1M2YyMWM5Y2NlOWYwYWFjOGI1NjdkODY1NjcyNDA1ZmI5ZTk2MDQ1ZmQ5YzJjMWVkOTIyN2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmYWY4NDBiN2I1ZDQ3NDFiMTdlNDgyYWY4YTc5Y2NlNzNlNzIzM2RjOGY3ZWQzMjA0MGEyMWI0MjQzOTkzMGEifQ"
+        },
+        {
+          "resource": "repo://apps/web/tsconfig.json#L14-L27",
+          "version": "repo-lines-v1:sha256:63eafa632b61fb366f84b0df03063f5514c5e5e03e03e6ffb163a61e8a5352ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyODM2YmM3NGZkOWEyMmM2OWE4MzMzNWQ0ZWJjM2Y2MTgzMDZlNTJlMDBmZWNlY2U0NzYzMzkyNWVjMDA3NzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTFkZjVlYjMzNWZlOTBlYjMwZDEzZTk0YWZjNDEzMDUxM2QzODdmMzAxN2EzYzQ3NjNhMDcyMzg5YmNjYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkOGE4Yjc5OGJlMTgwNzAxOWE1ZDY5NTFmNGE5YmI0YTljZWZlYTlkMzU3NzIxZTZhZWQ1MDFjOWJkYzFlNmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6b71436d4e794c90b9aa6b92d624cdbb",
+      "statement": "The PWA assets are present — public/manifest.json (start_url '/', display standalone) and public/sw.js, which precaches /, /catalog and /changelog and opens an 'forceorg-offline' IndexedDB with rosters/datasheets/stratagems/weapons stores — but no file under apps/web/src calls navigator.serviceWorker.register or references sw.js, so offline behaviour in practice comes from the localStorage mirror and per-page fallback fixtures, not the worker.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L15-L23",
+          "version": "repo-lines-v1:sha256:bc90edbe831b4388afb0838c9c31c70600cd1ed25d84bdd77ca8d046fdbfa100:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTlmMGVkZmIyNTg3MDFlMjVkOTczYjU1NmVhYjc3ZWFmZjk0MjM2NmE0YmYwMzhmMDY1NGNhZTY0YzVjMmM0YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWI3ZDM2Mzc1ODNmYjBmNzAxNDMyZTM1YmFhNGNiMzllYmNjZDg3YWRkMDViZjVkYmMwYmQ4MzFjNWFhMTIyNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2E0MWQ4MWI1ZmM1ZWNhMWY5MWZlNGEzZTM4YjhiMjhmNTc2MmVhNDY3ZDFiYTRkMjhiMTIzYThkOGE0Y2VjNCJ9"
+        },
+        {
+          "resource": "repo://apps/web/public/manifest.json#L1-L10",
+          "version": "repo-lines-v1:sha256:2c8a52ca14dada3b8ff27f5585ae5be60d4adc2d38b0da8668f6e6548cd7f2ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4OWJhMWE4MDU4ZGFlYjVlNTE4ZjJmNDhhNWY1NDczNDU1Y2Q4NzRiMTJiZDZmMDdkYzdlYmY4M2Y0ZGRkOTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg0NmU3ZTFmYmNlMTZkYTQ0YjZhNzU0NjJmM2FiZGUxNmI5NmNmOTVkZmJmMDc3YjhkMmYwOWJmMDg0NTA0MWIifQ"
+        },
+        {
+          "resource": "repo://apps/web/public/sw.js#L1-L45",
+          "version": "repo-lines-v1:sha256:0aae2fa984c1326a34865fa544573902be6f797e131eb9cfe87f422ff71c9f70:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YjQ1ZmUzYjI2YjcwYTQyODdjMzg2NTg2MjczMDg4YmQ2MDQyYzFmY2QwNDBkNDBmODJkYWYwZmU5NTIxMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiYjJmNTQ5YjkxODU3NTIwMzhhODI0MjI2NjM5ZmE0MmY0MzQxNTBkZDA0MmU1ZDFhYzA1M2NlMDg5YWQ2MzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgxYWEwYzg0NTEwMTYyMTJlODhlMDk4NWE2MDcyMzE2ODQ2OTE1MDViNjJkMjZmZGEyZGQ4ODhmZWM1MGJjY2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e4599e4bdeb54f61913e7872155d905d",
+      "statement": "The Tabletop Console page requests a screen wake lock on mount and releases it on unmount (ignoring denial/unsupported), keeping the display awake during tournament play; it is the only app page using a device API directly.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/src/app/army/%5Bid%5D/page.tsx#L119-L144",
+          "version": "repo-lines-v1:sha256:8b579be834c96c18f5a7fa0906a34ae752494f3bcc654366264b4e2a7f57530e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4NWZiZTJkMDJlZjU2ZTcwNDA5ODVkZTBlZWUyNDk0NzcyMTI4N2FiNTRmYjA2ODMxZGNmNDQzM2YyYjZlMTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2Y2IwOTAzMjU1NTMzOTkzYTRlY2M1MWJkOWIzZmE5NTdhZjExODg2MjE4YTBjYTQyYzczMzhkZDJjOTMyN2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNkNDUyNTEzMWJlNWM2M2YwNDJhODk4ZDc5Zjg1YzljYmU3MThmNTM3ZTBmZjFkOTk0NmNmZjk3OTM1Y2M4YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1YTNiY2FlMWQxM2FhNjMxZWExZTZmMWQ1ZDc5YzJkZDBmZGIwZTkwODE5NGM2MTc3NmE1MGJmODQyMDJlMWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba670929bf4d43bcb783dab0d928c726",
+      "statement": "The Playwright suite in apps/web/e2e/critical-flows.spec.ts uses the guest flow as beforeEach for every journey (load /, expect 'Instant Commander Access', fill the callsign input, click 'Enter ForceOrg'), then covers /catalog, /changelog and a Console navigation to /army/<id>; playwright.config.ts starts 'npx next start -p 3456' with reuseExistingServer false and only NEXT_PUBLIC_API_URL set, so the suite exercises fallback behaviour with no Supabase env.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/e2e/critical-flows.spec.ts#L8-L64",
+          "version": "repo-lines-v1:sha256:4943315e36875cab8b9070caa4e1148cbb42fb14710db51c025a21416c01772d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmOWRiMjJlZjg1NWFlZDRiMzk0ZWE1NDMyYzdhMDA4YmUxMTc2MDE3MjY1YTc5ZmI3OWM4NGQ0MjkzNWRjZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlNWI5ZWJlYzU4ZTMzYWUxOTBiMDhlM2ZmOGM5ZWUzNzZmNmViYzdmMGRmYzkyYTY3ZjE4MzBjY2ZmNjlhNjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0ZjgyNjZiYzZjNzA2MmI4ZDY0MDgyMTZhYjc5Nzc3Mjk1OGRmYWZkNWFiYTQyNTYzMGUwZGE5OWI5MDUzMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkNmUyNzRjZTIzMmMyMTM1NzFhOTYzNGIxMjJkMzA1NzdlZDUwMTQ0NjViOWY3NDhiMzk2YjQyYWEwZGNmZmYifQ"
+        },
+        {
+          "resource": "repo://apps/web/playwright.config.ts#L29-L39",
+          "version": "repo-lines-v1:sha256:5fb40c3f6d4a60d178ea2d83fb7cdb66903cd906088002e0ffc0b6ae33e10594:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNWMwYjBkYTAwMDIyN2JiM2YyMGVkMjI3MDRiOTFkM2Q3NzhlZmMzYjEzZjY0YzBjOWFmYzczNzM2MGEwNjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3YmVmNDRiNWM4OTA4YTZjMTBkNzUwNjVmNDY3NjA5OTY3NjBiZTA2NDQ2MjdiNGM0OTU5MWIzMWE4NmE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d9e2a59b967f460f9060db7a090e4296",
+      "statement": "Next.js inlines NEXT_PUBLIC_* at build time, and Dockerfile.web sets ENV NEXT_PUBLIC_API_URL=http://localhost:4000/api in the builder stage before building @forceorg/web; enabling real Supabase auth likewise requires the Supabase env vars at build time, not container runtime env.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.web#L32-L41",
+          "version": "repo-lines-v1:sha256:03b55ee7fd4cc86f168c261761b316a706c7fcc990e187f958c9632af1853212:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiNzA0ZWRiMTRhZDdmYmViYWU3ZTNmNTZiZTEzODRjZjhlMjYwMmMwN2VhZGVlMWQ3ZTQ5NGZkOTM0ZGRkYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2YjA4ZGQ2Zjg0Mjk5NWUwMmE0YjAyODhlNjFhZTQ0Y2RjNDNiM2Y3MmQwY2E2YTFkOTA0Y2EwNWYzMjE2NTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU4ODRhN2E4Y2E2NDk1N2Q5MGQ0YjFiNDY1OTM4OTk1MGM0YmM1YjZiOThkM2Q4YzcyNjA0ZDFkNzdlM2MzMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2MmNkMzE3MGRmMTI0MjdmNTI1ZTg3MTUwZmE2MWI3YTljYzRjNTU5NDdmMWY5YjVhZmU5MGZiMDAyMDc5NzkifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/supabase.ts#L9-L10",
+          "version": "repo-lines-v1:sha256:449a5a53c2944398db0f4687ac2f5721695305c4ed3db9fa121a8f689b8d6e9e:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQxYjA3NWRhMzZlMDlkMGU3OGU0NmY1ZWQ5YThjYmJmYTU2MzMwNTJmMWY3ZDJiOWRmOGRhYzVjMTk4ZTNkNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmI5YWFmMTYwNzZlOGIzNjUyN2U1ODhlZmJkMWExOTYzOWVjOGU4NTQ5YWY4MDE4YjRmYWY2YWEzNThjOWMwMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjQ3NWViZWE5OWNjYzA1NGRhOGE4NjE4NGMzNWM0MThhOTJjY2Y0ZGNiMTExNGJlMmNkYWM2ODE1YTM1MjEyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2UwNTQ4N2JkYzc5ODkwYTM2ZjY5ZTQ1MThmMTkxMGIwMGYwMDQzMmIzMGIzZGM3ZDYzMWVkNzc3ZTBmNmFhMyJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T01:03:35.924Z"
+  }
+}

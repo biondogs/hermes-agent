@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6e5401991e90a3a074f512c9a8620c48cdb05a232b8cd795abb78287f9854d88",
+  "claims": [
+    {
+      "id": "claim_fb1aaf1539844ad0990c2b9e88315c83",
+      "statement": "ForceOrg-40k's canonical deployment is a single self-hosted Docker Compose host containing web, API, PostgreSQL 16 and S3-compatible storage; no managed backend, hosted database or third-party storage service is involved, and the instance's own HTTP API is the only integration surface for external systems.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L7-L11",
+          "version": "repo-lines-v1:sha256:2f91a276a8ec0bf3b4e5c3f56074e7c01550c7bd570ff92d78b5430b95e4296c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjNkZWI2MDg0M2E1NWYxMTg5YTQ0NDJmNWViZmUxZTAxZmZlMDg3Y2ZkZTZiYThmYTA3OTg4MTRjZTNhMTlhOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzY5NzNlODQ5OTk3Y2NmZWI2YzYzODBhYzZjYWE5MGRiY2I4ZWQxZGZlZDczMDcwNTgyYTBkYzg3MWQxNDlmMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDhhODQzMWI4YTk1MTQ5OGUyMjAyOTM5ZmVlZmZkYjhmOTM2ZmUwMTQ2NWIzYzdlM2I1OTZhM2ZhMmRiOThjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDAxZjJlYzE3NTkzYzEwNTRlYjQ2MzY3ZDg0NTNlZjI0YTE3M2NlOTZiNzExN2Q5MWY5YTY4ZDQ0ZmVmOGIwMSJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L170-L179",
+          "version": "repo-lines-v1:sha256:d2d69ddcdddb76eb001800b0766569f6ea917f56c05793c989bb78d6732e893e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlODAwZTg5MTMzMDJkMzM0MWFhNGY3NDI0MjhlZDVkYTY5YzgzNzQyYzY3NDk2MmMyNDM2NDhlYmFhZmQ3MDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkMzhhOGMyZDk3Y2FlMDk5YTI1MWNjYzFiNDFiMWY0NDdkOWEyZWFmNGQwYThiNDVmMzY1NDEyODg4ZmQ1ZmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE3OTczNTVhNzcyYmJmNzM1NmUyODYwOGE2OWExMzVlNmE4MTJiNDMyN2RhNDdhMGI5NzcxMDVkNTg4ODQ0OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxZDNlYjg2ZjJjMmZkOTExMTc4ODJiZjUwN2IzZjQ1YmY1NTI4YmE5MWYyN2M1MDk2YjFjZDc4ZDEzNTM4OWMifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L3-L7",
+          "version": "repo-lines-v1:sha256:733455eb978434209da60a1bdfa7293ba4df404e4b19d174352ae745247852d4:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTYxOTNlZGYzM2ViNzNlODdkZDJkNmUwNTRkODA4MjQ0NjZjODYwOWJmMjIzNDNkMjI0YWUzODAwYzZhNDdiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmViOGY4ZTk3NWViMDk2MGFkZWIxYWM5Y2ViNWY1MThkOWYwMDNlMTQ5ZmQ5MGFlNzM5ZDI4NmY4OTFkZGJhYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2IwMTlhMDRjOGIyMmU4NmM0NDk2NTgwOGEzZmY3ZjQ5YzRhNDBhMTUwNjg2OTQwMzAxODgyZGRlODE1MWQwMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTZiODE3MDMxN2Y2MzAxYTE5ODFlNmU4ZWE5MjQzNDNkYzk1MWFkMWU2ODI4MTMyY2UzMmM4MmQ2MTdkODNhOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8897e606f5b245d1b407315e867a6f8f",
+      "statement": "The repository is an npm-workspaces monorepo (workspaces apps/*, packages/*) driven by Turborepo, with apps/web (@forceorg/web), apps/api (@forceorg/api), apps/sync-worker (@forceorg/sync-worker) and packages/types, ui-theme, rules-engine-11e, db-client; root build/dev/lint/test scripts forward to turbo run, and npm run dev is filtered to only @forceorg/web and @forceorg/api.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/package.json#L1-L25",
+          "version": "repo-lines-v1:sha256:4e0053846ac39fe964d99a186357a8adaf4d6b46c5aa6d52f91b8142c622c246:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmNTdjZWMwY2ZkM2ZkMmQ4ZjQ2NTk4NDM4ZGMwY2JmMGQzZjFiNzk4YWRiNTk2NGZhZjRiMzBkODUwNWRkMWUifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/package.json#L1-L18",
+          "version": "repo-lines-v1:sha256:1978c9bdd0a6e7019a0fda845b599dd364837ca84bb4bc5033a4f9cd80cbaad4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFjMmNjOWVhNjAxNzQyOWExZDc5NDMyMTcyYTMwZjgzZTcyZTJlOGIyZWM1NjAyY2MyNGNjMmQyYTNiNjhkMjQifQ"
+        },
+        {
+          "resource": "repo://apps/web/package.json#L1-L23",
+          "version": "repo-lines-v1:sha256:eccc5734f28c7a7de88716bf503d686be865b6520b53ca43e0cb5a7a2b4b3210:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMyMGNlOWQwMWM3NmNlMTE4ZDlhNTZjMmU0YWNjZDg3OGFhZGZhYTQwMzQxYWJjNDM0YmY0ZGJlMTlhNzMzMDAifQ"
+        },
+        {
+          "resource": "repo://package.json#L6-L23",
+          "version": "repo-lines-v1:sha256:ff22a6e0a86211fd7b97bd7fafaaabaf2af00e3719f8dec849f82c8c80dd2db6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkYWVlYmNiN2RhMDliM2E3Yzk1OGMxNDljMTZiYmJmOTE2MTJlYzYxZDQ0MjdiM2VlMWU2MzIyYThmMmJhMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlZDZjMGI5ZjhhMmRmMTBmNjlmMTFlNDU4NzA0NThhMjE0OGNmOWU4Y2FjYTA2Y2FlMDExZDYxNGE1MTdkZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFiMDg2Nzg4YjY5MGI0ZTZjNjFmYzdhNjQ4ZDUzOWUyNjMxODVmZmVmNjY4ZDEwZTYxNzI0NDdiZDgxMThiYTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4ffc78d962547f0b5769a72d59b319f",
+      "statement": "turbo.json gives build, lint, test and test:coverage dependsOn ^build, so each workspace's task runs only after its dependency workspaces have built; outputs are cached under dist/** and .next/** (excluding .next/cache), and dev runs uncached/persistent.",
+      "evidence": [
+        {
+          "resource": "repo://turbo.json#L4-L26",
+          "version": "repo-lines-v1:sha256:7152378c19707607f2bc4d0426b281efd6c0c55eee4b82e5bb8888b7c475e462:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZTIzYjQ5ZWQ3ODBkMzgwMzk3YWVhNzllM2NkZTgwZmU5NGM4YzU3YmZmODc1MjJjODMxNjM4MDhmN2M3OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlY2ZlMzAzYmI2MDQ1N2E3MGNiZDI2ODQxMThjYTAyZDU1MjQ3YmIwNTIyMTBlMmU3MmZlZDIxY2I2ZWZmODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0eb9b4d181914966b5534cdf1a133d17",
+      "statement": "The implied build order is types first, then rules-engine-11e, ui-theme and db-client, then the apps; each app Dockerfile hard-codes this order explicitly instead of running turbo run build (Dockerfile.api: types -> db-client -> rules-engine-11e -> api; Dockerfile.web: types -> ui-theme -> rules-engine-11e -> web), and each image carries only the packages its process imports.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L26-L51",
+          "version": "repo-lines-v1:sha256:3472cddb616f7d6fc3915a461967c3dda3c70650bbfdfd5a8630e18ab2e2ed10:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzhlNjZlZTZkMTA5NGFmY2Y0MjgzZTczYzRmM2QwYzllNThiNTRkY2VmN2RhZTZkMjViZWYxOWMzMGYxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZTA2N2YwNWM3ZDhmNjEzNDU4MDczZWVjNjcyOGY1YTY4ZDczMmVkYzE3M2YzYzQ1MDQxYTE2MjlhNWYxZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4YWM3YmJjMWVmOTQzMTk5ODgyMjJkMmIxZWFhZGIyZmUzOGVhZTljOWRkYmQzMWI2Zjk0MDY4ZTI0YzFhNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlYzVkYTc1MDY1YjYzZWRmNDQ5NTQ0ZjNiOThkOWYyMzY5MzViYmZmZTBkZjlkMGQ4OTRlMzU3MzAzZWMwN2EifQ"
+        },
+        {
+          "resource": "repo://Dockerfile.sync-worker#L28-L50",
+          "version": "repo-lines-v1:sha256:f034151b625dbc76b99abc0af74ad9390ff696a47120f1de9366ee88fcdaf96c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzhlNjZlZTZkMTA5NGFmY2Y0MjgzZTczYzRmM2QwYzllNThiNTRkY2VmN2RhZTZkMjViZWYxOWMzMGYxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwZWQ0NTNkYzBmYTc2NjU5MWM0Mzg1N2ZkNjViY2NjNTRmMzllMTc5ZWVkMjc4M2RkNzNlZjhiN2I1MzZkY2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxYzEyY2U2ZDRhZmNkYTFhNzQ1MWUyN2FkMjRlY2UxNWUxMDZjN2M2OWNhYmVhYmMwY2IxZjdlOWJmOTZhNjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NzIwNjJkYmJjNjEwOWRhZjYxYTQ1YzE2MTg5YTU5ZDY2ZjdmZDM5Y2Q3ZjEyNDZlNGYxMDZhNmQ4NmM3ZGMifQ"
+        },
+        {
+          "resource": "repo://Dockerfile.web#L36-L60",
+          "version": "repo-lines-v1:sha256:29dd7a02a682cb7a908bd5004dc5b0b20680efa7ce12804a6b485a6c1bd5b89f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjExZjIxZWRjZWIzZTk0NmNhYmQ0NTUzNTVkZjMyMWQ4NTRiOTdiMzBhZDkyOTkwMzc2MzQ4ZGZlNWUwNGJmZWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZTA2N2YwNWM3ZDhmNjEzNDU4MDczZWVjNjcyOGY1YTY4ZDczMmVkYzE3M2YzYzQ1MDQxYTE2MjlhNWYxZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4NGQyNmNmYjljOWU0YWE1ZmE4Y2IwNTc5MGY5ZmI0NjYwZDUyMGE0Y2UxNTMxZGY4NDk0ZTg5ZTJiOTE3MGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlMmY5OWE1YTQxZGQ3OTczYjhhZmE1YTc1YTRlNTY4NWQ2NGM3N2Y2MWMwMTI2MzZkZjk4ZTIxY2QxZjZhYmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_020e877a227247f39cd284542c7a4322",
+      "statement": "@forceorg/types and @forceorg/ui-theme resolve main and types directly to ./src/index.ts (types is a dependency-free header-only package; ui-theme keeps react/react-dom as peers), while @forceorg/db-client and @forceorg/rules-engine-11e compile to dist and must be built before runtime import; apps/web additionally lists types, ui-theme and rules-engine-11e in Next.js transpilePackages.",
+      "evidence": [
+        {
+          "resource": "repo://apps/web/next.config.js#L2-L8",
+          "version": "repo-lines-v1:sha256:04a0725b9241f2758cee4d597e681bfc8b797f3f3891133831344df3d219e5b9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhhOTYwNjczODZmMDgwMDBjNmE0ZDYwZTVmZmQ0M2MzZjY5NjVlNzA5YWMxODI1NDA3ODIzMzlmNGYyZjBiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY0ZDhjMDczNDI5ODkzMTAxNTc2ZDg4ZDk5MTI3ZTg5ZDY4OTFkM2IxN2U4OWRmMDJlYzlhZTcwNzA1ZDhiZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjNiMDA0MWYzYzUzZjIxYzljY2U5ZjBhYWM4YjU2N2Q4NjU2NzI0MDVmYjllOTYwNDVmZDljMmMxZWQ5MjI3ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjU0MGJjNjllM2I3NzY5YTVlN2NiM2ZjY2Q1YmFkYzU3MDI5OWQ2NWE0NWY2ZjZhOGJhOGQ1ZDA4OTdkNmRkMSJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L5-L15",
+          "version": "repo-lines-v1:sha256:4d4f0244d1ed950ea7e5edb8601fccbc96f35e436cd707a6eacdc7f9055ccb34:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmZDA0M2RkZTdlMjFiMjQxNWExYjA3NGIxZDQ1MzE0MDFiNjgyZTQ3ZDQyNTYwMzMyNmUzYTcyY2UxMzliNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzODZjZDRiMTExOTY5MDI0YzVhZTQ3NWU5ODExZjRmNjY5ZDc0NjgwYjA1MTZiMDE5ZTVhZmE3ZjJiZDQwNDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImExMDBkNDQxNWVlZGVhMjIwOWM5MTcxMzI0ZjQ5MDA5MDBkOWQ5YzdhNmZmMzg4NzUyM2U5ZmE2NWZmYjA4OTkifQ"
+        },
+        {
+          "resource": "repo://packages/rules-engine-11e/package.json#L1-L14",
+          "version": "repo-lines-v1:sha256:bbf911dd2cc8cb9ffc7aeebfcfd395efe71279164924937cdc086b66d9d83b27:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhM2I0NjlkOWUwOTc1NzIyNDY2NjczNGM5ZWY3YjI1NGQ4ODUzNGY1ZDViYjcwOTg5NjA4MDVjNTUzZGMzMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyNmUxOWZjYWUwNTFiOWE3ZmFhNjE4ZDVkYmVhNTdjMjc5NGMzYmM0OGYyOTllNWE3ZTljZjU1MTg2YmQ1MzcifQ"
+        },
+        {
+          "resource": "repo://packages/types/package.json#L1-L14",
+          "version": "repo-lines-v1:sha256:f0ef1b31bf13ca26794b6530386af6122f64a4ca4bfc7cd74d49ada1fb80e8bc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://packages/ui-theme/package.json#L1-L23",
+          "version": "repo-lines-v1:sha256:4ab145c1dc784f66d8bbc2e0bbc4aaacbd6bc8bf45a2a86adb9a284c0b0e4149:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cee6596971454dce9b891b36be743eea",
+      "statement": "The Prisma client is generated before any workspace type-checks: packages/db-client's build script is `prisma generate && tsc`, and the root postinstall runs prisma generate against packages/db-client/prisma/schema.prisma.",
+      "evidence": [
+        {
+          "resource": "repo://package.json#L21-L21",
+          "version": "repo-lines-v1:sha256:df798e019bb53dac8e237f2ad7dc016274ee3cacedc4a0c34b5f248463c9e64a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY3OThlMDE5YmI1M2RhYzhlMjM3ZjJhZDdkYzAxNjI3NGVlM2NhY2VkYzRhMGMzNGI1ZjI0ODQ2M2M5ZTY0YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDBiYzI1YzAxNDQxMjdjNWYyMWM1NTI5YTgyMzk2OGM3OTNiMGE0NTRhNjdlYmVkY2MwMTYwYmZlN2FjOTU1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlYWJlZmU3MmNiMmYyNTYzODQxZmRjYWM3OThmYmFjOTgxMWY1NTcxOWM2OWFkMDk0MTM1MzIyYjU5ZTJiMCJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/package.json#L7-L14",
+          "version": "repo-lines-v1:sha256:a2179adfd45079067362feae3cdb7f8b78ea478e76bcf90448d8cff7d856428a:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQ4MzNkNTk0OWMwM2E0MGNhOTUyNDkxNjEwYTY2NTk2NDRiM2FhNDY2MzYyZjc5OTAyMGRiZjE5ODE1NDdkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzJmNjYwODNiMzUxYTI0MGJhMDI5NTZkMjVhMTNkMWUxNGJhODMwYWQ0YjI3Yzc4M2QxODBjYjBjNWNkYTAxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDZjMWZhNjJjY2NlY2E5Zjg1NWM2YzQ5NjU2ZTM3ZTU5Y2Y1OWZlNWU5OTBlZGZjNTc1YjAxYjk0OTU5ZmUzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTI0ZTRkZDQ0ZGU2MzI3YTI5MjAwOTk0NzBlMWZjODgxYjM1NWY0NDc4ZGZiODgxM2VmZjE2ZDU3NDc0YjIwNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4ea57ca8e1004159a29772935fd4b505",
+      "statement": "The browser calls the API directly rather than through a Next.js server proxy: apps/web/src/lib/api.ts builds requests from NEXT_PUBLIC_API_URL (default http://localhost:4000/api), a value Next inlines at build time, so repointing an already-built web image at a different API origin requires a rebuild.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.web#L32-L34",
+          "version": "repo-lines-v1:sha256:2e7cf2bdc8ac9d591ae980fa85ff5f5c380ca0059895bdc3fc961129026ec328:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGI3MDRlZGIxNGFkN2ZiZWJhZTdlM2Y1NmJlMTM4NGNmOGUyNjAyYzA3ZWFkZWUxZDdlNDk0ZmQ5MzRkZGRiNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDBmMTNiZTM1ODRlMjliYzg3MTZhNzk5NjY0NGNjNWExYWUzZmNhOGJkNzMyMzc5MjBlNmI1NDkzYmZhN2M4MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTg4NGE3YThjYTY0OTU3ZDkwZDRiMWI0NjU5Mzg5OTUwYzRiYzViNmI5OGQzZDhjNzI2MDRkMWQ3N2UzYzMyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWM2MDE0NjA5MjZmODk2YzM1MThjNGIyYjFmNmRiN2NiMWQwMmRjOTA2MTk3NGMzMzk5ODhiM2M5YjljZjA3MCJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L16-L16",
+          "version": "repo-lines-v1:sha256:7124533ee687487fcf474a3376ae082aadad83ff02ef05156e985ce85c07954d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzEyNDUzM2VlNjg3NDg3ZmNmNDc0YTMzNzZhZTA4MmFhZGFkODNmZjAyZWYwNTE1NmU5ODVjZTg1YzA3OTU0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGY3ZTMxYWEzOTZiNzczY2E1MmY3M2I0ZDEyYzNlOGU3ZTU4NTRlNDc5NTAzOGYxYzllMzZjZGNjM2RjOGNmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjBiMjZjNWYyOTRiYWFlNzI4OGVmYzYwMzYyMDczMmMwNjc2YTU2MTNmYTk5YWYxOGE4MDMzMDlmYTA5MWQ4YSJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L69-L73",
+          "version": "repo-lines-v1:sha256:c7c20cc73e2984f47aeec019780e70ceade71fad75175c207d338459c9575b7b:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc0NjU5ZTMzMTlhZjlmMDk5MTFmNjBiOTA4NzkwZGYxNGY0NWUxY2NiNWUyZDgwMGMzZjM3YWM5ZGY4MzI5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzI1MDdjMmEzNzIxY2ZlZDE1MDYxYmEzYjg0ZWIyNTMwNWE3MDljZDExMTQ2ZmNmYzNkMmM4NzNiN2M3Zjc4YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWM1NmM2ZTgwYjY2ZmYxOWUzMjFjM2ZhYmE2NTMwZjA3MTAwM2ZiYWYzZjAxYWVhZjNmNWYwYzAyNjU3M2JjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDc1MDBiODdhMjE4ZGJhZTM3NzQ0OTU4MTU5NTAxN2JmY2RjN2I2YTY0M2EyMjcwNDVjMmM1Y2E3MTg5MDZjZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f30a3288c7c54b05bba88580a6b16731",
+      "statement": "apps/api/src/index.ts is the single process owning the network boundary: Helmet, CORS limited to CORS_ORIGIN, a 2mb JSON body limit, a 300-request/15-minute per-IP rate limiter mounted on /api, an unauthenticated GET /api/health, and five route mounts (datasheets, rosters, media, audit, changelog) followed by terminal 404 and 500 handlers.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/index.ts#L15-L68",
+          "version": "repo-lines-v1:sha256:1882917d0b5070fb59c367afa223fe110eb2a33ca05eac51c9f9c3ecf80fe871:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1YzYwZTM5MWM0YzFkYzU4OTI2MjMzNDE0Y2EzZWVjNzY3Mzg4MGM3OGY4MzZlMWU0M2I3MmNiYzY1MDkwOTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwMTNmZTg1MzQ4YmRjMGJlZWI0ZjU0OTUwZmJiMzE5ZGVkMzY5M2VmYWU1OTRiNzhmMWYzYTg5ZjU0Mzg0MmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjYzc5MjJhOWEwMDRkNzcwMDdiZjFjNGU3YWU5NmI4ZTEyNTMwZjc2YzJmMWM3YTYyYWEyNTEyNjA1MzM4NjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ae5a7683ddf4487a876467c82ec5030f",
+      "statement": "The API is the only process that talks to S3; its storage service resolves S3_ENDPOINT falling back to AWS_ENDPOINT and enables forcePathStyle whenever a custom endpoint is set, which is what makes local SeaweedFS a drop-in replacement for real S3.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/services/storage-service.ts#L17-L28",
+          "version": "repo-lines-v1:sha256:cc789bc2f771345a14c113271c12b496252d74369a53d75f1b8a5a2d1be1ce3a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViNWVjYmVlNzEwZjI1ZjRkYmNjYjdiN2Y5YWYyODA3NTkzZDlhOGMzNjY2MTM0ZjI0MDBmN2ZmZmQ1ZjRlYjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0ODFmMWFhY2E0NmNmZjk1MWYxMzM1ODdkYWZkOTIxNTI1ZTYwN2Q1ZGRjZmNjNWFmNGVmM2NiNWE3MjRjYjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhZDcxN2YzZTc5MmY3MDU5OTZlNDM5MGViYzc5ODg4YWJlZmUwNDQ1MjU1YmYxNzQ2NDI2ZjE1ZWFmYjU1NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU4ZDFkMzlhYmM1NmIwMWZkYzc5M2ZjOGZlODA4ZmMzZDNjMzlhNmQ1ZmNmYTQxMGRjMWM2ZGMwZjRhN2E3YWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5fd859f163f14b1188ed98bc2d0f1cc2",
+      "statement": "apps/sync-worker is a one-shot CLI rather than a service: src/index.ts runs runETLPipeline() and exits 0 on success or 1 on fatal error, with no listener or supervision.",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/index.ts#L8-L17",
+          "version": "repo-lines-v1:sha256:7d4fb285874e5ae1509b5e1f66c36512045f251f492aa4910570e3549770487d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlODIwMGViZDE3MDliNmE2NzViZWNiM2JlOWYzOWU1M2JiYWMwMmNjOTI3MjM0NjJjMDU0NjhlYjBkYTZhMTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhmMDRjZTYyYTM4NzE1MDE4YjgxYTRhYWFhY2FiZDNkYmRiMzJhYWVkYmNhNzExZWZjYWZlMzc2NzUzODc1MGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyN2VlYTcyMmIxMTQ5MjM0MDg1MGM5M2VhZmVlMzQ5ZDc3N2MxYTE0MGU3N2FiZmFhOTQzMDU1MzE3ZDg0MTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2e9e8cf30cea435893112f26ff7e4c4f",
+      "statement": "The sync worker is the only writer in the topology that bypasses the HTTP API: the ETL pipeline instantiates PrismaClient from @forceorg/db-client and writes Wahapedia catalog data and SyncMetadata directly to Postgres, which the API only reads back (e.g. via /api/changelog).",
+      "evidence": [
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L6-L18",
+          "version": "repo-lines-v1:sha256:5ad7ebe6800a22b5c3cb14aebb4d4efc9c91ce5ae5b6f0852b377ffe69b2fd4d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YmJkYTg5NzE1ODI2MGFlYzk3M2VjNmEzYWQ5YjY1YzcyOGU5YTY0MzQ5ZDIzMGMzNWFmZDUyNjdjNzI1MDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMmQyYzBkNmRjNWU3NGQ5MmZhMTRiOTFkYmVhMjY0MDkwYmViMzVmZGI5MTg4ZDliMzQxMTgxZGNlOWY0Y2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliNDRhZmE5Nzc4MDc0OWUwOWI3M2NjNTRjODU2OTlmMjQ5ZDBlNmQwNTU4ZTYxNmQwMGFiNWI4MjJhYzQ4ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkN2Q2ZjNkYjg2Mjc2YWFmMDMzYTBhMjA1M2Y1MTI0YTAyZWMyY2VmOTEzMmMzMDZlNTA4ZmJjY2Y3OTI5MTAifQ"
+        },
+        {
+          "resource": "repo://apps/sync-worker/src/etl-pipeline.ts#L76-L80",
+          "version": "repo-lines-v1:sha256:39ccde97c89b5b708feca781271294349956dd5d113e415239cb28e5d8332d53:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2YwMGM5OTY4Y2I4ZWMwMTBhODliMGJiOWYxODcxMTI2MGRkZWU0NDdhZDFjNGM2ZWZiMjNjOTNiODM0ODQyZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2EzZTQ2Zjk0Mjc2YjZmNmY0ZWQxZjAyYWY3OGJlZjZhMmVlMWM0MzlkZDU1ODRiOTczOTQ4MzEzMjE0ZDJiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWFjM2E1ZjM4OTg3NTRlY2ZiMjkyMTMyNDdkOWNhYjkxOWExNDQ0NDBkMGQ4M2M1NTlkYWJhZDI5ODRkYWYxMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzIyOTk4ZDdiZGM2NzVjODE5MzA1ZTVjODFiM2FkM2ZlY2RlOTY1YWIzNTM3MjQ3MzM0ZjE4ZTdmMmFhMzgyZCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4bfc5e216a2544529adfca091d7efb83",
+      "statement": "Sync passes are scheduled outside the app lifecycle: GitHub Actions cron runs `npm run worker:sync --prefix apps/sync-worker` daily at 02:00 UTC with DATABASE_URL/DIRECT_URL/ALERT_WEBHOOK_URL secrets, and on a self-hosted stack the equivalent is `docker compose run --rm sync-worker` behind the compose `tools` profile.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/wahapedia-sync.yml#L8-L41",
+          "version": "repo-lines-v1:sha256:15099c25f4172a194439ef7b803840e1c954a53ee85ace0dc8e9ce4515467827:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlOWMzMzczOTk2ZDZkNDcwN2Q5YWIzZDBhYTQ3ZTgzMWI4ODcwNjQ4MDNhZmFkNGVkZWQ2N2JhZWQ4OWExZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNkY2NiNzk2ZGJmYzU4YjIxNDg3YWRhZDgzMzNhZmQ4ODEyNDkwNDFlYjg5MGUxZmM3ZTcwZjMxOGZlODZhMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L84-L101",
+          "version": "repo-lines-v1:sha256:834fd747e8e091dcc0bfd3d687d3425b12e8580fab3c62bc8d49a45df649c6d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4NzNjMjI3NjdkMjRlMTNjNWE0ZTA1ZTk3MWI0YjRmN2JkNWExMTU0Yzc3YWIyMThmMmM2NGRmZWMyYjI4NmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhY2E0NmYzZTkzMGJlYjEzZThkZTgzMjA2ZGY4OWU0Njk4ZWU3MGViZDYyY2I0MWJhZDQ0YjMwMDIwMDY0Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMTY3ZDg5OGUzNjRhNjQyZWQwNjRiNWI2ZjJiYjExZTQ4OTkxMjdjZTg2NDAwODQyZDhiYmM3NjFkZmI4YmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTIzZjkwMzZkNzYwYmJjNDA5NDNmZTJlZTkwMzNiZjM0ZTg0ZGE1MzBiNmUwN2MxNzBjNzJiMWM3Y2ZkZWYifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L126-L130",
+          "version": "repo-lines-v1:sha256:27d3c257fdacbb6c454dc4b17c597e5a36df01ca8860ba0177cbf9319048d426:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE1NGYwOGU2ZGI4ODgzZjhhZjBmNGMxMjk3YTRmNDIzNTUwYTFkNTE0ODU2Zjc4MDY5ODczYzEyNmNhYTY0YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzY0NjQwZDVjOWZhODRkYTBhZjQ5Y2Q3MjNiMDA3YTJjNGY2YjJmYzdjOGRlYjA3YWM4ZjMxOWE3NDAyN2U5ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmQyYzIyMDJjN2VjM2ZmZTEyMDcxZGMzMTcwOTc2NTE1MjI1YzNhNjMwODE0YTQzOTkyN2UxZGJkZjE3YWZmYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6b2386a4b64b41f79eb496fa6a306e2e",
+      "statement": "packages/db-client is the persistence boundary: it re-exports the generated PrismaClient and its runtime enums, and holds the schema, migrations and seed script that both every API route and the ETL pipeline consume.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L6-L13",
+          "version": "repo-lines-v1:sha256:dd0ccb0611d4322055f97178991bba4035047c6f2577ad279e4c07c5724b5219:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTQ1ODBmYzBlZjFjODc0YzFhYjk0ZjU1ZjIyNzkxNmY1ZWNhNjllNWFkOGU4YmEzOTkyYTEwOWVlN2M5NWU0YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDJkNTBlOGIzNDg0YjMyZmU4OWI1ZTQ3YjgxZGJhZWM0NzZhMjg4YTM0YThjZTUyOTM0NWNjMjM0NGY1YmQwMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjdjMmZjMGE3ZDI2YjUyNjNkMWFkN2NkYjgwMjRjY2IxZGE1YTlkYjhkZGNlOTE1MmQ4NDFmMDM1MjJmZDY3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjhkZTY3MDE1ZjM3ODdiZDQzY2U4MThjMjEwMjlkMGQyZTNlMThjODY5OTEwYzFjNjZmOWFlOTRkZDMxNWJlOCJ9"
+        },
+        {
+          "resource": "repo://packages/db-client/src/index.ts#L1-L25",
+          "version": "repo-lines-v1:sha256:6ee64b471c87421fc32e50473cab613211a5c9152786736b99d4731be502318f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5MmVlMTY5NDMxMDMxMjU3NGNlNDhiYmI3OTJjZDc2ZjA0Zjg4NDljODkyYmVkMGY3ZjQxMmIwYzZmMGI2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwNjQxMDc2YTQxNzAzNTMwNDRlYTc5NTQ5NjQ1MzRiNWM1NmIwYTMyNTZiYmZkYjdjNmRlY2VkNzhjMWIwYTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1MTczZjFlNDIzZjE3ZmQ5YjM1NTFkYTJlY2RhYjA5NTRlODdjOTRjZTQ1ZDdjMzA5NjdkNTdmOWIwMDkzMTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_33709f7e204b40d1abd0e7d9b1829d75",
+      "statement": "packages/rules-engine-11e is shared business logic that runs in two processes: the browser bundle imports it in RosterBuilder for client-side validation while the API imports validateRoster in POST /api/rosters/:id/audit for the authoritative audit, so one compiled rules module serves both sides.",
+      "evidence": [
+        {
+          "resource": "repo://apps/api/src/routes/audit.ts#L9-L25",
+          "version": "repo-lines-v1:sha256:d456ff1b37888d548010723d0b7a73075c7858fe04a57ad23c60ffddb41548dd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZWUwNzBlN2FmNjYzMmRhOTcxM2Y2ZjM1ZTczNTFkZWI4ZTFmMWVlMTQxNDQ2MmMwZmVjMjcxNTRiNDY3MjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1OTRiMTQ1ZDdiOGQxYjUxNjI0MGMzOTFlZjZjOTg2OThjMGM0MDhiZTM1MzllMTMwNTAwZjY0NzQ5MGM0NDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5YzcxYmFiNDhiOWFjY2E1Njc4OTkyYjUyNzRjYTg5YzhiNWJjZTUxMTkwMjc5YWY2MWNmYjk4ZjYzOTlmY2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzZDQzMDkzOTYxOTc2MDcwNTc2M2NmOWU5MzNiZGJlZGEzZjU0MTJhYjc5YmUzMDdhYzQyMjkxZGNlMTE0NTEifQ"
+        },
+        {
+          "resource": "repo://apps/web/package.json#L14-L18",
+          "version": "repo-lines-v1:sha256:ffdc24a8f78a6e334390438df2533d84278f176e849c025a794506fb889acf51:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEzYjQ2OWQ5ZTA5NzU3MjI0NjY2NzM0YzllZjdiMjU0ZDg4NTM0ZjVkNWJiNzA5ODk2MDgwNWM1NTNkYzMwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdiZjI2NTI2YjI4NjIwMjMzOWI5ZjU1NDIxODgzMmNmZjZkY2FhZTRiOGQwOTk5M2E1MjcxNmZhOWQ5NzYyMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWNjOGNmNGIyMDE1NDQ0MmE4NTg2MTZmNmZhZjcxNzNjMDNmYzhkZmUzNDZiMDliYzhkNDRiMmUzZmI5ZGU3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzQ0ZTBjNGI1NzFlYjUzN2ZlZWFiY2I3ZjYzYjAzODlmYzI5MzIyYzEzMDJmZjNkMjU4ZjYxNGJhMzc5OTUyMyJ9"
+        },
+        {
+          "resource": "repo://apps/web/src/components/RosterBuilder.tsx#L1-L1",
+          "version": "repo-lines-v1:sha256:15b45fe3b26b70a4287c386586273088bd6042c1fcd040d40f82daf0fe952106:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTViNDVmZTNiMjZiNzBhNDI4N2MzODY1ODYyNzMwODhiZDYwNDJjMWZjZDA0MGQ0MGY4MmRhZjBmZTk1MjEwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTViNDVmZTNiMjZiNzBhNDI4N2MzODY1ODYyNzMwODhiZDYwNDJjMWZjZDA0MGQ0MGY4MmRhZjBmZTk1MjEwNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGI5NGJiMzUwZThhZTQ5YmI5YWIyMWUxYzBhZDg4YTljNTEwZDIwMzJlYTEzN2RmNDMwOTMxYzk5MWIxZTlkZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_0bf9ed126ae145bda47025c696a90121",
+      "statement": "docker-compose.yml and docker-compose.prod.yml declare the same five services — postgres (5432 + pg_isready healthcheck, dev-published), seaweedfs s3 (9000 S3 / 9333 master, dev-published; prod pins chrislusf/seaweedfs:3.80 and publishes nothing), api (4000), web (3000) and a profile-gated one-shot sync-worker — differing only in delivery: local source build versus pulling published GHCR images, including a published forceorg-sync-worker image run with `docker compose run --rm`.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.prod.yml#L21-L98",
+          "version": "repo-lines-v1:sha256:a71d28e9b69d1913e5fdabd716f10b72928ea89905cf494ca89357c27c1a7e14:eyJzZWxlY3RlZExpbmVDb3VudCI6NzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4NTFlNzA4MjkyNjFjOWNkYmRmMWM3YTBiZGViOTM1NzBmZjljNmY1MmU4YmFmMGMxZDA4OWMxNDExOWYzMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNjljMTQ3NWMyYTc3NjVjNDRlMmNlZmNhYjA1NDA5ODc0ZjEyMzY1YWJlZmZiYWE3OGI2NzhmZjYyMjNkMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUyYTM3MzcxMmY2MWEyNGE1MDBjN2U0ZDcxNWVhNDZmZjE3YzVhNmQ5NTFjOTc1NzU2NDk2OTJiYzIwMGRjYzAifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L8-L105",
+          "version": "repo-lines-v1:sha256:299856293f38a106de2beb7efa32798b6b16a4658f3f8d1cac59d97f44bbefda:eyJzZWxlY3RlZExpbmVDb3VudCI6OTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUyYTM3MzcxMmY2MWEyNGE1MDBjN2U0ZDcxNWVhNDZmZjE3YzVhNmQ5NTFjOTc1NzU2NDk2OTJiYzIwMGRjYzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk4MWVmYzY2OTJkZDU1MTJmYTRjMGE2ZGUyNzA1YzA3MDViZTkwNTM3ZmFhOTliNzJmNWE1ZmE2OGEyZGY5NmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9888da7227994698bafd33f032e74b0e",
+      "statement": "Startup ordering is health-driven: api and sync-worker depend_on postgres with condition service_healthy (pg_isready), while web depends_on api.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.prod.yml#L50-L52",
+          "version": "repo-lines-v1:sha256:cb6c28e1ff6b313b0b15b392a4df4af23111b266585842aea6343bf829d1a68d:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZkZDU1ZWYyYWUzY2E2NzRhNGMzYTU2ZGFiMzRmODkwOGQ3NDA0MzIzZGI1NGVhZGRjNGU0Y2YxODllOGZjZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjJlNjE2ZGQ0MGRkYjI2ODU2Mzk4ZjZjOTU1OGI4MjI2MmQyOGMzOTRjOTA1NDAwZTY5ZDk5MzE4NjM4ZWVlNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTZhZTJhZDRmNzE1M2RlMWVlZjRiZjNhZDlmYWRjZTczNDEzYmI1YjgxMzk0MzhkYTY5ZDA2NjY2YjY5N2M5NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzVkNjQwZWEzNzlhZjlkZDkzOTJkZjNmOGEzN2VmNGJlNTVlYjVhYjY3MzU0ODM5MmI2Yzg5OWU4YTJhZmJjMiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L22-L26",
+          "version": "repo-lines-v1:sha256:3cf3987fa515f36ff1a5a5010301399854f6e89c3935fca3bdf7c8a71043856b:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTcxZGI0ZTg3NWViOWE2YWYxNDU1NjMwNTg2MTk2Zjc0MjIyMzEyOGIzNjI1ODAwOTg0OWE2OGY4MDJjY2Y5YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWQxOTk4MjA1OWE1YTBlNjIzOWRiMjgwYjcyZDE5NDBlMTVhNjY5OWQ4NmQ3NzZmNWU3N2JjMTQ1NTI0ZTY4NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmEwNGI2ZWZiNDQxZmFiYzVlOWExOTI4MWJhNjJmNmQ4YjAwZjBjZDlmMDdmMmI5MDBhY2I3Y2U4ZGQwNDIxMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JmNDdmMTFhZmY5ZWE2ZGE1NTYzNDY0ZDAyZDUyMjBiN2RhMWRkNmY2MjlhZmVjMmJmYzIwYzE1YmI1ODM3ZCJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L49-L51",
+          "version": "repo-lines-v1:sha256:cb6c28e1ff6b313b0b15b392a4df4af23111b266585842aea6343bf829d1a68d:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZkZDU1ZWYyYWUzY2E2NzRhNGMzYTU2ZGFiMzRmODkwOGQ3NDA0MzIzZGI1NGVhZGRjNGU0Y2YxODllOGZjZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjJlNjE2ZGQ0MGRkYjI2ODU2Mzk4ZjZjOTU1OGI4MjI2MmQyOGMzOTRjOTA1NDAwZTY5ZDk5MzE4NjM4ZWVlNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTMyNDNlYzcxYTA4MGM1NTI5ZWU0N2M0ZDIxMmY3N2QxMTY0MTQ1NWVjOTVmYmYwNDk2NTZlMjBjYjI1Nzk3ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmZhMmFjMGRhZmZmZjAzYWFjMjAyMGI5NTFhYjg0NjYzY2Y0ZjQ4YWQzM2UyMzMyN2UwYWRiMzgzZmM3OGEwZiJ9"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L75-L76",
+          "version": "repo-lines-v1:sha256:ea185505ccc1975caf470481a79a0610860688de67a6735c8b1315e185cb4b57:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZkZDU1ZWYyYWUzY2E2NzRhNGMzYTU2ZGFiMzRmODkwOGQ3NDA0MzIzZGI1NGVhZGRjNGU0Y2YxODllOGZjZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTFjM2FkYWY4ZDVhMDdmZDE2MjU3OTExNThkZjEzY2RiOGU4MWQzMjU4NTIxYmVmNjJiZmYyYTAyZjQ1ZjMwZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDg2NjQxNTlhN2YwZjc2N2RhZDA1ZjRmNGM2ZjZiMGNlOThjMjc3MGY2YmMxMzUzZjVmMTZkZGMwMWFmNjg3NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWViNTBlOTkyMjA4NjBiNGEwZTFiZjU2M2U5MThkMTc3OGE4MWU5MTkzNmZkZmRmZjFkODFhZTc5YTNkZWQ0NyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4c658221db864909851dca40a61394de",
+      "statement": "Schema migration is owned by the API image rather than compose: apps/api/entrypoint.sh defaults DIRECT_URL to DATABASE_URL, runs `prisma migrate deploy` against packages/db-client/prisma/schema.prisma when DATABASE_URL is set, skips migrations in catalog-only mode otherwise, then execs node apps/api/dist/index.js.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile.api#L45-L66",
+          "version": "repo-lines-v1:sha256:b514112e77b71647984ff46828b8a34463e9762b908ccce974c668e0b1c0a0c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmOGUwOWQ4Yjg1MGMxMGJiYjljZTg0MzBkOWMzOTY2YTQ5YzgxOTNiNDMyNDIxODU3Yjk5ZjliODQyYTcwNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4MWNkNzU5MGEzNWQ3ZGMxYjk3MGNhZmMzY2Y3YmQ3YTZkYTA0ZTg5ZDI1YzlkZjUxZjc3MzI4NDVkOTMyMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5ZmJjODVjYjcxYWQ0NjEyZDNlZGUzODFjY2Q0MjdmMzQ4Y2NhNzIwYmI2YTNlZjlkNjk1YzMxMzhmNGRlNjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/api/entrypoint.sh#L8-L20",
+          "version": "repo-lines-v1:sha256:6ff9088d8e6f1bb075f90132e8ad8e887b153d4a71038e427cbb0d0a9b599149:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhOTBhZmQ4ZjE2M2ZlMGJhODY1MTFlYjRhODA4OWMxNzIzNjk4ZGNhZGE4YTExMjc0N2UwZDdmNmQyNWUzYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0OTgzOTZjODcwNWRkOTU2ZjM2MzU1YmFhNjA0ZmMyMjNiZjk1ZTYxNGZiOGQ5NzIxN2RhZWZkNThlZTE3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmN2I5YzQ5YzYyMmE3MzA3MzE1YmYxMGY1ODVlOTM1NmFhMmU4MmU3YzEyMjFmMGQ5YTU3MDcyMWVmZDJmYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L138-L139",
+          "version": "repo-lines-v1:sha256:ef98796d91e59ed3dc719698e483ffc4f7d243314b60f76dfca40ae12e2f1e90:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTY0YTM2OTVlZWEwZGU4ODA4YzczZWE0NzAwMjJhM2I1Y2VhY2VmYjVlNjlmNTA4ZmMzNzAzYzAzMDE1YzQ5ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjY2YTcxZTM5ODNhOTZmZjNjZmQyMzZiOWY4Y2VjNGU4OTI5Yzg2OGY0YTg4MDc3NWY1ZWEyNDM1NDAxZjM5NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTQyYzI3YWE3YjUxODBhNjhmY2Y0NjllNGJiNTgyZmE3YTU0ZmJjMTU0ZmY4Y2Q0MjY5ZGE1ZmY5NzgwZmI5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWIyMzU1MzNmZjJkYjhkZjY0ZGU4NmNkOGUzNDQ5NjAxOTc3YTkzMmM1MzI4MjU4NDM3Y2NmZTU4ZDM4Y2UxZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e686fde7b97b47c1915c5cbe0fb02b9f",
+      "statement": "docker-compose.prod.yml pulls ghcr.io/fatpat81/beerhammer/forceorg-{api,web,sync-worker}:${FORCEORG_TAG:-latest} and publishes only the API and web ports (${API_PORT:-4000}, ${WEB_PORT:-3000}); unset variables fall back to placeholder credentials that are public in the repository (${JWT_SECRET:-please-change-me}, postgres/postgrespassword) so test and CI hosts boot with zero configuration, and docs/DEPLOYMENT.md §2/§3.1 require overriding them before any exposure beyond localhost since anyone can otherwise mint valid write tokens. Rollback is re-pulling with FORCEORG_TAG=<previous sha>.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.prod.yml#L11-L18",
+          "version": "repo-lines-v1:sha256:ba1bc1539da29606c4067fb1a64cd5ad1039ca336507595a35c876aa7f6ad0f9:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjg2MmI5OTJjZTkxYmIxNzRkOTEyYzNlN2Q2ODRmYzVjNGQ3OTJkMjE2MDM3ZDE0ZmVmMmExMTYyZjFkYzJiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTE3M2Y4MmVkY2Y0MzY4MmMwZjk1NzcxMDMxN2M1ZGQ5ZjM4N2QyYjA5MmRhNThmZjE4MjM5MzFkNGI4OGJmNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzYwY2VhYjJiYzhjYTk0YTE4YjkyMGViYzBlM2M2NDMyZjE3NWEwNTFhODc3OWNmMTNhM2MzNDY5Y2YwNmNmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTk5OTk0NGI4ZWMzYmRkMmU5ZWFjODczNjY0YWU0YjM0ZTA4ZGE4NzI1YWRjYTJjNDg2MTdjYTNlNWJmNzVhYSJ9"
+        },
+        {
+          "resource": "repo://docker-compose.prod.yml#L46-L87",
+          "version": "repo-lines-v1:sha256:3816001b951debe14dddd366cfafb7a5fe53471844074270f19426feb4c5cbed:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MWY0ZTI1ZGNhNDg2ZTlkMzFjY2Y1Yjc2M2M2Yzg1MzMyOTc5ODk3OWI1NzVjNGYxOThkMTQ5ZTI0MzUzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzZjQ4MzIxZTQzZTg3NWI2ZjY4NWFiNjc1MDkzMzcxZTNiYTQyZjk5ZmYxMWM2NmE0ZjFlM2YzOTI0NWFiOTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxNmJlN2E1ZDM2OTU0ZDIxMDdhMzE1YjViNTZmYjY4ZDUyYzUxNTRhMjlhNDI4YjdjN2I1ZWRiY2JmMjZiNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRlZDljMzM2YzQxNmM4MDU2MWI4MTJjODA2ODZmNTU5MmFhNDAwMDEwODBkODNjZGM1ZGE4MjY2NmI2MmYzYWUifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L45-L51",
+          "version": "repo-lines-v1:sha256:a4fa7f2d11ebf7f44db6b2d4a6c249cc6a3ab40414dc5944c94f1c5c5c66d3c9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzEzZGUyODcwNDRlODNlNzc3ZTlmMDhkNDAzYWE4YmFkZWIyYzczZDc4YmY4ODY1YzNjODFiZTVlNzgwMTM5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTllNzlkN2ViOGQ5NjZjMmE2OTM3NTU1ODJhZjVjZjJlZDdhYjAwNDU1NGJhMDA0MTc1NzgyYWNjODc1MzFhNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTEwMjY0YzgzOTM5Yjk5ODY1ZTg3MWIzNmJlYjgyYjYwYTM4YTFjOWY4N2QwNDFlY2JjZTcxOTI1OTU0NWFkMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzM1YTlhMjBhMzc5MzZjNDk2NWY2MzU0ZDEyNWZlNmFiNzUxYWRmNTFiOTcxZjQ2MWI1MmNmYzQ1ZDNmYTgwNiJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L92-L124",
+          "version": "repo-lines-v1:sha256:cf067fb7f2ddfb68afa751ba89ab8596b111ea0ddc5b51b81e8c25642ed8e9aa:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZjY1NGJmNTFiMDA5M2QxNWU2Y2MxNjY3MjE3ODEwMjFiMDdiZjdlNDgwYjg2ODJhMTA5NGY0NTk0MzViMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczMjJkZDYzYzMxNzgyMzg5M2Y2MzU1NjcxZjZhYjQ5NWNhMzg1NTExNGZkNGViY2MxMjA5ZWNlMzc3NzZhOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiOWEzOWQ1YTdhNmNmYTE5Y2U1OGNlZjVjMmRiMmFmYWYzOTZkN2YyMWMzMjgzMWYyMDM1NGViNmJhYTQ2MDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5MjA1YTQwMTAyMmMxZWVkMjQ4ZTUxZDY2NTUwOTFmMjhlZTdlYTFmZDJjYjc0ZGY5MDk2OWVjNDc5OWYzZGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8c6808af4c3d41038dbd65c3f3e7ae57",
+      "statement": "Persistent state lives in exactly two named volumes, postgres_data and s3_data; `docker compose down` preserves them and `down -v` wipes them, so backups mean a pg_dump plus a copy of s3_data.",
+      "evidence": [
+        {
+          "resource": "repo://docker-compose.yml#L103-L105",
+          "version": "repo-lines-v1:sha256:e71369784de0aa69ce8bce25e7db29cbd44d8061c9b1212ef5ca5cb832bf478f:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDVlNTEwMDMxYjNkNWNmZjg2OGI5OWEyNzVkZDI0ZDcyZTQ1Y2I1MDZiM2M0ZjU4OWNkMDhkZDgwZTlmYjJlYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTJhMzczNzEyZjYxYTI0YTUwMGM3ZTRkNzE1ZWE0NmZmMTdjNWE2ZDk1MWM5NzU3NTY0OTY5MmJjMjAwZGNjMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzI2ZmYxNmIyODc1Y2I2M2FmOWEzY2I2MjM0MTdjMjRlNjg4OTdhZWM0M2M2YzVlNDRlNmI2ZDk1MTI2N2FiYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L181-L187",
+          "version": "repo-lines-v1:sha256:661d49055cc9678e947006934a28be92fc5ab79cef596ea002d5b7b49825739a:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2NiN2Q2NmI2OGVjMTNmZTJkYWQ5YTg0NWQ2ZTQ1NTlhMWViZGYzYmYxYTk4M2I3Nzk0MDZmZTYwOWQ1MzVlNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWFhNmY0YTRkMDlkMGRhZDc1ODg1Mjk2ZGQ5YmVjZTc4MDE0NTg3YWQzMjQzZDM5YmI5ODM4MWFmZjcxMTg5ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzNiNDQ5NDBjNTU1ODVmNmM0N2JjNmU3MDQwODVmNjA5NDliYmU2N2ExMWNkZTU5NDFhMTExZjNhNzBhZDRjYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTAyMmM5MGIyZmI0OTYxNTljZTg4MTAxMjc0MmQ2NzY1YjkxYmNkNmI1OGU1ZjFlMzQ0ZWI2MjkwYWQ1MjEzYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_218aec29c3d34dd0b84e09cf3ba69a8b",
+      "statement": "The web frontend persists rosters in browser localStorage keyed per callsign (forceorg_local_user, forceorg_rosters_<userId>), so the UI remains usable when the API is offline or the user is a guest and the frontend can be hosted independently of the API.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L34-L45",
+          "version": "repo-lines-v1:sha256:3ae4e3e06b2449819ba9da4966aae35bc6cdb1889e70f364edc293a2b9cb4ebb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1M2RhYjI1NmEzZTZiZWI4MDllZjVhYTdlZWIwMjkzZjY2NjM3YjBmZGE4NzQ3ZjgyNmY2ZDdmMWRhNTAxMTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMWYyZWMxNzU5M2MxMDU0ZWI0NjM2N2Q4NDUzZWYyNGExNzNjZTk2YjcxMTdkOTFmOWE2OGQ0NGZlZjhiMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmMTVmY2FmNTI5OWE5MGUxNzg0MWMyMmRiY2Y4ZTVmNGRmNDYwNGFlNDQ1NmU3YmQyZWYwMTBkYTcyMzNhMTAifQ"
+        },
+        {
+          "resource": "repo://apps/web/src/lib/api.ts#L124-L148",
+          "version": "repo-lines-v1:sha256:7697fe23886e54957cdac869ab4690c517476675eb2f04f5c73914ad28448545:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyODAwOGM2MWE3NTg0OGQ1YWMxZGE1MDM2YzU1YjNlYzE0YjVjOGVkMzc3OTNjMDZjNTA4OTdiYjEzN2VlNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1NmZmNjg4MGVjNmRkZjRmODZmNWI2NTE2MzBiMDFlN2YxNGVkMjUwYTI5ODQ3YjJmNDUxODAyNTc5NTEzYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1NTZmMTYxZmI3YmY5NjQxMjY1ZTMxYmE2ZDc3Y2ZlYTZlMmJhNzgxOThhNTNmZTAwZmU0MzQxNDk5MzAyNzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5ZTg2YjZmMDc5YjIwYTAwNGEzMWRiNmNkMWM0MzNjODQ1MjAzZjNlZDhjYmUwZTIwYmIzYjQzYmU1NWI4YjcifQ"
+        },
+        {
+          "resource": "repo://docs/DEPLOYMENT.md#L211-L215",
+          "version": "repo-lines-v1:sha256:c536e875a4d27d1c7fa0fa1aeba8f4ec44f3ccdca3e4af422e26a83324e30058:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzlhYjE3MWJmOGVkYTM5M2FkZjA1ZDY0OTY0NDM4NTcwZDMxMzIxNzBjMzk5ZTliOTQ1YmM0Njg3MGY5YjQ5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDI1MmU1NjhjMzRiNmVkMjZmMWQ2YjI2OWE2M2VkN2Q1ZmRlMjJhMWFhMDBlYzE0ODc4NDc5YTlmZjEyNjc0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODEzNDg5ZDc2Y2M0M2EyODE3ZmFkZDYzZjc1NjFkNjlhNzJlMzQ1NjU1OWQ0OTM4MDhhNjYxMDdhYTg3ZDNkYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjM2MDE5OTg1NjIzYmFhYzY1MDRlN2VjYjU0OTE5ZDZkYTRkOTVlY2MyY2FjMTEzNDczMmY4NzYyM2Y3MmNiYiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.0",
+    "at": "2026-10-06T03:00:05.375Z"
+  }
+}

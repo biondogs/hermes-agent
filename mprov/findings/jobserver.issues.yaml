@@ -1,0 +1,1440 @@
+# mProv Jobserver - comprehensive review findings register (R2)
+# Reviewed 2026-10-15 by sw-reviewer. Register is an immutable draft (R14).
+# Schema: /local/projects/software-co/mprov/FILE-PLAN.md section 2.
+# Evidence verified against commit below via read of the working tree at that commit.
+
+review:
+  repo: mprov_jobserver
+  branch: main
+  commit: 4f73fc1b2ca17c24a7639057249d04168008e121
+  reviewed_at: "2026-10-15"
+  reviewer: sw-reviewer
+  coverage:
+    files_reviewed: 71
+    files_total: 71
+    method: full-tree
+
+findings:
+  - id: JS-001
+    type: bug
+    severity: S1
+    title: "Remove the committed mPCC API key from stack.env"
+    user_value: null
+    evidence:
+      - path: stack.env
+        lines: 1-4
+        excerpt: |
+          MPROV_URL=http://10.99.137.11
+          MPROV_APIKEY=TyvzRDyH.p5lNONyYX6vav3eH5VeAp31OnfPUc4gS
+          MPROV_ADDRESS=10.99.137.11
+          MPROV_MODS=repo-update image-update image-delete mprov-webserver dnsmasq libgenders
+    repro: >
+      The file stack.env is tracked in git (added in commit 7479327, most recently
+      modified in 7218cdb) and holds a real-looking mPCC API key for the
+      10.99.137.11 deployment. dev-docker-compose.yml loads it as env_file for the
+      jobserver container. Anyone who clones this general-release repo obtains a
+      credential that, with the jobserver apikey auth shown in app.py startSession,
+      grants full provisioning API access to that deployment.
+    fix_idea: >
+      Treat the key as compromised: rotate it at the mPCC, purge the file from
+      git history, replace stack.env with a stack.env.example containing an empty
+      key, and gitignore the real file. Document env-file provisioning of the key
+      as the supported path, as jobserver.yaml.j2 already assumes.
+    blast_radius: >
+      Loss scenario: any person with read access to the repo (published general
+      release) authenticates to the deployment's mPCC as a jobserver, enrolls fake
+      jobservers, alters images, distros, or root passwords that image builds bake
+      into the fleet. Every deployment that reused this key pattern is exposed.
+    regression_test: >
+      test_no_secrets_in_tree: scan all tracked files at HEAD for API-key-shaped
+      tokens and fail if any file other than an example template contains one.
+      Fails today on stack.env, passes after rotation and purge.
+
+  - id: JS-002
+    type: bug
+    severity: S1
+    title: "Stop exposing the distro root password in process argv and daemon logs"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 344-348
+        excerpt: |
+          # set the root pw to the password in the distro
+          if 'rootpw' in imageDetails['osdistro']:
+            if imageDetails['osdistro']['rootpw'] is not None and imageDetails['osdistro']['rootpw'] != "" :
+              print("Setting root password...")
+              os.system(f"echo -e '{imageDetails['osdistro']['rootpw']}\n{imageDetails['osdistro']['rootpw']}' | chroot {imgDir} passwd root")
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 280-280
+        excerpt: |
+          print(f"..{imageDetails}")
+    repro: >
+      Set a rootpw on an OS distro in the mPCC and trigger an image update. At
+      image_update.py line 348 the password is interpolated into a shell command
+      passed to os.system, so the full string including the plaintext password is
+      the argv of the root shell process and is visible to every local user via ps
+      during the passwd call. Independently, line 280 prints the whole
+      imageDetails dict, which contains the osdistro rootpw, to daemon stdout
+      (journald or console per the unit dropin). Additionally, embedding the
+      password inside single quotes means a password containing a single quote
+      breaks out of the quoting and executes as root shell commands.
+    fix_idea: >
+      Never place the password on a command line: write it to a root-owned
+      mode-600 pipe or temp input and feed passwd via chrooted stdin using an
+      argument list with no shell interpolation. Remove the full-dict debug print
+      at line 280 or redact secret fields before logging. Validate or single-quote
+      escape handling belongs to the no-shell-argument-list approach.
+    blast_radius: >
+      Loss scenario: a local unprivileged user on any image-build jobserver runs
+      ps during a build, captures the fleet root password, and logs in as root on
+      every machine provisioned with that distro. Operators reading daemon logs
+      see the password with default journal access. Worst case: full fleet root
+      compromise from one observation.
+    regression_test: >
+      test_rootpw_never_in_argv_or_logs: build an image with a sentinel password,
+      enumerate all process argv on the host and all daemon log lines during the
+      build and assert the sentinel appears in neither. Fails today in both the ps
+      snapshot and the log capture, passes after the fix.
+
+  - id: JS-003
+    type: bug
+    severity: S1
+    title: "Stop writing the fleet API key to world-readable files during provisioning"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 273-277
+        excerpt: |
+          if entityId == "nads" and sysimage:
+            entity['apikey'] = ""
+          else:
+            # add our apikey to the entity
+            entity['apikey'] = self.js.apikey
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 284-289
+        excerpt: |
+          # make sure our local tmp dir exists
+          os.makedirs(self.scriptTmpDir, exist_ok=True)
+
+          # output the entity to a json file
+          with open(self.scriptTmpDir + "/entity.json", "w") as entFile:
+            entFile.write(json.dumps(entity))
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 319-327
+        excerpt: |
+          # create a config file to /tmp for our script-runner instance.
+          localConfig = [dict()]
+          localConfig[0]['global'] = self.js.config_data['global']
+          print(localConfig[0]['global']['jobmodules'])
+          localConfig[0]['global']['jobmodules'] = ['script-runner']
+          localConfig[0]['global']['runonce'] = True
+          # print(imgDir + '/tmp/mprov/jobserver.yaml')
+          with open(imgDir + '/tmp/mprov/jobserver.yaml',"w") as confFile:
+            yaml.dump(localConfig, confFile)
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 302-304
+        excerpt: |
+          image_update.join()
+          if image_update.threadOk != True:
+            return
+    repro: >
+      The script-runner copies the jobserver's mPCC API key into the entity dict
+      (script_runner.py line 277) and dumps it to entity.json under the configured
+      tmp dir (script-runner.yaml default is a path under world-readable /tmp)
+      created with os.makedirs default perms and open default mode 0644. During
+      post-boot runs this happens on every provisioned node. The file is only
+      unlinked on the success path at line 304, so any thread crash or mid-run
+      failure leaves the key on disk in the clear. Separately, image_update copies
+      the whole global config section (which jobserver.yaml defines as containing
+      the apikey) into jobserver.yaml inside the image tree at line 327, default
+      mode 0644, and only removes it at line 362 after the script run, so the
+      early returns at lines 304 and 313 leave the key-bearing config inside the
+      image directory on any submodule build failure.
+    fix_idea: >
+      Create the temp workspace directory with restrictive permissions before
+      writing anything containing the key, write key-bearing files with mode 0600,
+      use a finally-style cleanup that removes them on all exits, and strip or
+      scope the apikey so nodes and image trees never receive the fleet-wide key.
+    blast_radius: >
+      Loss scenario: any local unprivileged user on a provisioned node or build
+      jobserver reads the entity or config file during or after a provisioning
+      run and obtains the fleet mPCC API key, giving full control of provisioning.
+      Worst case: one crashed post-boot run leaks the key into every node that
+      shares the broken script.
+    regression_test: >
+      test_apikey_file_permissions_and_cleanup: run the script-runner with a
+      forced script failure and assert no file under the tmp dir contains the
+      sentinel API key afterwards, and assert the key-bearing files are mode 0600
+      while present. Fails today on both permissions and cleanup, passes after.
+
+  - id: JS-004
+    type: bug
+    severity: S1
+    title: "Do not execute an unverified binary fetched to world-writable tmp"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 364-366
+        excerpt: |
+          # grab a copy of busybox to /tmp
+          os.system(f"wget -q -O /tmp/busybox https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox")
+          os.chmod("/tmp/busybox", 0o755)
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 379-380
+        excerpt: |
+          os.system('rm -f ' + imgDir + '/' + imageDetails['slug'] + '.img')
+          if os.system('/tmp/busybox tar c -C' + imgDir + ' -f - ./ | gzip -1 -c > /tmp/' + imageDetails['slug'] + '.img'):
+    repro: >
+      Every image build downloads busybox to the fixed world-writable path
+      /tmp/busybox and ignores the wget exit code at line 365. When the download
+      fails (network outage, DNS, busybox.net unreachable), the code still chmods
+      and executes whatever file is at that path at line 380, as root. A local
+      user who pre-creates /tmp/busybox with their own payload gets it executed as
+      root on the next build whose download fails. The same lines also write the
+      image artifact to the predictable path /tmp/<slug>.img as root, which a
+      pre-planted symlink can redirect onto arbitrary files.
+    fix_idea: >
+      Ship busybox as a packaged dependency or download to a root-only directory
+      under the image store with a random name, fail the build when the download
+      returns nonzero, and verify the artifact against a pinned checksum before
+      executing. Write the image being built inside the image store instead of
+      shared /tmp.
+    blast_radius: >
+      Attack scenario: a local unprivileged user on a build jobserver plants a
+      binary at /tmp/busybox and waits for (or induces) a failed download; the
+      next image build executes it as root, and every image built afterward by
+      that host is attacker-controlled. Worst case: fleet-wide compromise of all
+      provisioned machines.
+    regression_test: >
+      test_busybox_download_failure_aborts_build: simulate an unreachable busybox
+      source with a pre-planted decoy file and assert the image build fails without
+      executing the decoy. Fails today because the build proceeds to tar, passes
+      after the guard.
+
+  - id: JS-005
+    type: bug
+    severity: S1
+    title: "Guard sweep cleanups so a mis-set image or repo directory cannot be wiped"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_sync.py
+        lines: 130-140
+        excerpt: |
+          # Clean up any directories that are not in our imageList.
+          print("Scanning for haning images... " + self.imageDir)
+          for entry in os.listdir(self.imageDir):
+            # print(entry)
+            if os.path.isdir(self.imageDir + '/' + entry):
+              # see if this entry is in our image list
+              if not os.path.basename(entry) in self.imageList:
+                # Nope doesn't seem to be there, doesn't need to exist on disk then.
+                #print("rm -rf " + self.imageDir + '/' + entry)
+                print("Warn: Removed unknown image directory: " + self.imageDir + '/' + entry)
+                shutil.rmtree(self.imageDir + '/' + entry)
+      - path: src/mprov_jobserver/plugins/repo_sync.py
+        lines: 132-143
+        excerpt: |
+          # Clean up any directories that are not in our repoList.
+          print("Scanning for hanging repos... " + self.repoDir)
+          # print(self.repoList)
+          for entry in os.listdir(self.repoDir):
+            # print(entry)
+            if os.path.isdir(self.repoDir + '/' + entry):
+              # see if this entry is in our repo list
+              if not os.path.basename(entry) in self.repoList:
+                # Nope doesn't seem to be there, doesn't need to exist on disk then.
+                #print("rm -rf " + self.repoDir + '/' + entry)
+                print("Warn: Removed unknown repo directory: " + self.repoDir + '/' + entry)
+                shutil.rmtree(self.repoDir + '/' + entry)
+    repro: >
+      Both sync plugins end every pass by recursively deleting every subdirectory
+      of the config-supplied imageDir or repoDir that is not in the current sync
+      list, with no path validation, ownership marker, staging area, or operator
+      confirmation. The lists come from operator config or from the live API. If
+      an operator sets imageDir or repoDir to a directory that also holds other
+      content (for example the shared /export, which also contains the tftp root
+      and the other store per the shipped plugin yamls), the next sync pass
+      deletes every subdirectory whose name is not a current image or repo id.
+      A transient empty or partial list from the mPCC widens the wipe to nearly
+      the whole store.
+    fix_idea: >
+      Restrict the sweep to a mprov-owned subdirectory, verify the configured path
+      is inside a declared mprov data root at config load, only delete directories
+      that carry a mprov marker file or whose names match the id format, and skip
+      the sweep entirely when the sync list is empty or the API call failed this
+      pass.
+    blast_radius: >
+      Loss scenario: one config typo (or one deployment that points two plugins
+      at overlapping paths) silently deletes the image store, the repo mirror, or
+      the tftp root on the next 10-second cycle. Recovery requires re-downloading
+      or rebuilding the entire store; provisioning fleet-wide stops until then.
+    regression_test: >
+      test_sweep_never_deletes_unmanaged_dirs: populate a fake imageDir with one
+      managed image and several unrelated directories and run one sync pass with a
+      healthy and with an empty image list. Assert unrelated directories survive
+      both passes. Fails today, passes after guards.
+
+  - id: JS-006
+    type: bug
+    severity: S2
+    title: "Fix status_code 404 comparisons that never match and crash sync loops"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_sync.py
+        lines: 56-64
+        excerpt: |
+          response = self.js.session.get( self.js.mprovURL + 'systemimages/' + image + '/')
+          if(response.status_code == "404" ):
+            # image not found in the MPCC, must have been removed, delete it locally.
+            self.imageList.remove(image)
+            print("Error: Image '" + image + "' was not found on the MPCC, removing locally." )
+            print("Error: Consider removing it from your config.")
+            continue
+
+          mpccVersion = response.json()['version']
+      - path: src/mprov_jobserver/plugins/repo_sync.py
+        lines: 57-65
+        excerpt: |
+          response = self.js.session.get( self.js.mprovURL + 'repos/' + str(repo) + '/')
+          if(response.status_code == "404" ):
+            # repo not found in the MPCC, must have been removed, delete it locally.
+            self.repoList.remove(repo)
+            print("Error: repo '" + repo + "' was not found on the MPCC, removing locally." )
+            print("Error: Consider removing it from your config.")
+            continue
+
+          mpccVersion = response.json()['version']
+    repro: >
+      requests returns status_code as an int, so the comparison against the string
+      404 is always false and the deleted-upstream branch is dead code. Remove an
+      image (or repo) from the mPCC that a jobserver still has configured or
+      remembered: the 404 handler never runs, control falls to response.json()
+      which is the error body, and the subscript for version raises KeyError,
+      killing the plugin thread inside the daemon. The sync loop then aborts
+      before the remaining images in the list sync and before the version file is
+      updated, on every heartbeat pass, and the intended local cleanup message is
+      never printed.
+    fix_idea: >
+      Compare the integer status code to the integer 404 in both files, and wrap
+      the version lookup so any unexpected response body is reported and the loop
+      continues with the next entry instead of crashing the whole pass.
+    blast_radius: >
+      Any image or repo removed upstream breaks image-sync and repo-sync entirely
+      on every jobserver that references it: no other image or repo syncs on that
+      host until an operator edits config, and stale local copies accumulate with
+      a confusing trace in the journal rather than the intended cleanup message.
+    regression_test: >
+      test_deleted_upstream_404_is_handled: point the sync plugin at a mock server
+      where one listed image returns 404 and another returns a newer version.
+      Assert the first is cleanly skipped with a message and the second still
+      syncs. Fails today with a KeyError crash and no second sync, passes after.
+
+  - id: JS-007
+    type: bug
+    severity: S2
+    title: "Fix malformed job query that claims every pending job in the queue"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 241-244
+        excerpt: |
+          # json to pass to the job search.
+          paramstr="{\"imageId\":\"" + image + "\"}"
+          if self.js.update_job_status(self.jobModule, 2, jobquery=paramstr):
+            updateFound=True
+      - path: src/mprov_jobserver/app.py
+        lines: 221-225
+        excerpt: |
+          if jobid is not None:
+            # get the specific job status
+            queryURL = self.mprovURL + 'jobs/' + str(jobid) + '/'
+          elif jobquery != "":
+            queryURL = self.mprovURL + 'jobs/?' + jobquery
+      - path: src/mprov_jobserver/app.py
+        lines: 256-259
+        excerpt: |
+          data['id'] = job['id']
+          data['jobserver'] = self.id
+          # print(data)
+          response = self.session.patch(self.mprovURL + 'jobs/' + str(data['id']) + '/', data=json.dumps(data))
+    repro: >
+      When imageList is configured, image_update builds the raw query string of a
+      JSON object and passes it as jobquery, intending to filter jobs by params.
+      update_job_status appends it directly after the query mark, producing jobs
+      followed by the bare JSON blob. The mPCC jobs view (verified in
+      control_center jobqueue views, which only reads the params, module,
+      jobserver, and status query keys) ignores the unrecognized key pair, so the
+      GET returns every job with no status filter. The patch loop in
+      update_job_status then marks every non-terminal job in the entire queue as
+      RUNNING and reassigns its jobserver field to this host, stealthing jobs that
+      belong to other jobservers and modules. Their owning plugins never pick
+      them up again because they only query status 1 or their own running set.
+    fix_idea: >
+      Encode the intended filter properly as a params query key with URL-encoding
+      applied, or filter the returned job list client-side by comparing parsed
+      params before patching. Additionally, have update_job_status refuse to patch
+      jobs whose module does not match the calling plugin as a backstop.
+    blast_radius: >
+      Any deployment that sets imageList on an image-update jobserver corrupts the
+      whole pending queue on the first check: every queued job across all modules
+      flips to RUNNING on a host that cannot execute most of them, and operators
+      must clear stuck jobs manually. Multi-jobserver sites lose queued work to
+      silent theft.
+    regression_test: >
+      test_configured_imagelist_query_is_scoped: with a mock mPCC queue holding
+      pending jobs for several modules, run the image_update check with a
+      configured imageList and assert only matching image-update jobs are patched
+      and only that module's statuses change. Fails today with unrelated jobs
+      patched, passes after.
+
+  - id: JS-008
+    type: bug
+    severity: S2
+    title: "Fix group script dependency handling that crashes the resolver"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 195-199
+        excerpt: |
+          if len(script['dependsOn']) > 0:
+            # we have deps.
+            for dep in script['dependsOn']:
+              print(dep)
+              deps.append(dep)
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 181-185
+        excerpt: |
+          if len(script['dependsOn']) > 0:
+            # we have deps.
+            for dep in script['dependsOn']:
+              deps.append(dep['slug'])
+    repro: >
+      For scripts from system groups the dependency loop appends the raw
+      dependsOn entry object instead of its slug field, unlike the identical loops
+      for distro and entity scripts. The serialized dependsOn entries are dicts.
+      depResolve then converts each value list to a set, and a set containing a
+      dict raises TypeError for unhashable type. Any group-assigned script that
+      declares even one dependency therefore crashes the resolver with an
+      exception inside the plugin thread before any script runs, leaving the
+      already-created nologin file and the entity file with its apikey behind
+      on the node, and the failed run still exits via the swallowed thread death
+      path.
+    fix_idea: >
+      Extract the slug field from each dependsOn entry in the group loop exactly
+      as the distro and entity loops do, and make depResolve fail with a clear
+      printed error instead of an unhashable-type crash if a non-string ever
+      reaches it.
+    blast_radius: >
+      Every system using group-level scripts with dependencies (a primary
+      mprov feature) gets no scripts executed at all during provisioning, with
+      only a thread traceback in the journal to explain it. Freshly provisioned
+      nodes skip all group post-boot setup until the bug is fixed.
+    regression_test: >
+      test_group_script_with_dependency_resolves: feed the script-runner a mock
+      entity whose group carries one script with one dependsOn entry and assert
+      the resolver returns ordered steps and the script runs. Fails today with
+      TypeError, passes after.
+
+  - id: JS-009
+    type: bug
+    severity: S2
+    title: "Stop creating /etc/nologin before validation and leaking it on error paths"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 87-91
+        excerpt: |
+          file_path = Path("/etc/nologin")
+          try:
+            file_path.touch()
+          except:
+            pass
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 99-102
+        excerpt: |
+          if '-h' in sys.argv:
+            # someone passed the -h flag, print the help.
+            self.printHelp()
+            return False
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 303-308
+        excerpt: |
+          # remove the entity file.
+          os.unlink(self.scriptTmpDir + "/entity.json")
+          try:
+            os.unlink("/etc/nologin")
+          except:
+            pass
+    repro: >
+      handle_jobs touches /etc/nologin first, before any argument validation.
+      The removal happens only at the end of the success path at line 306. Every
+      early return and every bare exit call before that point (the help flag at
+      line 101, the mutually-exclusive-options error at line 108, the
+      missing-option error at line 123, the entity-fetch failures at lines 152,
+      156, and 168) leaves /etc/nologin in place on the machine. Simply running
+      the post-boot unit with dash h to view help blocks all non-root interactive
+      logins on that node until someone removes the file by hand.
+    fix_idea: >
+      Move the nologin creation after all argument and entity validation, and
+      register a cleanup that always removes nologin when handle_jobs exits by
+      any path, including exceptions raised inside the script threads. Audit the
+      early paths to replace bare exit calls with a normal return after cleanup.
+    blast_radius: >
+      Any failed or aborted provisioning or post-boot run locks out every
+      non-root login on the affected node, including emergency interactive access
+      during exactly the incidents the operator is likely to be debugging. Persists
+      across reboots since nothing else removes the file.
+    regression_test: >
+      test_nologin_removed_on_all_exits: invoke the script-runner help path and a
+      forced entity-fetch failure and assert /etc/nologin does not exist after
+      each. Fails today on both, passes after.
+
+  - id: JS-010
+    type: bug
+    severity: S2
+    title: "Propagate post-boot and image script failures instead of reporting success"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 311-317
+        excerpt: |
+          def runScript(self, filename):
+            # grab the file
+            local_file = self.download_file(filename)
+
+            # run the file
+            subprocess.run(local_file, shell=True)
+      - path: src/mprov_jobserver/plugins/script_runner.py
+        lines: 291-304
+        excerpt: |
+          for step in scriptDeps:
+            threads = []
+            for script in step:
+              # download the script and thread it out within this step.
+              print(f"Running {scripts[script]['filename']}")
+              t = Thread(target=self.runScript, args=(scripts[script]['filename'], ))
+              t.start()
+              threads.append(t)
+    repro: >
+      runScript ignores the subprocess return code completely, and each script is
+      run in a bare Thread whose exception, if raised before the subprocess even
+      starts (for example a download failure in download_file), is swallowed by
+      the default thread excepthook. handle_jobs joins the threads, prints
+      complete, unlinks nologin, and returns; the oneshot unit then exits zero.
+      A post-boot script that fails on every node therefore reports success to
+      systemd and to the operator, and provisioning continues on broken systems
+      with no failure signal anywhere except a traceback in the journal.
+    fix_idea: >
+      Capture the subprocess return code per script, record per-thread success in
+      a shared structure the threads set, and after joining assert that every
+      script in every step returned zero before declaring completion. On any
+      failure, print which script failed with its exit code, skip the remaining
+      steps, and exit nonzero so the oneshot unit and any calling pipeline see
+      the failure.
+    blast_radius: >
+      Silent partial provisioning fleet-wide: any failed setup script (disk
+      layout, mounts, networking) is invisible because exit codes lie. Operators
+      discover the breakage much later as inexplicable node behavior, and remediation
+      requires no signal to trigger it. This is the highest-cost class of
+      provisioning bug: plausible-looking success over broken machines.
+    regression_test: >
+      test_failing_script_fails_the_run: stage one script that exits nonzero in a
+      mock script set and run the script-runner. Assert the process exits nonzero
+      and prints the failing script name. Fails today with exit zero, passes after.
+
+  - id: JS-011
+    type: bug
+    severity: S2
+    title: "Fix inverted switch merge so switches get DHCP entries"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/dnsmasq_mod/dhcp.py
+        lines: 52-54
+        excerpt: |
+          response = self.js.session.get( self.js.mprovURL + 'switches/?network=' + network['slug'])
+          if not self.checkHTTPStatus(response.status_code):
+              data_hosts['hosts'] = data_hosts['hosts'] + (response.json()[0])
+    repro: >
+      The merge of switch management interfaces into the DHCP host list is gated
+      on the request having FAILED (the condition is negated). When the switches
+      endpoint returns a healthy 2xx response the merge is skipped, so switch
+      management MAC and IP data never reaches the generated dhcp host config and
+      switches receive neither reservations nor PXE boot entries. When the request
+      fails, the code instead tries to parse an error body and take its first
+      element, raising inside the thread. The parallel dns module merges switches
+      unconditionally on success, confirming the intended direction.
+    fix_idea: >
+      Remove the negation so the merge runs on a successful response, guard the
+      response parse for both directions, and merge the parsed list wholesale like
+      the dns module does rather than indexing the first element of the reply.
+    blast_radius: >
+      Every deployment enabling DHCP on a network with switches modeled in the
+      mPCC silently omits switch entries from the dnsmasq host files: no DHCP
+      reservations for switch management interfaces, no PXE for switch OS
+      upgrades. Additionally any switch-endpoint error crashes the DHCP regen
+      thread and leaves the jobs it claimed stuck in RUNNING.
+    regression_test: >
+      test_switches_merged_on_success: serve a mock switches endpoint returning
+      two switch records with mgmt MACs and assert both appear in the rendered
+      dhcp host config. Fails today with no switch lines, passes after.
+
+  - id: JS-012
+    type: bug
+    severity: S2
+    title: "Fix load monitor guard that crashes the daemon under high load"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/app.py
+        lines: 288-291
+        excerpt: |
+          }
+          if data['one_minute_load'] >= multiprocessing.cpu_count() and self.config_data['loadmon']:
+            print("Not Registering, high load.")
+            return
+      - path: src/mprov_jobserver/plugins/mprov_webserver.py
+        lines: 51-54
+        excerpt: |
+          if os.getloadavg()[1] >= multiprocessing.cpu_count() \
+              and self.js.config_data['loadmon']\
+              and self.path.startswith("/images/"):
+    repro: >
+      Both load-shedding guards read the top-level config map for a loadmon key,
+      but loadmon lives in the global section (or as the class default True at
+      app.py line 28) and is never a top-level config key in the shipped jobserver
+      yaml or the jinja template that generates it. The short-circuit only delays
+      the failure: once the host load reaches the CPU count, the register_server
+      call raises KeyError for loadmon and the daemon process dies during the
+      heartbeat call in the main loop, so the exact load condition the feature
+      exists to handle instead kills the service, and systemd restart loops while
+      the load persists. The webserver handler has the same lookup and hits it
+      under load during image requests.
+    fix_idea: >
+      Read the already-mapped instance attribute instead of the raw config map in
+      both places, and add loadmon to the documented example config so the
+      behavior is discoverable and toggleable as intended.
+    blast_radius: >
+      Any jobservers that experience load at or above their CPU count, which
+      image builds themselves routinely cause on build hosts, crash the daemon
+      instead of shedding. On shared build nodes this turns a busy period into a
+      restart loop, killing in-flight provisioning passes and webserver serving.
+    regression_test: >
+      test_high_load_sheds_without_crash: instantiate the server with the shipped
+      default config, force the measured load above the CPU count, and run
+      register_server. Assert it prints the high-load message and returns rather
+      than raising. Fails today with KeyError, passes after.
+
+  - id: JS-013
+    type: bug
+    severity: S2
+    title: "Create the authorized_keys directory inside the image, not on the build host"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 334-342
+        excerpt: |
+          # copy in our root keys from the distro
+          if 'rootsshkeys' in imageDetails['osdistro']:
+            if imageDetails['osdistro']['rootsshkeys'] is not None:
+              os.makedirs("/root/.ssh", exist_ok=True)
+              try:
+                with open(imgDir + '/root/.ssh/authorized_keys', mode="w") as authkeys:
+                  authkeys.write(imageDetails['osdistro']['rootsshkeys'] )
+              except:
+                print("WARN: No authorized_keys copied, /root/.ssh/authorized_keys access error")
+    repro: >
+      The code creates the literal host directory /root/.ssh on the build server
+      but then writes authorized_keys under the image tree path, whose .ssh
+      subdirectory no earlier build step creates. On a freshly built image the
+      open fails, the bare except swallows it into a warning, and no key material
+      lands in the image. Every machine provisioned from that image boots without
+      the configured root access key, and the operator's only clue is a single
+      WARN line among build output. The stray directory also gets created on the
+      build host itself as a side effect.
+    fix_idea: >
+      Create the ssh directory inside the image tree with mode 0700 before writing
+      the file, write authorized_keys with mode 0600, and fail the image update
+      loudly when configured key material cannot be installed instead of
+      continuing with a warning.
+    blast_radius: >
+      Operators who configure rootsshkeys on a distro get locked-out root access
+      on all provisioned nodes (no key), discover it at first login attempt, and
+      must fall back to console access or the root password path. The feature
+      effectively never works on first builds.
+    regression_test: >
+      test_rootsshkeys_written_on_fresh_image: build into an empty image dir
+      against a mock distro with configured keys and assert authorized_keys exists
+      under the image root with the key content and mode 0600. Fails today,
+      passes after.
+
+  - id: JS-014
+    type: bug
+    severity: S2
+    title: "Report the one-minute load average the field name promises"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/app.py
+        lines: 283-288
+        excerpt: |
+          data = {
+              'name': myHostname,
+              'address': self.ip_address,
+              'jobmodules': self.jobmodules,
+              'one_minute_load': os.getloadavg()[2]
+          }
+    repro: >
+      os.getloadavg returns the tuple of one, five, and fifteen minute averages,
+      so index 2 is the FIFTEEN minute average while the field is named
+      one_minute_load and is sent to the mPCC on every registration heartbeat as
+      such. The control center then displays a fifteen minute average under a one
+      minute label, and any mPCC-side logic or operator runbook that reads the
+      field to judge instantaneous jobserver health gets a lagging value.
+    fix_idea: >
+      Use index 0 of getloadavg for the one minute field, or if a smoother value
+      is genuinely wanted for registration decisions, send both averages under
+      accurately named fields and keep the registration gate in the jobserver
+      itself.
+    blast_radius: >
+      Wrong health data shown and sent for every jobserver on every heartbeat,
+      continuously, in every deployment. Worst case an operator (or future mPCC
+      logic) overweighting the displayed value misjudges a jobserver as idle or
+      busy at the wrong moment, especially right after a load spike or lull.
+    regression_test: >
+      test_one_minute_load_is_one_minute: run register_server against a mock
+      server on a host where the one and fifteen minute averages differ and assert
+      the posted one_minute_load value equals the getloadavg index 0 sample taken
+      at the same moment. Fails today, passes after.
+
+  - id: JS-015
+    type: bug
+    severity: S2
+    title: "Fix repack_image so it does not destroy the image it repacks"
+    user_value: null
+    evidence:
+      - path: repack_image
+        lines: 1-7
+        excerpt: |
+          #!/bin/bash
+          # example repack script, may need tweaking.
+          # pass the path to the image directory
+
+          rm $1/`basename $1`.img -f
+          busybox tar c -C $1-f - ./ | gzip -1 -c > /tmp/`basename $1`.img
+          mv /tmp/`basename $1`.img $1/`basename $1`.img
+    repro: >
+      The script deletes the existing image first, then tars the directory. The
+      tar arguments are malformed: -C is given the single glued token made of the
+      path and a stray dash-f, so tar fails to change into the image directory
+      (and the unquoted path argument breaks entirely on paths containing spaces).
+      The pipeline exit code is that of gzip, which happily compresses the empty
+      stdin tar produces, so the failure is not detected. The result is a tiny
+      valid-looking gzip file that is moved over the freshly deleted image path,
+      replacing a real image with an empty artifact that still looks plausible by
+      name.
+    fix_idea: >
+      Quote every path argument, put a space between the chdir option and its
+      value and correct the dash-f placement, enable shell error and pipefail
+      strictness, build the new image beside the old one, and only replace the
+      original after verifying the new artifact is non-empty and tar succeeded.
+    blast_radius: >
+      An operator who runs the shipped script per its own comment loses the image
+      file unrecoverably (the directory contents remain, but the distributable
+      artifact is gone) and receives an empty replacement that naming suggests is
+      valid. If synced or served, machines boot a zero-content image. Added
+      upstream 2026-07 and shipping in the general release as-is.
+    regression_test: >
+      test_repack_produces_valid_image: run the script on a prepared image
+      directory containing fixtures and assert the produced image file is
+      non-empty, gunzips, and contains the fixture files. Fails today with an
+      empty artifact, passes after.
+
+  - id: JS-016
+    type: bug
+    severity: S3
+    title: "Tolerate unset optional network fields in DHCP config generation"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/templates/dnsmasq/dhcp.conf.j2
+        lines: 7-8
+        excerpt: |
+          {% if ":" in network.dhcpstart %}
+          dhcp-range=set:{{network.slug}},{{network.dhcpstart}},{{network.dhcpend}},slaac
+      - path: src/mprov_jobserver/templates/dnsmasq/dhcp.conf.j2
+        lines: 13-15
+        excerpt: |
+          {% if ":" in network.gateway %}
+          {% else %}
+          dhcp-option=tag:{{network.slug}},option:router,{{network.gateway}}
+    repro: >
+      The template tests membership of a colon in each optional network field
+      before rendering options. The mPCC Network model defines dhcpstart,
+      dhcpend, gateway, and nameserver1 all as nullable and blank-allowed
+      (verified in control_center networks models), and the mPCC API docs mark
+      gateway and nameserver1 as optional. When any network in the isdhcp set has
+      one of these fields null, the membership test against None raises TypeError
+      during render (verified with the same jinja2 construct), the DHCP regen
+      thread dies, dnsmasq keeps its previous configuration, and the jobs that
+      triggered the regen remain stuck in RUNNING. The upstream project has
+      already fixed this class once for empty IPs on systems, so null optional
+      fields are a live data shape.
+    fix_idea: >
+      Guard each optional field against being undefined or empty before the
+      address family test, skipping the corresponding option for that network,
+      and render a commented placeholder line so operators can see which networks
+      lack which options.
+    blast_radius: >
+      A single network record with a legitimately unset gateway or nameserver
+      stops all DHCP and DNS config regeneration for the whole jobserver, freezing
+      the running dnsmasq config and stranding the triggering jobs until the
+      operator finds the traceback in the journal.
+    regression_test: >
+      test_null_gateway_renders_cleanly: render the dhcp template with a network
+      fixture carrying null gateway and nameserver1 and assert the output contains
+      no options for those fields and no exception. Fails today with TypeError,
+      passes after.
+
+  - id: JS-017
+    type: bug
+    severity: S3
+    title: "Check dnsmasq worker outcomes before marking jobs successful"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/dnsmasq.py
+        lines: 146-148
+        excerpt: |
+          # wait for DNS and DHCP to finish.
+          for thread in self.threads:
+            thread.join()
+      - path: src/mprov_jobserver/plugins/dnsmasq_mod/config.py
+        lines: 86-88
+        excerpt: |
+          with open(self.tftproot + '/menu.ipxe', 'w') as conf:
+              conf.write(jenv.get_template('dnsmasq/menu.ipxe.j2').render(data))
+          self.js.update_job_status(self.jobModule, 4, jobquery=jobquery + "&status=2")
+    repro: >
+      The dnsmasq plugin joins the DNS and DHCP worker threads without inspecting
+      whether they survived or set their failure flag, then unconditionally runs
+      the config thread, whose handle_jobs marks every claimed job successful.
+      When a worker thread dies mid-render (for example from the null-field
+      TypeError in the dhcp template, or the switches merge crash), the jobs that
+      triggered regeneration are still flipped to SUCCESS. The operator sees green
+      jobs while the dnsmasq configuration on disk is whatever partial state the
+      crashed thread left.
+    fix_idea: >
+      After joining, check each worker thread's outcome flag and liveness before
+      proceeding, mark the claimed jobs failed with a reason when any worker
+      crashed, and have the config thread only mark success when the whole chain
+      completed.
+    blast_radius: >
+      Failed DNS or DHCP regeneration silently reports success, so PXE and DHCP
+      problems surface later as boot failures across nodes instead of as failed
+      jobs, and the operator's primary signal (job state in the mPCC) lies.
+    regression_test: >
+      test_failed_dns_worker_fails_jobs: run the dnsmasq module against a mock
+      network fixture that crashes the DNS worker and assert the claimed updates
+      end in failure state, not success. Fails today, passes after.
+
+  - id: JS-018
+    type: bug
+    severity: S3
+    title: "Claim jobs per jobserver and atomically to prevent double processing"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/app.py
+        lines: 222-225
+        excerpt: |
+          elif jobquery != "":
+            queryURL = self.mprovURL + 'jobs/?' + jobquery
+          else:
+            queryURL = self.mprovURL + 'jobs/?search=' + job_module
+      - path: src/mprov_jobserver/app.py
+        lines: 256-259
+        excerpt: |
+          data['id'] = job['id']
+          data['jobserver'] = self.id
+          # print(data)
+          response = self.session.patch(self.mprovURL + 'jobs/' + str(data['id']) + '/', data=json.dumps(data))
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 217-220
+        excerpt: |
+          if self.imageList is None:
+            # grab all the image-update jobs.
+            if not self.js.update_job_status(self.jobModule, 2):
+              return # no jobs.
+      - path: src/mprov_jobserver/plugins/image_delete.py
+        lines: 10-12
+        excerpt: |
+          def handle_jobs(self):
+            # See if we have any image-delete jobs, and take 'em if we do, else just exit
+            jobquery = "jobserver=" + str(self.js.id) + "&module=image-delete"
+    repro: >
+      Job claiming is a plain GET of the pending list followed by a loop of
+      PATCHes that set status RUNNING and overwrite the jobserver field with the
+      claiming host, with no conditional or transactional reservation. Two
+      jobservers running the same module within the same heartbeat window both
+      read the same pending jobs and both flip them to RUNNING, and both execute
+      them. image_update claims with the bare module search that ignores the
+      jobserver assignment entirely (the codebase knows the scoped form: image
+      delete filters by jobserver self), so one image-update host also steals
+      jobs the mPCC had assigned to a different image-update host. Double builds
+      race writing the same image directory; on a shared export filesystem this
+      produces interleaved partial output that other jobservers will happily serve.
+    fix_idea: >
+      Add a compare-and-swap style claim on the mPCC (patch from status PENDING to
+      RUNNING conditioned on current status and current jobserver being empty),
+      retry claims that lose the race, and require plugins to scope claim queries
+      by their own jobserver id as image delete already does.
+    blast_radius: >
+      Multi-jobserver deployments (the architecture explicitly supports
+      jobservers-per-module lists) get duplicated builds, wasted host hours, and
+      possible corrupted image directories on shared storage. Single-jobserver
+      sites are unaffected; severity limited to deployments the product explicitly
+      serves.
+    regression_test: >
+      test_concurrent_claim_single_execution: run two simulated jobserver
+      instances against one mock mPCC queue with a CAS-claim endpoint and assert
+      each queued job is claimed and executed exactly once. Fails today with both
+      claiming, passes after.
+
+  - id: JS-019
+    type: bug
+    severity: S3
+    title: "Fix broken error paths in repo-update that crash instead of failing jobs"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/repo_update.py
+        lines: 57-62
+        excerpt: |
+          try:
+            params = job['params']
+          except:
+            print("Error: Repo Update with no repo_id, cannot parse params.")
+            self.js.update_job_status(self.module, 3, jobid=job['id'])
+            return
+      - path: src/mprov_jobserver/plugins/repo_update.py
+        lines: 73-74
+        excerpt: |
+          print("Error: unable to make repodir:" + self.repoDir)
+          self.js.update_job_status(self.module, 3, jobquery='jobserver=' + self(self.js.id) + "&status=2")
+    repro: >
+      The error handlers reference an attribute that does not exist: the class
+      defines jobModule, not module, so both guard paths raise AttributeError the
+      moment they try to mark a malformed job failed. The third site compounds it
+      by calling the instance object as a function around the jobserver id, which
+      is a TypeError before the status call is even attempted. Every intended
+      failure path for malformed repo-update jobs instead crashes the plugin
+      thread, leaving the claimed jobs stuck in RUNNING with no failure record.
+    fix_idea: >
+      Use the correct attribute name in all three handlers, remove the stray
+      parenthesis that turns the id into a call, and cover these paths with tests
+      that assert malformed jobs are moved to failure state and the loop continues
+      with the next job instead of returning.
+    blast_radius: >
+      Any corrupted or empty-params repo-update job wedges the repo-update lane:
+      the claimed job never fails visibly, and because update_job_status skips
+      jobs already in RUNNING on later passes, it never re-runs either. Operators
+      see an eternity-RUNNING repo job with no diagnostic.
+    regression_test: >
+      test_malformed_params_fail_the_job: enqueue a repo-update job with empty
+      params against a mock mPCC and assert it transitions to failure state and
+      the thread processes subsequent jobs. Fails today with the thread dying and
+      the job stuck RUNNING, passes after.
+
+  - id: JS-020
+    type: bug
+    severity: S3
+    title: "Fix undefined jid reference in image-update error path"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 257-260
+        excerpt: |
+          except:
+            print("Error: Unable to make imageDir: " + self.imageDir)
+            self.js.update_job_status(self.jobModule, 3, jobid=jid, jobquery='jobserver=' + str(self.js.id) + '&status=2')
+            return
+    repro: >
+      The imageDir creation failure handler passes a variable named jid that is
+      only defined later, inside the per-image loop that begins at line 263. When
+      the handler runs it raises NameError, so the jobs this host claimed as
+      RUNNING are never marked failed, the plugin thread dies, and the stuck jobs
+      remain in RUNNING state forever because later passes only act on pending
+      jobs.
+    fix_idea: >
+      Mark failure for the full set of claimed image-update jobs via the jobquery
+      form (as the sibling handlers do) rather than a per-job variable that does
+      not exist at that point, and add a linter gate for undefined names so the
+      class of defect cannot recur.
+    blast_radius: >
+      Any host where the image store path is missing or unwritable (disk full,
+      permissions, unmounted export) wedges every claimed image-update job in
+      RUNNING permanently while the traceback scrolls past in the journal.
+    regression_test: >
+      test_imagedir_failure_fails_claimed_jobs: claim one job against a mock mPCC
+      and force the image store directory creation to fail. Assert the job ends in
+      failure state. Fails today with the job stuck RUNNING, passes after.
+
+  - id: JS-021
+    type: bug
+    severity: S3
+    title: "Stop changing the daemon working directory from worker threads"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update_mod/rhel.py
+        lines: 52-54
+        excerpt: |
+          # create this image's dir.  Use the image['slug']
+          os.makedirs(imgDir, exist_ok=True)
+          os.chdir(imgDir)
+      - path: src/mprov_jobserver/plugins/repo_sync.py
+        lines: 86-87
+        excerpt: |
+          os.makedirs(self.repoDir + '/' + str(repo), exist_ok=True)
+          os.chdir(self.repoDir)
+      - path: src/mprov_jobserver/plugins/repo_sync.py
+        lines: 86-88
+        excerpt: |
+          os.makedirs(self.repoDir + '/' + str(repo), exist_ok=True)
+          os.chdir(self.repoDir)
+          # TODO: Do the wget.
+      - path: src/mprov_jobserver/plugins/dnsmasq.py
+        lines: 47-49
+        excerpt: |
+          sh.dnf(['-y', 'install', 'mkisofs'])
+          oldCwd = os.getcwd()
+          os.chdir('/tmp')
+      - path: src/mprov_jobserver/plugins/repo_update_mod/rhel.py
+        lines: 43-45
+        excerpt: |
+          os.makedirs(f"{self.repoDir}/{self.repo['id']}", exist_ok=True)
+
+          os.chdir(f"{self.repoDir}/")
+    repro: >
+      Several plugins call the process-wide working directory change from inside
+      daemon threads and never restore it on the failure paths, and the image and
+      repo update modules never restore it at all. This is a single process whose
+      main loop and all sibling plugin threads share the new cwd. After the first
+      image build the daemon runs with its cwd inside an image directory; after a
+      failed iPXE fetch it runs from /tmp or the ipxe source tree. Every later
+      relative-path operation in any plugin (template writes, subprocesses that
+      rely on relative paths, the config-file fallback that resolves against the
+      current directory in app.py) then operates on the wrong tree. The repo
+      update shell commands run with an installroot under repoDir, so a corrupted
+      cwd also changes where their relative dnf metadata operations land.
+    fix_idea: >
+      Avoid the working directory change entirely by passing explicit destination
+      paths to the subprocesses involved, or wrap every required directory switch
+      in a save-and-restore that executes on all exits including exceptions, and
+      never perform it from a thread of a long-running daemon.
+    blast_radius: >
+      Long-running jobservers accumulate cwd corruption after their first image or
+      repo job: any plugin using relative paths afterward reads or writes the
+      wrong location, failures are intermittent and order-dependent, and restarts
+      mysteriously fix them. Worst case is wrong-tree writes by unrelated plugins.
+    regression_test: >
+      test_worker_threads_preserve_cwd: run the rhel image update module against
+      mocks inside a test daemon that also runs a sibling plugin asserting its own
+      relative-path fixture resolves against the original cwd. Fails today, passes
+      after.
+
+  - id: JS-022
+    type: enhancement
+    severity: S3
+    title: "Reap jobs orphaned in running state when a worker dies mid-job"
+    user_value: >-
+      Jobs abandoned by a crashed worker are automatically failed and retried
+      instead of sitting in running state forever.
+    evidence:
+      - path: src/mprov_jobserver/app.py
+        lines: 247-254
+        excerpt: |
+          # no need to update if our status hasn't changed.
+          # print("\t" + str(job['id']))
+          if(job['status'] == status ):
+            continue
+
+          # if we are in an end state, don't update.
+          if(job['status'] == 3) or (job['status'] == 4):
+            continue
+      - path: src/mprov_jobserver/plugins/plugin.py
+        lines: 36-39
+        excerpt: |
+          def run(self):
+            if self.load_config():
+              self.handle_jobs()
+    repro: >
+      When a plugin thread dies mid-job (any of the crash paths in this register),
+      its claimed jobs stay in RUNNING state. Nothing ever revisits them: the
+      status update logic only transitions pending jobs and skips terminal states,
+      claimed jobs are excluded from later claim queries by their status, and
+      plugin threads run with the default excepthook so the death is a journal
+      traceback at best. There is no heartbeat-per-job, no age check on running
+      jobs, and no startup recovery that would fail or requeue stragglers. The
+      mPCC shows the job as running indefinitely.
+    fix_idea: >
+      Record a per-job heartbeat or expected-duration bound at claim time, and
+      have either the jobserver on startup or the mPCC by timeout sweep any RUNNING
+      job whose claiming jobserver has gone silent or whose thread died, marking
+      them failed with a reason so operators and retry logic see the outcome.
+    blast_radius: >
+      Every mid-job crash in any of the modules strands its whole claimed batch as
+      ghost-running jobs. Operators cannot distinguish live work from dead work,
+      queues clog silently, and the only recovery is manual database surgery or
+      learned avoidance of the feature that crashed.
+    regression_test: >
+      test_stale_running_jobs_are_reaped: claim a job with a simulated worker that
+      dies before completion, then restart the jobserver (or run the reaper against
+      the mock mPCC) and assert the orphaned job transitions to failure. Fails
+      today with the job staying RUNNING, passes after.
+
+  - id: JS-023
+    type: bug
+    severity: S3
+    title: "Match the dnsmasq restart target precisely instead of killing by substring"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/dnsmasq_mod/dhcp.py
+        lines: 68-76
+        excerpt: |
+          pid=None
+          process_name="dnsmasq"
+          for proc in psutil.process_iter():
+              if process_name in proc.name():
+                pid = proc.pid
+                break
+          if pid is not None:
+              # process was found, kill it and let conf restart it.
+              os.kill(pid, signal.SIGKILL)
+      - path: src/mprov_jobserver/plugins/dnsmasq_mod/dns.py
+        lines: 139-147
+        excerpt: |
+          pid=None
+          process_name="dnsmasq"
+          for proc in psutil.process_iter():
+              if process_name in proc.name():
+                pid = proc.pid
+                break
+          if pid is not None:
+            # process was found, kill it and let conf restart it.
+            os.kill(pid, signal.SIGKILL)
+    repro: >
+      Both config regen threads find the dnsmasq process by scanning every process
+      on the host for a name CONTAINING the substring and then deliver SIGKILL to
+      the first match. Any unrelated program whose name merely contains the word
+      (exporter daemons, monitoring wrappers, auxiliary dns helpers named in the
+      same family) is killed stone dead by the root daemon, without warning, and
+      the iteration itself can raise on processes that vanish mid-scan, crashing
+      the regen thread after the wrong target was already killed.
+    fix_idea: >
+      Locate dnsmasq by its exact configured binary path and launched pid file or
+      its precise process name via an exact comparison, prefer asking systemd to
+      reload or restart the unit instead of signaling a discovered pid, and
+      tolerate vanished processes during the scan. Note the related but distinct
+      open upstream issue about when a full restart should happen at all, which
+      concerns restart policy rather than target selection.
+    blast_radius: >
+      On the DNS/DHCP jobservers of a fleet, any process with a matching substring
+      in its name can be SIGKILLed at any config regen, taking down monitoring or
+      auxiliary services without a trace other than the journal warning that a
+      regeneration happened at that moment.
+    regression_test: >
+      test_restart_kills_only_exact_target: start a decoy process whose name
+      contains the substring plus a real target under test, trigger a config
+      regen, and assert the decoy survives while the real target is addressed.
+      Fails today when the decoy matches first, passes after.
+
+  - id: JS-024
+    type: bug
+    severity: S3
+    title: "Fix handler attribute reference that breaks high-load shedding in the webserver"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/mprov_webserver.py
+        lines: 50-54
+        excerpt: |
+          def do_GET(self):
+            print(mProvHTTPReqestHandler.connCount)
+
+            if os.getloadavg()[1] >= multiprocessing.cpu_count() \
+                and self.js.config_data['loadmon']\
+                and self.path.startswith("/images/"):
+    repro: >
+      The request handler accesses a js attribute on itself, but only the server
+      instance carries the jobserver reference (the sibling method in the same
+      file correctly reaches through self.server for it). On an idle host the
+      first operand of the chain is false so the broken reference is never
+      touched, which is why serving works at all. The moment the five-minute load
+      reaches the CPU count, the exact condition this shedding logic exists for,
+      every image request raises AttributeError inside the handler thread and the
+      connection is dropped mid-response instead of the intended clean refusal
+      with an error status.
+    fix_idea: >
+      Reach the jobserver reference through the server instance as the size check
+      in the same class already does, read the load monitor toggle through the
+      mapped attribute rather than the raw config map (see the loadmon finding),
+      and add a unit test that exercises the shed path under a forced load value.
+    blast_radius: >
+      Image serving under load degrades from a designed, communicated refusal
+      with retry semantics into abrupt connection resets for every imaging client
+      at the worst possible time (precisely when the host is busy), producing
+      retry storms and confusing PXE failures across concurrently provisioning
+      nodes.
+    regression_test: >
+      test_high_load_returns_clean_error: force the load probe above the CPU
+      count in a handler unit test with a mock server carrying the jobserver
+      reference and assert the response is the intended error status rather than
+      an exception. Fails today, passes after.
+
+  - id: JS-025
+    type: bug
+    severity: S3
+    title: "Clean up image build bind mounts on failure and before archiving"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/templates/image-update/script-runner.sh
+        lines: 7-10
+        excerpt: |
+          for i in `echo "dev proc run sys"`
+          do
+            mount -o bind /$i ${IMGDIR}/${i}
+          done
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 379-380
+        excerpt: |
+          os.system('rm -f ' + imgDir + '/' + imageDetails['slug'] + '.img')
+          if os.system('/tmp/busybox tar c -C' + imgDir + ' -f - ./ | gzip -1 -c > /tmp/' + imageDetails['slug'] + '.img'):
+    repro: >
+      The generated build script bind-mounts the host dev, proc, run, and sys
+      trees into the image directory and unmounts them only in the tail of a
+      successful flow, with no trap or error handling. If the chrooted run fails
+      out of band, or the daemon is stopped mid-build (an ordinary systemctl
+      restart during a long build), the mounts persist. The next pass for that
+      image tars the image directory with those live host trees still mounted
+      under it, so the tar walks host proc and dev contents into the image archive
+      or hangs, and stale mounts also interfere with the following build's own
+      mount and chroot steps.
+    fix_idea: >
+      Register an exit trap in the generated script that unmounts all four binds
+      whenever the script ends for any reason, have the build code verify the
+      image tree is mount-free before archiving, and lazily unmount leftovers at
+      the start of each image build pass.
+    blast_radius: >
+      Builds interrupted by restarts or crashes poison the next build of the same
+      image: worst case a shipped image containing host device and process files,
+      more commonly a wedged build step or a tar that never completes, blocking
+      the image-update lane for that image until someone inspects mounts manually.
+    regression_test: >
+      test_interrupted_build_leaves_no_mounts: start a build that mounts the
+      bindings and is killed before the unmount phase, then run the next build
+      pass and assert it detects and clears the leftovers before tarring. Fails
+      today, passes after.
+
+  - id: JS-026
+    type: bug
+    severity: S3
+    title: "Stop interpolating mPCC-sourced values into shell command strings"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update_mod/rhel.py
+        lines: 35-35
+        excerpt: |
+          cmd=f"chroot {imgDir} dracut --regenerate-all -f --mdadmconf --force-add mdraid --add-drivers sd_mod --add-drivers \"{self.imageDetails['osdistro']['initial_mods'].replace(',',' ')}\""
+      - path: src/mprov_jobserver/plugins/repo_update_mod/rhel.py
+        lines: 51-51
+        excerpt: |
+          if os.system(f"dnf reposync --repofrompath {self.repo['id']},\"{self.repo['repo_package_url']}\" --repo {self.repo['id']} --destdir=./ --download-metadata --installroot={self.repoDir}/{self.repo['id']}"):
+    repro: >
+      Build commands are assembled by f-string interpolation into a single string
+      handed to the shell. The distro initial drivers list and the repo id and
+      package URL come from mPCC database records edited through the control
+      center API. Any of these values containing shell metacharacters (a double
+      quote in the drivers field, or a crafted or merely malformed URL recorded in
+      a repo) is executed as part of the root command on the build host. The
+      injection crosses the trust boundary only as far as the mPCC permission
+      model separates record editing from root script authorship, but the
+      constructed commands also break on legitimate values containing spaces or
+      quotes, which is a functional failure mode on its own.
+    fix_idea: >
+      Invoke these commands through the subprocess argument-list form with no
+      shell, passing mPCC-sourced values as single arguments, which both removes
+      the execution hazard and makes odd-but-legitimate values work. Apply the
+      same pattern to the dracut call in the boot-files update path.
+    blast_radius: >
+      Any mPCC user permitted to edit distro module lists or repo records can
+      achieve root command execution on image-build jobservers; on the
+      non-adversarial side, values with ordinary special characters crash builds
+      with shell syntax errors attributed to the wrong fixpoint.
+    regression_test: >
+      test_shell_metacharacters_in_repo_url_are_inert: run the repo update module
+      against a mock repo record whose URL contains quote and semicolon characters
+      and assert the reposync receives the URL verbatim as a single argument with
+      nothing executed. Fails today, passes after.
+
+  - id: JS-027
+    type: bug
+    severity: S3
+    title: "Close the file descriptor opened for connection-limit size checks"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/mprov_webserver.py
+        lines: 28-34
+        excerpt: |
+          try:
+            f = open(path, 'rb')
+          except OSError:
+            self.send_error(HTTPStatus.NOT_FOUND, "File not found, unable to open")
+            return False
+          try:
+            fs = os.fstat(f.fileno())
+      - path: src/mprov_jobserver/plugins/mprov_webserver.py
+        lines: 42-46
+        excerpt: |
+          except:
+            f.close()
+            print("Exception")
+            raise
+          return True
+    repro: >
+      On every image request the size check opens the target file to stat it and
+      returns success without closing it; the close statement lives only inside
+      the exception branch. Each served image GET therefore leaks one open
+      descriptor in the daemon process for its lifetime. With the shipped default
+      unit and typical descriptor limits around a thousand, an image-serving
+      jobserver exhausts its file descriptors after roughly a thousand image
+      fetches, after which image requests fail at open and, because the descriptor
+      table is process-wide, so can file operations in every other plugin thread.
+    fix_idea: >
+      Stat the path without holding a descriptor, or open within a context
+      management pattern that guarantees closure on every return path including
+      the early size-limit refusal, and add a descriptor-count assertion to the
+      serving tests.
+    blast_radius: >
+      Every image-source jobserver predictably degrades into failing all image
+      requests after cumulative fetches reach the descriptor limit, usually
+      quietly during a mass reprovisioning campaign when many nodes image at once,
+      and recovery requires a daemon restart that also interrupts any in-flight
+      builds.
+    regression_test: >
+      test_no_descriptor_leak_per_request: serve one image fixture a few hundred
+      times through the handler and assert the process open-descriptor count is
+      unchanged from start to end. Fails today with the count rising per request,
+      passes after.
+
+  - id: JS-028
+    type: bug
+    severity: S3
+    title: "Send job timestamps in UTC as the code intends"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/app.py
+        lines: 211-218
+        excerpt: |
+          if(status == 2) :
+            # we use UTC here because django in the mPCC will interpret that correctly.
+            # setting the job to running
+            data['start_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            data['end_time'] = None
+          elif(status == 3) or (status == 4) :
+            # job failed
+            data['end_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    repro: >
+      The comment states the times are UTC for correct Django interpretation, but
+      the code calls the local-clock now() and formats it without a timezone
+      offset, producing a naive local-time string. On any jobserver whose timezone
+      is not UTC, job start and end times are recorded shifted by the local
+      offset, so durations computed by the mPCC are wrong by hours, and jobservers
+      in different timezones on one deployment produce mutually inconsistent
+      timestamps for the same queue.
+    fix_idea: >
+      Use the timezone-aware UTC clock accessor that is already imported in the
+      module and render it into the format the mPCC expects, keeping one explicit
+      convention (UTC with offset or naive UTC) documented in both repos.
+    blast_radius: >
+      Every job start and end time on non-UTC jobservers is silently wrong in the
+      mPCC database, skewing provisioning-duration reporting and any timing
+      analysis operators do. Worst case on a fleet spanning timezones: durations
+      appear negative or wildly inflated.
+    regression_test: >
+      test_job_timestamps_are_utc: with the process timezone set to a known
+      non-UTC zone, run the status update against a mock mPCC and assert the
+      posted timestamps equal the UTC clock within a tolerance. Fails today,
+      passes after.
+
+  - id: JS-029
+    type: bug
+    severity: S4
+    title: "Include the promised genders.include file in generated genders output"
+    user_value: null
+    evidence:
+      - path: src/mprov_jobserver/plugins/libgenders.py
+        lines: 59-63
+        excerpt: |
+          # This genders file is maintained by mProv.
+          # if you would like entries included in this file
+          # create an /etc/genders.include file and put them
+          # there.  They will be added to the end of this file.
+    repro: >
+      The header that the generator writes into every genders file instructs
+      operators to place extra entries in an include file and promises they will
+      be appended to the end of the generated file. No code path reads that
+      include file; the writer only emits the node lines and never concatenates
+      anything. Operators who follow the documented mechanism get silently
+      dropped entries and pdsh selections that miss their custom groups.
+    fix_idea: >
+      Honor the documented contract by appending the include file contents at the
+      end of the generated output when it exists, or, if the include mechanism is
+      deliberately unimplemented, change the generated header text so it stops
+      promising the behavior.
+    blast_radius: >
+      Operators who follow the instructions inside the generated file lose their
+      custom genders entries on every regeneration without error, message, or
+      trace. Worst case is quiet omission of node attributes used by cluster
+      tooling.
+    regression_test: >
+      test_genders_include_is_appended: place a fixture include file at the
+      configured path, run the libgenders job, and assert the generated file ends
+      with the include contents. Fails today, passes after.
+
+  - id: JS-030
+    type: enhancement
+    severity: S4
+    title: "Enable flake8 and shellcheck lint gates in CI"
+    user_value: >-
+      Lint gates in CI catch undefined names, accidental identity comparisons,
+      and shell quoting slips before release instead of as production incidents.
+    evidence:
+      - path: src/mprov_jobserver/plugins/image_update.py
+        lines: 111-111
+        excerpt: |
+          if imageData['customIPXE'] is not "" and imageData['customIPXE'] is not None:
+      - path: src/mprov_jobserver/plugins/dnsmasq.py
+        lines: 1-1
+        excerpt: |
+          from distutils.command.build import build
+      - path: repack_image
+        lines: 5-6
+        excerpt: |
+          rm $1/`basename $1`.img -f
+          busybox tar c -C $1-f - ./ | gzip -1 -c > /tmp/`basename $1`.img
+    repro: >
+      Multiple findings in this register (an undefined variable in an image-update
+      error path, an undefined attribute in repo-update error handlers, an
+      unquoted shell path in the repack script) are exactly the defect classes
+      that a standard lint gate flags mechanically, and this release shipped them
+      to users. The identity comparison against a string literal at
+      image_update.py line 111 currently works only by reliance on CPython string
+      interning and is flagged by stock flake8; the unused disttools import at
+      dnsmasq.py line 1 would break outright on Python 3.12, which the package
+      metadata nevertheless claims to support.
+    fix_idea: >
+      Add a CI step running flake8 on the package sources and shellcheck on the
+      shell scripts and generated templates, start with a ruleset limited to
+      error-class findings so the gate is actionable, and fix or explicitly ignore
+      the existing hits, including the two examples cited as evidence.
+    blast_radius: >
+      No direct behavioral risk; this is the single hygiene allowance for lint
+      coverage. Its absence is the shared root cause that let several registered
+      defects ship.
+    regression_test: >
+      test_ci_lint_gate_present: CI configuration includes a flake8 step over the
+      package and a shellcheck step over shell scripts, and both steps fail the
+      build on the error classes cited above when reintroduced.

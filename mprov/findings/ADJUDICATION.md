@@ -88,6 +88,30 @@ files exist at d8871d4 per git ls-tree, and the corrected invocation passes.
   restart-trigger vs un-reaped mid-job death - the filing lane may merge if
   upstream maintainers disagree).
 
+## Stale-dependency history verification (task-deliverable check)
+
+Task note asked for a git-history review of control_center requirements.txt
+"post-commit 73b4381 (expected ~7/9 major-version bumps, none of the 5
+pinned)". The sha 73b4381 does not resolve in ANY of the four repos and the
+string appears nowhere in the findings tree - the note's reference is stale;
+the "CC-005" label also mismatches (CC-005 is the unauthenticated register
+endpoint; the dependency finding is CC-028). The substantive claim was
+verified with the real history instead:
+
+- f90d476 (2022-04-18): requirements.txt debuts with 2 pinned lines
+  (django greater-or-equal 3.2 and less than 3.3; dataclasses).
+- 23bb591 (2022-05-04): down to 1 pin (the django lock).
+- 6c029c4 (2024-12-11) "Remove the version lock on django": the django pin
+  is deleted; zero constraints from here on.
+- 47434f6 (2025-11-03) to the reviewed commit 98d4579: all 21 dependency
+  lines carry no version operator whatsoever.
+
+So CC-028's mechanism ("fully unpinned, README still documents Django 3.2
+while a fresh install resolves 4.x") is confirmed at source and by history:
+constraint removal was deliberate (the unpin commit is self-describing) and
+the README contradiction is real (README line 16). CC-028 stands as filed
+(S3, enhancement). For the record: the repos have never carried a lock file.
+
 ## Open questions (for the filing lane / operators, not blockers)
 
 1. Filing targets are blocked (issues disabled on all four forks). This is a
@@ -109,6 +133,10 @@ files exist at d8871d4 per git ls-tree, and the corrected invocation passes.
    cluster CC-001/CC-002/CC-004) deserve upstream mprov-ng PRs rather than
    fork-only issues; the charter routes filing to the forks, so PRs are out of
    this review's scope but should be surveyed when issues are enabled.
+6. The task note's stale-deps reference (commit 73b4381) could not be located
+   in any repo; if it was meant to point at a specific historical review or
+   fork state, the program owner should re-supply it. The verification above
+   used the actual requirements.txt history instead.
 
 ## QC journal (no-fabrication controls)
 

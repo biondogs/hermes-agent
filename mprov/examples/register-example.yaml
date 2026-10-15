@@ -1,0 +1,38 @@
+# EXAMPLE register (not a real finding) — schema reference for reviewers.
+# Evidence below is verbatim from mash @d8871d4 src/mash/utils.py.
+review:
+  repo: mash
+  branch: master
+  commit: d8871d44c7c754198d825b32984fbc99fbd3d1f7
+  reviewed_at: "2026-10-15"
+  reviewer: sw-pm
+  coverage:
+    files_reviewed: 7
+    files_total: 7
+    method: full-tree
+
+findings:
+  - id: MASH-001
+    type: bug
+    severity: S3
+    title: "Raw traceback on malformed node range argument"
+    user_value: null
+    evidence:
+      - path: src/mash/utils.py
+        lines: 46-47
+        excerpt: |
+          start = int(nodeRange[:rangeSpecifier])
+          end = int(nodeRange[rangeSpecifier+1:nextRangeEnd]) +1
+    repro: >
+      Pass a node spec with a non-numeric range segment, e.g.
+      'nodes[a-z]'; int() raises and the user sees a raw Python traceback
+      instead of a usage error.
+    fix_idea: >
+      Validate range segments before conversion and exit with a clear
+      usage error naming the offending spec when parsing fails.
+    blast_radius: >
+      Any typo in a node-range argument produces an unreadable crash for
+      every CLI user; no data impact, operator confusion only.
+    regression_test: >
+      test_malformed_range_clean_error: invoke rangeToList with 'a-z' spec,
+      assert clean usage error; fails today with ValueError traceback.

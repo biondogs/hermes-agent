@@ -1,0 +1,1047 @@
+# mash (mProv Admin Shell) — comprehensive review register (SW-MPROV-R4-MASH)
+# All evidence verbatim from master @d8871d44c7c754198d825b32984fbc99fbd3d1f7.
+# Findings verified by executed probes against the real CLI (see findings/mash/REVIEW-NOTES.md).
+
+review:
+  repo: mash
+  branch: master
+  commit: d8871d44c7c754198d825b32984fbc99fbd3d1f7
+  reviewed_at: "2026-10-15"
+  reviewer: sw-reviewer
+  coverage:
+    files_reviewed: 18
+    files_total: 18
+    method: full-tree
+
+findings:
+  - id: MASH-001
+    type: bug
+    severity: S2
+    title: "Connect with user and password never authenticates"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 199-203
+        excerpt: |
+          if 'user' == args[2]:
+            # We are using plain text auth
+            rawAuthStr=f"{args[2]}:{args[4]}"
+            encAuthStr=base64.b64encode(rawAuthStr)
+            authHeader = f"Basic {encAuthStr}"
+    repro: >
+      Type 'connect http://host user alice password secret' exactly as documented by
+      'help connect'. args is the space-split list [url, user, alice, password, secret],
+      so the branch condition compares 'user' to args[2] which holds the username
+      'alice' — the branch never matches and authHeader stays empty, so mash connects
+      unauthenticated and every subsequent verb fails with Unknown Model / 401 errors.
+      Even in the accidental case where the username is literally the string 'user',
+      base64.b64encode is called on a str instead of bytes and raises TypeError
+      (verified: 'TypeError: a bytes-like object is required, not str').
+    fix_idea: >
+      Test the auth-mode token at args[1] instead of args[2], validate argument count
+      before indexing, and encode the credentials string as UTF-8 bytes before base64
+      encoding. Consider reading the password via getpass-style prompt or config file
+      rather than the command line.
+    blast_radius: >
+      Every operator who follows the documented user/password connection syntax gets an
+      unauthenticated session with confusing downstream errors instead of a working
+      connection; the feature has likely never worked as shipped.
+    regression_test: >
+      test_connect_user_password_builds_basic_auth: invoke do_connect with 'url user
+      alice password secret' against a stub session and assert the Authorization header
+      is Basic with the base64 of alice:secret; fails today with an empty header,
+      passes after the fix.
+
+  - id: MASH-002
+    type: bug
+    severity: S2
+    title: "Plugin dispatch mangles arguments containing the plugin name"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 91-92
+        excerpt: |
+          pluginName, args = args.split(" ", 1)
+          args = args.replace(pluginName, "")
+    repro: >
+      Run 'bmc power on bmc001'. default() splits off the plugin name 'bmc' and then
+      does a global substring replace of 'bmc' in the remaining argument string, so
+      'power on bmc001' becomes 'power on 001' — the node name is corrupted before the
+      plugin receives it. Verified by execution: the passed string is literally
+      'power on 001' and the request targets hostname=001 instead of bmc001.
+    fix_idea: >
+      Remove the substring replace; the split on the first space already removed the
+      plugin token. If leading-space normalization is needed, strip only whitespace.
+    blast_radius: >
+      Any plugin argument containing the plugin name as a substring — node names like
+      bmc001, paths, or free text — is silently corrupted; BMC power operations are sent
+      for the wrong hostnames with no warning.
+    regression_test: >
+      test_plugin_args_not_mangled_by_plugin_name: dispatch 'bmc power on bmc001'
+      through default() with a stub plugin and assert the plugin receives 'power on
+      bmc001'; fails today with 'power on 001', passes after the fix.
+
+  - id: MASH-003
+    type: bug
+    severity: S2
+    title: "BMC power commands fail unless mprovURL ends with a slash"
+    user_value: null
+    evidence:
+      - path: src/mash/plugins/bmc.py
+        lines: 47-49
+        excerpt: |
+          for node in nodelist:
+            # print(f"'{self.mashCmd.mprovURL}'")
+            response = self.mashCmd.session.get(f"{self.mashCmd.mprovURL}power/{action}/?hostname={node}", timeout=None, stream=True)
+    repro: >
+      Connect with the natural form 'connect http://127.0.0.1:8080 apikey KEY' (no
+      trailing slash) and run 'bmc power on node01'. The URL is composed as
+      mprovURL + 'power/on/' which yields http://127.0.0.1:8080power/on/ — the host
+      becomes '127.0.0.1:8080power'. Verified by execution against a local mock: the
+      command fails with 'Failed to parse: 127.0.0.1:44143power is not a valid host or
+      port', while the identical command with a trailing-slash connect URL succeeds.
+      The CRUD verbs are unaffected because datamodel endpoints (e.g. /systems/) carry
+      their own leading slash, so users have no signal they must add one.
+    fix_idea: >
+      Normalize mprovURL once at connect time to exactly one trailing slash, or join
+      the power path with a leading slash in the plugin; make both code paths share a
+      single URL-join helper.
+    blast_radius: >
+      BMC power operations fail with an opaque URL-parse error for every operator who
+      connects without a trailing slash — the form that works for all other verbs.
+    regression_test: >
+      test_bmc_power_url_without_trailing_slash: connect to a stub server URL without
+      trailing slash, run bmc power on, and assert the request hit /power/on/ on the
+      stub; fails today with an invalid-host error, passes after the fix.
+
+  - id: MASH-004
+    type: bug
+    severity: S2
+    title: "BMC power commands give no success or failure feedback"
+    user_value: null
+    evidence:
+      - path: src/mash/plugins/bmc.py
+        lines: 47-49
+        excerpt: |
+          for node in nodelist:
+            # print(f"'{self.mashCmd.mprovURL}'")
+            response = self.mashCmd.session.get(f"{self.mashCmd.mprovURL}power/{action}/?hostname={node}", timeout=None, stream=True)
+    repro: >
+      Run 'bmc power cycle compute001' against a control center. The response object is
+      assigned and never inspected: status code and body are discarded, nothing is
+      printed on success or on failure. Verified by execution against a mock returning
+      200 with a result body: zero bytes of output; a 500 response also produces zero
+      output. The operator cannot distinguish a successful fleet power operation from a
+      failed or no-op one.
+    fix_idea: >
+      Check the response status and print a per-node result line (hostname plus server
+      result or error) to stdout, and surface command-level failure so scripts can
+      detect it.
+    blast_radius: >
+      Operators run power on/power off/cycle blind during maintenance; a failed or
+      404-inducing power command looks identical to a successful one, risking
+      maintenance actions on nodes that never rebooted or were never powered off.
+    regression_test: >
+      test_bmc_power_prints_result_and_errors: run bmc power on against a stub
+      returning 200 then a stub returning 500 and assert success and failure output
+      differ; fails today with no output in both cases, passes after the fix.
+
+  - id: MASH-005
+    type: bug
+    severity: S2
+    title: "Failed API calls leave stale MPROV_RESULT from the previous command"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 569-572
+        excerpt: |
+          if response.status_code < 200 or response.status_code > 299 :
+            self.print(f"Error: Communications error with mPCC, code: {response.status_code}")
+            self.print(f"{response.text}")
+            return
+      - path: src/mash/app.py
+        lines: 502-504
+        excerpt: |
+          if model not in self.models:
+            self.print(f"Error: Unknown Model {model}.")
+            return
+    repro: >
+      In a piped script: 'retrieve systems.models.System' succeeds and MPROV_RESULT is
+      set to the result list; then 'delete systems.models.System id=1' returns HTTP 500
+      and returns early at the communications-error branch without clearing
+      MPROV_RESULT. Verified by execution: 'pvar MPROV_RESULT' afterwards still shows
+      the previous retrieve's data. Contrast the field-validation paths at lines
+      527-529 and 535-537, which do set MPROV_RESULT to None — the error contract is
+      inconsistent. The do_retrieve docstring promises MPROV_RESULT is None on error.
+    fix_idea: >
+      Set the MPROV_RESULT variable to None on every early-return error path in the
+      request dispatcher, ideally via a single exit helper so new error branches cannot
+      forget it.
+    blast_radius: >
+      Scripts that branch on MPROV_RESULT after a failed command silently consume the
+      previous command's data — e.g. a foreach over MPROV_RESULT repeats operations on
+      the wrong (stale) objects. Worst case: destructive follow-up verbs driven by
+      stale results.
+    regression_test: >
+      test_mprov_result_cleared_on_http_error: succeed a retrieve, then issue a
+      delete against an endpoint returning 500, assert MPROV_RESULT is None; fails
+      today retaining the old value, passes after the fix.
+
+  - id: MASH-006
+    type: bug
+    severity: S2
+    title: "Pvar cannot print comma-separated variables with multi-character names"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 341-345
+        excerpt: |
+          csvparser = csv.reader(arg)
+          for vars in csvparser:
+            for varName in vars:
+              if varName in self.variables:
+                self.print(f"{varName}={self.variables[varName]}")
+    repro: >
+      'let foo=1', 'let bar=2', then 'pvar foo,bar' as documented by the command's
+      help text ("a comma separated list of variables"). csv.reader is given the bare
+      string, which it treats as an iterable of single characters: the parsed rows are
+      single characters like 'f', 'o', 'o', so no defined multi-character variable ever
+      matches. Verified by execution: 'pvar foo,bar' prints nothing, while 'pvar foo'
+      prints 'foo=1'.
+    fix_idea: >
+      Wrap the argument in a one-element list before parsing, or split on commas
+      directly and strip whitespace from each name.
+    blast_radius: >
+      The documented comma-list display feature silently prints nothing for any
+      real-world variable name; scripts and operators get no output and no error.
+    regression_test: >
+      test_pvar_comma_list_multi_char_names: define foo and bar, run pvar foo,bar,
+      assert both 'foo=1' and 'bar=2' are printed; fails today with no output, passes
+      after the fix.
+
+  - id: MASH-007
+    type: bug
+    severity: S3
+    title: "Malformed command arguments crash the entire shell with a traceback"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 193-199
+        excerpt: |
+          if len(args) > 1:
+            self.mprovURL = args[0]
+            if 'apikey' == args[1]: 
+              # we are using an API key
+              authHeader = f"Api-Key {args[2]}"
+      - path: src/mash/app.py
+        lines: 292-292
+        excerpt: |
+          key,value=arg.split('=',1)
+      - path: src/mash/app.py
+        lines: 425-427
+        excerpt: |
+          width = int(args[3])
+          self.variables[args[0]] = []
+          for i in range(int(args[1]), int(args[2]) + 1):
+      - path: src/mash/app.py
+        lines: 518-519
+        excerpt: |
+          for marg in shlex.split(model_args):
+            key, value = marg.split("=", 1)
+      - path: src/mash/utils.py
+        lines: 46-47
+        excerpt: |
+          start = int(nodeRange[:rangeSpecifier])
+          end = int(nodeRange[rangeSpecifier+1:nextRangeEnd]) +1
+    repro: >
+      Same defect pattern at five command entry points: user input is indexed or
+      parsed assuming a shape that is never validated. Verified by execution, each
+      killing the whole session with a raw Python traceback: 'connect host apikey'
+      (two tokens, args[2] → IndexError), 'let foo' (no '=', ValueError),
+      'seq a 1 xx' (int('xx') → ValueError), 'update <model> hostname' or
+      'create <model> foo' after a good connect (token without '=' at the
+      marg.split line → ValueError as the process exits 1 mid-script), and
+      'bmc power on nodes[a-z]' via rangeToList (int('a') follows the same pattern as
+      the registered example). Because these propagate out of onecmd, an interactive
+      session loses all session variables; a piped script aborts at that line.
+    fix_idea: >
+      Validate argument count and shape at each command entry point and exit the
+      individual command with a usage error naming the expected syntax, rather than
+      letting exceptions escape. A shared argument-validation helper would keep new
+      commands from repeating the pattern.
+    blast_radius: >
+      Every CLI user hits this on their first typo; worst case a long-running
+      interactive session with variables and loop state is lost to a one-character
+      mistake.
+    regression_test: >
+      test_malformed_args_yield_usage_error_not_traceback: for each of the five sites
+      invoke the command with the malformed argument and assert a clean usage error
+      and a surviving session; all five fail today withtraceback exits, pass after
+      guards are added.
+
+  - id: MASH-008
+    type: bug
+    severity: S3
+    title: "API calls have no timeout and hang the shell indefinitely"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 556-563
+        excerpt: |
+          if method == "post":
+            response = self.session.post(f"{self.mprovURL}{mEndpoint}{idStr}{queryString}", data=json.dumps(requestData), headers={'Connection':'close'}, timeout=None, stream=True)
+          elif method == "get":
+            response = self.session.get(f"{self.mprovURL}{mEndpoint}{idStr}{queryString}", timeout=None, stream=True) # TODO: Add query string and ID stuff.
+          elif method == "patch":
+            response = self.session.patch(f"{self.mprovURL}{mEndpoint}{idStr}{queryString}", data=json.dumps(requestData),timeout=None, stream=True) # TODO:
+          elif method == "delete":
+            response = self.session.delete(f"{self.mprovURL}{mEndpoint}{idStr}{queryString}",timeout=None, stream=True) # TODO
+      - path: src/mash/plugins/bmc.py
+        lines: 49-49
+        excerpt: |
+          response = self.mashCmd.session.get(f"{self.mashCmd.mprovURL}power/{action}/?hostname={node}", timeout=None, stream=True)
+    repro: >
+      Point mash at a control center (or reverse proxy) that accepts the TCP connection
+      but never responds, then run any CRUD verb or bmc power command. Every request
+      passes timeout=None, so the requests call blocks forever. Verified by execution
+      against a mock server that sleeps on /systems: the shell was still alive and
+      blocked after the request and neither SIGINT nor SIGTERM ended it (see MASH-009);
+      SIGKILL was required.
+    fix_idea: >
+      Use a finite default timeout (connect plus read) on all session calls, ideally
+      set once on the shared Session via a helper, and report a clean network-timeout
+      error when it trips.
+    blast_radius: >
+      A hung proxy, a firewall dropping packets, or a wedged control center freezes
+      every mash session touching it; combined with the swallowed signals the only
+      escape is kill from another terminal. Automation scripts stall indefinitely
+      consuming a worker slot.
+    regression_test: >
+      test_requests_use_finite_timeout: run retrieve against a stub server that never
+      responds and assert mash returns an error within a bounded test timeout; fails
+      today by blocking, passes after the fix.
+
+  - id: MASH-009
+    type: bug
+    severity: S3
+    title: "Signal handlers swallow SIGINT and SIGTERM during hung requests"
+    user_value: null
+    evidence:
+      - path: src/mash/main.py
+        lines: 8-13
+        excerpt: |
+          def exitHandler(signum, frame):
+            pass
+
+          # setup an exit handler.
+          signal.signal(signal.SIGINT, exitHandler)
+          signal.signal(signal.SIGTERM, exitHandler)
+    repro: >
+      Verified by execution: started mash, connected to a mock control center whose
+      /systems endpoint hangs, issued retrieve, waited past the request start, then
+      sent SIGINT — the process was still alive and still blocked; sent SIGTERM —
+      still alive. The handler body is 'pass', which replaces the default disposition
+      and discards the interrupt entirely; combined with the no-timeout requests
+      (MASH-008) the session can only be ended with SIGKILL.
+    fix_idea: >
+      Either do not install handlers for these signals (letting KeyboardInterrupt
+      terminate cleanly), or make the handler raise SystemExit so interrupted requests
+      unwound promptly. If the intent was to clean up background processes, run that
+      cleanup and then exit for real.
+    blast_radius: >
+      Every mash user: Ctrl-C silently does nothing in a hung session or during normal
+      use; automation wrappers sending SIGTERM cannot stop a runaway mash process.
+      Worst case requires SIGKILL, leaving forked background children orphaned.
+    regression_test: >
+      test_sigint_terminates_session: start mash blocked on a hanging endpoint, send
+      SIGINT, assert the process exits within a few seconds; fails today (verified the
+      process survives SIGINT and SIGTERM), passes after the fix.
+
+  - id: MASH-010
+    type: bug
+    severity: S3
+    title: "Error messages are written to stdout, polluting piped script output"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 42-47
+        excerpt: |
+          def print(self, *args):
+            'Use self.print not print() to output so we can catch it internally.'
+            print(*args, file=self.stdout)
+
+          def err(self, *args):
+            print(*args, file=sys.stderr)
+      - path: src/mash/app.py
+        lines: 569-571
+        excerpt: |
+          if response.status_code < 200 or response.status_code > 299 :
+            self.print(f"Error: Communications error with mPCC, code: {response.status_code}")
+            self.print(f"{response.text}")
+      - path: src/mash/app.py
+        lines: 579-579
+        excerpt: |
+          print("Error setting MPROV_RESULT")
+      - path: src/mash/plugins/bmc.py
+        lines: 38-39
+        excerpt: |
+          if(self.mashCmd.mprovURL is None) or self.mashCmd.mprovURL == "" :
+            print("ERROR: You probably aren't connected.")
+    repro: >
+      The shell has a proper err() channel to stderr, but most error paths use
+      self.print (stdout) or bare print. Verified by execution: piped scripts returned
+      'Error: Unknown Model bogusmodel.' and 'Error: Communications error with mPCC,
+      code: 500' with the response body mixed into stdout on a zero exit code —
+      anything consuming mash stdout (foreach captures, 'let x='retrieve...'' capture
+      via execInternal, or a shell pipeline) receives error text as if it were data.
+      The bmc plugin additionally uses bare print, bypassing the capturable
+      self.stdout entirely.
+    fix_idea: >
+      Route all error and diagnostic messages through the err() stderr channel and
+      reserve stdout for command results, including inside the bmc plugin; audit the
+      remaining bare print calls in command paths.
+    blast_radius: >
+      Scripts driving mash via stdin files or piped shells cannot separate data from
+      errors; captured variables can contain error text, and log scrapers see failures
+      as normal output. Happens on every API error during scripted use.
+    regression_test: >
+      test_errors_go_to_stderr_not_stdout: run a piped script whose first command
+      errors and assert stdout contains no 'Error:' lines while stderr does; fails
+      today with errors on stdout, passes after the fix.
+
+  - id: MASH-011
+    type: bug
+    severity: S3
+    title: "Script mode always exits 0 regardless of command failures"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 625-638
+        excerpt: |
+          def cmdloop(self, intro=None):
+            if self.file != None:
+              self.quiet = True
+              # we are getting a file piped in.
+              # it should be an FD, not a file name.
+              for line in self.file:
+
+                line=line.strip()
+                # skip comments.
+                if len(line) > 0:
+                  if line[0] == "#": 
+                    continue
+
+                self.onecmd(self.precmd(line))
+      - path: src/mash/main.py
+        lines: 33-33
+        excerpt: |
+          shell.cmdloop()
+    repro: >
+      Verified by execution: a piped script containing only failing commands (unknown
+      model, HTTP 500 delete) completes and the process exits 0. File mode ignores the
+      return value of every onecmd, tracks no failure state, and main() never sets an
+      exit code. Any wrapper (cron, CI, provisioning pipeline) cannot detect that the
+      mash script did nothing it was asked to do.
+    fix_idea: >
+      Track a session-level failure flag set by error paths in the request dispatcher
+      and commands, and have main exit nonzero after file-mode processing if any
+      command failed (or if the script aborted early).
+    blast_radius: >
+      All automation around mash: failed provisioning/bulk scripts look successful to
+      schedulers; a half-executed script (crashed mid-way per MASH-007's traceback
+      aborts aside) still reports success.
+    regression_test: >
+      test_script_mode_exit_code_reflects_failures: pipe a script of failing commands
+      and assert nonzero exit; also pipe a script of succeeding commands and assert
+      zero. Fails today with exit 0 in both cases for the first assertion; passes
+      after the fix.
+
+  - id: MASH-012
+    type: bug
+    severity: S3
+    title: "Nonexistent script file argument is silently ignored"
+    user_value: null
+    evidence:
+      - path: src/mash/main.py
+        lines: 24-32
+        excerpt: |
+          if len(sys.argv) >= 2:
+            if os.path.exists(sys.argv[1]):
+              # we are getting a file passed to us.
+              shell.setFile(open(sys.argv[1], 'r'))
+              if shell.file == None:
+                print(f"Error: Unable to open {sys.argv[1]}")
+                sys.exit(1)
+          else:
+            shell.setFile(None)
+    repro: >
+      Verified by execution: 'mash /nonexistent/provision.mash' with stdin closed or
+      piped produces no output at all and exits 0. os.path.exists fails, no else
+      branch exists for that case, and the file stays None, so mash falls through to
+      the empty/interactive path. The unreachable 'shell.file is None' error block
+      inside the exists branch demonstrates the intent existed but was wired to the
+      wrong condition.
+    fix_idea: >
+      Treat a supplied argv file that does not exist (or cannot be opened) as a hard
+      error with a message naming the path and a nonzero exit; also catch open()
+      exceptions since a file can exist but be unreadable.
+    blast_radius: >
+      Operators typo a script path and get silence — with piped stdin an empty
+      "successful" run, on a terminal a confusing interactive prompt. Automation
+      invoking mash with a wrong path believes the script ran.
+    regression_test: >
+      test_missing_script_file_errors_out: run mash with a nonexistent script path and
+      assert a stderr message and nonzero exit; fails today with exit 0 and no output,
+      passes after the fix.
+
+  - id: MASH-013
+    type: bug
+    severity: S3
+    title: "Common config file shapes crash connect with raw tracebacks"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 75-77
+        excerpt: |
+          result = {}
+          for entry in self.config_data:
+            result.update(entry)
+      - path: src/mash/app.py
+        lines: 183-183
+        excerpt: |
+          if 'apikey' in self.config_data['global']:
+    repro: >
+      The loader only supports an undocumented top-level YAML list of mappings
+      ('- global: {...}') because it iterates config_data and dict-updates each entry.
+      Verified by execution: a natural mapping-shaped config ('global:' as a top-level
+      key, the obvious way to write it) makes the loop call update() on the string key
+      'global' and raises ValueError ('dictionary update sequence element #0 has length
+      5; 2 is required'), killing the command with a traceback. Separately, a list
+      config whose entries lack a 'global' section survives loading and then dies at
+      the connect path with a KeyError on self.config_data['global']. No path is
+      documented anywhere — the help text (see MASH-019) names different files entirely.
+    fix_idea: >
+      Accept both shapes (mapping or list of mappings) in load_config, then validate
+      that the expected keys exist before use; on malformed config, print an error
+      showing the expected format instead of raising.
+    blast_radius: >
+      Any operator hand-writing a config file (the setup path for headless use) hits a
+      traceback on their first attempt unless they guess the undocumented
+      list-of-dicts shape; only the slash-based fallback chain is discoverable, not
+      the schema.
+    regression_test: >
+      test_config_shape_errors_cleanly: feed load_config a mapping-shaped config and a
+      list config missing 'global', assert a clear config error and no exception;
+      fails today with ValueError and KeyError tracebacks, passes after the fix.
+
+  - id: MASH-014
+    type: bug
+    severity: S3
+    title: "Foreach silently drops list items containing a hash character"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 362-365
+        excerpt: |
+          if " " not in arg:
+            self.err("Error: Syntax error")
+            return
+          args = shlex.split(arg, 2)
+    repro: >
+      shlex.split has no maxsplit parameter; its second positional parameter is
+      'comments'. Passing 2 enables comment handling, so any '#' in the remainder
+      starts a comment. Verified by execution: shlex.split('n in a b #c d', 2) returns
+      ['n', 'in', 'a', 'b'] — the items after '#' are silently dropped. A
+      'foreach node in c1 c2 #see-infra' line therefore loops over a truncated list
+      with no error, and the loop body runs fewer times than written.
+    fix_idea: >
+      Call shlex.split with only the string (comments stay disabled), or split the
+      line with a partition-based parse that takes the first token, the keyword, and
+      the remainder verbatim.
+    blast_radius: >
+      Any foreach whose list text contains '#' — including inline comments, which are
+      natural in script files — silently executes the loop body for a subset of items.
+      Wrong-side effects when the body mutates fleet state via CRUD verbs.
+    regression_test: >
+      test_foreach_preserves_hash_items: run foreach over an inline list containing a
+      '#' token and assert the loop body ran once per written item; fails today with
+      the tail dropped, passes after the fix.
+
+  - id: MASH-015
+    type: bug
+    severity: S3
+    title: "Dict-typed argument kills the whole interactive session"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 475-477
+        excerpt: |
+          if arg[0] == "{" and arg[len(arg)-1] == "}":
+            self.print(f"Error: dict type not supported yet!")
+            sys.exit(1)
+    repro: >
+      Verified by execution: with a good connection, run 'create <model>
+      hostname={'a':1}' — the value looks like a JSON dict, _parseArgType prints
+      'Error: dict type not supported yet!' and calls sys.exit(1), terminating the
+      entire process. In a piped script the remaining lines ('print still-alive' in
+      the probe) never execute; interactively all session variables are lost.
+    fix_idea: >
+      Reject the argument at the command level with a usage error instead of exiting
+      the process; then support the type or name the supported types in help.
+    blast_radius: >
+      One dict-style argument — an easy mistake given JSON-ish values are accepted for
+      lists in the same parser — discards an entire interactive session's state or
+      aborts the rest of a script.
+    regression_test: >
+      test_dict_arg_rejected_without_exit: pass a dict-typed value to create and
+      assert the shell survives with an error on that command only; fails today with
+      the process exiting, passes after the fix.
+
+  - id: MASH-016
+    type: bug
+    severity: S3
+    title: "Unparseable query tokens are silently swallowed and sent anyway"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 546-554
+        excerpt: |
+          for marg in model_args.split(" "):
+            try:
+              key, value = marg.split('=',1)
+              if key == 'id' or key == 'pk':
+                # we got an id, so add it to the URL
+                idStr=f"{value}/"
+            except:
+              pass
+              queryString += f"{marg}&"
+    repro: >
+      For get/delete, each query token is split on '=' inside a try; a token without
+      '=' raises and is ignored by the bare except, but execution falls through to the
+      append line below the except, so the unparseable token is concatenated into the
+      query string verbatim. Verified by execution: 'retrieve <model> garbage foo=bar'
+      produced no error or warning and issued a request whose query string contains
+      'garbage&foo=bar&'. A typo like 'hostnam=node1' is likewise passed through
+      unvalidated, and the server decides what happens — possibly returning an
+      unfiltered result set.
+    fix_idea: >
+      Validate that every query token has the key=value shape and that the key is a
+      known model field before building the string; reject the command with a usage
+      error naming the bad token instead of a silent bare-except.
+    blast_radius: >
+      Query typos produce server-dependent behavior with no client-side warning —
+      wrong or over-broad result sets that look plausible, e.g. an unfiltered retrieve
+      feeding a destructive foreach.
+    regression_test: >
+      test_bad_query_token_rejected: run retrieve with a token lacking '=' and one
+      with an unknown field name, assert a usage error and no request is made; fails
+      today sending the garbage query silently, passes after the fix.
+
+  - id: MASH-017
+    type: bug
+    severity: S3
+    title: "Trailing ampersand on bmc commands silently disables the command"
+    user_value: null
+    evidence:
+      - path: src/mash/plugins/bmc.py
+        lines: 52-56
+        excerpt: |
+          def precmd(self, line: str) -> str:
+            if line[-1] == "&":
+              line = line[:-1]
+              self.background = True
+            return line
+      - path: src/mash/app.py
+        lines: 105-105
+        excerpt: |
+          pluginInstance.onecmd(args)
+    repro: >
+      Plugins are invoked with pluginInstance.onecmd (app.py:105), which never calls
+      the plugin's precmd — so the ampersand-handling block is dead code, and
+      self.background (bmc.py:7) is never consulted by do_power. Following mash's own
+      backgrounding convention ('create ... &' works on CRUD verbs), 'bmc power cycle
+      node1&' passes 'node1&' to rangeToList, producing hostname 'node1&' in the
+      request; the control center's hostname match then matches nothing and the
+      response — 404 included — is discarded (MASH-004), so the power command is a
+      total silent no-op.
+    fix_idea: >
+      Handle the trailing ampersand where the line actually enters the plugin (in the
+      dispatch path or at the top of do_power), strip it before parsing the node spec,
+      and honor the background flag the same way the CRUD verbs do.
+    blast_radius: >
+      Operators who use mash's own '&' convention on the most dangerous verb get a
+      silent no-op: nodes believed power-cycled or powered off are untouched while the
+      operator proceeds on that assumption.
+    regression_test: >
+      test_bmc_trailing_amp_backgrounds_and_still_runs: run 'bmc power on node1&'
+      against a stub and assert the request carries hostname=node1 (strip verified)
+      and the command reports or backgrounds per convention; fails today by sending
+      hostname=node1& and doing nothing, passes after the fix.
+
+  - id: MASH-018
+    type: bug
+    severity: S4
+    title: "Connect silently ignores non-200 responses from the control center"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 466-468
+        excerpt: |
+          if response.status_code==200:
+            # we connected, get the supported data models.
+            self._getMPCCModels()
+    repro: >
+      Verified by execution against a mock whose root URL returns 403 while datamodel
+      endpoints would succeed: 'connect URL apikey KEY' prints absolutely nothing
+      (there is no else branch), no models are loaded, and the next verb fails with
+      'Error: Unknown Model ...' — an error pointing at the model name, not at the
+      failed connect.
+    fix_idea: >
+      Add an else branch reporting the non-200 status (and response body) as a
+      connection failure so the operator knows connect itself failed.
+    blast_radius: >
+      Misleading silence on any control-center front-end that does not answer 200 at
+      the root (reverse proxy, auth wall, redirect-not-followed, maintenance page);
+      user then chases phantom "unknown model" errors.
+    regression_test: >
+      test_connect_reports_non_200: connect against a stub returning 403 and assert an
+      error mentioning the connect failure; fails today with no output, passes after
+      the fix.
+
+  - id: MASH-019
+    type: bug
+    severity: S4
+    title: "Connect help documents the wrong config file paths"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 173-174
+        excerpt: |
+          connect - With no arguments, mash will try to read the .mprov-mash.yaml file in the user's 
+          home directory (~/.mprov-mash.yaml) and then try to read /etc/mprov/mprov-mash.yaml
+    repro: >
+      'help connect' tells users the no-argument connect reads ~/.mprov-mash.yaml and
+      /etc/mprov/mprov-mash.yaml. The code (load_config, lines 61-64) actually reads
+      /etc/mprov/mash.yaml, then /etc/mprov/jobserver.yaml, then ~/.mprov-mash.yaml. An
+      operator who creates /etc/mprov/mprov-mash.yaml per the help text gets the
+      "Unable to find working config file" error with no hint why.
+    fix_idea: >
+      Update the docstring to list the real search order and shapes (also covering
+      MASH-013's schema), or change the code to the documented paths — whichever is
+      the intended behavior.
+    blast_radius: >
+      Operator time wasted creating config files at paths mash never reads; worst case
+      is confusion, corrected by reading the source.
+    regression_test: >
+      test_help_connect_matches_config_search_order: render 'help connect' and assert
+      every documented path appears in load_config's search list; fails today on the
+      two wrong paths, passes after docstring and code agree.
+
+  - id: MASH-020
+    type: bug
+    severity: S4
+    title: "Dead exception handler is defined but never installed"
+    user_value: null
+    evidence:
+      - path: src/mash/app.py
+        lines: 14-15
+        excerpt: |
+          def exception_handler(exc_type, exc_value, exc_traceback):
+            print(f"There was an internal exception. {exc_value}", file=sys.stderr)
+    repro: >
+      exception_handler is defined at module scope but sys.excepthook is never
+      assigned to it anywhere in the tree (no reference to excepthook exists in
+      main.py or app.py). All the traceback-style crashes in MASH-007 print full
+      multi-line tracebacks, showing the handler is not active. Dead code also invites
+      a maintainer to assume friendly error messages exist when they do not.
+    fix_idea: >
+      Either install the handler on sys.excepthook in main() — which would turn
+      uncaught crashes into the intended single-line message (consider printing the
+      exception type too) — or delete the function.
+    blast_radius: >
+      No runtime effect today; developer/reviewer confusion about intended error
+      presentation, and raw tracebacks (MASH-007) reach end users contrary to the
+      apparent design intent.
+    regression_test: >
+      test_excepthook_installed_or_removed: if the handler stays, assert
+      sys.excepthook is exception_handler after startup; if removed, assert no such
+      symbol remains. Fails today on the first branch, passes after either fix.
+
+  - id: MASH-021
+    type: bug
+    severity: S4
+    title: "Changelog generator links to the mprov_jobserver repository"
+    user_value: null
+    evidence:
+      - path: gen_changelog.sh
+        lines: 11-11
+        excerpt: |
+          git log ${current_tag}...${previous_tag} --pretty=format:'*  %s [View](https://github.com/mprov-ng/mprov_jobserver/commit/%H)' --reverse | grep -v Merge
+      - path: gen_changelog.sh
+        lines: 16-16
+        excerpt: |
+          git log ${current_tag} --pretty=format:'*  %s [View](https://github.com/mprov-ng/mprov_jobserver/commit/%H)' --reverse | grep -v Merge
+    repro: >
+      Run 'gen_changelog.sh v0.0.8 v0.0.9' in the mash repo: the emitted markdown
+      links every commit to github.com/mprov-ng/mprov_jobserver/commit/... — the wrong
+      repository (copy-paste from the jobserver repo); every View link in the
+      generated changelog 404s.
+    fix_idea: >
+      Point the format strings at the mash repository (or derive the repo slug from
+      the git remote so the script is portable across the four mProv repos).
+    blast_radius: >
+      Wrong or dead links in generated release notes; annoyance only.
+    regression_test: >
+      test_changelog_links_target_this_repo: run the generator and assert emitted URLs
+      reference mprov-ng/mash; fails today with jobserver URLs, passes after the fix.
+
+  - id: MASH-022
+    type: bug
+    severity: S4
+    title: "Bmc power help omits pxe and pxeefi actions supported by the server"
+    user_value: null
+    evidence:
+      - path: src/mash/plugins/bmc.py
+        lines: 32-32
+        excerpt: |
+          action:  One of 'on', 'off', 'cycle', or 'reset'
+    repro: >
+      'help bmc power' lists only on/off/cycle/reset. The control center's power
+      endpoint (mprov_control_center @98d4579, systems/views.py SystemPowerAPIView
+      and _doPowerCmd) also implements 'pxe' and 'pxeefi' boot-target actions — and
+      mash passes the action token through verbatim, so 'bmc power pxe node01'
+      actually works. Because list-style help is the only documentation, operators
+      will not discover network-boot power control exists.
+    fix_idea: >
+      Update the docstring's action list to match the server's supported set, or
+      derive the advertised actions from a constant shared with the API contract when
+      one exists.
+    blast_radius: >
+      Feature hidden from users; no behavioral risk since arbitrary actions pass
+      through unvalidated either way.
+    regression_test: >
+      test_bmc_power_help_lists_server_actions: render 'help bmc power' and assert it
+      includes pxe and pxeefi; fails today, passes after the docstring change.
+
+  - id: MASH-023
+    type: bug
+    severity: S3
+    title: "Release workflow uses retired actions and removed set-output syntax"
+    user_value: null
+    evidence:
+      - path: .github/workflows/ci.yml
+        lines: 10-16
+        excerpt: |
+          - 
+            name: Checkout 
+            uses: actions/checkout@v2
+
+          - name: Setup Python 3.8
+            uses: actions/setup-python@v3
+            with:
+              python-version: "3.8"
+      - path: .github/workflows/ci.yml
+        lines: 27-27
+        excerpt: |
+          run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+    repro: >
+      This workflow is the product's only CI and the sole path that builds and
+      publishes the package to PyPI. It pins actions to Node16-era majors
+      (actions/checkout@v2, actions/setup-python@v3) whose runtime was removed from
+      the Actions runner on 2024-11-12 (GitHub changelog: End of life for Actions
+      Node16), uses the ::set-output workflow command deprecated since 2022-10-10 and
+      superseded by environment files, and builds on Python 3.8, which reached
+      upstream end-of-life in October 2024 while the README still declares it the
+      supported floor. Any release published from this workflow runs on removed or
+      deprecated components; when the runner stops mapping the old actions the
+      release path fails with no fallback.
+    fix_idea: >
+      Bump the pinned actions to current majors, replace the set-output echo with a
+      write to the environment-file variable, and move the build to a supported
+      Python while keeping packaging metadata consistent.
+    blast_radius: >
+      The next PyPI release is blocked or silently produces a broken build (e.g. empty
+      version tag if the deprecated output mechanism stops being honored); all
+      downstream pip installations of the CLI. Works today only while GitHub keeps
+      compatibility shims alive.
+    regression_test: >
+      test_release_workflow_uses_supported_actions: lint the workflow (actionlint or
+      equivalent) asserting no set-output commands and only Node-20/current action
+      majors; fails today on all three counts, passes after the fix.
+
+  - id: MASH-024
+    type: enhancement
+    severity: S3
+    title: "Add machine-readable JSON output mode"
+    user_value: >-
+      Scripts and pipelines can consume mash command results as structured JSON
+      instead of scraping prose output or reimplementing the API calls themselves.
+    evidence:
+      - path: src/mash/app.py
+        lines: 584-585
+        excerpt: |
+          if not self.quiet:
+            self.print("OK")
+    repro: >
+      The only output of a successful retrieve is the literal string 'OK' (or nothing
+      in quiet/script mode); results are reachable solely through the MPROV_RESULT
+      shell variable. mash is explicitly scriptable (stdin file mode, foreach, let
+      capture), but nothing it prints is machine-parseable, so callers must capture
+      output via the 'let x='retrieve...'' indirection or bypass mash entirely.
+    fix_idea: >
+      Add a session-level or per-command JSON mode that writes the API response
+      (already parsed by response.json()) as JSON on stdout, keeping error text on
+      stderr so the stream stays parseable.
+    blast_radius: >
+      Every automation consumer today must either duplicate control-center API calls or
+      parse captured prose; mistakes in that scraping layer silently corrupt
+      pipelines. Protective-feature absence: no machine-readable contract on a CLI
+      designed to be piped.
+    regression_test: >
+      test_json_mode_emits_parseable_results: enable JSON mode, run retrieve against a
+      stub, and assert stdout parses as JSON equal to the stub body; fails today with
+      prose or no output, passes after the fix.
+
+  - id: MASH-025
+    type: enhancement
+    severity: S3
+    title: "Add dry-run mode to destructive verbs"
+    user_value: >-
+      Operators can preview exactly which control-center records update and delete
+      would touch before committing the change.
+    evidence:
+      - path: src/mash/app.py
+        lines: 249-251
+        excerpt: |
+          def do_delete(self,arg):
+            'Issue a delete command to the mPCC. Args delete <model> <model args>'
+            self._sendHttpRequest("delete", arg)
+    repro: >
+      delete and update dispatch straight into _sendHttpRequest with no confirmation,
+      no preview, and no dry-run flag. In scripted foreach loops a single wrong
+      variable value (e.g. an over-broad retrieve feeding MPROV_RESULT, or the stale
+      value from MASH-005) issues immediate destructive calls against the control
+      center. The range-expansion in bmc power multiplies the blast: an entire node
+      range fires with no review step.
+    fix_idea: >
+      Add a dry-run flag (session option or verb suffix) that prints the method,
+      full URL, and payload the command would send, plus a confirmation prompt or
+      require-once flag for interactive delete/update of whole model sets.
+    blast_radius: >
+      Protective-feature absence on the primary admin tool for a provisioning system:
+      a typo reaches production state (or fleet power state via bmc) with no gate;
+      recovery means manual control-center cleanup.
+    regression_test: >
+      test_dry_run_sends_nothing_and_prints_request: enable dry-run, run delete and
+      update against a stub, assert the stub received no request and stdout shows the
+      would-be method/URL/payload; fails today (requests are sent), passes after the
+      fix.
+
+  - id: MASH-026
+    type: enhancement
+    severity: S3
+    title: "Validate config file and warn about unknown keys"
+    user_value: >-
+      Operators get told immediately when their config file is malformed or contains
+      keys mash does not understand, instead of a silent no-connection.
+    evidence:
+      - path: src/mash/app.py
+        lines: 180-188
+        excerpt: |
+          if not self.load_config():
+            self.err("Unable to find working config file.")
+            return
+          if 'apikey' in self.config_data['global']:
+            if self.config_data['global']['apikey'] != "":
+              authHeader = f"Api-Key {self.config_data['global']['apikey']}"  
+          if 'mprovURL' in self.config_data['global']:
+            if self.config_data['global']['mprovURL'] != "":
+              self.mprovURL = self.config_data['global']['mprovURL']
+    repro: >
+      No-argument connect reads only two keys ('apikey', 'mprovURL' under 'global')
+      and silently ignores everything else: a config with a typo like 'apiKeys:' or
+      'mprovurl:' connects with an empty auth header, and the only symptom is 401s on
+      the first verb. There is no validation step at load time, no warning for
+      unknown keys, and no schema documented (see MASH-013 for the crash side of the
+      same gap).
+    fix_idea: >
+      Validate the loaded config against the known key set at load_config time,
+      emit a warning naming unrecognized keys, and reject connect with a clear error
+      when the needed keys are absent or empty.
+    blast_radius: >
+      Every headless setup (scripts, cron) where the failure mode is silent
+      misconfiguration; operators debug the server side instead of their config.
+    regression_test: >
+      test_config_validation_warns_unknown_keys: load a config containing an
+      unrecognized key and assert a warning naming it, and a rejected connect when
+      apikey is missing; fails today with silence, passes after the fix.
+
+  - id: MASH-027
+    type: enhancement
+    severity: S3
+    title: "Bound dependency versions in requirements.txt"
+    user_value: >-
+      Fresh installs of the published package keep working as its dependencies
+      release new versions, instead of breaking on whatever PyPI serves that day.
+    evidence:
+      - path: requirements.txt
+        lines: 1-3
+        excerpt: |
+          pyyaml  # https://pypi.org/project/PyYAML/ - MIT
+          jinja2 # https://pypi.org/project/Jinja2/ - 3 Clause BSD
+          requests
+    repro: >
+      All three runtime dependencies are completely unbounded — no minimum, maximum,
+      or compatible-release specifier — and setup.py passes these lines straight into
+      install_requires while CI publishes the package to PyPI on every release. The
+      code depends on nontrivial API contracts (yaml FullLoader semantics, jinja2
+      Environment/render, requests Session/HTTPAdapter), so a future major of any of
+      the three can break freshly installed clients while previously pinned
+      environments keep working.
+    fix_idea: >
+      Add lower bounds at currently tested versions and considered upper bounds (or
+      compatible-release ranges) for the three dependencies, re-verified in the
+      release workflow.
+    blast_radius: >
+      Preventive gap: every future pip install of mprov_mash resolves to untested
+      versions; worst case a broad fleet of client installs breaks simultaneously
+      when a dependency ships an incompatible major.
+    regression_test: >
+      test_requirements_are_bounded: assert each requirements.txt entry carries at
+      least a lower-bound specifier; fails today with all three unbounded, passes
+      after the fix.
+
+  - id: MASH-028
+    type: enhancement
+    severity: S4
+    title: "Add linting to CI"
+    user_value: >-
+      Style errors and common Python and shell pitfalls are caught before the package
+      is published instead of accumulating in a rarely-touched repo.
+    evidence:
+      - path: .github/workflows/ci.yml
+        lines: 18-23
+        excerpt: |
+          - name: Install Dependancies
+            run: |
+              sudo apt-get update
+              python -m pip install --upgrade pip
+              pip install setuptools build
+              pip install -r requirements.txt
+    repro: >
+      The release workflow installs and builds but never lints or checks anything;
+      no flake8/ruff config exists in the tree, and the repo has historically had no
+      per-commit CI at all (the single workflow only triggers on release). This is
+      the one-per-repo lint-enablement item the charter allows; per-line style
+      findings are otherwise out of scope.
+    fix_idea: >
+      Add a lint job (Python linter over src, shellcheck over src/mash/mash and
+      gen_changelog.sh) to a push-triggered workflow so regressions surface before
+      release.
+    blast_radius: >
+      Preventive gap only; worst case is reviewer and maintainer friction on future
+      contributions to what is currently unlinted code.
+    regression_test: >
+      test_ci_runs_lint: assert the workflow definition contains a lint step that
+      runs a Python linter and shellcheck; fails today (build-only), passes after the
+      fix.

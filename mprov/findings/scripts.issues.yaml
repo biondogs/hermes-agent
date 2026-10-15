@@ -1,0 +1,1016 @@
+# R3 register — mprov_scripts comprehensive review (root-on-node scripts)
+# Reviewed read-only at master @55bdd511e4c6912b0a6d44aefb22fc6e791e60d5.
+# Cross-repo evidence cited in repro fields is from
+# mprov_control_center @98d4579 (disklayouts/serializers.py) and
+# mprov_jobserver @4f73fc1 (script_runner.py) local checkouts, both pinned
+# in REVIEW-CHARTER.md; primary evidence is always inside mprov_scripts.
+review:
+  repo: mprov_scripts
+  branch: master
+  commit: 55bdd511e4c6912b0a6d44aefb22fc6e791e60d5
+  reviewed_at: "2026-10-15"
+  reviewer: sw-reviewer
+  coverage:
+    files_reviewed: 33
+    files_total: 33
+    method: full-tree
+
+findings:
+  - id: SCR-001
+    type: bug
+    severity: S2
+    title: "Ansible loops never execute: over-escaped jq program is a compile error"
+    user_value: null
+    evidence:
+      - path: image-gen/run_ansible.sh
+        lines: 50-50
+        excerpt: |
+          for collection in `cat /tmp/mprov/entity.json | jq ".systemgroups[].ansiblecollections,.ansiblecollections[],.osdistro.ansiblecollections" | jq -s 'flatten(1)' | jq "select(.[].scriptType.slug|startswith(\\"$runMode\\"))" | jq -r '.[].collectionurl'`
+      - path: image-gen/run_ansible.sh
+        lines: 68-68
+        excerpt: |
+          for role in `cat /tmp/mprov/entity.json | jq ".systemgroups[].ansibleroles,.ansibleroles[],.osdistro.ansibleroles" | jq -s 'flatten(1)' | jq "select(.[].scriptType.slug|startswith(\\"$runMode\\"))" | jq -r '.[].roleurl'`
+      - path: image-gen/run_ansible.sh
+        lines: 101-101
+        excerpt: |
+          for playbook in `cat /tmp/mprov/entity.json | jq ".systemgroups[].ansibleplaybooks,.ansibleplaybooks[],.osdistro.ansibleplaybooks" | jq -s 'flatten(1)' | jq "select(.[].scriptType.slug|startswith(\\"$runMode\\"))" | jq -r '.[].filename'`
+    repro: >
+      The double-quoted jq programs contain triple backslash-escaped quotes.
+      Inside double quotes the shell reduces each double backslash to one
+      backslash and each backslash-quote to one quote, so jq receives
+      startswith with a backslash before the opening quote. That is a jq
+      syntax error, verified by execution: running the exact line 50 pipeline
+      against a fixture entity.json prints "jq: error: syntax error,
+      unexpected INVALID_CHARACTER ... 1 compile error" and emits no output,
+      so the loop body never runs. The same escape appears at lines 68 and
+      101. With the escaping reduced to a single backslash-quote the same
+      pipeline returns the collection URL and the loop body executes
+      (verified). Net effect: no ansible collection, role, or playbook
+      referenced in the mPCC is ever installed, and the script still exits 0
+      after wiping /tmp/mprov/ansible at line 119.
+    fix_idea: >
+      Fix the quoting in all three jq programs so jq receives a plain quoted
+      string around the run mode value, e.g. by building the jq program in a
+      variable with a single level of quote escaping, or by passing the run
+      mode into jq as a command-line argument instead of string-interpolating
+      it into the program text.
+    blast_radius: >
+      Every mProv deployment that attaches ansible collections, roles or
+      playbooks to an image or system group silently gets none of them
+      applied; the job reports success. Operators believe their ansible
+      configuration ran on fleet nodes when nothing was installed, in every
+      invocation of this script since the flawed pattern was introduced.
+    regression_test: >
+      test_run_ansible_jq_pipelines_produce_urls: execute the line 50, 68 and
+      101 pipelines against a fixture entity.json containing one
+      image-gen-marked collection, role and playbook and assert each pipeline
+      prints the corresponding URL. Fails today with a jq compile error and
+      empty output; passes once the quoting is corrected.
+
+  - id: SCR-002
+    type: bug
+    severity: S2
+    title: "Missing-key jq null literal bypasses guards and corrupts root config"
+    user_value: null
+    evidence:
+      - path: image-gen/set_root_pw.sh
+        lines: 7-13
+        excerpt: |
+          rootpw=`cat /tmp/mprov/entity.json | jq -r .config_params | jq -r .rootpw`
+          if [ "$rootpw" == "" ]
+          then
+            echo "Error: No rootpw specified, exiting." >&2
+            exit 1
+      - path: image-gen/set_root_pw.sh
+        lines: 19-19
+        excerpt: |
+          echo "root:${rootpw}:18700:0:99999:7:::" | cat - $TMPFILE  > /etc/shadow
+      - path: image-gen/setup_ssh.sh
+        lines: 7-14
+        excerpt: |
+          rootsshkey=`cat /tmp/mprov/entity.json | jq -r .config_params | jq -r .rootsshkey`
+          if [ "$rootsshkey" == "" ]
+          then
+            echo "Error: No rootsshkey specified, exiting." >&2
+            exit 1
+          fi
+      - path: image-gen/setup_ssh.sh
+        lines: 19-21
+        excerpt: |
+          echo "$rootsshkey" > /root/.ssh/authorized_keys
+          chmod 600 /root/.ssh/authorized_keys
+          exit 0
+      - path: post-boot/slurm_enable_gpus.sh
+        lines: 6-11
+        excerpt: |
+          gpus=`cat /tmp/mprov/entity.json | jq -r .config_params | jq -r .gpus`
+          if [ "$gpus" == "" ]
+          then
+            gpus=1
+          fi
+      - path: post-boot/slurm_enable_gpus.sh
+        lines: 22-22
+        excerpt: |
+            echo "SLURM=\" --conf Gres=gpu:$gpus\"" >> /etc/sysconfig/slurmd
+    repro: >
+      jq -r prints the literal text null when a key is absent, not the empty
+      string; the cited blocks contain blank source lines between the
+      assignment and the guard, which the excerpt omits. Verified
+      by execution: for entity.json with an existing config_params object
+      that lacks the key, each of the three value retrievals (rootpw,
+      rootsshkey, gpus) outputs null. The guards at set_root_pw.sh line 10,
+      setup_ssh.sh line 10 and slurm_enable_gpus.sh line 8 only compare
+      against the empty string, so they pass: set_root_pw writes a shadow
+      line "root:null:..." (line 19), setup_ssh writes the text null into
+      authorized_keys (line 19) and explicitly exits 0 (line 21), and
+      slurm_enable_gpus appends Gres=gpu:null to the slurmd EnvironmentFile
+      (line 22) instead of applying its intended default of 1.
+    fix_idea: >
+      Guard against both the empty string and the jq null literal, or better,
+      use jq itself to detect absence (select the key, or compare against the
+      jq null via jq type checks) so a missing key is distinguished from an
+      empty value in all three scripts.
+    blast_radius: >
+      Provisioning a node whose config_params omit rootpw, rootsshkey or gpus
+      — exactly the case these guards exist to catch — silently produces a
+      root shadow entry with an invalid hash, an authorized_keys containing
+      the text null, and a slurmd Gres count of null, while all three scripts
+      report success. Worst case: a fleet of nodes reachable neither by SSH
+      key nor by password, discovered only when operators try to log in.
+    regression_test: >
+      test_missing_key_guard_rejects_null: run each guard snippet with the
+      retrieved value set to the jq output for a missing key (the literal
+      null) and assert the script exits 1 with its "not specified" error.
+      Fails today — the scripts continue and write the null value; passes
+      after the guard treats null as missing.
+
+  - id: SCR-003
+    type: bug
+    severity: S2
+    title: "Disk formatter crashes mounting non-RAID partitions: disk-level mount is None"
+    user_value: null
+    evidence:
+      - path: post-boot/localTempDisk.py
+        lines: 147-149
+        excerpt: |
+          with open("/etc/fstab", "a") as fstab:
+            fstab.write(f"UUID={partuuid}\t{part['mount']}\t\t{part['filesystem']}\tdefaults\t0 0\n")
+          sh.mount([f"{pdisk['mount']}"])
+    repro: >
+      The fstab entry at line 148 is written for the partition mount point
+      part['mount'], but line 149 mounts pdisk['mount'], the field nested at
+      the disk-layout level. In the mPCC API the disk-level mount is produced
+      by DiskLayoutAPISerializer.getMount (mprov_control_center
+      disklayouts/serializers.py:38-43), which returns None for every disk
+      whose dtype is not mdrd. The f-string therefore renders the text None
+      and the script runs mount None, which cannot find the entry in fstab
+      and exits nonzero; the python sh wrapper raises an uncaught
+      ErrorReturnCode from buildDisks. The crash happens after /etc/fstab was
+      already unlinked (line 118) and after the first partition filesystem
+      was created, so a system with any partitioned non-RAID disk aborts
+      mid-build with a partial fstab.
+    fix_idea: >
+      Mount the same mount point that was just written to fstab (the
+      partition's mount field) rather than the disk-level field, or drop the
+      explicit mount call entirely and leave mounting to the fstab entry.
+    blast_radius: >
+      Every system whose disk layout includes a non-RAID disk with a
+      filesystem partition fails provisioning midway: partition created and
+      mkfs run, then an unhandled traceback and exit before the remaining
+      partitions, RAID devices, or fstab entries are built. Deployments whose
+      layouts are RAID-only skip the path, which is likely why this has gone
+      unnoticed.
+    regression_test: >
+      test_build_disks_mounts_partition_mountpoint: feed buildDisks a layout
+      with one non-mdrd disk and one xfs partition and assert the mount
+      argument equals the partition's mount field. Fails today with the
+      disk-level None value and a crash; passes once the mount call uses the
+      partition's mount point.
+
+  - id: SCR-004
+    type: bug
+    severity: S2
+    title: "RAID build crashes: member disk id compared against disk slug string"
+    user_value: null
+    evidence:
+      - path: post-boot/localTempDisk.py
+        lines: 170-182
+        excerpt: |
+          mdadm_cmd = f"--create {pdisk['diskname']} -R --force --level={pdisk['raidlevel']} --raid-devices={len(pdisk['members'])} "
+          for member in pdisk['members']:
+            # find our dev from the disklayouts.
+            for sdisk in self.disklayout:
+              if sdisk['slug'] == member['disklayout']:
+                dev = sdisk['diskname']
+            partOffset = 0
+
+            member_part = f"{dev}{member['partnum'] + partOffset}"
+            mdadm_cmd += f"{member_part} "
+            # zero the superblock
+            sh.mdadm(['--zero-superblock', f"{member_part}"])
+            sh.wipefs(['--all', '--force', f"{member_part}"])
+    repro: >
+      Each RAID member record comes from the mPCC as a serialized
+      DiskPartition whose disklayout field is a PrimaryKeyRelatedField
+      (mprov_control_center disklayouts/serializers.py:6-11), i.e. an integer
+      primary key. The lookup at line 174 compares that integer against
+      sdisk['slug'], a string such as a layout slug name, so the equality can
+      never hold, dev is never assigned, and the f-string at line 178 raises
+      NameError (local variable dev referenced before assignment) on the very
+      first member. buildRAIDs therefore always aborts; worse, buildDisks
+      (which runs first, line 289) unlinked /etc/fstab at line 118 and skips
+      all mdrd disks, so a RAID-only layout is left with no /etc/fstab at
+      all when the crash hits.
+    fix_idea: >
+      Match the member's disklayout primary key against the same key on the
+      disk entries (or have the API serialize the layout slug alongside the
+      id and compare slug to slug), and fail with a clear error naming the
+      unmatched member disk instead of relying on the NameError.
+    blast_radius: >
+      Every system whose disk layout contains a software RAID device fails
+      provisioning: no RAID array is ever created, and because the fstab
+      rebuild earlier in the same run already removed the file, the node
+      boots with an empty or missing fstab. All mdrd-based deployments are
+      affected on every run of this script.
+    regression_test: >
+      test_build_raids_matches_member_disklayout_by_id: feed the
+      DiskLayoutAPISerializer output for a two-member RAID to buildRAIDs and
+      assert the member device paths are computed from the correct disk
+      names. Fails today with a NameError on the first member; passes once
+      the member records are matched on the disk layout primary key.
+
+  - id: SCR-005
+    type: bug
+    severity: S3
+    title: "Unguarded cd before entity.json read leaves config variables empty"
+    user_value: null
+    evidence:
+      - path: image-gen/install_mprov_jobserver.sh
+        lines: 8-12
+        excerpt: |
+          cd /tmp/mprov
+
+          # get some initial variables.
+          mprovURL=`cat entity.json | jq .mprovURL -r`
+          apikey=`cat entity.json | jq .apikey -r`
+      - path: image-gen/install_mprov_script-runner.sh
+        lines: 9-13
+        excerpt: |
+          cd /tmp/mprov
+
+          # get some initial variables.
+          mprovURL=`cat entity.json | jq .mprovURL -r`
+          apikey=`cat entity.json | jq .apikey -r`
+      - path: image-gen/setup_data_share_mount.sh
+        lines: 2-10
+        excerpt: |
+          cd /tmp/mprov/
+          mprovURL=`cat entity.json | jq .mprovURL -r`
+          mpccHost=`echo "$mprovURL" | awk -F/ '{print $3}'`
+
+          dnf -y install nfs-utils
+
+          mkdir -p /data
+          # Add bind mount to fstab
+          grep -qF '/export/data' /etc/fstab || echo "${mpccHost}:/export/data    /data    nfs defaults    0 0" >> /etc/fstab
+      - path: image-gen/setup_mprov_share_mount.sh
+        lines: 2-10
+        excerpt: |
+          cd /tmp/mprov/
+          mprovURL=`cat entity.json | jq .mprovURL -r`
+          mpccHost=`echo "$mprovURL" | awk -F/ '{print $3}'`
+
+          dnf -y install nfs-utils
+
+          mkdir -p /opt/mprov
+          # Add bind mount to fstab
+          grep -qF '/export/mprov' /etc/fstab || echo "${mpccHost}:/export/mprov    /opt/mprov    nfs defaults    0 0" >> /etc/fstab
+    repro: >
+      None of the four scripts guard the cd: if /tmp/mprov is absent or the
+      cd fails for any reason, the shell stays in the previous directory,
+      every relative cat entity.json fails, and command substitution yields
+      an empty string rather than an error. mprovURL, apikey and mpccHost are
+      then empty: the two install scripts write jobserver and script-runner
+      YAML files with an empty mprovURL and apikey, and the two mount scripts
+      append an fstab NFS line with an empty server that no mount can ever
+      resolve. There is no fail-fast error handling in any of the four, so
+      nothing stops the writes and all four exit 0.
+    fix_idea: >
+      Make each script exit with a clear error when the cd fails or
+      entity.json is unreadable, before any config file or fstab line is
+      written; validate that the scraped values are non-empty as well.
+    blast_radius: >
+      Any provisioning run where the script working directory or entity file
+      is missing (failed jobserver download, environment mismatch) silently
+      produces persistently broken node state: an fstab NFS entry with an
+      empty server that delays every subsequent boot, and jobserver configs
+      with empty endpoint and credentials. Worst case is a fleet of nodes
+      with unremovable broken fstab lines.
+    regression_test: >
+      test_cd_failure_aborts_before_writes: run each of the four scripts in
+      a sandbox where /tmp/mprov does not exist (or entity.json is absent)
+      and assert that no fstab line is appended and no config file is
+      written, and that the script exits nonzero. Fails today — the writes
+      happen and the scripts exit 0; passes once the guard is added.
+
+  - id: SCR-006
+    type: bug
+    severity: S3
+    title: "Service install scripts continue after failed commands and report success"
+    user_value: null
+    evidence:
+      - path: image-gen/create_slurm_client_service.sh
+        lines: 4-7
+        excerpt: |
+          useradd -u 449 munge
+
+          # add a slurm user
+          useradd -u 450 slurm
+      - path: image-gen/create_slurm_client_service.sh
+        lines: 94-95
+        excerpt: |
+          systemctl enable slurmd
+          systemctl start slurmd
+      - path: image-gen/create_slurm_client_service.sh
+        lines: 116-117
+        excerpt: |
+          systemctl enable munge
+          systemctl start munge
+      - path: post-boot/enable_and_run_jobserver.sh
+        lines: 2-5
+        excerpt: |
+          systemctl enable mprov-jobserver
+          systemctl start mprov-jobserver
+          firewall-cmd --zone=public --add-port=8080/tcp --permanent
+          firewall-cmd --reload
+    repro: >
+      Neither script uses fail-fast error handling or checks any exit status,
+      so a failure at any step is carried forward. In
+      create_slurm_client_service.sh, if the dnf install at line 10 fails (or
+      the non-idempotent useradd calls at lines 4 and 7 fail on re-run because
+      the ids already exist), the script still creates the systemd units,
+      enables and starts slurmd at lines 94-95, then enables and starts munge
+      at lines 116-117. When the final systemctl start munge succeeds, the
+      script exits 0 and the whole run reads as successful despite a broken
+      slurm/munge stack. enable_and_run_jobserver.sh likewise proceeds past
+      failed enable or start of the jobserver; its exit status is whatever
+      firewall-cmd --reload last returned, masking the service failures.
+    fix_idea: >
+      Enable fail-fast error handling in both scripts, or check the status of
+      each critical command and abort with a message naming the failed step;
+      make the useradd calls idempotent so re-runs do not turn into silent
+      mid-script failures.
+    blast_radius: >
+      Any transient dnf or systemctl failure during image build or
+      re-provision leaves a half-configured slurm client (missing packages,
+      dead slurmd) or an unstarted jobserver that the pipeline records as
+      success. Operators find out only when the node joins the cluster
+      misbehaving.
+    regression_test: >
+      test_service_script_fails_loud_on_dnf_error: run
+      create_slurm_client_service.sh in a sandbox where the dnf install
+      command fails and assert the script exits nonzero before touching
+      systemd units. Fails today — the script runs to completion and exits 0;
+      passes once fail-fast handling is in place.
+
+  - id: SCR-007
+    type: bug
+    severity: S3
+    title: "Root fstab file deleted before rebuild with no failure isolation"
+    user_value: null
+    evidence:
+      - path: post-boot/localTempDisk.py
+        lines: 116-121
+        excerpt: |
+          sh.mdadm(['--stop', '--scan'])
+          try:
+            os.unlink("/etc/fstab")
+          except:
+            pass
+          partnum=1
+    repro: >
+      buildDisks deletes /etc/fstab at line 118 before any partition or
+      filesystem has been built, then re-creates its content incrementally
+      with append-mode writes (lines 147, 159, 192). Any failure after the
+      unlink — a missing device at parted.getDevice, a mkfs or mdadm error,
+      or the crashes described in SCR-003 and SCR-004 — leaves the node with
+      a truncated or entirely missing fstab, because nothing ever restores
+      the previous content. The bare except at lines 119-120 also swallows
+      unrelated unlink errors.
+    fix_idea: >
+      Build the new fstab content in a temporary file during the run and
+      atomically replace /etc/fstab only after all disks, filesystems and
+      RAID devices have been created successfully; keep a backup copy to
+      restore on failure. Narrow the exception handling around the unlink.
+    blast_radius: >
+      Every failed localTempDisk run (several independent crash paths exist
+      in this script) leaves the node without a valid fstab — persistent root
+      and swap entries gone — turning a recoverable provisioning error into a
+      node that boots broken. Affects every mdrd or partitioned-disk
+      deployment whose build fails for any reason.
+    regression_test: >
+      test_failed_run_preserves_original_fstab: seed a sandbox fstab, drive
+      buildDisks with a layout that raises mid-run (bad diskname), and assert
+      /etc/fstab still contains the original content afterwards. Fails today
+      — the file is gone or partial; passes with the build-then-swap scheme.
+
+  - id: SCR-008
+    type: bug
+    severity: S3
+    title: "Fill-partition handling reads stale loop variable for filesystem checks"
+    user_value: null
+    evidence:
+      - path: post-boot/localTempDisk.py
+        lines: 153-157
+        excerpt: |
+          if fillpart is not None:
+            self._createPartition(device, disk, fillpart, sectorsize, start)
+
+            if part['filesystem'] != 'raid' and part['mount'] != 'raid':
+              partuuid = self._makeFS(fillpart, pdisk)
+    repro: >
+      After the partition loop (lines 135-151) finishes, the variable part
+      still holds the last iterated partition, but the fill-partition block
+      tests part's filesystem and mount fields at line 156 while all other
+      statements in the block operate on fillpart. Whenever the fill
+      partition is not the last entry of the sorted list (its partnum is
+      lower than another partition's), the decision to build the fill
+      partition's filesystem is made from an unrelated partition's fields: a
+      fill partition typed raid can be mkfs'd over (corrupting a RAID
+      member), or a normal fill partition can be skipped, leaving it without
+      a filesystem or fstab entry.
+    fix_idea: >
+      Evaluate the same fields on fillpart that the block then passes to the
+      filesystem builder, so the fill partition's own type decides whether it
+      gets a filesystem.
+    blast_radius: >
+      Any disk layout whose grow-to-fill partition is not the
+      highest-numbered partition on its disk gets the wrong behavior,
+      silently — either a missing filesystem on the fill partition or a
+      filesystem written over a partition that was meant to be a RAID member.
+      Only layouts that happen to sort the fill partition last work.
+    regression_test: >
+      test_fill_partition_uses_own_fields: feed buildDisks a partition list
+      where a non-fill partition sorts after the fill partition and the fill
+      partition is typed raid; assert the filesystem builder is not called
+      for it. Fails today because the stale variable's non-raid values
+      authorise the call; passes after the fix.
+
+  - id: SCR-009
+    type: bug
+    severity: S3
+    title: "BMC password passed on ipmitool command line is visible in process list"
+    user_value: null
+    evidence:
+      - path: post-boot/setupBMC.py
+        lines: 101-111
+        excerpt: |
+          result = subprocess.run(["/usr/bin/ipmitool", "user", "set", "name", "2", f"{bmc['username']}"])
+          if result.returncode:
+            print(result.stdout)
+            print(result.stderr)
+            return
+
+          result = subprocess.run(["/usr/bin/ipmitool", "user", "set", "password", "2", f"{bmc['password']}"])
+          if result.returncode:
+            print(result.stdout)
+            print(result.stderr)
+            return
+    repro: >
+      Line 107 spawns ipmitool with the BMC password as a command-line
+      argument. For the lifetime of the process any local observer can read
+      it from the process argument listings of the ipmitool child and of this
+      python parent. ipmitool prompts for the password on its terminal when
+      the argument is omitted, so the value can be supplied through standard
+      input instead of the argument list.
+    fix_idea: >
+      Supply the password via stdin by invoking the interactive prompt form
+      of the ipmitool user set password command, or another channel that does
+      not place the secret in the process argument list; ensure it is never
+      printed in logs either.
+    blast_radius: >
+      The BMC credential for every node transits through a world-readable
+      process argument during provisioning. Post-boot runs normally happen
+      before users can log in, but any re-run of BMC setup on a live
+      multi-user node (script re-invocation, debugging) exposes the fleet BMC
+      password to every local user and any process-monitoring agent for the
+      command's duration; BMC control implies power and console control of
+      the node.
+    regression_test: >
+      test_bmc_password_not_in_argv: run the BMC setup against a stub ipmitool
+      that records its arguments, and assert the password value never appears
+      in any spawned process argument list. Fails today — the argument list
+      contains it; passes when fed via stdin.
+
+  - id: SCR-010
+    type: bug
+    severity: S3
+    title: "BMC setup crashes with NameError when systembmcs request fails"
+    user_value: null
+    evidence:
+      - path: post-boot/setupBMC.py
+        lines: 118-120
+        excerpt: |
+          else:
+            print(f"Error: Unable to get bmc info, {response.status_code}: {response.text}")
+      - path: post-boot/setupBMC.py
+        lines: 129-134
+        excerpt: |
+          data = {
+            "id": bmc['id'],
+            "mac": bmcMac,
+            "ipv6ll": bmcLL,
+          }
+          response = self.session.patch(f"{self.mprovURL}systembmcs/{bmc['id']}/", data=json.dumps(data))
+    repro: >
+      The variable bmc is only bound inside the status-code-200 branch (line
+      53). When the systembmcs request returns any other status, the else at
+      line 118 only prints an error and falls through to the MAC collection
+      block at line 121, which runs unconditionally; if ipmitool reports a
+      MAC address, line 130 dereferences bmc's id field and raises NameError
+      on an unbound name, aborting the script with a raw traceback instead of
+      a clean error exit.
+    fix_idea: >
+      Return (or exit nonzero) from the non-200 branch after reporting the
+      error, so the MAC-registration block cannot run without a BMC record in
+      hand.
+    blast_radius: >
+      Every node whose BMC record cannot be fetched from the mPCC (missing
+      SystemBMC row, permission or connectivity error) ends post-boot with a
+      Python traceback; the run's outcome is a crash rather than a
+      diagnosable failure. Only occurs on the error path, but that path is
+      the one that needs the cleanest behaviour.
+    regression_test: >
+      test_failed_bmc_fetch_exits_cleanly: stub the session to return a
+      non-200 for the systembmcs query with ipmitool available, and assert
+      the script exits nonzero with the printed error and no traceback. Fails
+      today with NameError; passes with the early return.
+
+  - id: SCR-011
+    type: bug
+    severity: S3
+    title: "Post-boot python scripts exit 0 after reporting errors"
+    user_value: null
+    evidence:
+      - path: post-boot/register_IPv6_ll.py
+        lines: 33-36
+        excerpt: |
+          if result.status_code != 200:
+            print("Error: Unable to get interfaces form mPCC")
+            print(f"{result.text}")
+            return 1
+      - path: post-boot/register_IPv6_ll.py
+        lines: 69-81
+        excerpt: |
+          def main(self):
+            self.startSession()
+            self.run()
+
+          def main():
+            script = MScript()
+            return script.main()
+
+          def __main__():
+              return main()
+
+          if __name__ == "__main__":
+              sys.exit(main())
+      - path: post-boot/setupBMC.py
+        lines: 141-143
+        excerpt: |
+          def main(self):
+            self.startSession()
+            self.run()
+    repro: >
+      run signals failure by returning 1 (register_IPv6_ll.py lines 36 and
+      67) or by a bare return (setupBMC.py lines 59 through 117 after each
+      ipmitool or parse error), but the MScript main methods call run without
+      using its return value, so script.main() returns None, the module-level
+      main returns None, and the sys.exit around main translates None to exit
+      status 0. Both scripts therefore print "Error: ..." messages and still
+      exit successfully.
+    fix_idea: >
+      Propagate the run status: have the MScript main return the value
+      returned by run (converting bare failure returns into a nonzero
+      status) so the module-level exit reflects the real outcome.
+    blast_radius: >
+      Failed IPv6 link-local registration and failed BMC setup are invisible
+      to any caller that checks exit status — the jobserver's logs carry the
+      error text while the process reports success, and the runner currently
+      ignores exit codes entirely (see the cross-repo observation in
+      REVIEW-NOTES), compounding the problem. Operators must eyeball every
+      log line.
+    regression_test: >
+      test_run_failure_yields_nonzero_exit: drive register_IPv6_ll.py with a
+      stubbed session returning a non-200 for the interfaces query and assert
+      the process exit status is nonzero. Fails today with status 0; passes
+      once the status propagates through main.
+
+  - id: SCR-012
+    type: bug
+    severity: S3
+    title: "Backup script always reports success even when every dump failed"
+    user_value: null
+    evidence:
+      - path: tools/backup-mprov.sh
+        lines: 4-12
+        excerpt: |
+          cd /var/www/mprov_control_center/
+
+          . ./bin/activate
+
+          rm -rf /tmp/mprov_backup/
+          mkdir -p /tmp/mprov_backup/
+
+          echo  "disklayouts: "
+          python3 manage.py dumpdata disklayouts --indent=2 --format yaml -o /tmp/mprov_backup/mprov_disklayouts.yaml
+      - path: tools/backup-mprov.sh
+        lines: 30-34
+        excerpt: |
+          tar -zcf mprov_backup.tar.gz mprov_backup/
+          echo "Done"
+          echo
+
+          echo "Backup saved to /tmp/mprov_backup.tar.gz"
+    repro: >
+      There is no fail-fast error handling and no per-command status check,
+      so a failed cd at line 4, a failed venv activation at line 6, or any
+      number of failed dumpdata invocations (run from the wrong directory
+      when the cd failed) never stop the script. The final statement is an
+      echo, so the script exits 0 and prints "Backup saved to
+      /tmp/mprov_backup.tar.gz" even when the tarball contains a partial or
+      empty directory tree.
+    fix_idea: >
+      Fail fast on the cd and the venv activation, check the status of each
+      dump before proceeding, and only print the saved-message (and exit 0)
+      when every component dump and the tar step succeeded; consider writing
+      the backup outside the volatile /tmp directory.
+    blast_radius: >
+      Operators relying on this backup routine get a warm confirmation for a
+      useless backup whenever the control center path, venv or dumps fail —
+      the damage is discovered only at restore time, when the missing data is
+      needed most.
+    regression_test: >
+      test_backup_fails_when_dumps_fail: run the script in a sandbox where
+      /var/www/mprov_control_center exists but manage.py fails, and assert a
+      nonzero exit and no "Backup saved" message. Fails today — exit 0 with
+      the success message; passes once statuses are checked.
+
+  - id: SCR-013
+    type: bug
+    severity: S3
+    title: "BMC and InfiniBand IPs silently wrong when node IP misses mgmt prefix"
+    user_value: null
+    evidence:
+      - path: tools/import_systems_csv.sh
+        lines: 77-82
+        excerpt: |
+          m_ipaddr=`host ${DATA[0]} | awk '{print $4}'`
+
+          fi
+          # let's get the bmc ip
+          bmcIp=`echo $m_ipaddr | sed -e "s/$mgmtNet/$bmcNet/g"`
+          ibIp=`echo $m_ipaddr | sed -e "s/$mgmtNet/$ibNet/g"`
+    repro: >
+      The BMC and InfiniBand addresses are fabricated by textual prefix
+      substitution on the management IP (defaults 172.20. to 172.29. and
+      172.21.). When the resolved node IP does not start with the configured
+      management prefix — a different subnet, a CNAME chain changing the host
+      command output shape, or a failed name resolution leaving m_ipaddr
+      empty — the substitutions are no-ops and the generated mash input
+      records the BMC and InfiniBand interfaces with a copy of (or an empty)
+      management IP. The import proceeds and creates conflicting or blank
+      interface and BMC rows with no warning.
+    fix_idea: >
+      After the substitution, verify the result actually changed and matches
+      the intended BMC or InfiniBand subnet, and fail the row (or the whole
+      import) with a clear message when it does not; validate the resolved
+      management IP for non-emptiness before deriving anything from it.
+    blast_radius: >
+      Bulk-importing a CSV whose nodes resolve outside the expected
+      management prefix (or fail to resolve) silently seeds the mPCC with
+      wrong BMC and InfiniBand addresses for every affected node — plausible
+      but wrong data that surfaces later as failed BMC control and
+      mis-addressed interfaces, requiring manual database cleanup.
+    regression_test: >
+      test_import_rejects_non_mgmt_ip: run the derivation snippet with a node
+      resolving to an IP outside the management prefix and assert the import
+      is rejected with a message. Fails today — the BMC IP silently equals
+      the management IP; passes with the post-substitution validation.
+
+  - id: SCR-014
+    type: bug
+    severity: S3
+    title: "Node import writes BMC credentials to world-readable temp file"
+    user_value: null
+    evidence:
+      - path: tools/import_systems_csv.sh
+        lines: 66-66
+        excerpt: |
+          echo -n "" > /tmp/mash_node_import
+      - path: tools/import_systems_csv.sh
+        lines: 84-94
+        excerpt: |
+          cat << EOF >> /tmp/mash_node_import
+
+          print Creating System ${m_hostname}
+          create systems.models.System hostname=${m_hostname} created_by=1 tmpfs_root_size=0 systemimage=${imageName} stateful=1 disks=['compute-state-lite']
+          let nodeId = {{ MPROV_RESULT['id'] }}
+
+          # add the nic
+          create systems.models.NetworkInterface name=ens0 hostname=${m_hostname} ipaddress=${m_ipaddr} bootable=1 system={{nodeId}} mac='${m_macaddr}' network=${nodeNetId}
+
+          # add the bmc
+          create systems.models.SystemBMC system={{nodeId}} ipaddress=${bmcIp} username=${bmcUser} password=${bmcPass} network=${bmcNetId}
+    repro: >
+      The generated mash input, which contains every node's hostname, MAC,
+      address and the BMC username and password variables, is accumulated in
+      the fixed-name path /tmp/mash_node_import created with the default
+      umask (world-readable when the root operator runs it, typically mode
+      644), and the file is never deleted after the mash invocation at line
+      104. A stale copy with the (operator-customised) BMC credential and
+      full inventory persists in /tmp until reboot, readable by any local
+      account on the host.
+    fix_idea: >
+      Create the accumulation file with restrictive permissions (or under a
+      private temporary directory made with mktemp semantics) and remove it
+      as soon as the mash run completes, including on failure paths.
+    blast_radius: >
+      Any local unprivileged user on the control-center host where the import
+      runs can read the fleet inventory and BMC credentials for as long as
+      the leftover file exists. Affects every bulk import; worst case is a
+      complete fleet credential and layout disclosure when operators set a
+      real password in the script variables.
+    regression_test: >
+      test_import_file_private_and_removed: run the import against a stub
+      mash, then assert /tmp/mash_node_import either no longer exists or has
+      mode 600 or tighter. Fails today — the file persists with default
+      permissions; passes with restrictive creation and cleanup.
+
+  - id: SCR-015
+    type: enhancement
+    severity: S3
+    title: "Twelve shipped scripts missing from the mpcc_scripts manifest"
+    user_value: "Operators cannot attach the shipped set_root_pw, setup_ssh and other scripts to systems in the control center because the manifest fixture omits them."
+    evidence:
+      - path: mpcc_scripts.yaml
+        lines: 1-8
+        excerpt: |
+          - model: scripts.script
+            pk: install_mprov_script_runner_sh
+            fields: 
+              slug: install_mprov_script_runner_sh
+              name: Install the mProv Jobserver for Scipts/NADS
+              filename: image-gen/install_mprov_script-runner.sh
+              scriptType: image-gen
+          - model: scripts.script
+    repro: >
+      The fixture is the source of the Script objects operators pick from in
+      the control center. Comparing its filename entries against the tree
+      shows twelve shipped files absent from the fixture:
+      image-gen/install_yq.sh, image-gen/set_root_pw.sh,
+      image-gen/setup_data_share_mount.sh, image-gen/setup_ssh.sh,
+      post-boot/NetworkManager-1.40-COPR.sh, post-boot/add-cuda-to-path.sh,
+      post-boot/ansible-playbooks/nvidia-fm-install.yaml,
+      post-boot/disable-fw-on-compute-nodes.sh,
+      post-boot/gpfs_mmsdrrestore.sh,
+      post-boot/install_chrony_and_timesync.sh, post-boot/nads.sh and
+      post-boot/slurm_enable_gpus.sh. No manifest entry points at a missing
+      file (all twelve entries resolve to real files), so the drift is
+      entirely in the unlisted direction.
+    fix_idea: >
+      Add manifest entries for the scripts that are meant to be operator
+      selectable — at minimum the core image-build helpers (root password,
+      SSH key, share mounts, yq installer) and the actively maintained
+      post-boot scripts — and keep deliberately deprecated or site-specific
+      scripts out on purpose, with that decision noted in the fixture.
+    blast_radius: >
+      Operators wanting root password or SSH key setup, GPU counting, chrony,
+      firewall or GPFS restore scripts cannot use them through the normal
+      control-center workflow; they must hand-load fixtures or copy scripts
+      manually, which is exactly the drift this fixture exists to prevent.
+    regression_test: >
+      test_manifest_covers_selectable_scripts: compare the set of files under
+      image-gen and post-boot with manifest filenames and assert that the
+      only unlisted ones are entries on a documented exclusion list. Fails
+      today with twelve unlisted files; passes once the fixture is updated.
+
+  - id: SCR-016
+    type: bug
+    severity: S3
+    title: "Hardcoded python3.8 site-packages path breaks Rocky 9 installs silently"
+    user_value: null
+    evidence:
+      - path: image-gen/install_mprov_jobserver.sh
+        lines: 35-35
+        excerpt: |
+          cp /usr/local/lib/python3.8/site-packages/mprov_jobserver/plugins/*.yaml /etc/mprov/plugins/
+    repro: >
+      The copy source assumes the jobserver package landed in the Python 3.8
+      site-packages directory, which only holds on RHEL or Rocky 8. On Rocky
+      9 (which this fleet explicitly targets — add-mitigations-off.sh line 4
+      names Rocky Linux 9.6, and pip3 installs into that system's newer
+      python tree) the source path does not exist, the cp fails, and without
+      fail-fast handling the script continues and exits 0, leaving a jobserver
+      config that includes a plugins directory holding none of the plugin
+      configuration files.
+    fix_idea: >
+      Discover the installed package location rather than hardcoding the
+      interpreter version (query the package metadata or expand the path
+      against the actual python3 site-packages of the running interpreter),
+      and fail the install script if the plugin files cannot be found.
+    blast_radius: >
+      Any node image built on Rocky 9 gets a jobserver installation whose
+      plugin configs silently never copy; the failure surfaces only at
+      runtime when the secondary jobserver comes up without its image-sync or
+      webserver module configuration. All Rocky 9 deployments of the
+      secondary jobserver script are affected.
+    regression_test: >
+      test_plugin_copy_locates_package_dynamically: run the script in a
+      sandbox where the jobserver is installed under a newer python
+      site-packages tree and assert the plugin yaml files land in
+      /etc/mprov/plugins. Fails today — the hardcoded copy is a no-op with a
+      failing cp; passes with dynamic discovery.
+
+  - id: SCR-017
+    type: enhancement
+    severity: S3
+    title: "No guard against repartitioning the running OS disk"
+    user_value: "Prevents a stale or mis-assigned disk layout in the mPCC from destroying the running OS disk of a node during provisioning."
+    evidence:
+      - path: post-boot/localTempDisk.py
+        lines: 127-128
+        excerpt: |
+          device = parted.getDevice(pdisk['diskname'])
+          disk = parted.freshDisk(device, 'gpt' )
+    repro: >
+      buildDisks takes each disk name from the layout the mPCC returns for
+      this system and immediately calls freshDisk on it, which creates a new
+      empty partition table, destroying whatever partitions the device had.
+      There is no validation between fetching the layout (line 209) and
+      wiping (line 128): nothing checks that the target device is not the
+      device the running system booted from, is not currently mounted, or
+      plausibly matches the size recorded for it. A layout accidentally
+      attached to the wrong system — or one containing the OS disk — is
+      executed verbatim as root.
+    fix_idea: >
+      Before repartitioning, validate each target device: refuse to wipe the
+      device backing the currently mounted root filesystem or any mounted
+      partition, and optionally sanity-check device size or model against the
+      layout record, requiring an explicit override to proceed.
+    blast_radius: >
+      The script's entire purpose is destructive, but today the only thing
+      standing between a data mistake in the mPCC and the wipe of a live OS
+      disk is the correctness of remote records. Worst case: one mis-assigned
+      layout record destroys the boot disk of every system that picks it up.
+    regression_test: >
+      test_refuses_root_device_wipe: run buildDisks in a sandbox where the
+      layout names the device currently mounted as root and assert the script
+      refuses with a clear error instead of wiping. Fails today — the wipe
+      proceeds; passes with the guard.
+
+  - id: SCR-018
+    type: bug
+    severity: S4
+    title: "Broken shebang in gpfs_mmsdrrestore.sh prevents direct execution"
+    user_value: null
+    evidence:
+      - path: post-boot/gpfs_mmsdrrestore.sh
+        lines: 1-4
+        excerpt: |
+          #/bin/bash
+          GPFS_MGRNODE=mgmt03.ib.cluster
+          /usr/lpp/mmfs/bin/mmsdrrestore -p $GPFS_MGRNODE
+          /usr/lpp/mmfs/bin/mmstartup
+    repro: >
+      The first line reads slash-bin-bash preceded by a single hash (verified
+      byte-for-byte) — a comment, not a shebang. Executing the file directly
+      fails because the kernel finds no interpreter directive. It only works
+      when a shell that falls back to interpreting non-executable-format
+      files runs it, or when invoked as an explicit argument to bash; the
+      jobserver's execution path happens to mask it. The script is also not
+      in the manifest and hardcodes a cluster-specific manager hostname.
+    fix_idea: >
+      Correct the interpreter line to a proper hash-bang path, and consider
+      taking the GPFS manager node from a parameter or the entity config
+      instead of hardcoding one cluster's hostname.
+    blast_radius: >
+      Anyone running the script directly gets an exec format error and may
+      assume GPFS restore ran when the invocation did nothing under some
+      wrappers. No fleet-wide impact; annoyance and confusion for the
+      operator who reuses this script.
+    regression_test: >
+      test_script_executes_directly: assert the file's first two bytes are
+      the interpreter marker and that executing the file directly in a
+      sandbox (with stubbed binaries) runs to completion. Fails today on both
+      counts; passes after the fix.
+
+  - id: SCR-019
+    type: bug
+    severity: S4
+    title: "Error messages print literal placeholder instead of exception detail"
+    user_value: null
+    evidence:
+      - path: post-boot/setupBMC.py
+        lines: 44-46
+        excerpt: |
+          except Exception as e:
+            print("Error: Unable to parse mPCC response. {e}")
+            sys.exit(1)
+      - path: post-boot/setupBMC.py
+        lines: 57-59
+        excerpt: |
+          except Exception as e:
+            print("Error: Unable to parse mPCC reply for BMC. {e}")
+            return
+    repro: >
+      Both except blocks interpolate nothing: the brace-e placeholders are
+      inside plain double-quoted strings with no formatting prefix, so the
+      output is the literal characters inside braces and the captured
+      exception detail is lost. The two failure branches report an error but
+      give the operator no information about what the mPCC actually returned.
+    fix_idea: >
+      Make both messages interpolate the exception (formatted string or
+      equivalent) so the parse failure reason is visible in the job output.
+    blast_radius: >
+      Any mPCC response that fails to parse produces an error line with no
+      diagnostic content; debugging BMC setup failures requires reproducing
+      the request by hand. No behavioural impact beyond log usefulness.
+    regression_test: >
+      test_parse_error_includes_exception: drive the parse branch with a
+      malformed response and assert the printed error contains the underlying
+      exception text. Fails today — output is the literal placeholder; passes
+      after interpolation.
+
+  - id: SCR-020
+    type: enhancement
+    severity: S4
+    title: "Enable shellcheck for shell scripts in CI"
+    user_value: "Catches quoting, unquoted-expansion and error-handling defects in these root-run shell scripts before they reach fleet nodes."
+    evidence:
+      - path: image-gen/extra_packages.sh
+        lines: 15-16
+        excerpt: |
+          echo $pkgs
+          dnf -y install $pkgs
+    repro: >
+      The repo has no CI at all (no .github directory in the tree) and its
+      shell scripts contain numerous items a shellcheck pass would flag —
+      unquoted expansions passed to dnf as shown, the unquoted empty-variable
+      test at image-gen/run_ansible.sh line 20 (verified to emit a bash unary
+      operator error when the variable is empty), unquoted command
+      substitutions, and cd statements without failure handling throughout
+      image-gen. These scripts run as root on every fleet node, so a static
+      check is the cheapest available guard. This is the single lint-class
+      filing allowed per repo by the review rules.
+    fix_idea: >
+      Add a CI workflow that runs shellcheck across all shell scripts in the
+      repository (image-gen, post-boot, tools) and treats new findings as
+      failures, ideally alongside a basic bash syntax gate.
+    blast_radius: >
+      Worst case is continued reliance on manual review for a class of
+      defect (quoting and error handling in privileged scripts) that a
+      linter mechanically detects; developer and reviewer annoyance only, no
+      runtime impact from the check itself.
+    regression_test: >
+      test_ci_shellcheck_runs_on_scripts: push a change to a script
+      containing a shellcheck-detectable quoting error and assert the CI
+      workflow fails. Fails today — no CI exists so nothing blocks it; passes
+      once the workflow gates merges.
+
+  - id: SCR-021
+    type: bug
+    severity: S4
+    title: "Rsync errors bypass the log file due to redirect order"
+    user_value: null
+    evidence:
+      - path: tools/image-grab.sh
+        lines: 67-71
+        excerpt: |
+          echo -n "Grabbing image $IMAGE_NAME from node $NODE (log: /tmp/$NODE-to-$IMAGE_NAME.log)..."
+          rsync -avzx $EXCLUDE_DIRS --progress $DELETE root@$NODE:/ $IMAGE_DIR/$IMAGE_NAME/ 2>&1 >  /tmp/$NODE-to-$IMAGE_NAME.log
+
+          # check the exit status of the rsync command
+          if [ $? -ne 0 ]; then
+    repro: >
+      The redirect at line 68 is ordered wrongly: the stderr duplication
+      sends stderr to the current stdout (the terminal) before the following
+      redirect sends stdout alone into the log file. The log file the
+      previous line advertises receives only stdout; rsync's error messages
+      go to the terminal and are lost when the tool is run unattended. The
+      status comparison at line 71 is also dead code because the fail-fast
+      setting at line 6 aborts the script before it on any rsync failure.
+    fix_idea: >
+      Reverse the redirect order so stderr is merged after stdout is pointed
+      at the log file (or use a single combined redirect), and remove or
+      repurpose the unreachable status check made redundant by the fail-fast
+      setting.
+    blast_radius: >
+      Operator debugging of failed image grabs must re-run with a terminal
+      attached to see why rsync failed; the advertised log is incomplete. No
+      effect on the transfer itself, whose failures still abort the script.
+    regression_test: >
+      test_stderr_captured_in_grab_log: run the grab command against an
+      unreachable node and assert the log file contains the rsync error
+      text. Fails today — the log has only stdout; passes with the corrected
+      redirect order.

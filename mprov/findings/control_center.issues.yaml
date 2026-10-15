@@ -1,0 +1,1647 @@
+# mProv Control Center — findings register
+# Full-tree review of biondogs/mprov_control_center @ 98d4579b4c11441561daca092879cc78466cfe69
+# Register is immutable once the review card completes. IDs are never reused.
+
+review:
+  repo: mprov_control_center
+  branch: main
+  commit: 98d4579b4c11441561daca092879cc78466cfe69
+  reviewed_at: "2026-10-15"
+  reviewer: sw-reviewer
+  coverage:
+    files_reviewed: 155
+    files_total: 333
+    method: full-tree
+
+findings:
+  - id: CC-001
+    type: bug
+    severity: S1
+    title: "Any API key grants unrestricted read-write access to every model endpoint"
+    user_value: null
+    evidence:
+      - path: common/views.py
+        lines: 38-40
+        excerpt: |
+            filter_backends = [filters.SearchFilter]
+            search_fields = ['name']
+            permission_classes = [HasAPIKey|IsAuthenticated]
+      - path: scripts/scripts_urls.py
+        lines: 4-7
+        excerpt: |
+            urlpatterns = [
+                path('<int:pk>/', ScriptAPIView.as_view()),
+                path('', ScriptAPIView.as_view()),
+            ]
+      - path: install_scripts/install_initial_jobserver.sh
+        lines: 6-12
+        excerpt: |
+            cat << EOF > /tmp/genAPIKey.py
+            import rest_framework_api_key
+            apikey = rest_framework_api_key.models.APIKey()
+            key = rest_framework_api_key.models.APIKey.objects.assign_key(apikey)
+            apikey.name="mProv Jobserver Key"
+            apikey.save()
+            print(key)
+    repro: >
+      Every model view inherits the shared base class whose permission_classes
+      uses the bitwise OR of HasAPIKey and IsAuthenticated, so satisfying either
+      one alone is enough. The one generated key ("mProv Jobserver Key") is
+      therefore equivalent to a full admin credential for the REST API: a holder
+      can GET every list, PATCH, POST and DELETE every model (systems, networks,
+      scripts, disk layouts, OS distros, job modules) with no scope, no
+      per-object checks and no revocation path other than deleting the single key.
+    fix_idea: >
+      Treat API keys as scoped agent credentials: define per-object permission
+      classes that restrict key-authenticated requests to the specific models a
+      jobserver agent needs, require an authenticated staff session for any
+      human-facing mutation, and replace the bitwise OR with a policy object
+      that grants access only for the intended combination. Generate a distinct
+      key per registered jobserver so a leak can be revoked without
+      re-provisioning the fleet.
+    blast_radius: >
+      Scenario: any single jobserver host or backup that leaks the shared key
+      hands an attacker full read-write control of the provisioning control
+      plane, including reading BMC passwords and rewriting the images that get
+      installed on every managed machine. All endpoints, every deployment,
+      worst case is fleet-wide compromise via one filesystem read.
+    regression_test: >
+      test_api_key_readonly_scope: create an API key, GET a model list (expect
+      403 unless the model is agent-required), and DELETE an object with only
+      the key (expect 403). Fails today with 200, passes once keys are scoped.
+  - id: CC-002
+    type: bug
+    severity: S1
+    title: "API serializers expose BMC and image root passwords in cleartext"
+    user_value: null
+    evidence:
+      - path: systems/serializers.py
+        lines: 20-22
+        excerpt: |
+            class Meta:
+                model = SystemBMC
+                fields = '__all__'
+      - path: systems/models.py
+        lines: 216-217
+        excerpt: |
+            username=models.CharField(max_length=255, verbose_name="BMC User", blank=True, null=True)
+            password=models.CharField(max_length=100, verbose_name="BMC Password", blank=True, null=True)
+      - path: osmanagement/serializers.py
+        lines: 12-14
+        excerpt: |
+            class Meta:
+                model = OSDistro
+                fields = '__all__'
+      - path: osmanagement/models.py
+        lines: 70
+        excerpt: |
+            rootpw = models.CharField(default="changeme", help_text="Root Password for the image", max_length=255, verbose_name="Root Password", blank=True)
+    repro: >
+      BMC credentials are stored as plain CharFields and the ModelSerializers
+      for SystemBMC and OSDistro serialize all model fields, so any GET of the
+      systembmcs, systems detail, or osdistros endpoints returns the BMC
+      password and the image root password in the JSON body, in cleartext.
+    fix_idea: >
+      Exclude secret fields from list and detail serializers (explicit field
+      lists or a write-only declaration on password fields), store BMC
+      credentials encrypted at rest using a vetted encryption field, and
+      provide a separate audited rotation flow instead of returning secrets on
+      every read.
+    blast_radius: >
+      Scenario: a read-only compromise of one jobserver key or one low-privilege
+      authenticated session dumps the BMC passwords of every managed server and
+      the root password baked into every OS image in one paginated GET; those
+      credentials then reach every baseboard management controller in the
+      fleet. Affects every deployment on every API read.
+    regression_test: >
+      test_bmc_serializer_hides_password: serialize a SystemBMC and an OSDistro
+      with populated secrets and assert the password keys are absent from the
+      output dict. Fails today (keys present), passes after exclusion.
+  - id: CC-003
+    type: bug
+    severity: S1
+    title: "BMC credentials printed to stdout and embedded in ipmitool argv"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 861-862
+        excerpt: |
+            def _doPowerCmd(self, bmc, action="on"):
+                print(f"Bmc: {bmc.ipaddress}, user: {bmc.username}, pass: {bmc.password}, action: {action}")
+      - path: systems/views.py
+        lines: 879-883
+        excerpt: |
+            # XXX: bootdev is not implemented in python-ipmi(pyipmi)
+            # so we will need to issue a raw ipmitool command.
+            ipmitool_cmd = f"/usr/bin/ipmitool -Ilanplus -U{bmc.username} -P{bmc.password} -H{bmc.ipaddress} chassis bootdev pxe {efiopt}"
+            print(ipmitool_cmd)
+            try:
+                subprocess.run(args=ipmitool_cmd.split())
+      - path: systems/admin.py
+        lines: 268-269
+        excerpt: |
+            def _doPowerCmd(self, bmc, action="on"):
+                print(f"Bmc: {bmc.ipaddress}, user: {bmc.username}, pass: {bmc.password}, action: {action}")
+      - path: systems/views.py
+        lines: 793-796
+        excerpt: |
+            def post(self, request, *args, **kwargs):
+                print(request.data)
+                if request.data['password'] == "":
+                    del request.data['password']
+    repro: >
+      Trigger any BMC power or PXE-boot action from the admin UI or the power
+      endpoint: the operator username and password are printed on the server
+      console and into container logs twice (once in the debug line, once
+      inside the assembled ipmitool command), and the password then sits in the
+      process argv of the spawned ipmitool child, where it is visible to every
+      local user via the process table. The BMC POST handler additionally
+      dumps the whole request body, including submitted passwords, to stdout.
+    fix_idea: >
+      Remove the credential-bearing print statements and route debug output
+      through a logger that never carries secrets; pass BMC credentials to
+      ipmitool via an environment variable or stdin rather than command-line
+      switches so they do not appear in argv, and do not log raw request bodies
+      on endpoints that accept passwords.
+    blast_radius: >
+      Scenario: log aggregation or an operator terminal captures the printed
+      BMC credentials for every chassis action, and any local shell user on the
+      mPCC host can read live passwords from the process list; those
+      credentials control power and boot for the entire fleet. Happens on every
+      power action in every deployment.
+    regression_test: >
+      test_power_action_does_not_leak_credentials: run a power action with a
+      stubbed runner and assert neither the captured log output nor the
+      subprocess argv contains the BMC password. Fails today, passes after
+      removal of the prints and an env-var hand-off.
+  # Adjudication amendment 2026-10-15 (sw-architect, R14 correction): severity
+  # recalibrated S2 -> S1. The README-documented default is still a nameable
+  # full-compromise path (admin:admin on the control plane); combined with
+  # CC-001's any-API-key access there is no privilege boundary left at all.
+  - id: CC-004
+    type: bug
+    severity: S1
+    title: "Installers bake in admin:admin and changemenow default credentials"
+    user_value: null
+    evidence:
+      - path: Dockerfile
+        lines: 75-77
+        excerpt: |
+            RUN echo "DJANGO_SUPERUSER_USERNAME=admin" > /var/www/mprov_control_center/.env && \
+                echo "DJANGO_SUPERUSER_PASSWORD=admin" >> /var/www/mprov_control_center/.env && \
+                echo "DJANGO_SUPERUSER_EMAIL=root@localhost" >> /var/www/mprov_control_center/.env
+      - path: install_scripts/install_mpcc.sh
+        lines: 221-223
+        excerpt: |
+            echo "DJANGO_SUPERUSER_USERNAME=admin" >> .env
+            echo "DJANGO_SUPERUSER_PASSWORD=admin" >> .env
+            echo "DJANGO_SUPERUSER_EMAIL=root@localhost" >> .env
+      - path: stack.env
+        lines: 1-2
+        excerpt: |
+            MYSQL_DATABASE=mprov
+            MYSQL_ROOT_PASSWORD=changemenow
+    repro: >
+      Both the Docker image build and the bare-metal installer create the
+      Django superuser with username admin and password admin, and the shipped
+      compose stack sets the MariaDB root password to changemenow. The README
+      documents the admin admin pair as the default credentials, so every
+      deployment that skips a rename step shares the same well-known control
+      plane password; nothing forces a change on first login.
+    fix_idea: >
+      Generate a random superuser and database password at install time and
+      show them to the operator once (or write them to a root-only file), add
+      a first-login forced password change, and refuse to start with a known
+      default credential. Remove the literal passwords from the Dockerfile and
+      the stack.env template.
+    blast_radius: >
+      Any internet- or intranet-reachable deployment left on defaults gives
+      full admin access (including CC-002 secret reads) to anyone who knows
+      the public README; the database is reachable with the same known value.
+      Affects every deployment that follows the quick-start path.
+    regression_test: >
+      test_install_refuses_default_admin_password: run the installer with no
+      password input in a test container and assert it either generates a
+      random credential or fails, and that no .env contains the literal string
+      admin as a password. Fails today, passes after the fix.
+  - id: CC-005
+    type: bug
+    severity: S1
+    title: "Unauthenticated register endpoint binds attacker MAC to systems"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 61-62
+        excerpt: |
+            authentication_classes = [] #disables authentication
+            permission_classes = [] #disables permission
+      - path: systems/views.py
+        lines: 110-115
+        excerpt: |
+            if port is not None:
+                nicQueryset = NetworkInterface.objects.all()
+                nicQueryset = nicQueryset.filter(mac=None, switch_port=port)
+                #print(nicQueryset)
+                if nicQueryset is not None and len(nicQueryset) > 0:
+                    system = System.objects.get(pk=nicQueryset[0].system.pk)
+    repro: >
+      POST /systems/register/ needs no authentication at all. The handler
+      matches the request's switch and port against network interfaces whose
+      MAC is still unset, then permanently assigns the attacker-supplied MAC to
+      whichever system holds that switch port. Any host on the provisioning
+      network can claim any not-yet-registered system identity by sending its
+      MAC with the right switch and port pair, after which the control center
+      serves that system's identity, iPXE config and disk image to the
+      attacker's machine.
+    fix_idea: >
+      Gate registration behind a per-deployment enrollment token or an
+      admin-approved pending queue: a first POST should create a pending
+      enrollment record awaiting approval, and only an authenticated admin or
+      a scoped step-up token should commit the MAC binding to a system. At
+      minimum, bind to the true socket peer address rather than any
+      client-supplied identification data.
+    blast_radius: >
+      Scenario: a rogue or compromised machine on the provisioning VLAN claims
+      an unregistered server's switch-port identity and receives that server's
+      provisioned disk image (with its root password and fleet certificates),
+      permanently poisoning inventory data. Reachable by anyone with layer-2
+      access to the provisioning network on every deployment.
+    regression_test: >
+      test_register_requires_enrollment_token: POST /systems/register/ without
+      the token and assert 401 or that only a pending record is created and no
+      NetworkInterface row is modified. Fails today (binding happens), passes
+      after gating.
+  - id: CC-006
+    type: bug
+    severity: S1
+    title: "Unauthenticated image endpoints trust spoofable X-Forwarded-For"
+    user_value: null
+    evidence:
+      - path: systems/views_noauth.py
+        lines: 47-51
+        excerpt: |
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+      - path: systems/views_noauth.py
+        lines: 275-279
+        excerpt: |
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+    repro: >
+      The unauthenticated kernel, initrd and iPXE endpoints decide which
+      system's data to serve purely from the client-controlled
+      X-Forwarded-For header, falling back to the socket address only when it
+      is absent. Anyone who can reach the HTTP port can send a forged header
+      naming any managed IP and receive that system's iPXE configuration,
+      kernel, initramfs, or installer key downloads.
+    fix_idea: >
+      Use the actual socket peer address for client identification on these
+      endpoints, and honor X-Forwarded-For only when the connection provably
+      arrives from a trusted reverse proxy (configured proxy list or
+      trusted-proxy middleware). Never let header-derived identity authorize
+      secret downloads.
+    blast_radius: >
+      Scenario: a host on any network segment that can route to the mPCC HTTP
+      port forges a peer header and downloads an installer security token or
+      any machine's boot artifacts, enabling the CC-001 escalation and image
+      inspection for password retrieval. Possible on every deployment, on
+      every unauthenticated request.
+    regression_test: >
+      test_ipxe_endpoint_ignores_forwarded_for: request the iPXE endpoint with
+      a mismatched X-Forwarded-For from a non-proxy client address and assert
+      the response reflects the real peer address or is refused. Fails today,
+      passes after the fix.
+  - id: CC-007
+    type: bug
+    severity: S3
+    title: "Authenticated system endpoints trust spoofable X-Forwarded-For"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 272-276
+        excerpt: |
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+      - path: systems/views.py
+        lines: 365-369
+        excerpt: |
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+    repro: >
+      The authenticated system and kernel-commandline endpoints use the same
+      header-first client IP logic for the ?self lookup: an authenticated
+      caller (including any API-key holder) can select an arbitrary system's
+      record by sending a forged X-Forwarded-For instead of only their own, and
+      also poison the auto-created NetworkInterface with an address they do
+      not own.
+    fix_idea: >
+      Restrict the ?self lookup to the true socket address, honor forwarded
+      headers only from configured trusted proxies, and make any
+      header-selected identity an explicit admin-scoped action rather than an
+      implicit self-identification.
+    blast_radius: >
+      Authenticated callers can read and bind other hosts' data through ?self
+      lookups; low likelihood of accidental trigger but it undermines the
+      self-identification contract on every ?self request.
+    regression_test: >
+      test_self_lookup_uses_socket_address: request the systems self endpoint
+      with a forged forwarded header from an authenticated client and assert
+      the returned system matches the socket address. Fails today, passes
+      after.
+  - id: CC-008
+    type: bug
+    severity: S1
+    title: "NFS export with no_root_squash exposes provisioning image share"
+    user_value: null
+    evidence:
+      - path: install_scripts/create_mprov_share.sh
+        lines: 34
+        excerpt: |
+            grep -qF '/export/mprov' /etc/exports || echo '/export/mprov    *(rw,no_root_squash,sync)' >> /etc/exports
+    repro: >
+      The installer exports the mProv share (which contains OS images and
+      installer scripts served to every managed machine) read-write to all
+      hosts with no_root_squash. Any machine that can mount NFS from the mPCC
+      server can create files as root, including replacing the disk images and
+      scripts that get pushed to fleet machines.
+    fix_idea: >
+      Drop no_root_squash, restrict the export to the provisioning subnet or
+      specific jobserver hosts, and export read-only where consumers only
+      read. If root-writes are genuinely needed for a specific tool, scope the
+      exception to that client host rather than the wildcard.
+    blast_radius: >
+      Scenario: any host with network reach to the NFS port mounts the share
+      and overwrites a fleet image or installer script as root; the next
+      provisioning run writes the attacker payload to a managed machine with
+      root privilege. Affects every bare-metal install that ran the script.
+    regression_test: >
+      test_exports_no_no_root_squash: source the script in a test container
+      and assert the appended export line contains no no_root_squash token.
+      Fails today, passes after.
+  - id: CC-009
+    type: bug
+    severity: S3
+    title: "DRF default permissions require both session and API key"
+    user_value: null
+    evidence:
+      - path: mprov_control_center/settings.py
+        lines: 251-254
+        excerpt: |
+            'DEFAULT_PERMISSION_CLASSES': (
+                'rest_framework.permissions.IsAuthenticated',
+                'rest_framework_api_key.permissions.HasAPIKey',
+            ),
+      - path: networks/api_views.py
+        lines: 11-12
+        excerpt: |
+            @api_view(['POST'])
+            def update_network_with_confirmation(request, pk):
+    repro: >
+      DRF conjoins every listed default permission class, so views that do not
+      override permission_classes (the two network confirmation endpoints)
+      require a request to carry both an authenticated session or basic-auth
+      credential and an API key simultaneously. A normal admin session or a
+      normal agent key alone is rejected, leaving these REST endpoints usable
+      only by a client that happens to present both credential kinds.
+    fix_idea: >
+      Decide per endpoint who may call it and set explicit permission_classes
+      there; if both operator sessions and agent keys are meant to be
+      accepted, express it with an OR-composed permission class rather than
+      the global default list, which DRF always ANDs.
+    blast_radius: >
+      The update-with-confirmation and preview-subnet-changes REST endpoints
+      effectively cannot be used by any natural client; the admin UI works
+      around them via its own flow, so API consumers silently hit 401 or 403.
+    regression_test: >
+      test_confirmation_endpoint_accepts_admin_session: POST to
+      update-with-confirmation with an authenticated staff session and no API
+      key, assert the permission check passes with stubbed network logic.
+      Fails today with 401 or 403, passes after explicit per-view permissions.
+  - id: CC-010
+    type: bug
+    severity: S2
+    title: "Unauthenticated GET permanently removes jobservers from images"
+    user_value: null
+    evidence:
+      - path: systems/views_noauth.py
+        lines: 95-100
+        excerpt: |
+            while ( statCode <= 199 or statCode >=400):
+              # jobsever gave a bad response, remove it and retry.
+              js_set.remove(js)
+              print("Removing Jobserver " + str(js) + ", URL: " + imageURL + " not accessible. Status: " + str(statCode))
+              image.jobservers.set(js_set)
+              image.save()
+      - path: systems/views_noauth.py
+        lines: 223-228
+        excerpt: |
+            while ( statCode <= 199 or statCode >=400):
+              # jobsever gave a bad response, remove it and retry.
+              js_set.remove(js)
+              print("Removing Jobserver " + str(js) + ", URL: " + imageURL + " not accessible. Status: " + str(statCode))
+              image.jobservers.set(js_set)
+              image.save()
+    repro: >
+      A plain GET of the kernel, initrd or image-download endpoints treats any
+      non-2xx fetch status as grounds to strip a jobserver from the image and
+      save the image row, from an unauthenticated request whose identity is a
+      spoofable header. If a jobserver is momentarily busy or restarting, the
+      association is permanently deleted. When the last jobserver is removed,
+      the retry loop indexes the empty set and the request 500s.
+    fix_idea: >
+      Never persist association changes from unauthenticated read paths;
+      treat jobserver health as a separate authenticated maintenance task with
+      retry thresholds, mark servers unhealthy in cache instead of deleting
+      relations, and guard the empty-set case before indexing.
+    blast_radius: >
+      Boot-time requests during a jobserver restart leave images with no
+      hosting jobserver, so subsequent boots fail until an admin re-adds the
+      server; triggered silently by routine traffic on every deployment using
+      these endpoints.
+    regression_test: >
+      test_get_does_not_mutate_jobserver_set_on_error: hit the unauth image
+      endpoint with a stubbed jobserver returning 503 and assert the image
+      row's jobservers relation is unchanged and the response is a clean
+      fallback. Fails today (relation shrinks), passes after.
+  - id: CC-011
+    type: bug
+    severity: S2
+    title: "IPXE endpoint crashes with 500 when no bootable NIC exists"
+    user_value: null
+    evidence:
+      - path: systems/views_noauth.py
+        lines: 321-328
+        excerpt: |
+            if nic==None:
+              # not bootable, we just return and let the template handle it.
+              if not nic.bootable:
+                rendered: str = template.render(context)
+                context= {
+                'nic': nic,
+              }
+            return(render(template_name="ipxe", request=request, context=context, content_type="text/plain" ))
+    repro: >
+      When a known IP's system has NICs but none flagged bootable, the code
+      keeps nic as None and then evaluates not nic.bootable, raising
+      AttributeError and returning a 500 to the booting machine. The block also
+      renders the template with the old context before rebinding a dict that
+      puts None into nic, so even without the crash the rendered output would
+      be wrong.
+    fix_idea: >
+      When no bootable interface is found, render a deliberate minimal iPXE
+      response (local boot or an error menu) with a properly built context;
+      assign the context before rendering and dereference nic only after the
+      None case is handled.
+    blast_radius: >
+      Machines whose admin unchecked the bootable flag get HTTP errors at
+      every PXE boot instead of a graceful local boot; also pollutes logs
+      with tracebacks on every retry loop iteration.
+    regression_test: >
+      test_ipxe_no_bootable_nic_returns_valid_script: request the iPXE
+      endpoint for a system whose NICs exist but are all non-bootable and
+      assert 200 with a non-empty iPXE script. Fails today with 500, passes
+      after.
+  - id: CC-012
+    type: bug
+    severity: S2
+    title: "System config dict mutates a class attribute shared by all instances"
+    user_value: null
+    evidence:
+      - path: systems/models.py
+        lines: 103
+        excerpt: |
+            config = {}
+      - path: systems/models.py
+        lines: 128-134
+        excerpt: |
+            if hasattr(self, "systemimage"):
+              if hasattr(self.systemimage, "osdistro"):
+                try:
+                  for field in self.systemimage.osdistro._meta.get_fields():
+                    field = field.name
+                    if field in self.inheritableFields:
+                      self.config[field] = getattr(self.systemimage.osdistro, field)
+      - path: systems/serializers.py
+        lines: 11-12
+        excerpt: |
+            class SystemSerializer(serializers.ModelSerializer):
+            config = serializers.DictField(allow_empty=True, required=False)
+    repro: >
+      config is a plain dict defined on the class, not a model field and not
+      an instance attribute. flatten_config writes self.config[...] which
+      resolves to the class attribute, so every System instance in the process
+      reads and writes the same dict: after serializing a system with image A,
+      a subsequent API list response shows systems with image B still carrying
+      A's inherited kernel cmdline, modules and install parameters in their
+      config field.
+    fix_idea: >
+      Initialize an instance-level dict in the model's init (or compute merged
+      values on demand via a method), so flatten_config writes to instance
+      state; never store inherited values on the class object.
+    blast_radius: >
+      Every API response and admin render that reads System.config after
+      another system was touched can display another machine's inherited
+      configuration — silent wrong output for all users, all deployments,
+      whenever more than one system with a distro is involved.
+    regression_test: >
+      test_config_not_shared_between_instances: instantiate two Systems with
+      different distros, flatten both, and assert each config contains only
+      its own distro's values. Fails today (both share one dict), passes after
+      instance-level init.
+  - id: CC-013
+    type: bug
+    severity: S2
+    title: "Detail retrieval globally mutates serializer Meta depth and never resets"
+    user_value: null
+    evidence:
+      - path: common/views.py
+        lines: 125-128
+        excerpt: |
+            if 'pk' in kwargs:
+                self.serializer_class.Meta.depth = 3
+                # someone is looking for a specific item.
+                return self.retrieve(self, request, format=None, pk=kwargs['pk'])
+      - path: static/genNetworkInterfaces.py
+        lines: 139-141
+        excerpt: |
+            else:
+              # grab the network
+              response = self.session.get(f"{self.mprovURL}/networks/{intf['network']}/")
+    repro: >
+      The shared detail branch sets serializer_class.Meta.depth = 3, which
+      mutates the class-level Meta of that serializer for the lifetime of the
+      process and is never reset on list requests. After any detail request
+      has been served once, list endpoints of the same model start emitting
+      fully nested objects, and clients that index into relation ids — like
+      the shipped interface generator that builds a URL from the network field
+      — receive nested dicts where they previously got primary keys and
+      produce garbage requests.
+    fix_idea: >
+      Derive a separate Detail serializer class with depth set declaratively
+      and use it for detail routes, or build serializer variants dynamically
+      without ever assigning to Meta on the shared class at request time.
+    blast_radius: >
+      Random-feeling API breakage: the nested form appears only after a detail
+      request happened earlier in the same worker process, so agent scripts
+      and integrations fail intermittently across all model endpoints in every
+      deployment with more than one consumer.
+    regression_test: >
+      test_list_shape_stable_after_detail_request: GET the list endpoint, then
+      a detail endpoint, then the list again, and assert both list payloads
+      have the same shape with relation fields as ids. Fails today on the
+      second list call, passes after per-route serializers.
+  - id: CC-014
+    type: bug
+    severity: S2
+    title: "NetworkInterface save silently overwrites user-set hostname"
+    user_value: null
+    evidence:
+      - path: systems/models.py
+        lines: 262-264
+        excerpt: |
+            def save(self, *args, **kwargs):
+              self.hostname = self.system.hostname
+              super(NetworkInterface, self).save(*args, **kwargs)
+    repro: >
+      NetworkInterface has its own hostname field, but every save forces it to
+      the parent system's hostname. Any value an operator sets on the
+      interface row (a secondary interface label or a per-interface host name)
+      is silently discarded the next time any code path saves the row,
+      including saves triggered as a side effect of switch reconciliation.
+    fix_idea: >
+      Only default hostname from the parent system when the field is empty or
+      the row is being created, or drop the interface-level field entirely if
+      it is truly derived; do not unconditionally rewrite it on every save.
+    blast_radius: >
+      Operators editing interfaces through the admin lose data on the next
+      unrelated save; every deployment with any per-interface hostname use,
+      and the loss is silent, with no error and no log.
+    regression_test: >
+      test_interface_hostname_preserved_when_set: create an interface with a
+      custom hostname, touch and re-save the row, assert the custom value
+      survives. Fails today (reset to system hostname), passes after.
+  - id: CC-015
+    type: bug
+    severity: S2
+    title: "IP calculation fallback can assign the same address to many NICs"
+    user_value: null
+    evidence:
+      - path: networks/utils.py
+        lines: 31-39
+        excerpt: |
+            if netmask >= 24:
+                # /24 networks - first 3 octets are network
+                network_octets = 3
+            elif netmask >= 16:
+                # /16 networks - first 2 octets are network
+                network_octets = 2
+            elif netmask >= 8:
+                # /8 networks - first octet is network
+                network_octets = 1
+      - path: networks/utils.py
+        lines: 55-59
+        excerpt: |
+            if new_ip_obj not in new_net:
+                # If the calculated IP is not in the new network,
+                # use the first available IP in the new network
+                new_ip_obj = list(new_net.hosts())[0] if list(new_net.hosts()) else new_net.network_address + 1
+                new_ip = str(new_ip_obj)
+    repro: >
+      The octet-splicing heuristic produces a candidate address and, when it
+      falls outside the target network, every conflicting NIC is given the
+      exact same first-available address, with no check against addresses
+      already assigned to other interfaces. Moving several NICs from a /24
+      into a /16 under those conditions stamps the same IP onto all of them.
+    fix_idea: >
+      Compute a truly free address: query already-assigned interface
+      addresses in the target network and pick the next unused one (or refuse
+      and report when the pool is exhausted); treat the first-host value only
+      as the starting point of a search, not as the fallback result.
+    blast_radius: >
+      Duplicate IPs written into provisioning config cause ARP conflicts and
+      failed boots for the affected machines; triggers on any bulk network
+      move through the preview and update flow, and the corruption lands in
+      stored data.
+    regression_test: >
+      test_moved_nics_get_unique_ips: prepare two NICs whose spliced addresses
+      both fall outside the target /16 and run the update; assert the two
+      resulting addresses differ and are both unassigned. Fails today (both
+      get the first host address), passes after.
+  - id: CC-016
+    type: bug
+    severity: S2
+    title: "NIC reconcile loop removes entries while iterating the same list"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 532-533
+        excerpt: |
+            nicqueryset = NetworkInterface.objects.all().filter(network=net)
+            nics = list(nicqueryset)
+      - path: systems/views.py
+        lines: 548-556
+        excerpt: |
+            for nic in nics:
+                found=False
+                if nic.switch_port is not None:
+                    for portnic in swportqueryset:
+                        if nic.id == portnic.id:
+                            found=True
+                            break
+                    if not found:
+                        nics.remove(nic)
+    repro: >
+      The reconciliation pass mutates the nics list with remove() while
+      iterating it, so the iterator skips the element immediately after every
+      removal. Interfaces whose switch port stopped matching are left in the
+      result on every second removal — the endpoint returns stale port and
+      NIC bindings alternating with removed ones, and callers such as DNS and
+      DHCP config generators provision from an arbitrary subset.
+    fix_idea: >
+      Build a new list of survivors, filtering on the set of switch-port NIC
+      ids, instead of calling remove() on the list being iterated.
+    blast_radius: >
+      Every call of the interface listing endpoint for a network that has any
+      port or NIC divergence silently returns wrong membership; downstream
+      generators emit config entries for machines that no longer belong.
+    regression_test: >
+      test_reconcile_removes_all_stale_nics: seed four stale interfaces whose
+      switch ports no longer match and call the endpoint; assert none of the
+      four appear in the response. Fails today (roughly half survive due to
+      the iterator skip), passes after.
+  - id: CC-017
+    type: bug
+    severity: S2
+    title: "Scripts detail route uses int converter against slug primary key"
+    user_value: null
+    evidence:
+      - path: scripts/scripts_urls.py
+        lines: 5-6
+        excerpt: |
+            path('<int:pk>/', ScriptAPIView.as_view()),
+            path('', ScriptAPIView.as_view()),
+      - path: scripts/models.py
+        lines: 25
+        excerpt: |
+            slug=models.SlugField(unique=True, primary_key=True)
+    repro: >
+      The Script model's primary key is a SlugField, but the detail route
+      declares the parameter as int. Any request to a slug-style path under
+      the scripts prefix (the slug values the API itself returns and the
+      install fixtures define) fails URL resolution, so per-object read, patch
+      and delete operations on scripts can never be addressed except for a
+      purely numeric slug.
+    fix_idea: >
+      Use the slug converter in the route pattern to match the model's primary
+      key type, or switch the lookup to a separate numeric id field; add a
+      route smoke test so converter and model type mismatches fail CI.
+    blast_radius: >
+      All per-object script API operations are unreachable; jobs that
+      reference scripts by slug and any client following API-discovered links
+      get 404 on every deployment.
+    regression_test: >
+      test_script_detail_route_resolves: reverse-resolve a slug pk like
+      install_mprov_script_runner_sh against the scripts urls and assert it
+      matches the detail view. Fails today (no match), passes after the
+      converter fix.
+  - id: CC-018
+    type: bug
+    severity: S2
+    title: "JobServer save purges other jobservers on minute-boundary races"
+    user_value: null
+    evidence:
+      - path: jobqueue/models.py
+        lines: 82-88
+        excerpt: |
+            if int(time.time() % 60) == 0:
+                # delete any servers that are older than 1 minute heartbeat.
+                delTime = time.time() - 60
+                delDateTime = datetime.datetime.fromtimestamp(delTime)#.strftime("%Y-%m-%d %H:%M:%S")
+                delDateTime = make_aware(delDateTime)
+                print("Info: Removing stale jobservers.")
+                self.__class__.objects.filter(heartbeat_time__lte=delDateTime).delete()
+    repro: >
+      Every JobServer save that lands in the last second of a wall-clock
+      minute deletes all jobservers whose heartbeat is older than 60 seconds.
+      With the configured 10-second heartbeat interval, a jobserver that
+      missed a few heartbeats (GC pause, blocked job) is hard-deleted along
+      with its queued job rows, and two servers saving concurrently at the
+      boundary can delete each other mid-registration since the deletion hits
+      the whole table with no lock or per-row grace.
+    fix_idea: >
+      Move stale reaping to a dedicated periodic maintenance command with a
+      multi-minute grace window; do not perform fleet-wide deletes inside the
+      save path on a wall-clock second condition. Use an update keyed on the
+      caller's identity for registration heartbeats.
+    blast_radius: >
+      Under load or clock skew, healthy jobservers vanish and re-register,
+      losing job history and intermittently breaking job dispatch; happens
+      routinely on busy minute boundaries in every deployment with more than
+      one jobserver.
+    regression_test: >
+      test_save_does_not_delete_fresh_jobservers: freeze time inside the
+      minute-boundary second, create a second jobserver with a 30-second-old
+      heartbeat, then save the first; assert the second still exists. Fails
+      today, passes after reaping moves out of save.
+  - id: CC-019
+    type: bug
+    severity: S2
+    title: "Image detail view returns list data and poisons its serializer class"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 679-684
+        excerpt: |
+            def get(self, request, format=None, **kwargs):
+
+                result = super().get(request, format, **kwargs)
+                if 'pk' in kwargs:
+                    self.serializer_class = SystemImageDetailsSerializer
+                return result
+    repro: >
+      The image list and detail view assigns the detailed serializer only
+      after super get has already produced the response, so a detail request
+      is serialized with the list serializer (wrong payload shape for what
+      clients expect), and the instance attribute change has no effect until
+      a later request reuses the same view instance — after which list
+      responses can intermittently render with the detail serializer.
+    fix_idea: >
+      Select the serializer before serialization: override
+      get_serializer_class based on the presence of pk in kwargs and remove
+      the post-response assignment entirely.
+    blast_radius: >
+      Detail API consumers receive the wrong representation and flip-flopping
+      list shapes across workers; affects every deployment using the image
+      API.
+    regression_test: >
+      test_image_detail_uses_detail_serializer: GET the image detail route and
+      assert the response contains the detail-serializer fields, then GET the
+      list and assert the list shape. Fails today, passes after
+      get_serializer_class routing.
+  - id: CC-020
+    type: bug
+    severity: S2
+    title: "Production installs never load jobqueue fixtures breaking job pipeline"
+    user_value: null
+    evidence:
+      - path: install_scripts/load_default_scripts.sh
+        lines: 32-34
+        excerpt: |
+            # import the yaml as a fixture
+            python manage.py loaddata scripts/fixtures/*
+            python manage.py loaddata ${tempdir}/mprov_scripts/mpcc_scripts.yaml
+      - path: install_scripts/init_mpcc.sh
+        lines: 104-108
+        excerpt: |
+                if [ ! -e /var/www/mprov_control_center/db/.initialized ]
+                then
+                       python manage.py createsuperuser --noinput
+
+                       python manage.py loaddata */fixtures/*
+    repro: >
+      The non-docker install path (init_mpcc.sh without the -d flag) executes
+      only the init.d scripts, and the fixture loader there loads scripts
+      fixtures exclusively. The jobqueue fixture that defines the JobModule
+      and JobStatus seed rows is only loaded in the -d branch via the wildcard
+      loaddata. On a production install the job tables are therefore empty:
+      jobserver registration fails on its module lookups, image, pxe and dns
+      update jobs are never created by the signal machinery, and the admin
+      mark-rebuild action throws on the missing status row.
+    fix_idea: >
+      Load the jobqueue (and any other required seed) fixtures in the shared
+      init path used by all install modes, or make the loader idempotent
+      across both branches; verify required seed rows exist at the end of
+      install and fail loudly if not.
+    blast_radius: >
+      Fresh bare-metal installs have a silently dead job pipeline — no images
+      get built or served and no PXE config propagates — until an operator
+      discovers the gap and hand-runs loaddata; every non-docker deployment
+      hits this.
+    regression_test: >
+      test_production_init_loads_jobqueue_fixture: run the production init
+      path in a test install and assert the JobModule rows for pxe-update and
+      image-update and the JobStatus rows exist afterwards. Fails today on
+      the production branch, passes after the fix.
+  - id: CC-021
+    type: bug
+    severity: S2
+    title: "LDAP self-signed cert flag sets global options to None"
+    user_value: null
+    evidence:
+      - path: mprov_control_center/settings.py
+        lines: 332-336
+        excerpt: |
+            AUTH_LDAP_GLOBAL_OPTIONS={}
+            # set if LDAP_SELF_SIGNED_CERT is set in the env.
+
+            if os.environ.get("LDAP_SELF_SIGNED_CERT", "0") == "1":
+                AUTH_LDAP_GLOBAL_OPTIONS = AUTH_LDAP_GLOBAL_OPTIONS.update({ ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER })
+    repro: >
+      dict update returns None, so when the operator sets
+      LDAP_SELF_SIGNED_CERT to 1 to accept a self-signed certificate, the
+      settings module assigns AUTH_LDAP_GLOBAL_OPTIONS = None. The LDAP
+      library then initializes its global options from None and every LDAP
+      login attempt fails before any TLS negotiation happens — the exact
+      deployments that needed the flag are the ones that break.
+    fix_idea: >
+      Update the dict in place without reassigning, or assign the merged
+      result using a dict literal, and add a settings import test asserting
+      the value is still a mapping after every LDAP branch.
+    blast_radius: >
+      All logins on LDAP deployments that follow the documented self-signed
+      workaround fail; the control plane falls back to the local admin
+      account, which is a well-known default per CC-004. No startup error
+      announces the misconfiguration.
+    regression_test: >
+      test_self_signed_flag_keeps_options_mapping: import settings with the
+      flag set and assert the global options value is a dict containing the
+      never-verify option. Fails today (value is None), passes after the fix.
+  - id: CC-022
+    type: bug
+    severity: S3
+    title: "Image download loop cannot detect gunzip or tar failures"
+    user_value: null
+    evidence:
+      - path: static/mprov_boot_init.sh
+        lines: 193-197
+        excerpt: |
+            while [ 1 ]
+            do
+              cd /image
+              wget $MPROV_IMAGE_URL -O - | gunzip -c | tar -x
+              if [ "$?" == "0" ]
+    repro: >
+      Without pipefail, the guard only sees the exit status of the final tar
+      command. A truncated download, a mid-stream gzip error, or a corrupt
+      archive that leaves tar extracting partial data can still exit 0, so the
+      retry loop declares failed transfers successful and the machine
+      continues booting from a corrupt or half-written image.
+    fix_idea: >
+      Enable pipefail for the pipeline, or download to a file first, verify
+      its integrity and size, then decompress and extract as separate guarded
+      steps, so any stage failure keeps the loop retrying and logs which
+      stage failed.
+    blast_radius: >
+      Machines can be provisioned from silently corrupted images after a
+      network hiccup; rare per boot but the failure is invisible and the
+      resulting system is unstable.
+    regression_test: >
+      test_download_retry_on_corrupt_stream: point the image URL at a server
+      that sends truncated gzip data and assert the script loops rather than
+      proceeding. Fails today (it proceeds), passes with pipefail or staged
+      extraction.
+  - id: CC-023
+    type: bug
+    severity: S3
+    title: "Installer continues after failing to disable netboot"
+    user_value: null
+    evidence:
+      - path: static/mprov_stateful.py
+        lines: 633-638
+        excerpt: |
+            try:
+              if req.status_code != 200:
+                print("Error: There was an issue trying to disable netboot.  You should look into this.")
+                print(f"Error: {req.text}")
+            except Exception as e:
+              print(f"Error: {e}")
+    repro: >
+      After the stateful installer writes the disk it asks the control center
+      to disable netboot for the system. When the API answers with a non-200
+      status, the handler only prints and returns; the installer finishes
+      successfully, so on the next boot the machine netboots again and
+      reinstalls — potentially looping because the disable call keeps failing.
+    fix_idea: >
+      Make the netboot-disable acknowledgment mandatory before declaring
+      success: retry with backoff and exit non-zero (or drop to a recovery
+      shell after quiescing) if the control center never confirms, so a
+      machine is never left in a wipe-and-reinstall loop.
+    blast_radius: >
+      Any transient API failure at the end of OS installation leaves the
+      machine in a destructive reboot loop re-wiping the freshly written disk;
+      worst case is repeated data loss on stateful systems.
+    regression_test: >
+      test_install_fails_when_netboot_disable_rejected: run the installer's
+      finalization against a stub server returning 500 and assert the
+      installer exits non-zero instead of reporting success. Fails today,
+      passes after.
+  - id: CC-024
+    type: bug
+    severity: S3
+    title: "Installer exception hook is never registered and is itself broken"
+    user_value: null
+    evidence:
+      - path: static/mprov_stateful.py
+        lines: 24-27
+        excerpt: |
+            def exception_hook(exctype, value, traceback):
+              traceback.print_exc()
+              print("\n\nERROR: Installer failed.  Dropping to shell.  Note: You are still in the RAM disk.")
+
+              os.execv("/bin/setsid" "/bin/bash -m  <> /dev/tty1 >&0 2>&1")
+    repro: >
+      Grep across the tree shows the system exception hook is never assigned,
+      so the handler meant to drop a failed install into a recovery shell
+      never run. Even if it were registered, its exec call concatenates the
+      two string arguments into one and passes no argument list, so it would
+      raise a TypeError instead of opening a shell.
+    fix_idea: >
+      Register the hook in the installer's entry point by assigning the
+      system exception hook at startup, and fix the exec call to pass the
+      program path and a proper argument list, so the drop-to-shell feature
+      works when installs fail.
+    blast_radius: >
+      Failed remote installs leave a hung or rebooting RAM-disk machine with
+      no operator access instead of the intended recovery shell; hits every
+      install that crashes.
+    regression_test: >
+      test_exception_hook_registered_and_exec_valid: import the installer
+      module, assert the system exception hook has been reassigned to it, and
+      assert its exec call passes a program path plus an argument list. Fails
+      today, passes after.
+  - id: CC-025
+    type: bug
+    severity: S3
+    title: "Error path references unbound response variable"
+    user_value: null
+    evidence:
+      - path: static/genNetworkInterfaces.py
+        lines: 89-95
+        excerpt: |
+            try:
+              response = self.session.get(self.mprovURL, stream=True)
+            except requests.exceptions.RequestException as e:
+              print(f"Error: Communication error to the server. (Status: {response.status_code}, Error: {e})", file=sys.stderr)
+              self.sessionOk = False
+              time.sleep(self.heartbeatInterval)
+              return False
+    repro: >
+      If the connection fails before any response exists, the except block
+      dereferences the response variable that was never assigned, raising an
+      unbound-local error; the daemon dies on the improved error path the
+      block was written for, instead of sleeping and retrying as intended.
+    fix_idea: >
+      Log only the exception in the connection-error branch since no status
+      code exists yet, keep the retry loop, and reserve status-code handling
+      for the path that actually has a response object.
+    blast_radius: >
+      Any network outage at session start crashes the interface generator
+      rather than letting it retry — one flaky link kills the agent until
+      someone restarts it by hand.
+    regression_test: >
+      test_session_failure_returns_false_not_crash: point the session at an
+      unreachable URL and call the connect step; assert it returns False
+      without raising. Fails today with an unbound-local crash, passes after.
+  - id: CC-026
+    type: bug
+    severity: S3
+    title: "Unguarded get lookups return 500 on unknown identifiers"
+    user_value: null
+    evidence:
+      - path: osmanagement/views_noath.py
+        lines: 23-24
+        excerpt: |
+            if 'pk' in kwargs:
+              repo = OSRepo.objects.get(pk=kwargs['pk'])
+      - path: systems/views_noauth.py
+        lines: 63-65
+        excerpt: |
+            isInitRamFS=False
+
+            image = SystemImage.objects.get(pk=imgName)
+      - path: networks/views.py
+        lines: 227-230
+        excerpt: |
+            if 'network' in self.request.query_params:
+                network = self.request.query_params['network']
+                net = Network.objects.get(slug=network)
+                self.queryset = self.model.objects.filter(network=net)
+    repro: >
+      The pattern of a bare objects.get on a URL or query parameter appears
+      across read endpoints (repo listing by id, boot artifact lookup by image
+      id, switch view filtered by network slug): any identifier that does not
+      exist — a stale agent cache, a deleted image, a typo — raises
+      DoesNotExist and surfaces as an HTTP 500 with a traceback instead of a
+      404.
+    fix_idea: >
+      Wrap these lookups with the get-or-404 helper, or filter with an
+      explicit DoesNotExist branch returning a clean 404, consistently across
+      the parameter-driven read endpoints.
+    blast_radius: >
+      Agents and users probing deleted or mistyped identifiers get server
+      errors and tracebacks in logs; frequent during troubleshooting and
+      re-registrations, and the noise masks real failures.
+    regression_test: >
+      test_unknown_identifier_returns_404: for each listed endpoint, request
+      it with a non-existent id or slug and assert the status is 404, not 500.
+      Fails today, passes after guards.
+  - id: CC-027
+    type: bug
+    severity: S3
+    title: "Unauthenticated datamodel and status-changes endpoints leak internals"
+    user_value: null
+    evidence:
+      - path: mprov_control_center/views.py
+        lines: 54-61
+        excerpt: |
+                if full_class_name.startswith('django') or full_class_name.startswith('rest_framework'):
+                    continue
+                model_list.append(full_class_name)
+                if 'model' in request.GET:
+                    self.model = request.GET['model']
+                    if self.model not in model_list:
+                        self.model = None
+                        return JsonResponse({'error': 'Unknown Model Requested'}, status=500)
+      - path: mprov_control_center/urls.py
+        lines: 100
+        excerpt: |
+            path('datamodel/', DataTypeView.as_view()),
+      - path: jobqueue/urls.py
+        lines: 9
+        excerpt: |
+            path('status-changes/', JobStatusChangesView.as_view(), name='job_status_changes'),
+      - path: jobqueue/views.py
+        lines: 297-302
+        excerpt: |
+            def get(self, request):
+                # Get recent job status changes from cache
+                from django.core.cache import cache
+
+                recent_changes_key = "recent_job_status_changes"
+                recent_changes = cache.get(recent_changes_key, [])
+    repro: >
+      The datamodel endpoint is a plain view with no login or permission
+      requirement, so anonymous callers can enumerate every application model
+      and inspect field-level metadata; the jobqueue status-changes view is
+      likewise unauthenticated and hands recent job status records to anyone,
+      which is data intended for signed-in operators.
+    fix_idea: >
+      Require staff authentication on both views, and shrink the datamodel
+      output to the models the admin documentation actually exposes rather
+      than reflecting the entire application registry.
+    blast_radius: >
+      Anonymous reconnaissance of schema and job activity on any deployment
+      reachable from untrusted networks; low direct damage but it materially
+      assists targeted attacks on the CC-001 and CC-005 surface.
+    regression_test: >
+      test_datamodel_and_status_changes_require_auth: anonymous GET on both
+      endpoints asserts 401 or a login redirect. Fails today with 200, passes
+      after.
+  - id: CC-028
+    type: enhancement
+    severity: S3
+    title: "Requirements are fully unpinned allowing silent dependency drift"
+    user_value: "Administrators get reproducible installs because dependency versions stay fixed across machines and time."
+    evidence:
+      - path: requirements.txt
+        lines: 1-6
+        excerpt: |
+            django  #https://www.djangoproject.com/ - 3-clause BSD
+            django-dotenv # https://pypi.org/project/django-dotenv/ - MIT
+            djangorestframework # https://pypi.org/project/djangorestframework/ - BSD License (BSD)
+            pyyaml # https://pypi.org/project/PyYAML/ - MIT
+            requests # https://pypi.org/project/requests/ - Apache Software License (Apache 2.0)
+            django-cors-headers # https://pypi.org/project/django-cors-headers/ - MIT
+    repro: >
+      No version constraints are specified for any dependency (the README even
+      documents Django 3.2 while a fresh install resolves a 4.x release), so
+      each install pulls whatever is current: behavior changes between
+      deployments, and a future upstream release can break the control plane
+      or installer agents with no code change on this side.
+    fix_idea: >
+      Pin direct dependencies to known-good versions, or use bounded ranges
+      with a lock file, and add a CI job that installs from requirements into
+      a clean environment and boots the app to catch incompatible releases
+      early.
+    blast_radius: >
+      Environments that differ by install day; debugging cost when a fresh
+      install fails where an old one worked, and silent future breakage for
+      all new deployments on any upstream release.
+    regression_test: >
+      test_ci_clean_install_boot: in CI, install from requirements in a clean
+      venv, run the manage check command and boot one request; this fails the
+      day an incompatible release lands and keeps pinning honest after.
+  - id: CC-029
+    type: enhancement
+    severity: S3
+    title: "Installer pipes remote script from main branch into root shell"
+    user_value: "Installers run a fixed, reviewable script version instead of whatever is on main at install time."
+    evidence:
+      - path: install_scripts/install_initial_jobserver.sh
+        lines: 3
+        excerpt: |
+            wget https://raw.githubusercontent.com/mprov-ng/mprov_jobserver/main/install_mprov_jobserver.sh -O - | sudo su - -c /bin/bash
+    repro: >
+      The jobserver bootstrap downloads whatever script text is currently on
+      the upstream main branch and executes it as root with no checksum, no
+      tag pinning and no integrity bound to a reviewed commit; a compromised
+      upstream repository, a force-push, or an interceptor yields direct root
+      code execution on the jobserver host.
+    fix_idea: >
+      Ship the jobserver installer from a pinned release tag with a published
+      checksum, or install via a packaged artifact, and stop the pipe-to-root
+      pattern; if remote bootstrap must stay, verify a digest before executing
+      anything.
+    blast_radius: >
+      Supply-chain exposure for every fresh jobserver install; worst case is
+      attacker-chosen root code on the host that holds fleet images and the
+      shared API key.
+    regression_test: >
+      test_installer_pins_release: assert the bootstrap URL references a tag
+      or digest and the script verifies it before executing anything (a repo
+      CI check). Fails today, passes after pinning.
+  - id: CC-030
+    type: bug
+    severity: S3
+    title: "BMC ipmitool command built by string interpolation breaks on spaces"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 880-883
+        excerpt: |
+            ipmitool_cmd = f"/usr/bin/ipmitool -Ilanplus -U{bmc.username} -P{bmc.password} -H{bmc.ipaddress} chassis bootdev pxe {efiopt}"
+            print(ipmitool_cmd)
+            try:
+                subprocess.run(args=ipmitool_cmd.split())
+      - path: systems/admin.py
+        lines: 290-292
+        excerpt: |
+            ipmitool_cmd = f"/usr/bin/ipmitool -Ilanplus -U{bmc.username} -P{bmc.password} -H{bmc.ipaddress} chassis bootdev pxe {efiopt}"
+            try:
+              subprocess.run(args=ipmitool_cmd.split())
+    repro: >
+      The command is assembled as one string and re-split on whitespace before
+      exec. A BMC username, password or address containing a space (legal for
+      the first two) silently splits into extra arguments: the password leaks
+      into a following flag position, options shift, and the chassis command
+      executes with wrong credentials or fails outright. A password beginning
+      with a dash is even parsed as an ipmitool option.
+    fix_idea: >
+      Build the subprocess argument list directly as a Python list with each
+      credential as a single element and the flag names explicit, so values
+      containing spaces or leading dashes cannot re-tokenize into options.
+    blast_radius: >
+      PXE-boot actions misbehave or fail for any credential containing spaces
+      or dashes; uncommon but confusing, and duplicated in both the admin and
+      API code paths.
+    regression_test: >
+      test_ipmitool_args_survive_spaces: call the power-PXE path with a
+      stubbed subprocess and a password containing a space, and assert the
+      password arrives as one argv element. Fails today, passes after list
+      construction.
+  - id: CC-031
+    type: bug
+    severity: S3
+    title: "Model signals recover the request via stack-frame inspection"
+    user_value: null
+    evidence:
+      - path: systems/models.py
+        lines: 393-400
+        excerpt: |
+            if sender == SystemImage or sender == System:
+              import inspect
+              for frame_record in inspect.stack():
+                  if frame_record[3]=='get_response':
+                      request = frame_record[0].f_locals['request']
+                      break
+              else:
+                  request = None
+      - path: networks/models.py
+        lines: 107-113
+        excerpt: |
+            import inspect
+            for frame_record in inspect.stack():
+                if frame_record[3]=='get_response':
+                    request = frame_record[0].f_locals['request']
+                    break
+            else:
+                request = None
+    repro: >
+      pre_save signal handlers walk the entire Python stack looking for the
+      framework's response frame to grab the current request, on every save
+      of the affected models. The technique breaks under any runner that saves
+      outside a request cycle (management commands, shell, tests, async
+      dispatch), silently falling back to no request — leaving audit fields
+      unset or defaulted to a hard-coded user — and the cost of a full stack
+      walk is paid on every write.
+    fix_idea: >
+      Use a thread-local request middleware or an explicit actor parameter
+      passed down from the service layer, giving every save path a defined
+      actor instead of reverse-engineering it from frame objects.
+    blast_radius: >
+      Audit fields silently stay unset or fall back to user one under
+      non-request save paths in all deployments; subtle wrong data that is
+      hard to trace, plus per-save overhead.
+    regression_test: >
+      test_created_by_set_from_management_command: save a model inside a
+      management command with an explicit actor parameter and assert the
+      audit field is recorded (or that the fallback is explicit and
+      documented). Fails today on the no-request path, passes after explicit
+      actor plumbing.
+  - id: CC-032
+    type: bug
+    severity: S3
+    title: "Unguarded request data access returns 500 instead of 400"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 92-96
+        excerpt: |
+            if request.data['switch'] is not None:
+                try:
+                    switch = Switch.objects.get(hostname=request.data['switch'])
+                except:
+                    switch = None
+      - path: jobqueue/views.py
+        lines: 265-270
+        excerpt: |
+            defaults = {
+                'heartbeat_time': datetime.now(),
+                'address': request.data['address'],
+                'name': request.data['name'],
+                'port': request.data['port'],
+                'one_minute_load': request.data['one_minute_load']
+            }
+      - path: osmanagement/views.py
+        lines: 185-188
+        excerpt: |
+                    # update the entry
+                    obj = queryset[0]
+                    obj.name = request.data['name']
+                    obj.save()
+    repro: >
+      Multiple POST and PATCH handlers index the request payload directly
+      (the register handler's switch, port, vendor and model keys; the
+      jobserver heartbeat's address, name, port and load keys; the OS type
+      update's name key; the BMC post's password key), so a client that omits
+      any expected key raises a key error and receives a 500 traceback rather
+      than a validation error; agents sending partial payloads during
+      upgrades wedge registration.
+    fix_idea: >
+      Route payloads through serializer validation with required fields
+      declared, or use guarded access with explicit presence checks returning
+      a 400 plus the missing-field list, consistently across the write
+      endpoints.
+    blast_radius: >
+      Version-skewed or buggy agents get opaque 500s and traceback noise
+      during every registration window; no data corruption, but the failures
+      are indistinguishable from server faults.
+    regression_test: >
+      test_missing_keys_return_400: POST each listed endpoint with a payload
+      missing one required key and assert a 400 with a validation body. Fails
+      today with 500, passes after serializer-based validation.
+  - id: CC-033
+    type: bug
+    severity: S3
+    title: "Image slug regenerated on every save silently drops renames"
+    user_value: null
+    evidence:
+      - path: systems/models.py
+        lines: 470-472
+        excerpt: |
+            else:
+              instance.created_by = request.user
+            instance.slug = slugify(instance.name)
+      - path: systems/models.py
+        lines: 270
+        excerpt: |
+            slug=models.SlugField(max_length=255, unique=True, editable=False, verbose_name='Image ID', primary_key=True)
+    repro: >
+      The pre_save hook for images reassigns the slug from the name on every
+      save, but the slug is the model's primary key. The update statement then
+      matches on the new primary key, which no row has, so renaming an image
+      makes the change disappear without an error — or the new slug collides
+      with another image and raises an integrity error instead. Any queued
+      jobs or jobserver URLs that recorded the previous slug are left
+      dangling.
+    fix_idea: >
+      Set the slug only at creation time when the field is empty, or block
+      name changes after creation; if renames must work, migrate the primary
+      key explicitly and cascade the update into referencing job parameters
+      rather than rewriting it inside a quiet hook.
+    blast_radius: >
+      Operators renaming images see either a silent no-op or an integrity
+      error in the admin, while queued jobs keep firing against the old image
+      id. Low-frequency but data-corrupting behavior.
+    regression_test: >
+      test_image_rename_persists_or_is_refused: create an image, save with a
+      new name, re-fetch from the database and assert the new name is present
+      with consistent primary-key handling, or that the change was rejected
+      with a visible error. Fails today (name reverts silently), passes
+      after.
+  - id: CC-034
+    type: bug
+    severity: S3
+    title: "Admin mark_rebuild action does not persist version and slug changes"
+    user_value: null
+    evidence:
+      - path: systems/admin.py
+        lines: 548-550
+        excerpt: |
+            # TODO: Increment version number and clear out jobservers field.
+            instance.jobservers.clear()
+            instance.version = instance.version + 1
+      - path: systems/admin.py
+        lines: 526-528
+        excerpt: |
+            for instance in queryset:
+              if not instance.needs_rebuild:
+                return
+              instance.slug = slugify(instance.name)
+    repro: >
+      The admin bulk action flags the queryset for rebuild via a bulk update,
+      then increments instance version and rewrites the slug in memory but
+      never saves the instance, so those changes are discarded (only clearing
+      the jobserver relation persists, because that call writes immediately).
+      The version counter jobservers use to detect image freshness never moves
+      when admins use the action, and a mid-loop early return on a flag the
+      bulk update already replaced aborts processing of the remaining selected
+      rows.
+    fix_idea: >
+      Persist the intended fields as part of the update (a bulk update for the
+      version, or a save with explicit update fields per row), remove the dead
+      early return over the replaced boolean, and drop the slug rewrite
+      entirely given the slug is the primary key per CC-033.
+    blast_radius: >
+      Rebuilds triggered from the admin changelist keep stale versions so
+      jobservers may skip re-syncing the image; every admin bulk action use is
+      affected.
+    regression_test: >
+      test_mark_rebuild_bumps_version: run the action on an image and assert
+      the version in the database increased and the jobserver relation was
+      cleared for every selected row. Fails today (version unchanged), passes
+      after.
+  - id: CC-035
+    type: bug
+    severity: S3
+    title: "Power endpoint returns 500 for missing params and unknown ids"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 831-835
+        excerpt: |
+            if 'id' in request.query_params:
+                system_results= System.objects.get(id=request.query_params['id'])
+                if system_results is None:
+                    return Response(None, status=404)
+                self.queryset = self.model.objects.filter(system=system_results.id)
+      - path: systems/views.py
+        lines: 857-858
+        excerpt: |
+            if self.queryset.count() == 0:
+                return Response(None, status=404)
+    repro: >
+      The power view's class-level queryset is None. The id branch calls the
+      object get directly, raising DoesNotExist and a 500 for unknown ids —
+      the None check beneath it can never trigger — and if the request carries
+      no supported filter at all, the fall-through path dereferences the None
+      queryset's count and raises an AttributeError 500.
+    fix_idea: >
+      Give the view a real base queryset for its model, use 404-on-missing
+      semantics for the id lookup, and return a 400 with a message when no
+      selector was supplied, instead of relying on dead None checks.
+    blast_radius: >
+      Any mistyped id, or a caller that sends no parameters, gets an HTTP 500
+      from the power endpoint on every deployment using the API form of the
+      action.
+    regression_test: >
+      test_power_endpoint_param_matrix: request the power route with an
+      unknown id (expect 404) and with no params (expect 400). Fails today
+      with 500 on both, passes after the queryset and lookups are fixed.
+  - id: CC-036
+    type: enhancement
+    severity: S4
+    title: "No linting or static analysis in CI"
+    user_value: "Developers get automated feedback on unused imports, undefined names, and style drift before changes land."
+    evidence:
+      - path: systems/serializers.py
+        lines: 1-2
+        excerpt: |
+            from array import array
+            from pyexpat import model
+      - path: requirements.txt
+        lines: 1
+        excerpt: |
+            django  #https://www.djangoproject.com/ - 3-clause BSD
+    repro: >
+      The CI workflows build images and run no linter or static analyzer, and
+      the tree shows the predictable residue: modules begin with unused or
+      nonsensical imports (the array and pyexpat imports in the systems
+      serializer module are editor auto-import artifacts), and dead or debug
+      blocks survive indefinitely because nothing flags them.
+    fix_idea: >
+      Add an unopinionated pass to CI — a pyflakes-class check for unused and
+      undefined names plus a formatter in check mode — starting with the
+      source apps and excluding vendored static files, and fix the existing
+      findings in one mechanical commit.
+    blast_radius: >
+      Ongoing maintenance cost only; noise for reviewers and a higher chance
+      that a genuinely dangerous undefined-name bug slips through, as in the
+      CC-025 class.
+    regression_test: >
+      test_ci_runs_linter: a CI step executes the chosen linter on the source
+      apps and fails the build on reported errors. Fails on the current
+      workflow (no such step), passes once the step exists and the tree is
+      clean.
+  - id: CC-037
+    type: bug
+    severity: S3
+    title: "LDAP group search built with set literal instead of string"
+    user_value: null
+    evidence:
+      - path: mprov_control_center/settings.py
+        lines: 342
+        excerpt: |
+            AUTH_LDAP_GROUP_SEARCH = LDAPSearch({AUTH_MPROV_LDAP_BASE},ldap.SCOPE_SUBTREE, "(objectClass=posixGroup)")
+    repro: >
+      The base DN argument is wrapped in braces, constructing a one-element
+      set instead of a string. The LDAP search receives a set as its base, and
+      group lookup — including the require-group authorization check
+      configured directly above — fails with unexpected-type or invalid-DN
+      errors on every LDAP login attempt in the affected configuration.
+    fix_idea: >
+      Pass the environment-sourced base DN directly as a string, and add a
+      smoke test that builds the LDAP search objects from settings and
+      asserts the base is a plain string ending in the configured DN.
+    blast_radius: >
+      Every LDAP deployment's group search and group-required authorization
+      breaks; combined with CC-021 the whole optional LDAP path has never
+      worked as shipped.
+    regression_test: >
+      test_ldap_group_search_base_is_string: with LDAP environment variables
+      set, import settings and assert the group search base equals the
+      configured base string. Fails today (it is a set), passes after.
+  - id: CC-038
+    type: bug
+    severity: S2
+    title: "PATCH handler silently substitutes admin user for anonymous requests"
+    user_value: null
+    evidence:
+      - path: common/views.py
+        lines: 170-173
+        excerpt: |
+            def patch(self, request, *args, **kwargs):
+                if(type(request.user) == AnonymousUser ):
+                    request.user = User.objects.get(username='admin')
+                return self.partial_update(request, args, kwargs)
+    repro: >
+      The shared PATCH implementation replaces an anonymous request user with
+      a hard-coded admin superuser before performing the update. Because the
+      class's permission gate accepts an API key without authentication
+      (CC-001), any key-holding caller executes writes as the superuser:
+      audit fields record admin, and no per-user write checks can ever be
+      enforced on PATCH paths built on this base class. If the admin account
+      was renamed or removed, every PATCH crashes with a 500.
+    fix_idea: >
+      Reject anonymous mutations instead of impersonating a superuser; require
+      an authenticated session for PATCH, and derive any system-account
+      behavior from an explicitly named, limited service account rather than
+      a hard-coded admin username.
+    blast_radius: >
+      Every PATCH on every model endpoint executes with superuser identity
+      for key-bearing callers, forging the audit trail and foreclosing future
+      permission tightening; combined with a leaked key the write path is
+      indistinguishable from the real administrator.
+    regression_test: >
+      test_patch_with_api_key_is_not_admin_impersonated: PATCH an object with
+      a valid API key and no user credentials; assert the request is rejected
+      with 401 or 403 and no audit field records admin. Fails today (the
+      update succeeds as admin), passes after anonymous mutations are refused.
+  - id: CC-039
+    type: bug
+    severity: S3
+    title: "Config comment filter removes list items while iterating them"
+    user_value: null
+    evidence:
+      - path: systems/models.py
+        lines: 151-154
+        excerpt: |
+            lines = sysgrpfield.split("\n")
+            for line in lines:
+              if line.startswith("#"):
+                lines.remove(line)
+    repro: >
+      The system-group config inheritance strips commented lines by calling
+      remove on the list being iterated. After a removal the iterator steps
+      past the next element, so two or more consecutive comment lines leave
+      the second one in the merged config; the surviving comment text is then
+      appended into inherited kernel cmdline or module fields that get baked
+      into boot configuration.
+    fix_idea: >
+      Filter into a new list — keeping lines that do not start with the
+      comment marker — instead of mutating the list during iteration.
+    blast_radius: >
+      Any system group whose multi-line config contains adjacent comment
+      lines produces inherited config with stray comment fragments flowing
+      into kernel command lines; silent bad configuration on affected
+      machines.
+    regression_test: >
+      test_consecutive_comments_all_stripped: call the inheritance logic on a
+      field with three consecutive comment lines followed by a value and
+      assert no comment text remains. Fails today (a middle line survives),
+      passes after rebuilding the list.
+  # Adjudication entry 2026-10-15 (sw-architect): re-applied here per charter
+  # section 5 (file against the repo owning the primary evidence) and R14,
+  # from the cross-repo routing note in findings/mash/REVIEW-NOTES.md, where
+  # the mash reviewer scoped and execution-verified the mash side. Independent
+  # source verification of systems/views.py:816-822 was done by the adjudicator
+  # at commit 98d4579. Not a duplicate of CC-035 (same view, different defect:
+  # CC-035 covers 500s on missing params, this covers wrong-target matching).
+  # IDs are never reused.
+  - id: CC-040
+    type: bug
+    severity: S1
+    title: "Power endpoint hostname parameter is a substring match hitting wrong nodes"
+    user_value: null
+    evidence:
+      - path: systems/views.py
+        lines: 816-822
+        excerpt: |
+            if 'hostname' in request.query_params:
+              # someone is searching by hostname
+              system_results= System.objects.filter(hostname__contains=request.query_params['hostname'])
+              if system_results.count() > 0:
+                if system_results.count() > 10:
+                  print("WARN: Large node set returned, truncating.")
+                  system_results = system_results[:10]
+    repro: >
+      The power API view filters systems with a hostname-contains query on the
+      raw query parameter, so a value an operator believes to be an exact
+      hostname matches every system whose hostname merely contains the string.
+      Callers that pass hostnames straight through, such as the mash shell's
+      bmc power command, send exactly this belief. When more than ten systems
+      match, the queryset is silently truncated to the first ten and the power
+      action is executed against each of their BMCs, with the truncation
+      noted only on server stdout. A targeted power-off of compute001 can
+      therefore power off compute001 plus sibling-named systems such as
+      compute0010 through compute0019, capped at ten machines per call.
+    fix_idea: >
+      Change the hostname branch to an exact-match lookup on the hostname
+      field. If partial matching is an intended feature, move it to an
+      explicitly named parameter with documented semantics and a confirmation
+      step for multi-system result sets, and never silently truncate a
+      destructive multi-target action.
+    blast_radius: >
+      Any power action issued against a node whose hostname is a substring of
+      other hostnames force-powers-off up to ten wrong nodes, each potentially
+      carrying unsaved work, while the mash CLI displays no per-node results
+      at all. The operator discovers the collateral damage only when the
+      machines go down.
+    regression_test: >
+      test_power_hostname_exact_match: seed systems named compute001 and
+      compute0010 each with a BMC, issue a power request carrying the compute001
+      hostname parameter, and assert only compute001's BMC received the action.
+      Fails today with both systems targeted, passes after the lookup is made
+      exact or confirmation-gated.

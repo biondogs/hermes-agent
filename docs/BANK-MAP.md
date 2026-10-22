@@ -82,9 +82,29 @@ intended effective bank of any standing profile: fleet profiles point at the
 specialist banks above. Exception: none today.
 
 ### Living reference banks retained server-side (not assigned to any profile)
-- `hermes-general` (5084 facts) — legacy pre-Hindsight-reorg general bank;
+- `hermes-general` (5349 facts) — legacy pre-Hindsight-reorg general bank;
   historical, read-only value.
 - The per-board summary banks above participate in this category.
+
+### Live-state verification (2026-10-22 ~20:30Z, run of t_0fbb3c61 BANK-TRIAGE-MIRROR-2)
+Server-side readback after the .env-pin fix and the butler SOUL cutover:
+- **Butler banks all non-empty and accumulating** (live retain working,
+  by-design butler-operational content only; no migration into them needed):
+  `g01-butler` 37 · `swco-butler` 39 · `sjproto-butler` 28 · `gaudi-butler` 30
+  · `g02-butler` 20 nodes.
+- **Per-board summary banks frozen** since pass-1 (t_2e99dfb6), unchanged:
+  `gaudi` 125 · `gargantua01` 18 · `gargantua02` 14 · `skipjack` 6 ·
+  `skipjack-prototype` 6 (non-destructive ruling holds).
+- **Post-cutover stray check on the main `hermes` bank** (window
+  created_at ≥ 2026-10-22T14:07Z): 1,807 nodes / 287 originals, ALL from
+  legitimate `hermes`-resident lanes (operator main session, kanban
+  architect/orchestrator runs, builtin-memory deltas). **0 true strays** —
+  no mirrors required on that pass.
+- Subsequent OPERATOR RULING (same run, later): FRESH START on memory banks —
+  legacy banks (incl. `hermes` main) go read-only-archive; ratified banks
+  carry forward and repopulate naturally. Cutover plan:
+  `docs/FRESH-BANK-CUTOVER.md` (t_0fbb3c61, operator GO pending; zero config
+  changes executed by that run).
 
 ---
 

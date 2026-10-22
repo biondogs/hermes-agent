@@ -10,6 +10,12 @@ operator GO. All inventory data was gathered read-only
 (profile scans + server API counts; raw evidence in the card's workspace:
 `profile_scan.json`, `discover_out.json`, `straws_win.json`).
 
+> **EXECUTED 2026-10-22 ~20:22Z — see "Execution outcome" appendix at the
+> bottom.** Operator GO (with modifications) landed on the card: default root
+> KEEPS `hermes` (row 1 dropped); rows 2-7 + 8-10 executed and verified.
+> The tables below remain the *plan as ratified*; the appendix records what
+> actually ran.
+
 ---
 
 ## 1. Inventory — every profile and its CURRENT effective bank
@@ -176,3 +182,66 @@ content, so rollback is complete and lossless.
 5. Acknowledge accepted cold-starts: orchestrator/architect/worker/research/
    distiller/root-assistant all start with empty recall; they repopulate from
    live usage only.
+
+---
+
+## Appendix — Execution outcome (2026-10-22 ~20:22-20:45Z, t_0fbb3c61 run 2)
+
+Operator GO received on the card after the block: *"Leave the default on the
+large original bank, and cold start on any new currently slim board banks…"* —
+row 1 DROPPED (no `hb-main`; default root keeps `hermes` as its LIVE bank,
+operator-ratified end state), rows 2-7 + 8-10 EXECUTED.
+
+**Executor:** `/local/projects/software-co/scripts/fresh_bank_cutover_converge.py`
+(idempotent, dry-run first: 15 planned actions, then `--apply`: 15 applied).
+Backups (all 9 touched files):
+`~/kanban-backups/fresh-bank-cutover-20261022T202128Z/`.
+
+### Bank creation (server-side PUT upsert, HTTP 200 ×6, mission set on each)
+
+| Bank | fact_count at verification | Canary verdict |
+|---|---|---|
+| `hb-orchestrator` | 3 | PASS (retain landed; recall returns marker, 3 hits) |
+| `hb-architect` | 3 | PASS (3 / 3) |
+| `hb-kanban-worker` | 3 | PASS (3 / 3) |
+| `hb-research` | 3 | PASS (3 / 8) |
+| `hb-distiller` | 4 | PASS — note: the distiller model *believed* it had no memory tool, but its session's auto-retain pipeline still banked the canary (which is the actual mechanism being verified) |
+| `hb-sampling-test` | 3 | PASS (3 / 9) |
+
+### Config flips (rows 2-7) + .env-pin normalization (rows 8-10)
+
+- 6 × `hindsight/config.json` `bank_id` + `banks{}` block flipped `hermes` →
+  new bank. `hermes -p <profile> config check` PASS on all 6.
+- 3 × butler `.env` `HINDSIGHT_BANK_ID` commented out (g02/swco/sjproto;
+  config.json carrier governs — pin-wins landmine disarmed). `config check`
+  PASS ×3; butler bank totals unchanged (20/39/28) post-normalization.
+
+### Verification (§5 gates applicable now)
+
+1. ✅ Conformance: all 9 touched profiles `config check` PASS; no profile
+   other than the default root points at `hermes` anymore.
+2. ✅ Retain canaries (live-lane, not synthetic): fresh one-shot
+   `hermes -p <profile> chat -q` per profile; each session's auto-retain
+   landed its `FBC22-CANARY-<profile>` document ONLY in the new bank.
+3. ✅ Recall canaries: `POST …/memories/recall` on each new bank returns the
+   marker facts.
+4. ⏳ 24h deathwatch on `hermes` (minus the default-lane traffic, which is now
+   legitimate): park for the follow-up disposition card.
+5. ✅ Live-run evidence: canary documents carry real session metadata
+   (document ids, e.g. hb-orchestrator canary doc of 2026-10-22 ~20:29Z).
+6. ✅ Receipts on card t_0fbb3c61.
+
+**Operational finding (verified by experiment):** a retain issued ~21s after
+the config flip from an ALREADY-RUNNING session still landed in `hermes`
+(document 4231a8ce…, 20:22:13Z) — running sessions cache their bank at
+startup. Fresh processes pick up the new bank immediately (all six one-shots
+correct). Gateway reload / restart of long-lived sessions is the operator's
+call and was NOT performed, per directive. Affected long-lived consumers to
+eventually reload: kanban-orchestrator, kanban-board-architect, kanban-worker,
+research, distiller, sampling-test (dispatcher-spawned workers are fresh
+processes and already correct; only persistent/interactive sessions of these
+profiles would lag).
+
+**Disposition state:** NO deletes executed anywhere. `hermes-general` + frozen
+per-board banks detached-read-only; `hermes` live for default root only.
+The future DELETE decision remains a separate operator card, unchanged.

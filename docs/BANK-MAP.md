@@ -24,20 +24,27 @@ There is no `~/.hindsight/config.json` on this host — that hop in the
 client-side default chain is absent.
 
 **Server**: `http://ga01:8888` (`mode: local_external`) — the aistack Hindsight
-instance, 16 banks as of 2026-10-22.
+instance, 25 banks as of 2026-10-22 (post FRESH-BANK-CUTOVER GO execution).
 
 ---
 
 ## 1. Intended banks per profile family
 
-### Host/root + default-board lanes → bank `hermes`
-The shared general bank for host-level and cross-board agent work.
+### Root/default lane → bank `hermes` (operator-ratified end state)
 - `default` (root home `~/.hermes`) — root `hindsight/config.json`, bank `hermes`.
-- `kanban-board-architect`, `kanban-orchestrator`, `kanban-worker`
-- `research`
-- `sampling-test` (test lane, hermes is acceptable; no isolation requirement)
-- `distiller` (cross-board curator; hindsight tools surfaced manually
-  (memory_enabled: false), bank `hermes` correct when used)
+  **Operator GO 2026-10-22 (FRESH-BANK-CUTOVER):** the default root assistant
+  KEEPS the large original `hermes` bank as its LIVE bank — this is the ratified
+  end state for this lane, not drift. `hermes` is NOT an archive.
+
+### Kanban core / specialist lanes → role-separated `hb-*` banks (cutover executed 2026-10-22)
+Fresh-start banks per operator GO (choice A minus hb-main); deliberately empty
+at creation, repopulate from live runs only:
+- `kanban-orchestrator` → `hb-orchestrator`
+- `kanban-board-architect` → `hb-architect`
+- `kanban-worker` → `hb-kanban-worker`
+- `research` → `hb-research`
+- `distiller` → `hb-distiller`
+- `sampling-test` → `hb-sampling-test` (throwaway test lane, safe to delete freely)
 
 ### Board worker/orchestrator lanes → per-FAMILY specialist banks (ratified, deliberate)
 Specialist banks are **intentional** (operator 2026-10-22): the same family
@@ -70,8 +77,10 @@ over config.json (#5171) and re-route the butler into a shared bank.
 - `g02-butler`, `swco-butler`, `sjproto-butler` → banks `g02-butler`,
   `swco-butler`, `sjproto-butler` (provisioned t_02de9dff BUTLERS-STAGE-3,
   2026-10-22; banks created server-side, canary retain/recall receipted;
-  `config.json` and the `.env` `HINDSIGHT_BANK_ID` pin carry the SAME bank —
-  the agreeing-pair form ratified for stage-3 per card body spec #3)
+  **2026-10-22 FRESH-BANK-CUTOVER rows 8-10:** the `.env`
+  `HINDSIGHT_BANK_ID` agreeing-pair pins were commented out (config.json
+  carrier governs, pin-wins landmine disarmed); config check PASS and bank
+  totals unchanged post-normalization)
 - future butlers (`sj-butler` for the production skipjack board if stood up):
   same pattern → `<slug>-butler`
 
@@ -86,12 +95,19 @@ specialist banks above. Exception: none today.
   historical, read-only value.
 - The per-board summary banks above participate in this category.
 
-### Live-state verification (2026-10-22 ~20:30Z, run of t_0fbb3c61 BANK-TRIAGE-MIRROR-2)
-Server-side readback after the .env-pin fix and the butler SOUL cutover:
+### Live-state verification (updated 2026-10-22 ~20:45Z — FRESH-BANK-CUTOVER GO EXECUTED, run of t_0fbb3c61)
+Server-side readback after the .env-pin fix, the butler SOUL cutover, AND the
+operator-GO'd fresh-bank cutover execution:
 - **Butler banks all non-empty and accumulating** (live retain working,
-  by-design butler-operational content only; no migration into them needed):
+  by-design butler-operational content only; `.env` pins now removed on
+  g02/swco/sjproto — config.json carrier governs, totals unchanged):
   `g01-butler` 37 · `swco-butler` 39 · `sjproto-butler` 28 · `gaudi-butler` 30
   · `g02-butler` 20 nodes.
+- **New role-separated banks LIVE and canary-verified** (created 2026-10-22,
+  fresh start, each with a bank mission; live-lane canary retain + recall
+  verified per profile, fresh one-shot sessions): `hb-orchestrator` 3 ·
+  `hb-architect` 3 · `hb-kanban-worker` 3 · `hb-research` 3 · `hb-distiller` 4 ·
+  `hb-sampling-test` 3 nodes (canary content only, by design).
 - **Per-board summary banks frozen** since pass-1 (t_2e99dfb6), unchanged:
   `gaudi` 125 · `gargantua01` 18 · `gargantua02` 14 · `skipjack` 6 ·
   `skipjack-prototype` 6 (non-destructive ruling holds).
@@ -100,11 +116,22 @@ Server-side readback after the .env-pin fix and the butler SOUL cutover:
   legitimate `hermes`-resident lanes (operator main session, kanban
   architect/orchestrator runs, builtin-memory deltas). **0 true strays** —
   no mirrors required on that pass.
-- Subsequent OPERATOR RULING (same run, later): FRESH START on memory banks —
-  legacy banks (incl. `hermes` main) go read-only-archive; ratified banks
-  carry forward and repopulate naturally. Cutover plan:
-  `docs/FRESH-BANK-CUTOVER.md` (t_0fbb3c61, operator GO pending; zero config
-  changes executed by that run).
+- **OPERATOR RULING + GO (2026-10-22, both lands on t_0fbb3c61):** FRESH START
+  on memory banks. Executed: 6 new role-separated banks created + 6 profiles
+  flipped (rows 2-7) and 3 butler `.env` pins normalized (rows 8-10);
+  default root KEEPS `hermes` as its live bank (row 1 dropped — ratified end
+  state). NO deletes anywhere; `hermes-general` and the frozen per-board
+  summary banks stay detached-read-only indefinitely (`hermes` itself remains
+  a LIVE bank — its only writer now is the default root lane); re-delete
+  decision is a future separate operator card. Rollback:
+  `~/kanban-backups/fresh-bank-cutover-20261022T202128Z/`
+  (all 9 touched files, timestamped copies; restore = copy back).
+  **Known caveat (verified by experiment this run):** running sessions cache
+  their bank at startup — a retain issued ~21s after the config flip from a
+  pre-existing session still landed in `hermes`. Fresh processes pick up the
+  new bank immediately (all six canary one-shots landed correctly). Gateway
+  reload/restart of long-lived sessions remains the operator's call (NOT done,
+  per directive).
 
 ---
 

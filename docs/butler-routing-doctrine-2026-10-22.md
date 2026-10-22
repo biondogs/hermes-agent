@@ -57,9 +57,8 @@ When the operator messages a butler a work request for its board, the butler:
 It does NOT implement the work. Butler SOULs also carry the escalation law:
 - **Cross-board / meta / fleet-authority requests →** reply exactly
   `route this to the default orchestrator` — do not act.
-- **Housekeeping (archive/delete/unarchive) →** acknowledge, do not attempt, reply that
-  housekeeping routes to the default orchestrator (see §5 — this is a tool-layer gap, not a
-  butler defect; butlers are terminal-less by design and Hermes has no kanban_archive tool).
+- **Housekeeping with a card to stamp (card archive/delete) →** the butler ACTS in-tool (since 2026-10-22, t_aabdf078): comments `HOUSEKEEPING: archive — <reason>` on that exact card, tells the operator the nightly ARCHIVE-GC sweeper archives it by morning (urgent → default orchestrator immediately), and a later `HOUSEKEEPING: cancel` comment on the same card prevents the sweep.
+- **Housekeeping with no card to stamp (board unarchive/import) →** acknowledge, do not attempt, reply that housekeeping routes to the default orchestrator (see §5 — tool-layer gap; butlers are terminal-less by design and Hermes has no kanban_archive tool).
 
 Worker SOULs (53 profiles) now carry a **Board Discipline** section: explicit-`board=` writes,
 follow-ups on the assigned card's board only, no chat intake of new operator requests, and
@@ -89,8 +88,21 @@ card **create** (with assignee + parents), managed-board **list**, **show**, **c
 
 | Gap | Status | Escalation |
 |---|---|---|
-| No `kanban_archive` tool in Hermes — archive is CLI-only, butlers are terminal-less by design (live evidence: g01-butler created+assigned+blocked test card t_0a8bbc03 but could not archive it; orchestrator CLI-closed it, verified archived 2026-10-22 15:5x) | CONFIRMED LIVE (operator report, this card) | housekeeping requests → default orchestrator |
+| No `kanban_archive` tool in Hermes — archive is CLI-only, butlers are terminal-less by design (live evidence: g01-butler created+assigned+blocked test card t_0a8bbc03 but could not archive it; orchestrator CLI-closed it, verified archived 2026-10-22 15:5x) | CONFIRMED LIVE (operator report, this card) | card archive/delete → butler `HOUSEKEEPING: archive` stamp + nightly ARCHIVE-GC sweeper (bridge until kanban_archive ships); unarchive/import → default orchestrator |
 | Kanban tool layer accepts a foreign `board=` (no tool-layer fence) — SOUL + description guardrails are the active fence, verified refusing pre-call on all five; dispatcher pinning remains structural for spawned workers | architect finding (BUTLER-VERIFY Check 3, BLOCK-PASS) | guardrail + fail-loud conventions; treat as upstream gap |
+
+**ARCHIVE-GC bridge (LIVE 2026-10-22, card t_aabdf078):** gap 1 above is now mitigated end-to-end. Nightly sweeper
+`~/.hermes/scripts/archive_gc.py` (cron `be9cc3360254`, 21:30 ET; log
+`~/.hermes/kanban/archive-gc.log`) scans every board DB for `HOUSEKEEPING: archive` comments,
+honors a later `HOUSEKEEPING: cancel` on the same card, accepts stamps ONLY from authors
+ending `-butler` or equal to `default`, never touches `running` cards, caps at 20 archives per
+run, and receipts each archive with an `ARCHIVE-GC:` comment before archiving. Butler SOULs now
+carry the active stamp protocol (marker: `Card Housekeeping via ARCHIVE-GC Stamp`), converged
+by `scripts/archive_gc_butler_converge.py` (this script, grep-guarded, idempotent;
+pre-mutation backups in `backups/archive-gc-butler-wiring-2026-10-22/pre/`).
+**SELF-RETIRING:** the whole bridge — sweeper cron, script, and the SOUL protocol sections —
+retires together once upstream ships a real `kanban_archive` tool; the upstream feature request
+stays recorded (below).
 
 **Recorded for operator decision — NOT implemented** (upstream Hermes feature requests):
 1. A **scoped `kanban_archive` tool** (or per-profile housekeeping allowlist) so butlers can do

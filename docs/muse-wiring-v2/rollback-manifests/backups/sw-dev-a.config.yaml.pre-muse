@@ -1,0 +1,98 @@
+model:
+  default: qwen38-flash-fp8
+  provider: custom:LiteLLM
+  max_tokens: 65536
+  context_length: 262144
+agent:
+  description: Implementer lane A. Ships features and fixes in git worktrees per spec (code plus unit tests plus changelog entry, one logical change per commit). Runs own tests before handoff.
+  max_turns: 200
+  reasoning_effort: medium
+  disabled_toolsets:
+    - computer_use
+    - delegation
+    - discord
+    - discord_admin
+    - feishu_doc
+    - feishu_drive
+    - homeassistant
+    - image_gen
+    - spotify
+    - tts
+    - video
+    - video_gen
+    - x_search
+    - yuanbao
+auxiliary:
+  vision:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  compression:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  web_extract:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  approval:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  mcp:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  title_generation:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  memory_query_rewrite:
+    model: qwen38
+    reasoning_effort: none
+    provider: custom:LiteLLM
+  tts_audio_tags:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  skills_hub:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  triage_specifier:
+    model: glm53
+    provider: custom:LiteLLM
+  kanban_decomposer:
+    model: glm53
+    provider: custom:LiteLLM
+  profile_describer:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+  curator:
+    model: qwen38-flash-fp8
+    provider: custom:LiteLLM
+onboarding:
+  seen:
+    tool_progress_prompt: true
+providers:
+  litellm:
+    api: https://orb.arch.jhu.edu/v1
+    name: LiteLLM
+    api_key: ${LITELLM_API_KEY}
+    models:
+      glm53:
+        context_length: 1000000
+      qwen38-flash-fp8:
+        context_length: 262144
+      qwen38:
+        context_length: 1000000
+    ssl_verify: false
+    transport: chat_completions
+_config_version: 51
+memory:
+  provider: hindsight
+  memory_enabled: true
+  user_profile_enabled: true
+plugins:
+  enabled:
+    - hindsight
+  disabled: []
+
+approvals:
+  deny:
+    - 'git push --force*'
+    - 'git reset --hard*'
+    - 'rm -rf /*'
+    - 'rm -rf ~/*'

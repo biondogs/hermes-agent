@@ -130,8 +130,8 @@ pre-mutation backups in `backups/butler-routing-2026-10-22/pre/`) — script fil
 
 SOUL.md is read at session start (`prompt_builder.load_soul_md`), and the skill copy loads per
 session. Long-lived gateway sessions serving the five butlers and the default profile will
-keep their pre-doctrine prompts until their sessions reset (idle reset at 4h) **or** the
-gateway is restarted. **Restart is deliberately left to the operator** (restarts kill in-flight
+keep their pre-doctrine prompts until their sessions reset (daily at 04:00 per
+`session_reset: at_hour: 4`, or 7 days idle) **or** the gateway is restarted. **Restart is deliberately left to the operator** (restarts kill in-flight
 workers). Profiles needing a reload to pick the doctrine up immediately: **g01-butler,
 g02-butler, gaudi-butler, swco-butler, sjproto-butler, default**. Workers pick the SOUL change
 up on their next dispatch (fresh process per card) — no restart needed.

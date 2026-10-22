@@ -67,7 +67,13 @@ butler memories stay isolated, never in shared banks. The `.env`
 over config.json (#5171) and re-route the butler into a shared bank.
 - `g01-butler` → bank `g01-butler` (retrofix receipted on t_fd8ca6f0)
 - `gaudi-butler` → bank `gaudi-butler` (receipted on t_fd8ca6f0)
-- future `swco-butler`, `sjproto-butler`, etc.: same pattern → `<slug>-butler`
+- `g02-butler`, `swco-butler`, `sjproto-butler` → banks `g02-butler`,
+  `swco-butler`, `sjproto-butler` (provisioned t_02de9dff BUTLERS-STAGE-3,
+  2026-10-22; banks created server-side, canary retain/recall receipted;
+  `config.json` and the `.env` `HINDSIGHT_BANK_ID` pin carry the SAME bank —
+  the agreeing-pair form ratified for stage-3 per card body spec #3)
+- future butlers (`sj-butler` for the production skipjack board if stood up):
+  same pattern → `<slug>-butler`
 
 ### Per-board seeded summary banks (`gargantua01`, `gargantua02`, `gaudi`, `skipjack`, `skipjack-prototype`)
 Created 2026-10-12 by the board-migration seeder (seed-banks2.py) as

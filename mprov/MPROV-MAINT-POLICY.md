@@ -5,6 +5,18 @@ owners of the mprov stack; upstream maintainer is **uberlinuxguy**
 (org: `mprov-ng`). These rules bind every card in this wave and any future
 mprov work until the operator amends them.
 
+## Amendments
+
+- **2026-10-23 — Rule A standing line changed (operator amendment, kanban
+  t_9e433953).** The required standing line on mprov commits/PRs is now
+  exactly `Assisted by JoeBot`. The previous required line
+  `Assisted by AI` is **retired**: an artifact carrying the old line is a
+  **violation to be amended** (edit the commit message / PR description to
+  carry the new line), not a valid variant co-existing with it. Everything
+  else is unchanged: Rule A's bidirectional scope (ALL mprov repos only;
+  NEVER any other repo), Rule B (`uberlinuxguy` reviewer), and Rule C
+  (distillation standard).
+
 ## Scope — what "mprov repos" means
 
 Exactly these four products (fork side and upstream side both in scope):
@@ -16,13 +28,13 @@ Exactly these four products (fork side and upstream side both in scope):
 | scripts | `biondogs/mprov_scripts` | `mprov-ng/mprov_scripts` |
 | mash CLI | `biondogs/mash` | `mprov-ng/mash` |
 
-## Rule A — "Assisted by AI" attribution line
+## Rule A — "Assisted by JoeBot" attribution line
 
 EVERY commit message AND every PR description touching an mprov repo (fork
 or upstream side) MUST include the exact line:
 
 ```
-Assisted by AI
+Assisted by JoeBot
 ```
 
 Scope is bidirectional and absolute:

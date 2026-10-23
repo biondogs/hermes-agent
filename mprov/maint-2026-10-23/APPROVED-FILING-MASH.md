@@ -26,7 +26,7 @@ body and backtick expression renders as a template, invisibly — the API key in
 config is readable from the payload.
 evidence: src/mash/app.py:467-473 — renderString builds a plain jinja2
 Environment(loader=BaseLoader, autoescape=False) and calls from_string().render();
-used by precmd (:648) and do_endforeach (:430). Execution-verified at the pin: a
+used by precmd (:648) and do_endforeach (:430). Execution-verified at commit 36b6a5e: a
 __class__/__mro__ payload returned 513 reachable subclasses; a __globals__ payload
 returned the platform string.
 root cause: Untrusted script text treated as a trusted template; Jinja2 is
@@ -35,8 +35,7 @@ proposed fix: Render with jinja2.sandbox.SandboxedEnvironment (safe filters, no
 attribute-walking into unsafe internals) and document that let/foreach only
 interpolate variables.
 severity: S2 — silent full-privilege execution from the shared script format;
-escalates to S1 if mash scripts are ever fetched or executed remotely (SCR-009
-conditional-severity precedent).
+escalates to S1 if mash scripts are ever fetched or executed remotely.
 ```
 
 ### MASH-102 — labels: `bug,s3-robustness,review-found`
@@ -65,7 +64,7 @@ Title: `[S4] Plugin output and plugin help bypass the shell's redirectable stdou
 ```text
 symptom: Plugin output and plugin help cannot be captured: backtick capture
 (`let x=`bmc help power``) yields an empty variable, and quiet script mode still emits
-plugin help to the terminal. Execution-verified at the pin: do_help put the connect
+plugin help to the terminal. Execution-verified at commit 36b6a5e: do_help put the connect
 docstring on the shell's stdout but echoed the argument to process stdout; plugin
 help bypasses the shell's stream entirely.
 evidence: src/mash/app.py:132-146 (do_help prints directly);

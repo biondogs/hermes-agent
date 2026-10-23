@@ -29,7 +29,7 @@ proposed fix: Write to a root-only directory created mode 700 with files 600 (or
 operator-configured persistent destination) and verify the tarball's permissions.
 severity: S2 — any local account on the control-center host harvests fleet-wide BMC
 credentials. Larger blast radius than fork issue #14 (different script, different
-root cause — not a duplicate). Source-verified by the adjudicator at eb80617.
+root cause — not a duplicate). Source-verified at eb80617.
 ```
 
 ### SCR-023 — labels: `bug,s3-robustness,review-found`
@@ -42,7 +42,7 @@ emergency mode; a fstab merely mentioning /export/data in a comment or stale ent
 silently skips the needed mount so /data never mounts.
 evidence: image-gen/setup_data_share_mount.sh:23 —
 `grep -qF '/export/data' /etc/fstab || echo "…" >> /etc/fstab`. Both failure modes
-verified by execution with the script's exact logic at the pin; the line was
+verified by execution with the script's exact logic at commit eb80617; the line was
 introduced by upstream fix 56e1991.
 root cause: Fixed-string substring match for idempotence, plus append without
 ensuring the previous line ends with a newline.

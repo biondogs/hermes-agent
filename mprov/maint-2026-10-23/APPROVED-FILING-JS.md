@@ -30,8 +30,8 @@ add-self-to-jobservers patch, so the version mismatch condition (line 137) stays
 on every pass.
 proposed fix: Set imgVersions[image] = imageData['version'] after a successful peer
 pull, write the file, then run the same addjs patch as the equal-version branch.
-severity: S2 — wrong steady-state behavior in ordinary operation. Source-verified by
-the adjudicator at 00d00bfd.
+severity: S2 — wrong steady-state behavior in ordinary operation. Source-verified
+at 00d00bfd.
 ```
 
 ### JSR2-02 — labels: `bug,s2-functional,review-found`

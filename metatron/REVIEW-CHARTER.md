@@ -9,6 +9,8 @@ Charter authored: 2026-10-23 (kanban t_cef0727b, sw-pm).
 Companion documents (same directory):
 - INVENTORY.md — branch inventory, per-branch health table, foundational
   concept with source citations. Read first.
+- OPERATOR-DIRECTION.md — locked operator decisions from intake Q&A
+  (2026-10-23). Binding; supersedes any charter caveat it closes.
 
 ## 1. Product under review
 
@@ -56,21 +58,21 @@ Anti-inflation rules (adjudication enforces):
 
 ## 3. Issue taxonomy
 
-Intended label set (mirrors mprov): one type (`bug` XOR `enhancement`, both
-already exist on the fork) + one severity (`s1-blocker`, `s2-functional`,
-`s3-robustness`, `s4-hygiene`) + `review-found`. The four severity labels and
-`review-found` DO NOT YET EXIST on biondogs/metatron — creating them is an
-upstream write and is OUT of scope for the review phase; it needs a separate
-operator-gated card before any filing phase. During the review phase findings
-live in registers only, so taxonomy is enforced at register-schema level.
+Label taxonomy (mirrors mprov): one type (`bug` XOR `enhancement`) + one
+severity (`s1-blocker`, `s2-functional`, `s3-robustness`, `s4-hygiene`) +
+`review-found`. **OPERATOR DECISION Q7=c (2026-10-23, OPERATOR-DIRECTION.md
+§2.8): there is NO filing phase — findings registers feed the rewrite backlog
+directly.** GitHub labels on biondogs/metatron are never created and never
+used; taxonomy is enforced at register-schema level only (every finding
+carries its type + severity fields in the YAML register).
 
 ## 4. Per-branch review scope
 
 ### 4.1 master (v1 line) — harvest + health
 - Core pipeline & agents (`src/metatron/pipeline/`, `agents/` — 18 files):
   stage model rigidity (fixed-order, no back-edges — see INVENTORY §3 audit
-  answers), metadata bleed between stages (existing issue #57 — verify vs
-  current HEAD before re-filing).
+  answers), metadata bleed between stages (existing issue #57 — record a
+  still-open/fixed verdict vs current HEAD; no re-filing, Q7=c).
 - RAG subsystem (`rag/` — 11 files): vector-store resource leaks (#44),
   SQL injection via collection_name (#33), non-deterministic embeddings
   (#49), silent zero-vector fallbacks (#45).

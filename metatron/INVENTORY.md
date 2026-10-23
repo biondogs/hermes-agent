@@ -48,10 +48,11 @@ zero references in software-co management repo before this intake).
 | dependabot/* (5 open PR branches) | — | Jul | — | mixed | PR #29 open since 2026-07-11 (12 prod bumps) — dep debt |
 
 **Operator's "v1 and v2":** they are BRANCHES in the one repo, not tags or
-repos. "v1" is not a branch name — `master` is the only v1 candidate (v0.4.0).
-`v2` is a real branch with its own design docs and an open PR #69. Caveat for
-the operator: the *newest* work (GUI Phase 2) lives on neither — it is on
-`feature/gui-editor`.
+repos. "v1" is not a branch name — `master` is the only v1 candidate (v0.4.0);
+operator confirmed this reading via Q1 answers (see OPERATOR-DIRECTION.md).
+`v2` is a real branch with its own design docs and an open PR #69 (kept as
+source material, not merged). The *newest* work (GUI Phase 2) lives on neither
+— it is on `feature/gui-editor`, operator-confirmed IN scope (Q1).
 
 ## 3. Foundational concept (with sources)
 
@@ -106,4 +107,10 @@ master since: BibTeX/LaTeX escaping (#74/#56 equivalents), safe-tar (#28 via
 ## 4. Review-phase receipts index
 
 - Charter: `metatron/REVIEW-CHARTER.md` (this dir), commit sha in card handoff.
-- Reviewer label set NOT yet created on fork (upstream write — operator gate).
+- Operator direction: `metatron/OPERATOR-DIRECTION.md` (this dir) — locked
+  Q1–Q8 decisions, 2026-10-23.
+- "v1 and v2" RESOLVED by operator (Q1–Q3): master = v1 line, `v2` branch =
+  v2 line, `feature/gui-editor` IN scope as third source; all three are
+  down-selection material for a greenfield rewrite (name `metatron` kept).
+- Reviewer label set: never to be created — Q7=c closed the filing gate as
+  moot; registers feed the rewrite backlog directly.

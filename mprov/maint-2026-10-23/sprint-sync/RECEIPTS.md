@@ -40,11 +40,14 @@ filing):
 
 | Repo | filed-upstream | skipped-covered | added-to-project | fork-dupes-deleted | fork pending-delete (blocked) |
 |---|---|---|---|---|---|
-| mprov_control_center | 5 (#309–#313) | 6 | 0 | 6 | 5 |
-| mprov_jobserver | 11 (#156–#166) | 3 | 0 | 3 | 11 |
-| mprov_scripts | 8 (#20–#27) | 0 | 0 | 0 | 8 |
-| mash | 3 (#18–#20) | 0 | 0 | 0 | 3 |
-| **Total** | **27** | **9** | **0 — CAPABILITY WALL** | **9** | **27** |
+| mprov_control_center | 5 (#309–#313) | 6 | 5 | 11 | 0 |
+| mprov_jobserver | 11 (#156–#166) | 3 | 11 | 14 | 0 |
+| mprov_scripts | 8 (#20–#27) | 0 | 8 | 8 | 0 |
+| mash | 3 (#18–#20) | 0 | 3 | 3 | 0 |
+| **Total** | **27** | **9** | **27** | **36** | **0** |
+
+(Final column/status per resume run 104 — see “Project 9 — RESOLVED” and
+“Resume run 104” below. Attempt-1 snapshot recorded 0 added / 27 pending.)
 
 Filed IDs→numbers: `sprint-sync/relay-receipts.json` (each entry: id, repo,
 URL, labels, body sha256[:12], readback status, originating fork issue).
@@ -62,27 +65,36 @@ s1-blocker, s3-robustness`; JS +`review-found, s3-robustness, s4-hygiene`;
 SCR +`review-found, s2-functional, s3-robustness, s4-hygiene`;
 MASH + same four. `bug`/`enhancement` already existed everywhere.
 
-## Project 9 — CAPABILITY FAILURE (blocks completion)
+## Project 9 — CAPABILITY FAILURE (attempt 1) → RESOLVED (resume run 104)
 
-`gh project item-add 9 --owner mprov-ng --url <first-filed-url>` →
+Attempt 1: `gh project item-add 9 --owner mprov-ng --url <first-filed-url>` →
 `error: your authentication token is missing required scopes [read:project]`
 (token biondogs scopes: gist, read:org, repo, workflow; no GH_TOKEN in env;
 `gh auth refresh` is browser-interactive → not possible headless).
 `gh project field-list 9` fails identically, so the Todo option-name
-verification never ran. **0 of 27 filed issues are in project 9.** Fix:
-`gh auth refresh -s read:project,project`, then relay-resume adds all 27 +
-completes the gated deletions below. Receipt:
-`sprint-sync/project-denial-receipt.json`.
+verification never ran. **0 of 27 filed issues were in project 9 at block
+time.** Receipt: `sprint-sync/project-denial-receipt.json`.
+
+Resolution 2026-10-23T15:21Z: operator ran `gh auth refresh`; token now
+carries `project` scope (live-verified via `gh auth status`). All 27 filed
+issues added to org project 9 “2026 Issue Sprint”; read-back `item-list`
+shows **27/27 present, Status=Todo** (project items 120 → 147, exactly +27).
+Todo option name verified via `field-list` first: Status field
+`PVTSSF_lADOBiDZ0c4BoTUYzhm0DR4`, option `Todo` (`f75ad846`). Per-issue
+receipts: `project9-adds.log` (add rc=0 ×27) +
+`project9-additions.json` (url, item id, project_status=Todo).
 
 ## Fork wave-2 cleanup
 
 9 twin-covered fork issues DELETED after covering twins verified OPEN in the
 same pass (`sprint-sync/twin-cleanup-receipt.json`): biondogs CC #48–#53,
-JS #32–#34. 27 relayed-issue fork copies NOT yet deleted — per butler ruling
-deletion is gated on the mprov-ng twin being live AND added to project 9;
-project writes are wall-blocked. Pending deletions: biondogs CC #44–#47,
-#54; JS #35–#45; SCR #22–#29; MASH #31–#33. Oct-15 wave fork issues:
-untouched. Fork repos untouched. Fork branches with open PRs untouched.
+JS #32–#34. 27 relayed-issue fork copies were NOT deleted in attempt 1 (gated
+on project-9 add per butler ruling); all 27 deleted in resume run 104 after
+their mprov-ng twins were verified live-open immediately before each
+deletion and confirmed added to project 9 — see “Resume run 104” below and
+`sprint-sync/fork-deletions.log`. Total fork wave-2 cleanup: 36/36 deleted.
+Oct-15 wave fork issues: untouched. Fork repos untouched. Fork branches with
+open PRs untouched.
 
 ## Housekeeping comment count (butler note)
 
@@ -104,3 +116,43 @@ its own card to land or retire. Fresh clones now at
 CC `6afb414`, JS `b07393d`, SCR `eb80617`, MASH `36b6a5e`.
 `MPROV-MAINT-PINS.md` updated; `MPROV-MAINT-POLICY.md` amended with the
 venue rule (verbatim operator wording included).
+
+## Resume run 104 (2026-10-23T15:16–15:22Z, sw-pm) — final close-out
+
+Context: attempt 2 (run 101) crashed on an owner-gateway disconnect ~3 min
+in with outcome unknown; butler directive for the retry was reconcile-first,
+not blind-replay.
+
+1. **Reconciliation.** Token scopes re-verified live (`gh auth status`:
+   `project` now present — operator `gh auth refresh` confirmed). Full
+   `gh project item-list 9 --owner mprov-ng` snapshot (120 items at start):
+   **0 of our 27 were present — run 101 landed zero project writes before
+   dying.** Fork-side check: all 27 gated fork issues still existed.
+   Nothing partial to dedupe.
+2. **Project 9 adds.** Todo option verified first via `field-list`
+   (Status = `PVTSSF_lADOBiDZ0c4BoTUYzhm0DR4`, option `Todo` = `f75ad846`).
+   27/27 `item-add` rc=0 (`project9-adds.log`); read-back: 27/27 present
+   with Status=Todo, project total 120 → 147 (`project9-additions.json`,
+   `project9-after.tsv`).
+3. **Gated fork deletions.** Pair list built from
+   `relay-receipts.json` FILED entries; matched the butler ratification list
+   exactly (CC #44–47,#54; JS #35–45; SCR #22–29; MASH #31–#33). Per pair:
+   twin re-verified OPEN via REST immediately before delete; delete rc=0;
+   post-check HTTP 410 “This issue was deleted”. 27/27 (`fork-deletions.log`,
+   pairs in `delete-pairs.tsv`). Two guard passes executed zero writes first
+   (gh CLI quirks: `issue view -q` needs `--json` in this build; REST
+   `.state` is lowercase) — fail-safe skips, no unintended mutations; third
+   pass ran the real loop. Fork wave-2 total now 36/36 deleted (9 attempt-1 +
+   27 run-104).
+4. **Scope guards held:** no re-filing, 9 skips untouched, Oct-15 wave
+   untouched, no code, no PRs. Zero writes beyond the 27 project adds + 27
+   gated deletions + this receipts commit.
+
+Note (cross-card): the archived-clone `rescue/js29`/`rescue/js30` work above
+has since landed as mprov-ng/mash PRs #21/#22 (t_e5c9b3a3, commit 2b2fc1c) —
+that "needs its own card" line is historical.
+
+Receipt file hashes (sha256): project9-adds.log
+8bfecbd0ce0f79ad163e02448c48ddd791b3daff7df5d64f3c01042cced6960e;
+fork-deletions.log 84c4d65721ec66474ca5ba57d60695a2bc8aab85b8082677be9523cbc1157192;
+project9-after.tsv 482d6efe84e0ea7f3ab5d56d6dcc82aa567bd552911d0f4481031e2e4f55cc00.

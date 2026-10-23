@@ -7,6 +7,13 @@ mprov work until the operator amends them.
 
 ## Amendments
 
+- **2026-10-23 — CONTRIBUTOR ALLOWLIST added (operator ruling, kanban
+  t_508b58a2).** The only contributors to the main `mprov-ng` repos are
+  `biondogs` and Jason Williams on either of his two accounts
+  (`uberlinuxguy`, `jhujasonw`); everyone else is external. See the
+  **Contributor allowlist** section below for logins, evidence, the
+  consequence clause, and the new pre-publication identity check.
+
 - **2026-10-23 — Filing venue changed: mprov-ng repos + project 9 (operator
   ruling, kanban t_2beff046).** ISSUE filings target the live
   **`mprov-ng/<repo>`** repositories — never the biondogs forks — and every
@@ -33,6 +40,44 @@ mprov work until the operator amends them.
   else is unchanged: Rule A's bidirectional scope (ALL mprov repos only;
   NEVER any other repo), Rule B (`uberlinuxguy` reviewer), and Rule C
   (distillation standard).
+
+## Contributor allowlist (2026-10-23, operator ruling)
+
+The **only** contributors accepted on the main `mprov-ng` repos are:
+
+| GitHub login | Principal | Flag | Evidence (read-only queries, 2026-10-23) |
+|---|---|---|---|
+| `biondogs` | Sepp / Joseph Biondo (operator) | **CONFIRMED** | Our filing identity; commits + merged PRs in all four repos (e.g. CC `c44d5aa`, mash `36ef120`). |
+| `uberlinuxguy` | Jason Williams | **CONFIRMED** | GitHub profile `name: "Jason Williams"`, email `uberlinuxguy@gmail.com`; 113 merged PRs across the four repos since 2026-09-01; sole org-side committer on main. |
+| `jhujasonw` | Jason Williams (second account) | **CONFIRMED** | GitHub profile `name: "Jason Williams"`; mprov-ng org member; commit-trail email `jasonw@jhu.edu` on ~30 authored commits incl. recent Sep-2026 merges; 19 merged CC PRs + 1 jobserver PR. |
+
+Both Jason Williams accounts are CONFIRMED, not INFERRED: identical real
+name on both GitHub profiles, both active as mprov-ng org members with
+merged contribution history. If the operator ever disputes this mapping,
+amend this section — do not silently reinterpret it.
+
+### Consequence clause
+
+PRs and issues authored by accounts **outside** this allowlist are not
+accepted: they are closed unmerged without fix-phase work. Prior
+application: `mprov-ng/mash#21` and `#22` closed unmerged 2026-10-23 per
+the no-external-submissions directive (kanban t_395c5db2).
+
+### Filing-lane identity check (added to the standing pre-publication checks)
+
+Before ANY future commit, PR, or issue on an `mprov-ng` repo, the lane
+MUST verify:
+
+1. `gh api user --jq .login` returns an allowlisted login, AND
+2. the commit author identity (name + email that will be published) maps
+   to an allowlisted account.
+
+If either check fails, do not publish — block the card instead.
+
+### Reviewer rule — unchanged
+
+Rule B stands as written: `uberlinuxguy` is requested as reviewer on
+every mprov PR.
 
 ## Scope — what "mprov repos" means
 

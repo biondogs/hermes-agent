@@ -1,0 +1,37 @@
+# FORK-ENDGAME Phase-0 receipts — 2026-10-23 (t_afc04040, sw-pm)
+
+Operator ruling (option A): delete biondogs/{mprov_control_center,mprov_jobserver,mprov_scripts,mash}
+after (1) four mprov-ng docs PRs resolve and (2) rescues below complete. Scope guard: NEVER biondogs/hermes-agent (#143372).
+
+## Phase 0 — fork open-PR inventory (verified live 2026-10-23 ~14:56Z via `gh pr list --state open`)
+
+| Fork PR | Fix | Verdict | Evidence |
+|---|---|---|---|
+| biondogs/mash#29 (base master; head rahul05ranjan/mash@fe8c8f3, branch fix/config-shapes-clean-error) | accept mapping-shaped configs, clean config errors | **LIVE → migrate** | `git apply --check` CLEAN on mprov-ng/mash master @ 36b6a5e; upstream `load_config` still iterates parsed YAML unconditionally (ValueError on mapping-shaped config) — verified at 36b6a5e. Related fork issue biondogs/mash#13 (MASH-013, adjudicated 2026-10-23); NO mprov-ng twin exists (mash upstream open issues are only #18/#19/#20). Original author Rahul Ranjan — preserve authorship on rebase. |
+| biondogs/mash#30 (head rahul05ranjan/mash@f6a0374, branch fix/foreach-hash-items) | foreach stops dropping list items after a hash | **LIVE → migrate** | `git apply --check` CLEAN on 36b6a5e; upstream `do_foreach` path unchanged since Oct-15 pin. Adjudication hunk-check: covers none of MASH-101/102/103 — untracked upstream. |
+| biondogs/mprov_control_center#2 (copilot/fix-7acece7a…, Feb 2026) | "security + code quality" hygiene | **DEAD / superseded — no PR** | Branch targets code that no longer exists upstream: systems/api/api.py + api2.py deleted, views_noath.py already renamed views_noauth upstream, settings.py already reads SECRET_KEY from env; net 12-file diff conflicts 12/12 files on upstream main @ 6afb414. Underlying themes tracked upstream via filed issues (e.g. CC-051/rootpw). Full net diff archived: rescue/cc2-net.diff in this card's workspace. |
+| biondogs/mprov_control_center#3 (copilot/add-wysiwyg-text-editor) | WYSIWYG (CKEditor) feature | **DEAD — no PR** | Feature request, not a rescue fix: 1218 files / ~21k insertions, mostly vendored CKEditor statics, based Feb-2026 (upstream 301 commits ahead). If operator wants WYSIWYG, re-file as a clean upstream feature request — do not migrate this branch. |
+| biondogs/mprov_jobserver | — | 0 open PRs (re-checked) | |
+| biondogs/mprov_scripts | — | 0 open PRs (re-checked) | |
+
+Rescue patches preserved byte-exact at this card's workspace: `rescue/fix29.patch`, `rescue/fix30.patch`, `rescue/cc2-net.diff`.
+Migration PRs for the two LIVE mash fixes: card MPROV-M-RESCUE-MASH (sw-dev-a).
+
+## Phase 1 — Oct-15 wave status (in progress this run)
+- 120/120 Oct-15 fork issues enumerated (SETUP snapshot: CC #4–#43 = 40, JS #1–#31 = 31, SCR #1–#21 = 21, mash #1–#28 = 28). All exist ONLY on forks — vanish on deletion; survivors must be re-filed at mprov-ng.
+- CC disposition complete (t_2eae052c attached `cc-oct15-dispositions.md`, at upstream pin d7c2094): 18 fixed-upstream w/ refs, 18 still-present, 4 partial (#5, #29, #35, #39), 0 regressions.
+- JS/SCR/MASH disposition inputs: sweeps t_a43d97bb (JS: fork product tree identical to Oct-15 base), t_412f1a54 (SCR), t_1ee1e0e4 (MASH @ upstream pin 36b6a5e).
+- Wave-2 upstream twins already filed at mprov-ng on 2026-10-23 (CC #309–#313, JSR2 twins incl. #141–#146/#155–#166, SCR #20–#27, MASH #18–#20); dedupe vs these is mandatory in the migration card.
+- Bulk filing + 120/120 coverage receipt: card MPROV-M-OCT15-MIGRATE (survivor count >15 ⇒ dedicated card per ruling).
+
+## Phase 2 — deletion gate: **NOT MET** (2026-10-23 14:59Z)
+- mprov-ng/mprov_jobserver#153 MERGED 14:22Z ✓
+- mprov-ng/mprov_control_center#307 MERGED 14:42Z ✓
+- mprov-ng/mprov_scripts#19 OPEN ✗
+- mprov-ng/mash#17 OPEN ✗
+- Phase 0: receipts above complete; mash rescue PRs pending (card open).
+- Phase 1: coverage receipt pending (card open).
+Successor poll card created (+24h). Deletion requires operator explicit GO comment; never touches biondogs/hermes-agent.
+
+## Ops note
+`/local/projects/mprov-maint/*` shared clones were re-provisioned by a concurrent lane mid-run (2026-10-23 ~14:57Z, upstream remote refs wiped). Rescue artifacts therefore pinned to SHAs + saved patch files, not local branches.

@@ -313,9 +313,29 @@ def _require_orchestrator_tool(tool_name: str) -> None:
 def _board(board: Optional[str], *, quiet_close: bool = False):
     """``with _board(slug) as (kb, conn)``; lazy import so the module loads in non-kanban
     contexts. ``board=None`` keeps the env/symlink resolution chain; an explicit slug
-    overrides it per call. ``quiet_close`` swallows close() errors (best-effort bridges)."""
+    overrides it per call — except for a session whose active profile pins a board
+    (``kanban.board`` in its config.yaml): the pin scopes the session to that board,
+    so unpinned calls resolve to it and an explicit *different* board is refused
+    (swco-butler misfiling incident, 2026-10-23 — the tool layer now fences
+    cross-board access for pinned profiles such as board butlers).
+    ``quiet_close`` swallows close() errors (best-effort bridges)."""
     from hermes_cli import kanban_db as kb
     from hermes_cli import kanban_db_connect as kbc
+    pin = kb.profile_board_pin()
+    if pin:
+        wanted: Optional[str] = None
+        if board is not None:
+            try:
+                wanted = kb._normalize_board_slug(board)
+            except ValueError as e:
+                raise _Reject(f"invalid board slug: {e}")
+        if wanted is not None and wanted != pin:
+            raise _Reject(
+                f"this session is pinned to kanban board {pin!r} by its profile "
+                f"config (kanban.board); the tool layer refuses targeting "
+                f"{wanted!r}. Cross-board work belongs to the owning board's "
+                f"butler/profile, or to an unpinned profile (default)."
+            )
     conn = kbc.connect(board=board)
     try:
         yield kb, conn

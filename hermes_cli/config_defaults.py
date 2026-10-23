@@ -1867,6 +1867,18 @@ DEFAULT_CONFIG = {
     # promotes dependency-satisfied todos to ready, and fires `hermes -p <assignee> chat -q ...` per
     # claimable task. Run ONE dispatcher per profile; two on the same kanban.db race for claims.
     "kanban": {
+        # PROFILE-SCOPED board pin (swco-butler→gargantua02 misfiling incident,
+        # 2026-10-23): read RAW from the active profile's config.yaml by
+        # hermes_cli.kanban_db.profile_board_pin(), never from this merged
+        # default — "" / absent = no pin, resolution as before. Set on a
+        # one-board profile (e.g. a board butler:
+        # `hermes -p swco-butler config set kanban.board software-co`) so its
+        # pin-less chat/CLI sessions resolve unpinned kanban calls to that
+        # board and tools/kanban_tools fences every other board. Environment
+        # pins (dispatcher-spawned workers) and machine flows still outrank
+        # it. Never set this in the root config — the root profile's unpinned
+        # sessions must keep the shared current-board pointer.
+        "board": "",
         # Auto-subscribe the originating gateway/TUI session to completion + block events when
         # kanban_create is called from a session with a persistent delivery channel. Disable for
         # profiles that prefer explicit kanban_notify-subscribe calls per task.

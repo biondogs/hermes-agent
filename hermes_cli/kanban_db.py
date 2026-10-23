@@ -420,8 +420,74 @@ def current_board_path() -> Path:
     return kanban_home() / "kanban" / "current"
 
 
+# Per-profile board pin: ``kanban.board`` in the ACTIVE PROFILE's config.yaml,
+# resolved through the (multiplex-safe, ContextVar-based) hermes home and
+# mtime-cached. A gateway chat / CLI session that runs as a profile carries no
+# HERMES_KANBAN_* pins (the daemon strips those at boot so one session cannot
+# retarget another), so before this pin it fell through to the shared
+# ``<root>/kanban/current`` pointer — which a single ``boards switch`` can leave
+# aimed at an unrelated board fleet-wide (swco-butler → gargantua02 misfiling
+# incident, 2026-10-23). Env pins (dispatcher-spawned workers) and machine
+# context overrides still rank above the profile pin; explicit user intent
+# (board= argument, CLI --board) outranks everything and is fenced separately
+# at the tool layer for pinned profiles.
+_PROFILE_BOARD_PIN_CACHE: dict[str, tuple[int, Optional[str]]] = {}
+
+
+def profile_board_pin() -> Optional[str]:
+    """Active profile's board pin from its config.yaml ``kanban.board`` key.
+
+    ``None`` whenever the active profile has no pin, the value is malformed,
+    or the pinned board is missing/archived — callers fall through to the
+    shared resolution chain. Deliberately reads the raw YAML (not the merged
+    config) so a profile-scoped ``kanban:`` key can never interact with the
+    root dispatcher config's ``kanban:`` section, and never raises: pin
+    resolution must not crash unpinned callers. Never resolves through
+    ``HERMES_KANBAN_HOME`` — the profile home and the board root are
+    independent by design (see :func:`kanban_home`).
+    """
+    try:
+        from hermes_constants import get_hermes_home
+        home = Path(get_hermes_home())
+    except Exception:
+        return None
+    key = str(home)
+    cfg = home / "config.yaml"
+    try:
+        mtime = cfg.stat().st_mtime_ns
+    except OSError:
+        _PROFILE_BOARD_PIN_CACHE.pop(key, None)
+        return None
+    cached = _PROFILE_BOARD_PIN_CACHE.get(key)
+    if cached is not None and cached[0] == mtime:
+        return cached[1]
+    slug: Optional[str] = None
+    try:
+        # hermes_yaml (ruamel) is the declared YAML policy module; bare PyYAML was
+        # never a dependency and vanishes from fresh `uv sync` venvs (found in rebase).
+        from hermes_yaml import safe_load
+        raw = safe_load(cfg.read_text(encoding="utf-8-sig")) or {}
+        if isinstance(raw, dict):
+            section = raw.get("kanban")
+            val = section.get("board") if isinstance(section, dict) else None
+            if isinstance(val, str) and val.strip():
+                try:
+                    slug = _normalize_board_slug(val)
+                except ValueError:
+                    slug = None
+    except Exception:
+        slug = None
+    if slug and (not board_exists(slug) or read_board_metadata(slug).get("archived")):
+        # Same fall-through contract as a stale `current` file / env slug:
+        # a deleted or archived pin never resurrects a dead board (#43243).
+        slug = None
+    _PROFILE_BOARD_PIN_CACHE[key] = (mtime, slug)
+    return slug
+
+
 def get_current_board() -> str:
-    """Active slug: context override -> ``HERMES_KANBAN_BOARD`` -> ``<root>/kanban/current``
+    """Active slug: context override -> ``HERMES_KANBAN_BOARD`` -> the active
+    profile's config pin (``kanban.board``) -> ``<root>/kanban/current``
     (only while that board exists) -> ``DEFAULT_BOARD``. A malformed/stale slug
     falls through — the dispatcher must never crash on a hand-edited file."""
     def _existing(candidate: str) -> Optional[str]:
@@ -447,6 +513,9 @@ def get_current_board() -> str:
         found = _existing(candidate)
         if found:
             return found
+    pinned = profile_board_pin()
+    if pinned:
+        return pinned
     try:
         f = current_board_path()
         if f.exists():

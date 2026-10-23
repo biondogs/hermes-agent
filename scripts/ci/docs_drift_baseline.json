@@ -74,6 +74,7 @@
   "gateway.restart_loop_guard.max_restarts",
   "gateway.restart_loop_guard.window_seconds",
   "gateway.scale_to_zero.idle_timeout_minutes",
+  "kanban.board",
   "kanban.notify_in_gateway",
   "kanban.worker_log_backup_count",
   "kanban.worker_log_rotate_bytes",

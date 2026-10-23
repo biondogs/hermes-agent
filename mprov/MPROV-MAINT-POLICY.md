@@ -31,6 +31,14 @@ mprov work until the operator amends them.
   **read-only legacy**: do not delete them, do not file there, do not touch
   the Oct-15 wave fork issues, and do not touch any fork branch carrying an
   open PR (deleting a fork kills its open PR).
+- **2026-10-23 — PR TRACKING added (operator ruling, kanban t_3dde7503).**
+  Every sprint fix PR must carry a plain exact `Fixes #N` line, its issue's
+  project-9 item must sit **In Progress** while the PR is open, and the
+  publication read-back must verify all four gates (PR open, reviewer,
+  Fixes ref, issue-item column). PRs are tracked **through the issue**: do
+  not create PR-level project-9 items. See the **PR tracking** section
+  below for the full contract and the no-automation finding behind it.
+
 - **2026-10-23 — Rule A standing line changed (operator amendment, kanban
   t_9e433953).** The required standing line on mprov commits/PRs is now
   exactly `Assisted by JoeBot`. The previous required line
@@ -112,6 +120,53 @@ Scope is bidirectional and absolute:
 
 Every PR opened against an mprov repo (fork-side or `mprov-ng` side)
 requests **`uberlinuxguy`** as reviewer at PR creation time.
+
+## PR tracking (2026-10-23, operator ruling — kanban t_3dde7503)
+
+A fix PR is tracked **through the issue it fixes**. The project board
+tracks issues, not PRs: **do not create PR-level project-9 items**
+(operator ruling 2026-10-23; the maintainer's own hand-curated PR items on
+that board are his practice, not ours to imitate).
+
+Every sprint fix PR must satisfy, **at publication time**:
+
+1. **Exact Fixes line.** The PR body carries a plain, machine-checkable
+   line `Fixes #N` on its own line (N = the `mprov-ng` issue being fixed).
+   Plain text only — no bold/decoration wrapping the keyword. Check:
+   `gh pr view <PR> --repo mprov-ng/<repo> --json body -q .body |
+   grep -qm1 -E '^Fixes #[0-9]+$'`.
+   If a body edit is needed after creation, use a REST
+   `PATCH /repos/<owner>/<repo>/pulls/<n>` — `gh pr edit --body-file`
+   silently no-ops on the gh version installed on this host (2.45.0).
+2. **Issue-item column.** The fixed issue's project-9 item is moved to
+   **In Progress** the moment the PR is published (column model: filed →
+   **Todo**; fix PR open → **In Progress**; merged or closed-with-issue-
+   resolved → **Done**; no open PR → back to **Todo**). The lane publishing
+   the PR performs this move itself — see the no-automation finding below;
+   never assume the board moves on its own. When the merge is confirmed,
+   the lane moves the item to **Done** and re-reads it — do not rely on
+   issue auto-close to move the board item (no board automation has ever
+   been observed firing unattended).
+3. **Publication read-back (all four gates, by live re-fetch after the PR
+   is opened):** (i) PR state is open, (ii) `uberlinuxguy` reviewer is
+   attached, (iii) the live body still carries the exact `Fixes #N` line,
+   and (iv) the issue's project-9 item reads **In Progress** (e.g.
+   `gh project item-list 9 --owner mprov-ng --limit 500 --format json`,
+   match the issue URL and re-read its Status). A publication is not
+   complete until all four read green.
+
+**No-automation finding (2026-10-23 audit, t_3dde7503):** project #9 has no
+automation that puts PRs on the board. All 23 PR-type items on it were
+created by hand by `uberlinuxguy` on 2026-10-23 (GraphQL `creator` is his
+human account; several created seconds before he clicked merge, e.g.
+mprov_jobserver#192 at 20:38:04Z, merged 20:38:16Z), while our 25 open
+sprint PRs with valid `Fixes` refs produced zero board items on their own.
+GitHub's native merge automation (close-the-issue via Fixes) does fire —
+mprov_jobserver#171 auto-closed 2s after merge — but no board movement has
+ever been observed without the maintainer at the keyboard. Therefore the
+fix-lane publication checklist itself owns gates 2 and 4 (move it yourself,
+read it back); this section exists because that contract step was missing
+when mprov_jobserver#192 opened untracked.
 
 ## Rule C — Issue-filing distillation standard
 

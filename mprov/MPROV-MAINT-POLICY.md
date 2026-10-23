@@ -64,6 +64,15 @@ mprov work until the operator amends them.
   NEVER any other repo), Rule B (`uberlinuxguy` reviewer), and Rule C
   (distillation standard).
 
+- **2026-10-23 — FILING STYLE added (operator directive, kanban
+  t_302a8bf1).** Our filings adopt the maintainer's look for STRUCTURE and
+  FORMAT; content standards are untouched (operator carve-out verbatim:
+  *"we don't need to loosen our standards"*). See the **Filing style**
+  section below; normative templates in `filing-templates/`; the empirical
+  profile and side-by-side delta in `FILING-STYLE-PROFILE.md`; the
+  open-filing restyle PROPOSAL (awaiting operator GO — nothing live edited
+  yet) in `FILING-STYLE-REMEDIATION-2026-10-23.md`.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -216,6 +225,133 @@ reading. Hard requirements for every new issue body:
   root cause / proposed fix / severity**.
 - No filler: no preamble, no restating the title, no boilerplate sections
   beyond the five above.
+
+**2026-10-23 amendment (kanban t_302a8bf1):** the five Rule-C items are now
+a CONTENT checklist every body must satisfy, not visible labels. Their
+EXPRESSING FORM is governed by the **Filing style** section below — Rule C
+wording survives for content; where this section and Rule C read as
+requiring the old visible-label layout, this section wins on form only.
+
+## Filing style (2026-10-23, operator directive — kanban t_302a8bf1)
+
+Operator directive: *"Feedback from Jason is that he doesn't like the
+formatting of many of our issue and PR comments … make our filings look more
+like his."* Carve-out: *"we don't need to loosen our standards."* Norm =
+`uberlinuxguy`'s current (Oct-2026) filing pattern, measured across all four
+mprov-ng repos (`FILING-STYLE-PROFILE.md`). This section governs STRUCTURE
+and FORMAT; it never licenses dropping content.
+
+### Invariants (style never touches these)
+
+Rule A trailer (`Assisted by JoeBot`, exact, last line of PR bodies and in
+every commit); Rule B reviewer; contributor allowlist + pre-publication
+identity check; PR tracking with the five-gate publication read-back; the
+`Fixes #N` machine check (`^Fixes #N$`, plain, own line); distiller
+pre-publication text gate + leak-scan law; evidence quality (defect-site
+`file:line` at the verified sha; test counts + base comparison); ≤150-word
+cap on our filing bodies (a CAP, not a target — prefer his brevity: his
+issue median is 41 words); lanes never merge.
+
+### The style rules (FS)
+
+- **FS1 — issue titles.** Declarative failure sentences for defects ("X
+  never reboots: Y unmounts /proc before Z"), imperative for enhancement
+  asks ("Let job servers claim a job atomically"). ≤14 words. NO `[Sx]` or
+  any tag prefix, no trailing period. The `fact: mechanism` colon form is
+  encouraged where it reads naturally.
+- **FS2 — issue bodies.** Prose paragraphs only: no `## ` headings, and
+  NEVER the visible five-label block (`Symptom:` / `Evidence:` / `Root
+  cause:` / `Proposed fix:` / `Severity:` as labels). The five contents must
+  still all be present and findable. At most two bold mini-labels from his
+  vocabulary — `**Fix:**` (his workhorse, use it), `**Likely cause:**`,
+  `**To decide:**`, `**Coordinate with:**`, `**Check first:**`,
+  `**Needs verification:**`. House addition kept by carve-out: a final
+  `Severity: S<N> — <one-clause impact>` line (he weaves impact into prose;
+  our severity must stay explicit — flagged conflict #3 below). Close with
+  his provenance/footer line ("Found while … for #N. Related: #N."); a real
+  "Migrated from …" provenance may live in that sentence.
+- **FS3 — evidence.** Defect-site evidence as a commit-pinned permalink
+  (`https://github.com/mprov-ng/<repo>/blob/<sha>/<path>#L<n>`) preferred,
+  backticked `file:line` at minimum; verbatim error/diff output in a fenced
+  block whenever the claim is about observed output. Never paraphrase an
+  error, never invent a receipt.
+- **FS4 — references.** Same-repo `#N`; cross-repo `mprov-ng/<repo>#N`;
+  coordination phrasing from his set: `Related:`, `Blocked by … That has to
+  reach … before this merges.`, `Depends on #N. Merge that first.`,
+  `Unblocks …`. No internal ids/vocabulary anywhere (leak-scan unchanged).
+- **FS5 — PR bodies.** `Fixes #N` as a plain standalone line at the TOP
+  (position adopted from his `Closes #N.` first line; our line carries no
+  period because the gate greps `^Fixes #N$` — the one visible deviation,
+  deliberate). Then narrative prose (what was true before / what changes /
+  why safe). Sections are content-named (`## Change`, `## Testing`,
+  `## Merge notes`, `## API clients`, `## The bug` / `## The fix`) or absent
+  entirely for small fixes — never `## Summary`/`## Description` filler,
+  never bold-label blocks. Test evidence in his sentence shape: "Full
+  suite: N passed, N xfailed, in the image built from this branch. Against
+  main's code, N of the new tests fail." A before/after table is his idiom
+  for behavior matrices. Last line `Assisted by JoeBot`.
+- **FS6 — thread comments.** One paragraph, stance/verdict first, first
+  person, mirror the counterpart's length; receipts inline (backticked
+  sha/file/test names, `#N` refs, one or two numbers) instead of bulleted
+  receipt lists; bullets only for ≥3 true list items; asks worded as
+  preferences ("I would prefer … because …"). Same evidence law as filings:
+  tested verdicts only. Verify your own comment landed via API read-back.
+- **FS7 — labels/milestones.** Issue-object labels stay the filing lane's
+  (`bug|enhancement` + `review-found` + `sN-*`) — tooling metadata under
+  operator adjudication (conflict #2); severity appears NOWHERE ELSE but
+  the body's Severity line. Milestones: none (matches his current practice).
+- **FS8 — corpus boundaries.** Closed issues/PRs, all historical comments
+  (ours and his), commits, and project-9 rows are never restyled. Restyle
+  applies to NEW filings immediately and to OPEN filings only per the
+  operator-GO'd tiers in `FILING-STYLE-REMEDIATION-2026-10-23.md`.
+
+### Distiller text-gate ruleset for mprov (amends the t_03720d69 conventions)
+
+Provenance note: card t_03720d69 no longer resolves in any board DB
+(pruned); its conventions are restated from gate precedent and extended
+here. Every future mprov text-gate card MUST carry as inputs: this section,
+`filing-templates/` (all three), and the draft under review. The gate checks,
+in order:
+
+1. Leak-scan + sanitizer (unchanged): no `t_` ids, board/gate vocabulary,
+   agent/persona tells, internal hostnames, cross-board detail.
+2. Rule A: exact `Assisted by JoeBot` line present and LAST in PR bodies
+   (and in commits); Rule B reviewer requested.
+3. `Fixes #N` present as first-line plain standalone match `^Fixes #N$`.
+4. Rule C contents: all five (symptom / evidence / root cause / proposed
+   fix / severity) semantically present — as prose under FS2, NOT as labels.
+5. Style (FS rules): no `[Sx]`/tag title prefix; no visible five-label
+   block; no generic `##` headings; section names content-shaped or absent;
+   ≤2 bold mini-labels, allowed vocabulary only; body ≤150 words.
+6. Evidence: defect-site `file:line`/permalink present; error output quoted
+   verbatim where the claim is observational; test evidence has counts AND
+   a base comparison.
+7. Tone/voice: single human first-person voice, stance-first,
+   length-mirroring (FS6 for comments).
+8. Verdict mechanics unchanged: PASS, or REJECT with numbered, verifiable
+   findings; one edit + re-gate, second failure stops the lane.
+
+### Flagged conflicts (kept on record — operator adjudicates; nothing silently dropped)
+
+1. **Rule C's mandated visible structure vs his label-free prose.** Kept
+   both: contents mandatory (Rule C), form his (FS2). Gate enforces presence
+   of contents, not labels.
+2. **Severity taxonomy (`[Sx]` + `sN-*` + `review-found` labels) vs his
+   label-free recent issues (0 labels, 76 filings).** Title token dropped
+   (pure look). Object labels KEPT by default — board/worklist tooling joins
+   on them; if the operator rules they're also off-style, removal is one
+   batch of label PATCHes.
+3. **Explicit `Severity: S<N>` body line vs his prose-impact weaving.**
+   Kept as a house addition under the carve-out (severity must be
+   checkable); placed as his footer-style sentence so the look stays his.
+4. **≤150-word cap vs his PR median 157 words.** Cap kept per carve-out;
+   our PRs will read marginally terser than his own — deliberate.
+5. Profile-side sync of this ruleset into the `distiller` profile's SOUL
+   checklist is profile meta-work: routed to a `kanban-board-architect`
+   card (PM lacks that authority); until then, gate cards carry this
+   section as an input per the ruleset above — the distiller reads repo
+   etiquette files FRESH by design, so the policy file is canonical.
+
 
 ## Rule D — Review-phase scope (this wave)
 

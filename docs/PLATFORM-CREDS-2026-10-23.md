@@ -80,3 +80,21 @@ vulnerabilities in web/ui-tui workspaces (out of scope per card: wait for upstre
 ## Gateway restart + post-restart verification
 
 (Section appended by restart-verify script — see below.)
+
+### Post-restart verification (appended 2026-10-23T15:41:24-04:00 by transient unit `platform-creds-restart-verify`)
+
+```
+restart: rc=1 ; gateway after restart: active ; adapters-settled=0
+CHECKS: slack_socket=0 slack_conn=0 slack_disabled=0 slack_auth=0 tg_default=0 tg_butlers=0 dupwarn=0 gateway_up=0
+getme default: ok=true username=@hermes_m7pbhr5y3t7pndbd_bot
+getme g01-butler: ok=true username=@hermes_x7ekkuvwjfq65xc2_bot
+getme g02-butler: ok=true username=@hermes_e7qpgliym674gowu_bot
+getme gaudi-butler: ok=true username=@hermes_kjrlofdh4ufebfbt_bot
+getme sjproto-butler: ok=true username=@hermes_jwgdpmnxsr34d4gd_bot
+getme swco-butler: ok=true username=@hermes_gt7qqfll3hr3h3d7_bot
+getme kanban-stream: ok=true username=@ga01_kanbanops_23_bot
+doctor post-restart: Found 2 issue; 'both hold the same' count: 0
+VERDICT: FAIL
+```
+Full transcript: `~/kanban-backups/platform-creds-2026-10-23/restart-verify.log`;
+journal region: `journal-post-restart.txt`; doctor: `doctor-postrestart.txt`.

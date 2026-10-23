@@ -1,0 +1,201 @@
+{
+ "confirmed": [
+  "CC-001",
+  "CC-002",
+  "CC-004",
+  "CC-005",
+  "CC-006",
+  "CC-007",
+  "CC-010",
+  "CC-014",
+  "CC-023",
+  "CC-026",
+  "CC-027",
+  "CC-028",
+  "CC-031",
+  "CC-032",
+  "CC-033",
+  "CC-036",
+  "CC-038",
+  "CC-040",
+  "JS-001",
+  "JS-002",
+  "JS-003",
+  "JS-004",
+  "JS-005",
+  "JS-007",
+  "JS-009",
+  "JS-010",
+  "JS-013",
+  "JS-014",
+  "JS-015",
+  "JS-016",
+  "JS-017",
+  "JS-022",
+  "JS-023",
+  "JS-024",
+  "JS-025",
+  "JS-026",
+  "JS-027",
+  "JS-028",
+  "JS-030",
+  "SCR-001",
+  "SCR-003",
+  "SCR-004",
+  "SCR-005",
+  "SCR-006",
+  "SCR-007",
+  "SCR-008",
+  "SCR-009",
+  "SCR-010",
+  "SCR-011",
+  "SCR-012",
+  "SCR-013",
+  "SCR-014",
+  "SCR-015",
+  "SCR-016",
+  "SCR-017",
+  "SCR-018"
+ ],
+ "adopted": [
+  [
+   "SCR-019",
+   "Error messages print literal placeholder instead of exception detail",
+   "https://github.com/mprov-ng/mprov_scripts/issues/45"
+  ]
+ ],
+ "orphan_results": [],
+ "to_file": [
+  [
+   "SCR-020",
+   "mprov_scripts",
+   "Enable shellcheck for shell scripts in CI"
+  ],
+  [
+   "SCR-021",
+   "mprov_scripts",
+   "Rsync errors bypass the log file due to redirect order"
+  ],
+  [
+   "MASH-002",
+   "mash",
+   "Plugin dispatch mangles arguments containing the plugin name"
+  ],
+  [
+   "MASH-003",
+   "mash",
+   "BMC power commands fail unless mprovURL ends with a slash"
+  ],
+  [
+   "MASH-004",
+   "mash",
+   "BMC power commands give no success or failure feedback"
+  ],
+  [
+   "MASH-005",
+   "mash",
+   "Failed API calls leave stale MPROV_RESULT from the previous command"
+  ],
+  [
+   "MASH-006",
+   "mash",
+   "Pvar cannot print comma-separated variables with multi-character names"
+  ],
+  [
+   "MASH-007",
+   "mash",
+   "Malformed command arguments crash the entire shell with a traceback"
+  ],
+  [
+   "MASH-008",
+   "mash",
+   "API calls have no timeout and hang the shell indefinitely"
+  ],
+  [
+   "MASH-009",
+   "mash",
+   "Signal handlers swallow SIGINT and SIGTERM during hung requests"
+  ],
+  [
+   "MASH-010",
+   "mash",
+   "Error messages are written to stdout, polluting piped script output"
+  ],
+  [
+   "MASH-011",
+   "mash",
+   "Script mode always exits 0 regardless of command failures"
+  ],
+  [
+   "MASH-013",
+   "mash",
+   "Common config file shapes crash connect with raw tracebacks"
+  ],
+  [
+   "MASH-014",
+   "mash",
+   "Foreach silently drops list items containing a hash character"
+  ],
+  [
+   "MASH-015",
+   "mash",
+   "Dict-typed argument kills the whole interactive session"
+  ],
+  [
+   "MASH-016",
+   "mash",
+   "Unparseable query tokens are silently swallowed and sent anyway"
+  ],
+  [
+   "MASH-017",
+   "mash",
+   "Trailing ampersand on bmc commands silently disables the command"
+  ],
+  [
+   "MASH-018",
+   "mash",
+   "Connect silently ignores non-200 responses from the control center"
+  ],
+  [
+   "MASH-020",
+   "mash",
+   "Dead exception handler is defined but never installed"
+  ],
+  [
+   "MASH-021",
+   "mash",
+   "Changelog generator links to the mprov_jobserver repository"
+  ],
+  [
+   "MASH-022",
+   "mash",
+   "Bmc power help omits pxe and pxeefi actions supported by the server"
+  ],
+  [
+   "MASH-024",
+   "mash",
+   "Add machine-readable JSON output mode"
+  ],
+  [
+   "MASH-025",
+   "mash",
+   "Add dry-run mode to destructive verbs"
+  ],
+  [
+   "MASH-026",
+   "mash",
+   "Validate config file and warn about unknown keys"
+  ],
+  [
+   "MASH-027",
+   "mash",
+   "Bound dependency versions in requirements.txt"
+  ],
+  [
+   "MASH-028",
+   "mash",
+   "Add linting to CI"
+  ]
+ ],
+ "dup_titles": []
+}

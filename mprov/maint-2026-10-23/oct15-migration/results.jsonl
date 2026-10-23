@@ -1,0 +1,83 @@
+{"fid":"CC-001","repo":"mprov_control_center","title":"[S1] Any API key grants unrestricted read-write access to every model endpoint","url":"https://github.com/mprov-ng/mprov_control_center/issues/315"}
+{"fid":"CC-002","repo":"mprov_control_center","title":"[S1] SystemBMCDetailSerializer returns BMC passwords in cleartext via ?detail","url":"https://github.com/mprov-ng/mprov_control_center/issues/316"}
+{"fid":"CC-004","repo":"mprov_control_center","title":"[S1] Installers bake in admin:admin and changemenow default credentials","url":"https://github.com/mprov-ng/mprov_control_center/issues/317"}
+{"fid":"CC-005","repo":"mprov_control_center","title":"[S1] Unauthenticated register endpoint binds attacker MAC to systems","url":"https://github.com/mprov-ng/mprov_control_center/issues/318"}
+{"fid":"CC-006","repo":"mprov_control_center","title":"[S1] Unauthenticated image endpoints trust spoofable X-Forwarded-For","url":"https://github.com/mprov-ng/mprov_control_center/issues/319"}
+{"fid":"CC-007","repo":"mprov_control_center","title":"[S3] Authenticated system endpoints trust spoofable X-Forwarded-For","url":"https://github.com/mprov-ng/mprov_control_center/issues/320"}
+{"fid":"CC-010","repo":"mprov_control_center","title":"[S2] Unauthenticated GET permanently removes jobservers from images","url":"https://github.com/mprov-ng/mprov_control_center/issues/321"}
+{"fid":"CC-014","repo":"mprov_control_center","title":"[S2] NetworkInterface save silently overwrites user-set hostname","url":"https://github.com/mprov-ng/mprov_control_center/issues/322"}
+{"fid":"CC-023","repo":"mprov_control_center","title":"[S3] Installer continues after failing to disable netboot","url":"https://github.com/mprov-ng/mprov_control_center/issues/323"}
+{"fid":"CC-026","repo":"mprov_control_center","title":"[S3] Unguarded System/image pk lookups return 500 on unknown ids (powerstate, addjs)","url":"https://github.com/mprov-ng/mprov_control_center/issues/324"}
+{"fid":"CC-027","repo":"mprov_control_center","title":"[S3] Unauthenticated datamodel and status-changes endpoints leak internals","url":"https://github.com/mprov-ng/mprov_control_center/issues/325"}
+{"fid":"CC-028","repo":"mprov_control_center","title":"[S3] Runtime dependencies except Django remain fully unpinned","url":"https://github.com/mprov-ng/mprov_control_center/issues/326"}
+{"fid":"CC-031","repo":"mprov_control_center","title":"[S3] Model signals recover the request via stack-frame inspection","url":"https://github.com/mprov-ng/mprov_control_center/issues/327"}
+{"fid":"CC-032","repo":"mprov_control_center","title":"[S3] Unguarded request.data key access on jobservers/ostype register returns 500","url":"https://github.com/mprov-ng/mprov_control_center/issues/328"}
+{"fid":"CC-033","repo":"mprov_control_center","title":"[S3] Image slug regenerated on every save silently drops renames","url":"https://github.com/mprov-ng/mprov_control_center/issues/329"}
+{"fid":"CC-036","repo":"mprov_control_center","title":"[S4] No lint or static-analysis gate in CI","url":"https://github.com/mprov-ng/mprov_control_center/issues/330"}
+{"fid":"CC-038","repo":"mprov_control_center","title":"[S2] PATCH handler silently substitutes admin user for anonymous requests","url":"https://github.com/mprov-ng/mprov_control_center/issues/331"}
+{"fid":"CC-040","repo":"mprov_control_center","title":"[S1] Power endpoint hostname parameter is a substring match hitting wrong nodes","url":"https://github.com/mprov-ng/mprov_control_center/issues/332"}
+{"fid":"JS-001","repo":"mprov_jobserver","title":"[S1] Remove the committed mPCC API key from stack.env","url":"https://github.com/mprov-ng/mprov_jobserver/issues/167"}
+{"fid":"JS-002","repo":"mprov_jobserver","title":"[S1] Stop exposing the distro root password in process argv and daemon logs","url":"https://github.com/mprov-ng/mprov_jobserver/issues/168"}
+{"fid":"JS-003","repo":"mprov_jobserver","title":"[S1] Stop writing the fleet API key to world-readable files during provisioning","url":"https://github.com/mprov-ng/mprov_jobserver/issues/169"}
+{"fid":"JS-004","repo":"mprov_jobserver","title":"[S1] Do not execute an unverified binary fetched to world-writable tmp","url":"https://github.com/mprov-ng/mprov_jobserver/issues/170"}
+{"fid":"JS-005","repo":"mprov_jobserver","title":"[S1] Guard sweep cleanups so a mis-set image or repo directory cannot be wiped","url":"https://github.com/mprov-ng/mprov_jobserver/issues/171"}
+{"fid":"JS-007","repo":"mprov_jobserver","title":"[S2] Fix malformed job query that claims every pending job in the queue","url":"https://github.com/mprov-ng/mprov_jobserver/issues/172"}
+{"fid":"JS-009","repo":"mprov_jobserver","title":"[S2] Stop creating /etc/nologin before validation and leaking it on error paths","url":"https://github.com/mprov-ng/mprov_jobserver/issues/173"}
+{"fid":"JS-010","repo":"mprov_jobserver","title":"[S2] Propagate post-boot and image script failures instead of reporting success","url":"https://github.com/mprov-ng/mprov_jobserver/issues/174"}
+{"fid":"JS-013","repo":"mprov_jobserver","title":"[S2] Create the authorized_keys directory inside the image, not on the build host","url":"https://github.com/mprov-ng/mprov_jobserver/issues/175"}
+{"fid":"JS-014","repo":"mprov_jobserver","title":"[S2] Report the one-minute load average the field name promises","url":"https://github.com/mprov-ng/mprov_jobserver/issues/176"}
+{"fid":"JS-015","repo":"mprov_jobserver","title":"[S2] Fix repack_image so it does not destroy the image it repacks","url":"https://github.com/mprov-ng/mprov_jobserver/issues/177"}
+{"fid":"JS-016","repo":"mprov_jobserver","title":"[S3] Tolerate unset optional network fields in DHCP config generation","url":"https://github.com/mprov-ng/mprov_jobserver/issues/178"}
+{"fid":"JS-017","repo":"mprov_jobserver","title":"[S3] Check dnsmasq worker outcomes before marking jobs successful","url":"https://github.com/mprov-ng/mprov_jobserver/issues/179"}
+{"fid":"JS-022","repo":"mprov_jobserver","title":"[S3] Reap jobs orphaned in running state when a worker dies mid-job","url":"https://github.com/mprov-ng/mprov_jobserver/issues/180"}
+{"fid":"JS-023","repo":"mprov_jobserver","title":"[S3] Match the dnsmasq restart target precisely instead of killing by substring","url":"https://github.com/mprov-ng/mprov_jobserver/issues/181"}
+{"fid":"JS-024","repo":"mprov_jobserver","title":"[S3] Fix handler attribute reference that breaks high-load shedding in the webserver","url":"https://github.com/mprov-ng/mprov_jobserver/issues/182"}
+{"fid":"JS-025","repo":"mprov_jobserver","title":"[S3] Clean up image build bind mounts on failure and before archiving","url":"https://github.com/mprov-ng/mprov_jobserver/issues/183"}
+{"fid":"JS-026","repo":"mprov_jobserver","title":"[S3] Stop interpolating mPCC-sourced values into shell command strings","url":"https://github.com/mprov-ng/mprov_jobserver/issues/184"}
+{"fid":"JS-027","repo":"mprov_jobserver","title":"[S3] Close the file descriptor opened for connection-limit size checks","url":"https://github.com/mprov-ng/mprov_jobserver/issues/185"}
+{"fid":"JS-028","repo":"mprov_jobserver","title":"[S3] Send job timestamps in UTC as the code intends","url":"https://github.com/mprov-ng/mprov_jobserver/issues/186"}
+{"fid":"JS-030","repo":"mprov_jobserver","title":"[S4] No lint gate in CI","url":"https://github.com/mprov-ng/mprov_jobserver/issues/187"}
+{"fid":"SCR-001","repo":"mprov_scripts","title":"[S2] Ansible loops never execute: over-escaped jq program is a compile error","url":"https://github.com/mprov-ng/mprov_scripts/issues/28"}
+{"fid":"SCR-003","repo":"mprov_scripts","title":"[S2] Disk formatter crashes mounting non-RAID partitions: disk-level mount is None","url":"https://github.com/mprov-ng/mprov_scripts/issues/29"}
+{"fid":"SCR-004","repo":"mprov_scripts","title":"[S2] RAID build crashes: member disk id compared against disk slug string","url":"https://github.com/mprov-ng/mprov_scripts/issues/30"}
+{"fid":"SCR-005","repo":"mprov_scripts","title":"[S3] Unguarded cd before entity.json read leaves config variables empty","url":"https://github.com/mprov-ng/mprov_scripts/issues/31"}
+{"fid":"SCR-006","repo":"mprov_scripts","title":"[S3] Service install scripts continue after failed commands and report success","url":"https://github.com/mprov-ng/mprov_scripts/issues/32"}
+{"fid":"SCR-007","repo":"mprov_scripts","title":"[S3] Root fstab file deleted before rebuild with no failure isolation","url":"https://github.com/mprov-ng/mprov_scripts/issues/33"}
+{"fid":"SCR-008","repo":"mprov_scripts","title":"[S3] Fill-partition handling reads stale loop variable for filesystem checks","url":"https://github.com/mprov-ng/mprov_scripts/issues/34"}
+{"fid":"SCR-009","repo":"mprov_scripts","title":"[S3] BMC password passed on ipmitool command line is visible in process list","url":"https://github.com/mprov-ng/mprov_scripts/issues/35"}
+{"fid":"SCR-010","repo":"mprov_scripts","title":"[S3] BMC setup crashes with NameError when systembmcs request fails","url":"https://github.com/mprov-ng/mprov_scripts/issues/36"}
+{"fid":"SCR-011","repo":"mprov_scripts","title":"[S3] Post-boot python scripts exit 0 after reporting errors","url":"https://github.com/mprov-ng/mprov_scripts/issues/37"}
+{"fid":"SCR-012","repo":"mprov_scripts","title":"[S3] Backup script always reports success even when every dump failed","url":"https://github.com/mprov-ng/mprov_scripts/issues/38"}
+{"fid":"SCR-013","repo":"mprov_scripts","title":"[S3] BMC and InfiniBand IPs silently wrong when node IP misses mgmt prefix","url":"https://github.com/mprov-ng/mprov_scripts/issues/39"}
+{"fid":"SCR-014","repo":"mprov_scripts","title":"[S3] Node import writes BMC credentials to world-readable temp file","url":"https://github.com/mprov-ng/mprov_scripts/issues/40"}
+{"fid":"SCR-015","repo":"mprov_scripts","title":"[S3] Twelve shipped scripts missing from the mpcc_scripts manifest","url":"https://github.com/mprov-ng/mprov_scripts/issues/41"}
+{"fid":"SCR-016","repo":"mprov_scripts","title":"[S3] Hardcoded python3.8 site-packages path breaks Rocky 9 installs silently","url":"https://github.com/mprov-ng/mprov_scripts/issues/42"}
+{"fid":"SCR-017","repo":"mprov_scripts","title":"[S3] No guard against repartitioning the running OS disk","url":"https://github.com/mprov-ng/mprov_scripts/issues/43"}
+{"fid":"SCR-018","repo":"mprov_scripts","title":"[S4] Broken shebang in gpfs_mmsdrrestore.sh prevents direct execution","url":"https://github.com/mprov-ng/mprov_scripts/issues/44"}
+{"fid":"SCR-019","repo":"mprov_scripts","title":"[S4] Error messages print literal placeholder instead of exception detail","url":"https://github.com/mprov-ng/mprov_scripts/issues/45"}
+{"fid":"SCR-020","repo":"mprov_scripts","title":"[S4] Enable shellcheck for shell scripts in CI","url":"https://github.com/mprov-ng/mprov_scripts/issues/47"}
+{"fid":"SCR-021","repo":"mprov_scripts","title":"[S4] Rsync errors bypass the log file due to redirect order","url":"https://github.com/mprov-ng/mprov_scripts/issues/48"}
+{"fid":"MASH-002","repo":"mash","title":"[S2] Plugin dispatch mangles arguments containing the plugin name","url":"https://github.com/mprov-ng/mash/issues/23"}
+{"fid":"MASH-003","repo":"mash","title":"[S2] BMC power commands fail unless mprovURL ends with a slash","url":"https://github.com/mprov-ng/mash/issues/24"}
+{"fid":"MASH-004","repo":"mash","title":"[S2] BMC power commands give no success or failure feedback","url":"https://github.com/mprov-ng/mash/issues/25"}
+{"fid":"MASH-005","repo":"mash","title":"[S2] Failed API calls leave stale MPROV_RESULT from the previous command","url":"https://github.com/mprov-ng/mash/issues/26"}
+{"fid":"MASH-006","repo":"mash","title":"[S2] Pvar cannot print comma-separated variables with multi-character names","url":"https://github.com/mprov-ng/mash/issues/27"}
+{"fid":"MASH-007","repo":"mash","title":"[S3] Malformed command arguments crash the entire shell with a traceback","url":"https://github.com/mprov-ng/mash/issues/28"}
+{"fid":"MASH-008","repo":"mash","title":"[S3] API calls have no timeout and hang the shell indefinitely","url":"https://github.com/mprov-ng/mash/issues/29"}
+{"fid":"MASH-009","repo":"mash","title":"[S3] Signal handlers swallow SIGINT and SIGTERM during hung requests","url":"https://github.com/mprov-ng/mash/issues/30"}
+{"fid":"MASH-010","repo":"mash","title":"[S3] Error messages are written to stdout, polluting piped script output","url":"https://github.com/mprov-ng/mash/issues/31"}
+{"fid":"MASH-011","repo":"mash","title":"[S3] Script mode always exits 0 regardless of command failures","url":"https://github.com/mprov-ng/mash/issues/32"}
+{"fid":"MASH-013","repo":"mash","title":"[S3] Common config file shapes crash connect with raw tracebacks","url":"https://github.com/mprov-ng/mash/issues/33"}
+{"fid":"MASH-014","repo":"mash","title":"[S3] Foreach silently drops list items containing a hash character","url":"https://github.com/mprov-ng/mash/issues/34"}
+{"fid":"MASH-015","repo":"mash","title":"[S3] Dict-typed argument kills the whole interactive session","url":"https://github.com/mprov-ng/mash/issues/35"}
+{"fid":"MASH-016","repo":"mash","title":"[S3] Unparseable query tokens are silently swallowed and sent anyway","url":"https://github.com/mprov-ng/mash/issues/36"}
+{"fid":"MASH-017","repo":"mash","title":"[S3] Trailing ampersand on bmc commands silently disables the command","url":"https://github.com/mprov-ng/mash/issues/37"}
+{"fid":"MASH-018","repo":"mash","title":"[S4] Connect silently ignores non-200 responses from the control center","url":"https://github.com/mprov-ng/mash/issues/38"}
+{"fid":"MASH-020","repo":"mash","title":"[S4] Dead exception handler is defined but never installed","url":"https://github.com/mprov-ng/mash/issues/39"}
+{"fid":"MASH-021","repo":"mash","title":"[S4] Changelog generator links to the mprov_jobserver repository","url":"https://github.com/mprov-ng/mash/issues/40"}
+{"fid":"MASH-022","repo":"mash","title":"[S4] Bmc power help omits pxe and pxeefi actions supported by the server","url":"https://github.com/mprov-ng/mash/issues/41"}
+{"fid":"MASH-024","repo":"mash","title":"[S3] Add machine-readable JSON output mode","url":"https://github.com/mprov-ng/mash/issues/42"}
+{"fid":"MASH-025","repo":"mash","title":"[S3] Add dry-run mode to destructive verbs","url":"https://github.com/mprov-ng/mash/issues/43"}
+{"fid":"MASH-026","repo":"mash","title":"[S3] Validate config file and warn about unknown keys","url":"https://github.com/mprov-ng/mash/issues/44"}
+{"fid":"MASH-027","repo":"mash","title":"[S3] Bound dependency versions in requirements.txt","url":"https://github.com/mprov-ng/mash/issues/45"}
+{"fid":"MASH-028","repo":"mash","title":"[S4] Add linting to CI","url":"https://github.com/mprov-ng/mash/issues/46"}

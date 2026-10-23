@@ -1,0 +1,151 @@
+From bc9b22039bcb12e89244e21c5db5d8b0d522d314 Mon Sep 17 00:00:00 2001
+From: kanban-board-architect <kanban-board-architect@local>
+Date: Fri, 23 Oct 2026 16:36:04 +0000
+Subject: [PATCH] FIX2: structured-only error detection + retry-spam collapse
+ (local hotfix, card t_df30ec0c)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+D1: _is_error_result no longer substring-scans string results for
+'error'/'failed'/'traceback' — a short string mentioning them (browser_console
+'no JavaScript errors', log tails) false-positived as a failure. Errors are
+flagged ONLY from structured dict signals (result.error truthy, success is
+False, status in error/failed/failure); non-dict results are never errors.
+
+D2: push_error collapses consecutive identical failure lines into
+'<line> ×N' instead of appending one line per attempt (observed '❌ terminal
+failed' ×4 for one flaky command).
+
+Local hotfix per operator GO 2026-10-23; NOT pushed to origin
+(github.com/mbgulden/hermes-kanban-stream). Propagated to 57 profile copies
++ root install (all sha256-verified). See
+/local/projects/software-co/patches/REAPPLY-NOTES.md.
+
+Agent-Profile: kanban-board-architect
+Agent-Run: t_df30ec0c
+---
+ __init__.py         | 35 ++++++++++++++++++++++-------------
+ tests/smoke_test.py | 37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+), 13 deletions(-)
+
+diff --git a/__init__.py b/__init__.py
+index fee18c6..02d0f95 100644
+--- a/__init__.py
++++ b/__init__.py
+@@ -233,6 +233,7 @@ class _TaskStream:
+         self.last_edit = 0.0
+         self.last_think = 0.0
+         self.current_line = "💭 Thinking…"
++        self._error_repeat = 0          # consecutive-duplicate counter (push_error)
+         self.done = False
+         self.edit_count = 0
+         self.completion_tokens = 0
+@@ -419,8 +420,18 @@ class _TaskStream:
+ 
+     def push_error(self, line: str):
+         with self._lock:
+-            self.tool_history.append(line)
+-            self.current_line = line
++            last = self.tool_history[-1] if self.tool_history else ""
++            if last == line or (self._error_repeat > 1
++                                and last == "%s ×%d" % (line, self._error_repeat)):
++                # Retry spam collapse: the new line repeats the failure
++                # line directly above it, so replace it in place with
++                # "<line> ×N" instead of appending one line per attempt.
++                self._error_repeat += 1
++                self.tool_history[-1] = "%s ×%d" % (line, self._error_repeat)
++            else:
++                self._error_repeat = 1
++                self.tool_history.append(line)
++            self.current_line = self.tool_history[-1]
+         self.schedule_edit()
+ 
+     def finish(self, blocked: bool = False, summary: str = ""):
+@@ -475,19 +486,17 @@ def _arg_summary(args: Optional[Dict[str, Any]]) -> str:
+ 
+ 
+ def _is_error_result(result: Any) -> bool:
+-    if result is None:
++    if not isinstance(result, dict):
++        # Structured signals only. Never substring-scan string results
++        # for words like "error"/"failed"/"traceback": tool output that
++        # merely mentions them ("no JavaScript errors", a log tail, a
++        # search hit) false-positives as a failure.
+         return False
+     try:
+-        if isinstance(result, dict):
+-            # Key-based signals only: a substring scan over a dict result
+-            # false-positives on tool output that merely mentions errors
+-            # (a file read, a log tail, a search hit).
+-            if result.get("error") or result.get("success") is False:
+-                return True
+-            status = str(result.get("status", "")).lower()
+-            return status in ("error", "failed", "failure")
+-        s = str(result).lower()
+-        return ("error" in s or "failed" in s or "traceback" in s) and len(s) < 500
++        if result.get("error") or result.get("success") is False:
++            return True
++        status = str(result.get("status", "")).lower()
++        return status in ("error", "failed", "failure")
+     except Exception:
+         return False
+ 
+diff --git a/tests/smoke_test.py b/tests/smoke_test.py
+index 0441ccb..4b996e6 100644
+--- a/tests/smoke_test.py
++++ b/tests/smoke_test.py
+@@ -85,6 +85,18 @@ check("_is_error_result: success dict mentioning errors is not an error",
+       mod._is_error_result({"output": "0 errors found in log"}) is False)
+ check("_is_error_result: None is not an error",
+       mod._is_error_result(None) is False)
++check("_is_error_result: string result mentioning error is not an error",
++      mod._is_error_result("Error: no JavaScript errors found") is False)
++check("_is_error_result: traceback string is not an error",
++      mod._is_error_result("Traceback (most recent call last): boom") is False)
++check("_is_error_result: long log-tail string mentioning error is not an error",
++      mod._is_error_result("error " * 500) is False)
++check("_is_error_result: non-dict result (list) is not an error",
++      mod._is_error_result(["error", "failed"]) is False)
++check("_is_error_result: success=False dict is an error",
++      mod._is_error_result({"success": False, "error": None}) is True)
++check("_is_error_result: status 'failed' dict is an error",
++      mod._is_error_result({"status": "failed", "output": "x"}) is True)
+ check("_arg_summary: command truncated to 80 chars",
+       len(mod._arg_summary({"command": "x" * 200})) <= 91)
+ stream = mod._TaskStream("t_smoketest")
+@@ -94,6 +106,31 @@ check("_format: renders task id and stays under Telegram limit",
+ final = stream._format(final=True, summary="done")
+ check("_format: final frame shows total", "total" in final)
+ 
++# D2: consecutive identical failure lines collapse to "<line> ×N".
++# Offline harness: neutralise the Telegram send/edit path.
++stream.schedule_edit = lambda force=False: None
++err = "❌ terminal failed"
++stream.push_error(err)
++check("push_error: single failure pushes exactly one line",
++      stream.tool_history == [err])
++stream.push_error(err)
++check("push_error: second identical failure collapses to ×2",
++      stream.tool_history == ["%s ×2" % err]
++      and stream.current_line == "%s ×2" % err)
++stream.push_error(err)
++check("push_error: 3 identical consecutive errors collapse to ×3",
++      stream.tool_history == ["%s ×3" % err]
++      and stream.current_line == "%s ×3" % err)
++stream.push_error("❌ read_file failed")
++check("push_error: a different failure line resets the run and appends",
++      stream.tool_history == ["%s ×3" % err, "❌ read_file failed"]
++      and stream.current_line == "❌ read_file failed")
++stream.push_tool("🔍 terminal command='x'")
++stream.push_error(err)
++check("push_error: interleaved tool line breaks the consecutive run",
++      stream.tool_history == ["%s ×3" % err, "❌ read_file failed",
++                              "🔍 terminal command='x'", err])
++
+ # 7. steer.py --check exits 1 (not a crash) with no env configured.
+ env = {k: v for k, v in os.environ.items()
+        if not k.startswith("KANBAN_STREAM_")}
+-- 
+2.43.0
+

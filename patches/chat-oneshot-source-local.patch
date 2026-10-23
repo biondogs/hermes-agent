@@ -1,0 +1,189 @@
+From c69ae0d911cbd2f6394b935a320f09aa490acd7e Mon Sep 17 00:00:00 2001
+From: Sepp <biondogs@users.noreply.github.com>
+Date: Fri, 23 Oct 2026 05:38:27 +0000
+Subject: [PATCH] LOCAL HOTFIX (t_c58c5eed): one-shot chat -q died host-wide on
+ inherited automation source labels
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The kanban dispatcher (and cron/a2a) sets HERMES_SESSION_SOURCE, which the
+terminal tool bridges into every child process. GatewaySessionStore.create()
+sent that label verbatim as session.create's `source`; the canonical create
+contract (tui_gateway/contracts/canonical_sessions.py, Literal over SURFACES)
+refuses non-surface labels with a bare 4001 invalid_params (no field/detail,
+logged nowhere at INFO), so every `hermes chat -q` run from a worker terminal
+died at agent init with "couldn't start the model connection: invalid_params".
+The thin client (gateway_chat) never inherited the label, which is why only
+the classic CLI one-shot path broke.
+
+Fix: GatewaySessionStore.gateway_source() keeps main's label inside the
+surfaces the gateway advertises via runtime.describe — an inherited
+non-surface label falls back to the thin client's own rule (oneshot for a
+finite run, cli otherwise); an explicit --source the gateway cannot serve
+raises the thin client's "does not support source" copy instead of the
+opaque refusal. Older gateways (describe without sources) keep the old
+pass-through behavior.
+
+Patch copy: /local/projects/software-co/patches/chat-oneshot-source-local.patch
+Rollback anchor = pre-patch HEAD fe5e8bd91a.
+
+Agent-Profile: sw-dev-a
+Agent-Run: t_c58c5eed
+---
+ hermes_cli/gateway_session_store.py           | 39 +++++++++--
+ .../hermes_cli/test_gateway_session_store.py  | 68 +++++++++++++++++++
+ 2 files changed, 103 insertions(+), 4 deletions(-)
+
+diff --git a/hermes_cli/gateway_session_store.py b/hermes_cli/gateway_session_store.py
+index 47f31528c6..cc93efd2d7 100644
+--- a/hermes_cli/gateway_session_store.py
++++ b/hermes_cli/gateway_session_store.py
+@@ -70,6 +70,7 @@ class GatewaySessionStore:
+         self.current: dict | None = None
+         self._reader = None
+         self._create_parameters = None
++        self._create_sources = None
+ 
+     def __bool__(self):
+         return not self.connection.final
+@@ -162,11 +163,12 @@ class GatewaySessionStore:
+         """``session.create`` with the launch policy (and ``title``: the owner's resolve -> create ->
+         title step); adopts and returns the new session id. ``record_cwd=False`` (``/new``,
+         ``--create-if-missing``) leaves the row's cwd empty, as main's explicit creates did."""
+-        from agent.session_source import CLI_FAMILY_SOURCES, session_source_for
++        from agent.session_source import CLI_FAMILY_SOURCES
+         params = _creation_policy(launch or {})
+         params["cwd"] = os.path.realpath(os.getenv("TERMINAL_CWD") or os.getcwd())
+-        # Main's row label: ``cli``, ``oneshot`` for a finite -q/-Q run, or an explicit --source.
+-        params["source"] = session_source_for("cli")
++        # Main's row label: ``cli``, ``oneshot`` for a finite -q/-Q run, or an explicit --source —
++        # kept inside the surfaces this gateway serves (``gateway_source``, t_c58c5eed).
++        params["source"] = self.gateway_source()
+         # Main's row stamp (run_agent._launch_cwd_for_session): this process's cwd (``-w`` never
+         # chdirs, so the repo root), only for a CLI-family label on a local terminal backend.
+         local = (os.getenv("TERMINAL_ENV") or "local").strip().lower() in ("", "local")
+@@ -183,11 +185,40 @@ class GatewaySessionStore:
+     def client_env(self):
+         """This shell's ``client_env`` when the gateway takes it (one ``runtime.describe`` per store)."""
+         from hermes_cli.gateway_chat import client_env_policy
++        self.describe_create_contract()
++        return client_env_policy(self._create_parameters)
++
++    def describe_create_contract(self):
++        """Cache the owner's ``session_create`` contract (its accepted parameters and surfaces) once."""
+         if self._create_parameters is None:
+             described = self.call("runtime.describe")
+             contract = described.get("session_create") if isinstance(described, dict) else None
+             self._create_parameters = list((contract or {}).get("parameters") or [])
+-        return client_env_policy(self._create_parameters)
++            self._create_sources = [str(item) for item in (contract or {}).get("sources") or []]
++        return self._create_parameters, self._create_sources or []
++
++    def gateway_source(self):
++        """Main's row label, kept inside the surfaces this gateway serves (t_c58c5eed).
++
++        ``HERMES_SESSION_SOURCE`` is bridged into every child process of an automation session
++        (kanban, cron, a2a), and those labels are not creatable surfaces: the create contract's
++        closed set refuses them with a bare ``invalid_params``, so any ``hermes chat -q`` run from
++        such a terminal died at agent init. An INHERITED label the contract does not serve falls
++        back to the thin client's own rule (``hermes_cli.gateway_chat``): the label this run would
++        have had with no env — ``oneshot`` for a finite run, ``cli`` otherwise. An explicit
++        ``--source`` is never silently rewritten: an unsupported one raises the thin client's copy.
++        A gateway whose describe carries no sources (older build) keeps the pre-contract behaviour.
++        """
++        from agent.session_source import session_source_for
++        source = session_source_for("cli")
++        sources = self.describe_create_contract()[1]
++        if not sources or source in sources:
++            return source
++        from gateway.session_context import get_session_env
++        if get_session_env("HERMES_SESSION_SOURCE_EXPLICIT", "") == "1":
++            raise GatewayClientError(f"Gateway does not support source {source!r}")
++        finite = get_session_env("HERMES_SINGLE_QUERY_SESSION", "") == "1"
++        return "oneshot" if finite and "oneshot" in sources else "cli"
+ 
+     def branch(self, session_id, title=None):
+         """``session.mutate branch``: the gateway forks the whole active transcript into a child it
+diff --git a/tests/hermes_cli/test_gateway_session_store.py b/tests/hermes_cli/test_gateway_session_store.py
+index 177fa78184..17c3572fab 100644
+--- a/tests/hermes_cli/test_gateway_session_store.py
++++ b/tests/hermes_cli/test_gateway_session_store.py
+@@ -89,6 +89,74 @@ def test_a_finite_run_creates_mains_oneshot_session_so_bare_c_finds_it(store, mo
+     assert client.calls[-1][1]["source"] == "cli"
+ 
+ 
++class ContractClient(FakeClient):
++    """A gateway whose ``runtime.describe`` answers with the real create contract (the surfaces
++    and parameters it accepts), like ``gateway/session_controls.py``'s ``describe``."""
++
++    SOURCES = ["acp", "cli", "gui", "oneshot", "tool", "tui"]
++
++    async def rpc(self, method, *, _timeout=None, **params):
++        if method == "runtime.describe":
++            self.calls.append((method, params))
++            return {"session_create": {"sources": self.SOURCES,
++                                       "parameters": ["client_env", "cwd", "row_cwd", "model"]}}
++        return await FakeClient.rpc(self, method, _timeout=_timeout, **params)
++
++
++def _contract_store(client_cls=ContractClient):
++    client = client_cls()
++
++    @asynccontextmanager
++    async def connect():
++        yield client
++    conn = GatewayConnection(connect=connect)
++    conn.start(5)
++    return GatewaySessionStore(conn), client, conn
++
++
++def test_inherited_automation_source_is_demoted_to_a_gateway_surface(store, monkeypatch):
++    """t_c58c5eed: HERMES_SESSION_SOURCE is bridged into every child of an automation session
++    (kanban, cron), and those labels are NOT creatable surfaces (the create contract's closed
++    Literal refuses them with a bare ``invalid_params``, host-wide, for any `hermes chat -q` run
++    from a worker terminal). An inherited label the gateway does not serve falls back to the thin
++    client's own rule — the label the run would have had with no env at all."""
++    db, client, conn = _contract_store()
++    try:
++        monkeypatch.setenv("HERMES_SESSION_SOURCE", "kanban")
++        monkeypatch.delenv("HERMES_SESSION_SOURCE_EXPLICIT", raising=False)
++        monkeypatch.setenv("HERMES_SINGLE_QUERY_SESSION", "1")
++        db.open_session(cli(), {})
++        assert client.calls[-1][1]["source"] == "oneshot"
++        # Interactive (not a finite run): the fallback is `cli`, as the thin client's default.
++        monkeypatch.delenv("HERMES_SINGLE_QUERY_SESSION")
++        GatewaySessionStore(db.connection).open_session(cli(), {})
++        assert client.calls[-1][1]["source"] == "cli"
++        # An explicit `--source` the gateway does not serve is a real error, with the thin
++        # client's copy — never the opaque refusal.
++        monkeypatch.setenv("HERMES_SESSION_SOURCE_EXPLICIT", "1")
++        with pytest.raises(GatewayClientError, match="does not support source 'kanban'"):
++            GatewaySessionStore(db.connection).open_session(cli(), {})
++    finally:
++        conn.close()
++
++
++def test_inherited_source_untouched_when_gateway_serves_it(store, monkeypatch):
++    """No contract (an older gateway) or a served label: the store passes main's label through
++    exactly as before — the demotion only fires on a label the contract refuses."""
++    monkeypatch.setenv("HERMES_SESSION_SOURCE", "kanban")
++    monkeypatch.delenv("HERMES_SESSION_SOURCE_EXPLICIT", raising=False)
++    db, client = store  # the plain fixture's describe carries no create contract: pass through
++    db.open_session(cli(), {})
++    assert client.calls[-1][1]["source"] == "kanban"
++    monkeypatch.setenv("HERMES_SESSION_SOURCE", "tool")  # served by ContractClient's SOURCES
++    db2, client2, conn2 = _contract_store()
++    try:
++        db2.open_session(cli(), {})
++        assert client2.calls[-1][1]["source"] == "tool"
++    finally:
++        conn2.close()
++
++
+ def test_resume_attaches_and_unknown_target_is_left_to_mains_not_found_path(store):
+     db, client = store
+     assert db.open_session(cli("local-old", resumed=True)) == "local-old"
+-- 
+2.43.0
+

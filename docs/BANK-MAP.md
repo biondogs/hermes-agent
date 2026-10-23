@@ -10,7 +10,10 @@ role banks mixed facts from 4-5 distinct hardware estates. Amended later the sam
 by a second operator ruling (this update, t_05966941): gaudi's `*-perf`/`*-sdk` banks
 are ROLE banks not environment banks, `hermes-general` is identified as the
 operator-laptop bank (`laptop`), and the 2026-10-23 deletion GO was executed —
-server now holds exactly **24 banks**.
+server held exactly **24 banks**. A third ruling the same evening
+(t_7601b273): the `unsloth-litellm` profile was declared **obsolete** —
+profile deleted and its lane bank `hb-unsloth-studio` deleted — so the
+server now holds exactly **23 banks**.
 
 **Naming convention.** `<environment-or-host>-<texture>`: `g01-infra`,
 `g02-infra`, `skipjack-infra`, `skipjack-prototype-infra`, `gaudi-hpu*`. The
@@ -38,11 +41,12 @@ There is no `~/.hindsight/config.json` on this host — that hop in the
 client-side default chain is absent.
 
 **Server**: `http://ga01:8888` (`mode: local_external`) — the aistack Hindsight
-instance, **exactly 24 banks as of 2026-10-23** (live recount via
-`GET /v1/default/banks`, same day, post env-axis cutover + deletion GO).
+instance, **exactly 23 banks as of 2026-10-23** (live recount via
+`GET /v1/default/banks`, same day, post unsloth-lane retirement).
 
 **Ratified canon (operator, 2026-10-23): 3 general + 5 butler + 5 environment +
-11 role/specialist = 24.** Every bank on the server falls into exactly one of
+10 role/specialist = 23** (24 until the unsloth lane was retired the same
+evening). Every bank on the server falls into exactly one of
 these groups; the group counts below are live-verified.
 
 ---
@@ -85,7 +89,7 @@ grouping"). Moved to §1.3. One system = one env bank: gaudi's environment group
 is `gaudi-hpu` alone. Display names already PATCHed server-side to
 `gaudi-perf [role]` / `gaudi-sdk [role]`; **bank_ids immutable and unchanged**.
 
-### 1.3 Role / specialist banks (11)
+### 1.3 Role / specialist banks (10)
 Lane-role separation *within* an estate, plus dedicated kanban/research lanes.
 The gaudi role banks preserve the 2026-10-22 ORCH AMEND doctrine ("inference
 knowledge must NOT live in general board knowledge; do NOT propose
@@ -108,7 +112,6 @@ pollutes ops recall.
 | `hb-research` | `hb-research` | research lane | `research` | 3 |
 | `hb-distiller` | `hb-distiller` | distiller lane | `distiller` | 810 |
 | `hb-sampling-test` | `hb-sampling-test` | throwaway test lane (safe to delete freely) | `sampling-test` | 3 |
-| `hb-unsloth-studio` | `hb-unsloth-studio` | unsloth-litellm lane (added 2026-10-23, t_7601b273) | `unsloth-litellm` | 4 |
 
 The two `hb-host-ops` / `hb-upstream-comm` pools were gaudi-pure (no
 cross-env mixing), so the fresh-start ruling did not require cold-starting
@@ -150,6 +153,7 @@ Deleted from the server with 404 + listing readback verification:
 | `hb-inference-bench` | 2,038 | detached mixed pool (watcher/bench observations from g02/gaudi +q38p) |
 | `hb-synapse-sdk` | 186 | gaudi SDK pool, superseded by fresh-start `gaudi-hpu-sdk` |
 | `gaudi` | 125 | frozen legacy per-board summary bank (board-migration seeder, 2026-10-12) |
+| `hb-unsloth-studio` | 4 | lane bank retired same-day: operator ruled the `unsloth-litellm` profile OBSOLETE (t_7601b273, 2026-10-23 evening); contents were canary facts from the tuning verification only — DELETE `/v1/default/banks/hb-unsloth-studio` → 200 (`deleted_count: 15`), listing recount 24 → 23 |
 
 The live 24-bank listing additionally confirms the other four frozen legacy
 per-board summary banks are gone in the same wave (the card receipt names only

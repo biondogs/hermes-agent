@@ -52,3 +52,21 @@ Successor poll card created (+24h). Deletion requires operator explicit GO comme
 - Fix B (fork PR mash#30, fork issue #14 / MASH-014): **https://github.com/mprov-ng/mash/pull/22** — branch `fix/foreach-hash-items`, head 01bfcb8 (cherry-pick -x of f6a0374, authorship preserved, no changes vs fork). Local fresh-venv pytest 40/40.
 - Gate compliance: both head-commit messages + both PR bodies carry exact line `Assisted by JoeBot`; uberlinuxguy requested as reviewer on both; Agent-Profile/Agent-Run hook trailers stripped pre-push per butler guidance; docs-sweep commit f9bb463 NOT carried (superseded by mash#17); base = mprov-ng/mash master @ 36b6a5e.
 - CI: pytest (3.9/3.11/3.13) pass on both PRs. Rescue patches had been wiped from t_afc04040/rescue/ mid-run (sprint-sync lane); rebuilt via direct fetch from rahul05ranjan/mash (branch tips matched pinned SHAs fe8c8f3/f6a0374 exactly).
+
+## Dated amendment 2026-10-23T17:41Z — mash rescue PRs #21/#22 CLOSED UNMERGED (operator policy)
+
+Operator directive 2026-10-23: contributor PRs are not currently accepted on the main mprov-ng repos. Per directive, both rescue PRs were closed WITHOUT merging (neutral public comment posted on both; no internal detail disclosed).
+
+| PR | State | Head SHA | Merged | Closed at |
+|---|---|---|---|---|
+| mprov-ng/mash#21 (config-shapes) | CLOSED | `823062fece1a2fc55908db6ec5fc2c9d5195044a` | no (`mergedAt: null`) | 2026-10-23T17:41:45Z |
+| mprov-ng/mash#22 (foreach-hash) | CLOSED | `01bfcb84d5d6b6b94c0f90de619e0cd71f407787` | no (`mergedAt: null`) | 2026-10-23T17:41:47Z |
+
+Read-back verified via `gh pr view --json state,number,mergedAt` (both `state: CLOSED`, `mergedAt: null`).
+
+**Durable re-approach material:** closed PRs retain their full diffs permanently on mprov-ng — PR pages, commit history, and head SHAs above remain fetchable regardless of branch state. The re-approach (separate card) can always reconstruct each fix from `mprov-ng/mash` PR refs (`refs/pull/21/head`, `refs/pull/22/head`) or the cherry-picked upstream commits (originals: rahul05ranjan/mash fe8c8f3 / f6a0374, authorship preserved via `cherry-pick -x`). Nothing further needs to be preserved out-of-band.
+
+Scope compliance: no branches deleted, no fork repos touched, mprov-ng/mprov_scripts#19 and mprov-ng/mash#17 (own docs PRs) untouched — unaffected by this policy. No re-open or re-submit performed here.
+
+### Deletion-gate amendment (same date)
+- mprov-ng/mash#21 and #22 are **resolved-as-CLOSED-UNMERGED** by operator policy (2026-10-23T17:41Z). They no longer await a merge and are removed from any gate expectation as pending-merge items; the rescue fixes they carried are preserved via the closed-PR diffs above for the separate re-approach card.

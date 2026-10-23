@@ -6,14 +6,20 @@ Hindsight memory bank on ga01. Rewritten 2026-10-23 by the env-axis cutover
 organizing axis is now **HARDWARE ENVIRONMENT** (operator: "g02, g01, skipjack and
 skipjack proto are all individual hardware environments… much different than anything
 that has to do with ga01"), replacing the 2026-10-22 role-axis arrangement whose shared
-role banks mixed facts from 4-5 distinct hardware estates.
+role banks mixed facts from 4-5 distinct hardware estates. Amended later the same day
+by a second operator ruling (this update, t_05966941): gaudi's `*-perf`/`*-sdk` banks
+are ROLE banks not environment banks, `hermes-general` is identified as the
+operator-laptop bank (`laptop`), and the 2026-10-23 deletion GO was executed —
+server now holds exactly **24 banks**.
 
 **Naming convention.** `<environment-or-host>-<texture>`: `g01-infra`,
 `g02-infra`, `skipjack-infra`, `skipjack-prototype-infra`, `gaudi-hpu*`. The
 confusing `Hermes q38` name (test-farm-era) and the `hb-` (= *hindsight-bank*,
 NOT Habana) prefix on mixed pools are retired from the active map; `hb-` survives
-only on (a) detached archive pools awaiting an operator delete decision and
-(b) kanban-core lane banks whose content is healthy (see §3).
+today only as immutable bank_ids on retained role/specialist banks — kanban-core
+lanes plus the two gaudi specialist pools under readable aliases (see §1). Every
+historical `hb-` mixed pool and every frozen legacy name was deleted 2026-10-23
+(receipt in §1.6).
 
 **Bank resolution rule (effective, verified in plugin source).** The primary
 bank resolves as:
@@ -32,102 +38,129 @@ There is no `~/.hindsight/config.json` on this host — that hop in the
 client-side default chain is absent.
 
 **Server**: `http://ga01:8888` (`mode: local_external`) — the aistack Hindsight
-instance, 33 banks as of 2026-10-23 (post env-axis cutover).
+instance, **exactly 24 banks as of 2026-10-23** (live recount via
+`GET /v1/default/banks`, same day, post env-axis cutover + deletion GO).
+
+**Ratified canon (operator, 2026-10-23): 3 general + 5 butler + 5 environment +
+11 role/specialist = 24.** Every bank on the server falls into exactly one of
+these groups; the group counts below are live-verified.
 
 ---
 
 ## 1. Intended banks per profile family
 
-### Root/default lane → bank `hermes` (unchanged, operator-ratified 2026-10-22)
-- `default` (root home `~/.hermes`) — root `hindsight/config.json`, bank `hermes`.
-  `hermes` (~29.8k facts) is the root assistant's LIVE bank — ratified end state,
-  not an archive.
-- ⚠ **`hermes-general` is NOT read-only**: the default lane also writes it
-  (observed 2026-10-23: 574 facts landed 10-22/10-23, identity `default`;
-  mechanism unconfirmed). It is therefore NOT a deletion candidate until its
-  writer is understood. Investigation item in the 2026-10-23 cutover report.
+### General banks (3) — shared/operator-owned, never deletion candidates
 
-### Hardware-environment banks (fresh start, created 2026-10-23)
+| Bank (server id) | Display name | Facts (live) | Role |
+|---|---|---|---|
+| `hermes` | `hermes` | 30,164 | Root/default lane: root `hindsight/config.json` (root home `~/.hermes`). Root assistant's LIVE bank — ratified end state 2026-10-22, not an archive. |
+| `hermes-general` | **`laptop`** | 6,053 | **Operator-owned.** The operator's laptop Hermes instance's LIVE bank — an *external client* writing to ga01 (bank_id immutable; display name PATCHed to `laptop` 2026-10-23). |
+| `software-co` | `software-co` | 4,306 | software-co fleet bank (see §1.5). |
+
+**`laptop` resolves the "unbound writer" mystery (2026-10-23).** The prior map
+flagged `hermes-general` as "NOT read-only — default lane writes observed
+(574 facts landed 10-22/10-23, identity `default`, mechanism unconfirmed)".
+Identified per operator ruling: those writes came from the operator's laptop
+Hermes instance, not the ga01 default lane. The bank is therefore LIVE,
+operator-owned, and **must NEVER be proposed for deletion**.
+
+### 1.2 Hardware-environment banks (5) — fresh start 2026-10-23
 Fresh per operator ruling: deliberately empty at creation; repopulate from live
-runs only. One bank per hardware estate; a worker recalls ONLY its own
+runs only. **One bank per hardware estate** — a worker recalls ONLY its own
 environment's texture. Canary-verified 2026-10-23 (retain+recall per bank,
 0 cross-env leaks).
 
-| Bank | Environment | Bound profiles |
-|---|---|---|
-| `g01-infra` | Gargantua01 — prototype k8s | `g01-orchestrator`, `g01-planner`, `g01-auditor`, `g01-scribe`, `g01-ops`, `g01-watcher` |
-| `g02-infra` | Gargantua02 — production k8s, Azure VMs 413-418 | `g02-orchestrator`, `g02-planner`, `g02-auditor`, `g02-scribe`, `g02-ops`, `g02-watcher` |
-| `skipjack-infra` | Skipjack — HPC/AI hybrid cluster (mgmt02) | `sj-orchestrator`, `sj-planner`, `sj-auditor`, `sj-scribe`, `sj-ops`, `sj-watcher` |
-| `skipjack-prototype-infra` | Skipjack Prototype — k8s on gh207+gh208 | `sjp-orchestrator`, `sjp-planner`, `sjp-auditor`, `sjp-scribe`, `sjp-ops`, `sjp-watcher` |
-| `gaudi-hpu` | Gaudi host (ga01, Habana HPU) — general board/infra lane | `gaudi-orchestrator`, `gaudi-planner`, `gaudi-auditor`, `gaudi-scribe`, `gaudi-deployer` |
-| `gaudi-hpu-perf` | Gaudi HPU — inference/bench lane | `gaudi-analyst`, `gaudi-benchrunner`, `gaudi-watcher` |
-| `gaudi-hpu-sdk` | Gaudi HPU — SynapsePT/SDK/kernel lane | `gaudi-arch`, `gaudi-perfeng`, `gaudi-synapse` |
-
-**Why gaudi keeps three role banks** (reconciled with the 2026-10-22 ORCH AMEND
-"inference knowledge must NOT live in general board knowledge; do NOT propose
-consolidation"): the env axis already eliminates the cross-estate pollution the
-amend guarded against — a gaudi fact can no longer be recalled by a g02 worker.
-Within the gaudi estate the amend's specialist separation is preserved as
-role-secondary sub-banks (`gaudi-hpu` / `-perf` / `-sdk`). Non-gaudi estates are
-single-bank: their fact volumes (~200-1,000/mo each, mostly ops+watcher) do not
-justify a second bank; revisit if watcher noise pollutes ops recall.
-
-### Gaudi specialist banks retained LIVE under readable aliases (content preserved, zero churn)
-| Alias (config carrier) | Underlying bank (server id) | Bound profiles | Facts |
+| Bank | Environment | Bound profiles | Facts (live) |
 |---|---|---|---|
-| `gaudi-hpu-hostops` | `hb-host-ops` | `gaudi-dockerops`, `gaudi-sysadmin` | 139 |
-| `gaudi-hpu-upstream` | `hb-upstream-comm` | `gaudi-liaison` | 421 |
+| `g01-infra` | Gargantua01 — prototype k8s | `g01-orchestrator`, `g01-planner`, `g01-auditor`, `g01-scribe`, `g01-ops`, `g01-watcher` | 141 |
+| `g02-infra` | Gargantua02 — production k8s, Azure VMs 413-418 | `g02-orchestrator`, `g02-planner`, `g02-auditor`, `g02-scribe`, `g02-ops`, `g02-watcher` | 244 |
+| `skipjack-infra` | Skipjack — HPC/AI hybrid cluster (mgmt02) | `sj-orchestrator`, `sj-planner`, `sj-auditor`, `sj-scribe`, `sj-ops`, `sj-watcher` | 178 |
+| `skipjack-prototype-infra` | Skipjack Prototype — k8s on gh207+gh208 | `sjp-orchestrator`, `sjp-planner`, `sjp-auditor`, `sjp-scribe`, `sjp-ops`, `sjp-watcher` | 103 |
+| `gaudi-hpu` | Gaudi host (ga01, Habana HPU) — the estate's one env bank | `gaudi-orchestrator`, `gaudi-planner`, `gaudi-auditor`, `gaudi-scribe`, `gaudi-deployer` | 191 |
 
-These two pools were gaudi-pure (no cross-env mixing), so the fresh-start ruling
-did not require cold-starting them; the alias gives the readable name with
-identical two-way reachability (verified: canary facts appear under both ids;
-Hindsight server API supports aliases natively — "another id to answer to",
-409 on collisions, zero data movement).
+**REGROUP (operator 2026-10-23):** `gaudi-hpu-perf` and `gaudi-hpu-sdk` were
+listed here as environment banks in the morning cutover — they are **ROLE
+banks, not environment banks** (operator: "they shouldn't be in the environment
+grouping"). Moved to §1.3. One system = one env bank: gaudi's environment group
+is `gaudi-hpu` alone. Display names already PATCHed server-side to
+`gaudi-perf [role]` / `gaudi-sdk [role]`; **bank_ids immutable and unchanged**.
 
-### Kanban core / specialist lanes → unchanged from 2026-10-22 fresh start
-- `kanban-orchestrator` → `hb-orchestrator`
-- `kanban-board-architect` → `hb-architect`
-- `kanban-worker` → `hb-kanban-worker`
-- `research` → `hb-research`
-- `distiller` → `hb-distiller`
-- `sampling-test` → `hb-sampling-test` (throwaway test lane)
-- `unsloth-litellm` → `hb-unsloth-studio` (added 2026-10-23, t_7601b273)
+### 1.3 Role / specialist banks (11)
+Lane-role separation *within* an estate, plus dedicated kanban/research lanes.
+The gaudi role banks preserve the 2026-10-22 ORCH AMEND doctrine ("inference
+knowledge must NOT live in general board knowledge; do NOT propose
+consolidation") under the env-axis taxonomy: a gaudi fact still cannot be
+recalled by a g02 worker — the env axis handles that — and within the gaudi
+estate the amend's specialist separation lives on as these role banks.
+Non-gaudi estates are single-bank: their fact volumes (~200-1,000/mo each,
+mostly ops+watcher) do not justify a second bank; revisit if watcher noise
+pollutes ops recall.
 
-### software-co fleet → bank `software-co` (unchanged; kept in production per operator)
+| Bank (server id) | Display name | Lane | Bound profiles | Facts (live) |
+|---|---|---|---|---|
+| `gaudi-hpu-perf` | `gaudi-perf [role]` | Gaudi inference/bench | `gaudi-analyst`, `gaudi-benchrunner`, `gaudi-watcher` | 187 |
+| `gaudi-hpu-sdk` | `gaudi-sdk [role]` | Gaudi SynapsePT/SDK/kernel | `gaudi-arch`, `gaudi-perfeng`, `gaudi-synapse` | 133 |
+| `hb-host-ops` | `gaudi-hpu-hostops` (alias) | Gaudi host ops | `gaudi-dockerops`, `gaudi-sysadmin` | 139 |
+| `hb-upstream-comm` | `gaudi-hpu-upstream` (alias) | Gaudi upstream/liaison | `gaudi-liaison` | 421 |
+| `hb-orchestrator` | `hb-orchestrator` | kanban-orchestrator lane | `kanban-orchestrator` | 96 |
+| `hb-architect` | `hb-architect` | kanban-board-architect lane | `kanban-board-architect` | 384 |
+| `hb-kanban-worker` | `hb-kanban-worker` | kanban-worker lane | `kanban-worker` | 67 |
+| `hb-research` | `hb-research` | research lane | `research` | 3 |
+| `hb-distiller` | `hb-distiller` | distiller lane | `distiller` | 810 |
+| `hb-sampling-test` | `hb-sampling-test` | throwaway test lane (safe to delete freely) | `sampling-test` | 3 |
+| `hb-unsloth-studio` | `hb-unsloth-studio` | unsloth-litellm lane (added 2026-10-23, t_7601b273) | `unsloth-litellm` | 4 |
+
+The two `hb-host-ops` / `hb-upstream-comm` pools were gaudi-pure (no
+cross-env mixing), so the fresh-start ruling did not require cold-starting
+them; the alias gives the readable name with identical two-way reachability
+(verified: canary facts appear under both ids; Hindsight server API supports
+aliases natively — "another id to answer to", 409 on collisions, zero data
+movement).
+
+### 1.4 Per-board butler banks (5) — Topology-B, isolated (unchanged)
+Per operator-approved policy (t_fd8ca6f0): butler memories stay isolated, never
+in shared banks. The `.env` `HINDSIGHT_BANK_ID` pin stays UNSET in every butler
+profile (env would win over config.json — #5171). Future butlers
+(`sj-butler` for the production skipjack board if stood up): same pattern →
+`<slug>-butler`.
+
+| Bank | Board front-end | Facts (live) |
+|---|---|---|
+| `g01-butler` | gargantua01 | 37 |
+| `g02-butler` | gargantua02 | 120 |
+| `gaudi-butler` | gaudi | 116 |
+| `sjproto-butler` | skipjack-prototype | 28 |
+| `swco-butler` | software-co | 899 |
+
+### 1.5 software-co fleet → bank `software-co` (unchanged; kept in production per operator)
 - `sw-architect`, `sw-dev-a`, `sw-dev-b`, `sw-devops`, `sw-docs`, `sw-pm`,
   `sw-qa`, `sw-reviewer`, `sw-ux`.
 - Bank mission (as seeded): engineering-practice working-lore only — one-fix-
   one-approve-one-commit, review posture, commit/DCO hygiene, QA ladder, kanban
   handoff contract. Infra/Azure/GPU facts deliberately rejected.
+- `software-co` is the third member of the general canon group (§1).
 
-### Per-board butler lanes (Topology-B) → dedicated `<board>-butler` banks (unchanged, isolated)
-Per operator-approved policy (t_fd8ca6f0): butler memories stay isolated, never
-in shared banks. The `.env` `HINDSIGHT_BANK_ID` pin stays UNSET in every butler
-profile (env would win over config.json — #5171).
-- `g01-butler` → `g01-butler` · `g02-butler` → `g02-butler` ·
-  `gaudi-butler` → `gaudi-butler` · `sjproto-butler` → `sjproto-butler` ·
-  `swco-butler` → `swco-butler`.
-- Future butlers (`sj-butler` for the production skipjack board if stood up):
-  same pattern → `<slug>-butler`.
+### 1.6 Deletion receipt — 2026-10-23, operator GO executed
+Deleted from the server with 404 + listing readback verification:
 
-### Detached mixed pools (read-only archives; deletion is a future operator GO — see cutover report)
-Old role-axis banks that mixed multiple hardware estates. No profile binds to
-them anymore (verified 2026-10-23, 63 profile dirs scanned, 0 violations); zero
-post-flip writes (deathwatch snapshot in the report). **Detached, NOT deleted.**
-- `Hermes q38` (6,092) — lane workers from all 5 estates + q38p test-farm legacy (≈1,831).
-- `hb-infra-release` (3,027) — ops texture from g01/g02/sj/sjp/gaudi + q38p-deployer.
-- `hb-inference-bench` (2,038) — watcher/bench observations from g02/gaudi (+q38p).
-- `hb-synapse-sdk` (186) — gaudi SDK facts (gaudi-pure, but slated for fresh
-  start by the 2026-10-23 operator ruling; superseded by `gaudi-hpu-sdk`).
+| Bank | Facts (at delete) | Class |
+|---|---|---|
+| `Hermes q38` | 6,092 | detached mixed pool (lane workers from all 5 estates + q38p test-farm legacy ≈1,831) |
+| `hb-infra-release` | 3,027 | detached mixed pool (ops texture from g01/g02/sj/sjp/gaudi + q38p-deployer) |
+| `hb-inference-bench` | 2,038 | detached mixed pool (watcher/bench observations from g02/gaudi +q38p) |
+| `hb-synapse-sdk` | 186 | gaudi SDK pool, superseded by fresh-start `gaudi-hpu-sdk` |
+| `gaudi` | 125 | frozen legacy per-board summary bank (board-migration seeder, 2026-10-12) |
 
-### Frozen legacy per-board summary banks (created 2026-10-12 by board-migration seeder)
-Not bound to any standing profile; unchanged by this cutover; deletion folds
-into the same operator review: `gargantua01` (18) · `gargantua02` (14) ·
-`skipjack` (6) · `skipjack-prototype` (6) · `gaudi` (125).
+The live 24-bank listing additionally confirms the other four frozen legacy
+per-board summary banks are gone in the same wave (the card receipt names only
+the five above; the server listing is source of truth):
+`gargantua01` (18) · `gargantua02` (14) · `skipjack` (6) ·
+`skipjack-prototype` (6). Net: **33 → 24 banks**.
 
-### hermes-general (6,011)
-Previously classified "detached read-only legacy"; **live `default`-lane writes
-observed 2026-10-23** (see root-lane warning above). Not a delete candidate yet.
+Pre-delete readback snapshots (per-bank fact dumps, writer-identity
+classification, deathwatch logs) live in the 2026-10-23 cutover report and the
+rollback bundle (§3 footer). **NOT deleted** — and never to be proposed:
+`hermes-general`/`laptop` (operator-owned, §1).
 
 ---
 
@@ -152,9 +185,9 @@ Recall-quality cost of the cold start (accepted by the operator ruling
 "fresh start everything"): every fleet worker loses recall of its 2026-09/10
 history in the mixed pools until its env bank repopulates organically. Largest
 losses by writer: g02-ops (901 facts in hb-infra-release), gaudi-watcher (704),
-g02-watcher (522), gaudi benchrunner/auditor (375/216 in Hermes q38). The pools
-remain server-side as read-only archives, so nothing is destroyed before an
-explicit delete GO.
+g02-watcher (522), gaudi benchrunner/auditor (375/216 in Hermes q38). Those
+pools have since been **deleted under the 2026-10-23 operator GO** (§1.6) —
+the acceptance of that loss is what made the delete GO possible.
 
 ## 3. Rules of the road going forward
 
@@ -167,18 +200,24 @@ explicit delete GO.
 3. **Husks** (no hindsight wiring): `coding`, `kworker-muse-probe`,
    `plugin-ab`, `.deleted` — ignore until provisioned or removed.
 4. **New hardware environment?** One fresh `<env>-infra` bank + fleet flip,
-   following the 2026-10-23 cutover receipts as the recipe.
+   following the 2026-10-23 cutover receipts as the recipe. One system = one
+   env bank; role sub-banks within an estate are allowed per §1.3 but are
+   ROLE banks, never counted as environment banks.
 5. **Running sessions cache their bank at startup** — bank flips take effect on
    the next fresh process (dispatcher-spawned workers: next claim; served
-   sessions: next reload). Deathwatch any detached bank for 24h after a cutover
-   to catch missed reloads.
-6. This map is the source of truth; when adding a profile, pick the env bank of
-   its estate and record it here.
+   sessions: next reload). Deathwatch any detached bank for 24h after a
+   cutover to catch missed reloads.
+6. **Operator-owned banks are never deletion candidates** — `hermes`,
+   `laptop` (hermes-general), `software-co`. Deletion GOs for anything else
+   come from the operator only, and every deletion lands as a receipt in §1.6.
+7. This map is the source of truth; when adding a profile, pick the env bank of
+   its estate (or the role bank of its lane) and record it here.
 
 **Rollback for the 2026-10-23 cutover**:
 `~/kanban-backups/env-bank-cutover-20261023T172208Z/` — pre-cutover
 `hindsight/config.json` + `.env` for every profile (tar: `pre-cutover-profile-configs.tar.gz`),
 pre/post bank snapshots, flip receipts, canary log. Restore = untar + copy the
 profile's two files back; aliases removable via
-`DELETE /v1/default/banks/{bank}/aliases/{alias}`; the 7 new banks are harmless
-if left orphaned (or removable by operator GO later).
+`DELETE /v1/default/banks/{bank}/aliases/{alias}`. Deleted banks (§1.6) are not
+recoverable from this bundle — it predates the delete GO; their pre-delete
+readback dumps (if preserved in the cutover report) are the only record.

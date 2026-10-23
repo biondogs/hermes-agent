@@ -1,11 +1,11 @@
 # METATRON-ARCH-BRIEF — Foundational redevelopment architecture brief
 
-**Status:** DRAFT FOR OPERATOR DIRECTION — §7 decision gate open; brief is not final until D1–D8 are answered.
-**Card:** t_77ba5a4b (METATRON-ARCH-1) · **Author:** sw-architect · **Date:** 2026-10-23
+**Status:** FINAL — operator direction locked 2026-10-23: D1–D8 answered via butler chat (§7.1 is the binding record). The locked direction is codified as ADR-0003…0008 in `metatron/docs/adr/`.
+**Card:** t_77ba5a4b (METATRON-ARCH-1) · **Author:** sw-architect · **Date:** 2026-10-23 (amended post-gate, same day)
 **Binding inputs:** `OPERATOR-DIRECTION.md` (@8d70770 — verbatim Q1–Q8 + 8 locked constraints) · `INVENTORY.md` · `REVIEW-CHARTER.md`
 **Evidence base:** METATRON-CONTEXT.md (DOC-1 heritage sweep, t_668275f1) · findings registers + REVIEW-NOTES from R1-V1 (t_ff37197e, 40 findings, master@811e335), R2-V2 (t_712f7faa, 17 findings, v2@b2c1a5b), R3-GUI (t_b68a8d3b, 26 findings, feature/gui-editor@838f88c) · direct read-only spot-checks in /local/projects/metatron at the pinned refs (branch tips, `PHASE_ORDER` in workflow.py, `src/metatron/project/` tree, EDITOR-ARCHITECTURE.md non-negotiables — re-verified 2026-10-23).
 
-Every preserve/discard claim below carries its reviewer-evidence citation. All 83 register findings were reconciled against the three REVIEW-NOTES before adoption; claims I could not ground in evidence are marked **[gated]** and routed to the operator gate (§7) rather than assumed.
+Every preserve/discard claim below carries its reviewer-evidence citation. All 83 register findings were reconciled against the three REVIEW-NOTES before adoption; claims I could not ground in evidence were marked **[gated]** and routed to the operator gate (§7) rather than assumed. The gate was answered on 2026-10-23 — every marker in the body now resolves to its ADR (§7.1 is the binding record).
 
 ---
 
@@ -30,7 +30,7 @@ A **self-hosted, open-source agent *harness* — not a chatbot** — that scaffo
 - **the user's own plain-text files are the product** ("dissertation is the product" — ux-replan doc, v2), portable and externally editable, deletable by `rm` (ADR-0001 decided force),
 - **every change — human or agent — is attributed and revertible**, by the user and by the harness (checkpoints from the first commit 06f4627; operator Q2 verbatim: revertible "by the user or the harness as needed"),
 - **citations must resolve to verified fetched records**; trust gates fluency,
-- the human remains the author; machine contribution is disclosed (v2 voice-profile non-goal: *"not an authorship-detection evader"*), **[gated D5]**,
+- the human remains the author; machine contribution is disclosed (v2 voice-profile non-goal: *"not an authorship-detection evader"*), **[resolved D5 → ADR-0007]**,
 - the server is the single authority and clients observe-and-request (EDITOR-ARCHITECTURE §1.1: "WorkflowManager is the sole server-side authority; the Y doc is content, never state").
 
 ### 1.3 For whom
@@ -55,9 +55,9 @@ Single-user first (operator Q4; in-repo anticipation 48468e5: "no feature gets b
 ### 1.5 Non-goals (scope fences — most scope creeps through silence, so make them explicit)
 
 - **Not a chatbot / general assistant.** Surfaces exist to move a document through a lifecycle.
-- **Not multi-user.** No accounts, no presence, no per-user permissions, no CRDT in v1's storage core. **[gated D7]**
+- **Not multi-user.** No accounts, no presence, no per-user permissions, no CRDT in v1's storage core. **[confirmed by D7 → ADR-0004]**
 - **Not a hosted SaaS.** No relay, no telemetry dependency, no server fleet. One user, one machine, one process (plus a browser tab).
-- **Not an citations-launderer.** No "make this sound undetectable" posture. **[gated D5]**
+- **Not an citations-launderer.** No "make this sound undetectable" posture. **[resolved D5 → ADR-0007]** — *voice fidelity* is squarely in scope (output indistinguishable from the author's own natural writing, per the operator's 2026-10-23 rider); the fence sits at the reference target: the author's own corpus, never a detector's classifier.
 - **Not a research search engine.** Connectors exist to feed the trust gate, not to be a product themselves (OpenAlex/Unpaywall/Retraction-Watch were already down-selected in v2's own honest ⬜ annotations).
 
 ---
@@ -115,23 +115,23 @@ All three lines are source material (operator Q1). None is a fork candidate: mas
 5. **Three duplicate exporters** (docx/pdf/latex, ~90% shared, inconsistent cited-papers styling — V1-014 class) → one template-driven export system with **centralized per-format escaping** (the #54/#55/#56/V1-029 injection class gets fixed once, in one place, not per-format per-release).
 6. **The REST server** (unauthenticated 0.0.0.0 + compose port publishing — V1-001 S1, gh#42) → replaced by a single-process local server with token auth, loopback bind default (gui-editor's token posture, minus its GUI-003 bug class via same-origin single token).
 7. **Alias/back-compat shims and stubs-as-features** (LiteLLM renames, run/run_async dispatch stack, subagent_process fake success — V1-012) → nothing carries.
-8. **Scribbr humanizer default-on** (V1-022: unseeded rewriting of academic text by default) → **[gated D5]**; I4's evidence points to removal.
+8. **Scribbr humanizer default-on** (V1-022: unseeded rewriting of academic text by default) → **not inherited (resolved D5 → ADR-0007)**. The detector-facing module is discarded; its anti-trope / anti-obvious-AI-formatting *concept list* is harvested into the voice-profile feature set per the operator's rider — every stylometry pass ledgered, none silent.
 
 **v2 discards (R2 §3/§7):** the branch *wiring* (cli-local persistence hooks, dual workspace models, V2-009 process-global session mutation), import-time `load_dotenv()` (V2-002, its introduced S1 — standing ban in the new codebase), the 49-commits-stale lineage itself, checkpoint-verb hybridization (V2-012), in-branch dependency churn (V2-015), self-contradicting docs (V2-014).
 
-**gui-editor discards (R3 §2.2):** the **3-service substrate** (Vite+Hocuspocus+gateway; 3 ports/3 tokens/3 processes for one user — fails the branch's own "does the single human benefit?" test), **Yjs/CRDT as required document core** (revisioning doesn't need it; R3: "keep CRDT as a future collab backend behind the control-op seam" — **[gated D7]**), **awareness/presence machinery** (GUI-011 races; demo-grade value), **two-token browser auth with query-string tokens** (GUI-003's entire bug class), per-connection DirectConnection caches + per-room op queues (exist only because agents used a second door), **client-side PHASE_ORDER hand-mirror** (the concrete anti-pattern: the client renders the phase model the server serves), the O(n²) event feed (GUI-015).
+**gui-editor discards (R3 §2.2):** the **3-service substrate** (Vite+Hocuspocus+gateway; 3 ports/3 tokens/3 processes for one user — fails the branch's own "does the single human benefit?" test), **Yjs/CRDT as required document core** (revisioning doesn't need it; R3: "keep CRDT as a future collab backend behind the control-op seam" — confirmed out of v1 by D7 → ADR-0004, seam preserved), **awareness/presence machinery** (GUI-011 races; demo-grade value), **two-token browser auth with query-string tokens** (GUI-003's entire bug class), per-connection DirectConnection caches + per-room op queues (exist only because agents used a second door), **client-side PHASE_ORDER hand-mirror** (the concrete anti-pattern: the client renders the phase model the server serves), the O(n²) event feed (GUI-015).
 
 **Repo-wide process discards (recurrence registry, METATRON-CONTEXT §2):** CI that can't fail (exit-0 masks, push-only jobs, never-run branches — GUI-004/#82/recurrence #2 becomes a P0 exit criterion), ad-hoc per-format escaping patches, doc-drift (no more hand-parallel claims; the phase model, counts, and stack names become single-sourced), the 4-identity git mess and untracked automation debris (greenfield repo hygiene from commit one).
 
 ### 2.3 Negative-results register → rewrite requirements
 
-The three registers (83 findings) become the new repo's acceptance-test anti-catalog: every S1/S2 is encoded as "this must be impossible in the new design" (typed statuses, no stub-as-success, capture-completeness assertions, `.env` cwd-trust ban, deletion-aware history). This is operator Q7=c's direct feed into the backlog; triage of the 20 old audit issues is **[gated D8]**.
+The three registers (83 findings) become the new repo's acceptance-test anti-catalog: every S1/S2 is encoded as "this must be impossible in the new design" (typed statuses, no stub-as-success, capture-completeness assertions, `.env` cwd-trust ban, deletion-aware history). This is operator Q7=c's direct feed into the backlog; triage of the 20 old audit issues is settled by D8: backlog-raw-material only — the operator flagged none as having bitten in daily use, so none receive priority uplift over the register findings.
 
 ---
 
 ## 3. Target architecture (first principles)
 
-The shape below is invariant across the §4 stack options; component *bindings* (frameworks, editor kit) follow the stack decision. Items marked **[D\*]** firm up after the gate.
+The shape below is invariant across the §4 stack options; component *bindings* (frameworks, editor kit) were decided by the gate (2026-10-23): former **[D\*]** markers now bind per the ADR set `metatron/docs/adr/0003`–`0008`.
 
 ### 3.1 Layer map
 
@@ -170,15 +170,15 @@ The shape below is invariant across the §4 stack options; component *bindings* 
 7. **Every subsystem must be reachable or deleted.** Integration graph is part of CI: dead code that nothing calls fails the build (kills V1-016-class "shipped but unwired").
 8. **CI red-ability is a release gate**, on every branch (fixes recurrence #1/#2 at the root: e2e assertions sanitized at a harness seam once, suites that can't fail are rejected at review).
 
-### 3.3 What is deliberately NOT yet decided here
+### 3.3 What was gated, now decided (2026-10-23)
 
-Stack (D1), front-end form (D2), phase-model granularity (D3), revision substrate (D4), humanizer stance (D5), trust-gate sequencing (D6), collab substrate scope (D7), backlog triage (D8). These are operator forks — see §7. Downstream cards decompose from the *approved* state of this brief only.
+Stack → Option A, Python-first harvest-forward (ADR-0003). Front-end form → browser editor primary + CLI parity, no TUI (ADR-0004). Phase model → compact cyclic 7-state with typed back-edges (ADR-0005). Revision substrate → embedded shaded git (ADR-0006). Humanizer → voice-fidelity in scope / detection-evasion out (ADR-0007). Trust gate → first-class in P3, before expansive drafting (ADR-0008). Collab substrate → none in v1; edit-op seam + AgentEvent contract preserved (ADR-0004). Backlog + doctrine → resolved in §7.1 (D8). Downstream cards decompose from this approved state.
 
 ---
 
 ## 4. Stack options (≥2 credible, per card)
 
-### Option A — **Conservative-reuse (RECOMMENDED): Python-first monorepo, single-process web app**
+### Option A — **Conservative-reuse (SELECTED — D1 → ADR-0003): Python-first monorepo, single-process web app**
 
 - **Backend:** Python 3.12+, `uv` packaging, PyPI distribution under the reserved name `metatron`. Framework: FastAPI app serving (a) the WS gateway (harvested gui-editor protocol) and (b) the built SPA as static files — **one process, one port, one token, loopback by default**. Typer CLI for console parity stays in-process against the same engine.
 - **Front end:** the gui-editor *concept* minus its substrate: BlockNote/React editor (build verified GREEN by R3 against locked versions: BlockNote 0.54.2, React 19, TS 5.9, vite 7 — and its MPL-2.0 license is already cleared by the permanent-OSS decision d096bbf/2f34532), run **non-collaboratively**: the editor's document model syncs through the command/edit-op seam to the server-side revision store. No Yjs, no Hocuspocus, no presence.
@@ -193,7 +193,7 @@ Stack (D1), front-end form (D2), phase-model granularity (D3), revision substrat
 
 ### Recommendation
 
-**Option A.** Every credible evaluator of the evidence (R1's priority pyramid, R2's "components catalog" verdict, R3's "keep the seam, drop the substrate") converges on the same shape: keep the Python component harvest, keep the typed protocol seams, drop the multi-process substrate. Option B is on the table because the card requires it to be — but its only structural advantage (single language) is bought by discarding the highest-probably-correct assets in the building. **[gated D1]**
+**Option A.** Every credible evaluator of the evidence (R1's priority pyramid, R2's "components catalog" verdict, R3's "keep the seam, drop the substrate") converges on the same shape: keep the Python component harvest, keep the typed protocol seams, drop the multi-process substrate. Option B is on the table because the card requires it to be — but its only structural advantage (single language) is bought by discarding the highest-probably-correct assets in the building. **Decided: Option A — D1 → ADR-0003 (operator, 2026-10-23).**
 
 ---
 
@@ -208,7 +208,7 @@ Stack (D1), front-end form (D2), phase-model granularity (D3), revision substrat
 
 ---
 
-## 6. Phase breakdown (long horizon: phases → candidate workstreams; task-level decomposition happens in later card waves, AFTER the §7 gate)
+## 6. Phase breakdown (long horizon: phases → candidate workstreams; the §7 gate is resolved — §6.1 hands back the wave-1 decomposition; later waves decompose per phase as each opens)
 
 **P0 — Groundwork & guardrails** *(the anti-recurrence phase; nothing else starts without it)*
 WS: new repo scaffold (uv, package layout, pnpm workspace) · CI skeleton with red-ability gate on all branches + packaging test (no dev-extra-only runtime deps — GUI-016 class) · licensing/MIT + governance docs · ADR skeleton + doc single-sourcing rules · backlog ingestion: registers → tagged anti-requirements/test ideas.
@@ -227,7 +227,7 @@ WS: research connectors harvested + rate-limited (V1-030) + escalated identifier
 *Exit:* a seeded claim set with one fabricated citation fails the gate loudly; a clean set passes with evidence links.
 
 **P4 — Writing lifecycle & agents**
-WS: lifecycle stages on the P1 engine (research→plan→draft→review→revise→cite→export, back-edges per D3) · drafting agents emit **suggestion sets**, not writes · voice profile (interview → drafting style; ledgered — I4, D5 posture) · single template-driven exporter family with centralized per-format escaping + Unicode (V1-014/024 class) · synthesis/argument-structure tooling per the v2 corpus (down-selected per D8).
+WS: lifecycle stages on the P1 engine (research→plan→draft→review→revise→cite→export, back-edges per D3) · drafting agents emit **suggestion sets**, not writes · voice profile (interview → drafting style; ledgered — I4) carrying the anti-trope / anti-obvious-AI-formatting feature set and the humanizer/style-transfer model evaluation from the **ADR-0007 rider seeds** (voice-LoRA fine-tune = planned research track on the voice-collector corpus, post-v1 scope) · single template-driven exporter family with centralized per-format escaping + Unicode (V1-014/024 class) · synthesis/argument-structure tooling per the v2 corpus (down-selected per D8).
 *Exit:* full paper arc runs with every agent output reviewable and every exported artifact escaping-clean under property tests.
 
 **P5 — Front end**
@@ -240,11 +240,41 @@ WS: backlog burn-down (all carried S1/S2-class anti-requirements verified as tes
 
 Dependencies: P0 → P1 → {P2, P3} → P4 → P5 → P6 (P2 and P3 parallelizable across dev lanes).
 
+### 6.1 Wave-1 handback (unblocked by D1/D2 — workstream level; lanes + dependencies ready for card filing)
+
+| # | Workstream | Phase | Suggested lane | Depends on | Scope highlights (exit-slice) |
+|---|---|---|---|---|---|
+| W1-1 | New-repo scaffold + CI with teeth | P0 | sw-dev-a | — | uv package layout + pnpm workspace; red-ability gate on all branches (a deliberately broken commit must fail CI); packaging test (runtime deps cannot hide in dev extras — GUI-016 class); MIT + governance docs; single wired git identity; version-tag policy from commit one |
+| W1-2 | Registers → anti-requirement backlog | P0 | sw-dev-b | W1-1 | ingest all three finding registers + the 20 audit issues + 6 dependabot PRs (D8: raw material, no uplift) as tagged anti-requirements + test ideas; map every S1/S2 to its "impossible in the new design" test |
+| W1-3 | Provider layer | P1 | sw-dev-a | W1-1, W1-2 | harvest `message_normalize`; native OpenAI-compatible + native Anthropic Messages transports; streaming with correct retry state (V1-008 class); reasoning-content policy (V1-033 class); config precedence with the no-cwd-upward-env-capture ban as a tested invariant (V2-002 class) |
+| W1-4 | Lifecycle engine + typed stage contracts | P1 | sw-dev-b | W1-1, W1-2 | the ONE engine: 7-state cyclic machine per ADR-0005; typed request/result/status contracts (I7); single-writer; append-only state log; typed back-edges recorded with trigger + rationale |
+| W1-5 | Event spine + local server shell + CLI parity | P1 | sw-dev-a | W1-4 (event taxonomy frozen) | AgentEvent spine with public replay/cursor/unsubscribe (GUI-018 lesson); token auth + loopback default + same-origin single token; Typer console (v1 console-UX harvest) against the same engine |
+| W1-6 | Wave-1 integration exit | P1 | sw-dev-a + sw-dev-b | W1-3, W1-4, W1-5 | two-stage toy workflow runs end-to-end; both surfaces (CLI + WS) observe one event stream; every failure mode returns a typed status; CI signals red on any regression |
+
+Wave-2 previews (not filed yet — decompose as each phase opens): P2 revisioning per ADR-0006 (needs W1-4/W1-6); P3 trust layer per ADR-0008 (parallelizable with P2 across lanes); front-end cards (P5 per ADR-0004) start only after the W1-5 event-spine contract is frozen. Voice-layer work (ADR-0007) lands in P4, with its two research seeds on the research list from P0 onward.
+
 ---
 
-## 7. OPERATOR DIRECTION GATE — decision list
+## 7. OPERATOR DIRECTION GATE — RESOLVED (2026-10-23)
 
-Per OPERATOR-DIRECTION §3, the eight locked answers are NOT re-asked. Everything below is a genuine remaining fork, each with my recommendation and its falsifier. Answers here scale directly into the phase plan and the ADR set; D1/D2 gate the wave-1 card breakdown itself.
+Asked as comment #48 (D1–D8, recommendation first on each, plus the non-blocking O-1/O-2 register); answered via butler chat 2026-10-23, one question at a time per the operator's request. **§7.1 is the binding record.**
+
+### 7.1 Locked decisions (binding record)
+
+| # | Fork | Operator answer (2026-10-23) | Recorded in |
+|---|---|---|---|
+| D1 | Stack | **(a)** Python-first, harvest-forward, single-process web app | ADR-0003 |
+| D2 | Front-end form | **(a)** Browser editor primary + CLI parity; no TUI in v1 | ADR-0004 |
+| D3 | Phase model | **(a)** Compact cyclic ~7 states, typed back-edges, Plan/Draft/Review surfaces | ADR-0005 |
+| D4 | Revision substrate | **(a)** Embedded shaded git repo; v2 RevisionStore semantics; deletions bug fixed | ADR-0006 |
+| D5 | Humanizer/evasion stance | **(a) with rider** — detector-facing evasion NOT inherited; the voice-fidelity layer IS: anti-trope / anti-obvious-AI-formatting concepts harvested as voice-profile features; target is output indistinguishable from the operator's own natural writing; two research seeds (evaluate open humanizer/style-transfer models as candidate stylometry passes; plan a voice LoRA fine-tune on the voice-collector corpus — post-v1 scope). Contribution ledger applies to all stylometry passes. Verbatim rider preserved in ADR-0007 | ADR-0007 |
+| D6 | Trust-gate sequencing | **(a)** Claim–source alignment + fabrication checks ship first-class in Phase 3, before expansive drafting | ADR-0008 |
+| D7 | Collab substrate | **(a)** No Yjs/Hocuspocus in v1; edit-op seam + AgentEvent contract preserved so collab can be added later | ADR-0004 |
+| D8 | Backlog + doctrine | **(a) all three** — 20 audit issues + 6 dependabot PRs are backlog raw material only (none bit in daily use); v2 research corpus remains the design doctrine, down-selected per feature; PR #69 superseded-as-branch, harvested-as-ideas | §2.3, §6.1 (process policy — no ADR required) |
+
+**Open-question register — defaults standing (operator may revisit anytime):** O-1 (empirical sw-qa run of the never-CI'd gui-editor suites before trusting the harvest) — **default holds: no run**; the harvest trusts the registers, not the suites (GUI-004/017 document why a collab-suite green would be meaningless). O-2 (dead-line reconsiderations: canvas / OpenWiki / multi-platform gateway) — **default holds: stay dead.**
+
+#### Original decision list as posted (comment #48) — preserved for the audit trail
 
 | # | Fork | Options ( recommendation first ) | Why | What it changes |
 |---|---|---|---|---|
@@ -257,7 +287,7 @@ Per OPERATOR-DIRECTION §3, the eight locked answers are NOT re-asked. Everythin
 | **D7** | **Collab substrate scope** (fold of R3's posted Q2) | **(a) Confirm: no Yjs/Hocuspocus in rewrite v1 — keep the edit-op seam + event contract so collab can be added later without surgery** · (b) keep the collab substrate live | All three reviewers independently read single-user-first as substrate-out; (a) is also strictly cheaper | P5 surface count; future-collab cost |
 | **D8** | **Backlog triage + corpus authority** (fold of DOC-1 Q1/Q3/Q4) | **(a) Confirm: the 20 open audit issues + 6 dependabot PRs are backlog-raw-material only (nobody fixes them on v1) — flag any that actually bit you for priority; (b) confirm the v2 research corpus (How Humans write / roadmap-v2) remains the design doctrine to cite, down-selected per-feature; (c) v2/PR#69's status: superseded-as-branch, harvested-as-ideas (my read — confirm)** | Sets doctrine authority + tells P3/P4 triage which defects had real-world bite | P3/P4 priorities |
 
-**Open-question register (non-blocking, answered anytime):** O-1 (from R3): want an empirical JS/TS test run of the never-CI'd gui-editor suites via sw-qa before its harvest ratio is trusted? Default: no — the register already documents why collab-suite green wouldn't be trusted (GUI-004/017). O-2 (from DOC-1): anything from the dead-line harvest table you want reconsidered (canvas, OpenWiki, multi-platform) — default: stay dead.
+The non-blocking register (O-1/O-2) moved to §7.1's standing-defaults paragraph.
 
 ---
 
@@ -268,7 +298,8 @@ Per OPERATOR-DIRECTION §3, the eight locked answers are NOT re-asked. Everythin
 - Revisit D4 (git substrate) if restore-attribution or lock-recovery correctness fights the git substrate more than once — that falsifies "invisible git" and promotes option (b).
 - Revisit D7 (no CRDT) the day a second human actually joins a document — that's the trigger the substrate seam exists for.
 - Revisit the whole single-process posture if the browser editor needs sub-50ms streaming and the in-process path can't deliver — measured, not assumed.
+- ADR-0007 (voice fidelity vs detection evasion) carries a standing red-flag rule rather than a revisit trigger: any voice-layer feature whose validation or test metric depends on a detector's output escalates to the operator before it ships.
 
 ---
 
-*Prepared by sw-architect, card t_77ba5a4b. Post-gate, this brief finalizes (§7 answers folded in as ADRs), the phase plan converts to implementation cards for sw-dev-a/sw-dev-b, and sw-reviewer gets the ADR set as its adversarial checklist.*
+*Prepared by sw-architect, card t_77ba5a4b. Gate resolved 2026-10-23: answers folded in as ADR-0003–0008 (`metatron/docs/adr/`). Wave-1 workstreams (§6.1) are the handback — ready to file for sw-dev-a/sw-dev-b. sw-reviewer receives the ADR set + the §3.2 design rules + the §2.3 negative-results register as its adversarial checklist for the redevelopment.*

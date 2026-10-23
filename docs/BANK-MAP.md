@@ -46,6 +46,17 @@ at creation, repopulate from live runs only:
 - `distiller` → `hb-distiller`
 - `sampling-test` → `hb-sampling-test` (throwaway test lane, safe to delete freely)
 
+### Specialist server-manager lane → `hb-unsloth-studio` (added 2026-10-23, t_7601b273)
+- `unsloth-litellm` → `hb-unsloth-studio` — dedicated bank created server-side
+  (PUT upsert, mission set) for the Unsloth Studio server-manager / LiteLLM
+  DB-configurator profile imported 2026-10-23. Post-cutover convention
+  applies: `hindsight/config.json` carrier governs (`bank_id` + `banks{}`
+  flipped from inherited `hermes`), **no `.env` `HINDSIGHT_BANK_ID` pin**
+  (0 pin lines verified). Canary verified from a fresh one-shot session:
+  4 facts, 3 canary content hits, 0 leaks into the shared `hermes` bank.
+  Unsloth Studio management and LiteLLM DB-config knowledge must stay out of
+  shared banks.
+
 ### Board worker/orchestrator lanes → per-FAMILY specialist banks (ratified, deliberate)
 Specialist banks are **intentional** (operator 2026-10-22): the same family
 serves every board fleet — bank membership follows the LANE ROLE, not the

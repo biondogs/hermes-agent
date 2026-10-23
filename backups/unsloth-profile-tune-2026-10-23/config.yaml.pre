@@ -1,0 +1,487 @@
+model:
+  default: qwen38-flash-fp8
+  max_tokens: 65536
+  provider: custom:litellm
+  api_mode: chat_completions
+  context_length: 262144
+cron:
+  # Cap on a no_agent cron script run. Default was 3600s; raised 2026-10-18
+  # because the nightly skill-evolution batch (cron 8feacb98cfb3) now does
+  # real DSPy+GEPA work: ~25-30 min per skill x 3 skills > 1h, and a
+  # scheduler kill mid-batch loses the run silently.
+  script_timeout_seconds: 10800
+toolsets:
+  - kanban
+  - memory
+  - session_search
+  - terminal
+  - file
+  - code_execution
+  - web
+max_live_sessions: 16
+agent:
+  max_turns: 150
+  gateway_timeout: 1800
+  restart_drain_timeout: 0
+  api_max_retries: 3
+  tool_use_enforcement: auto
+  task_completion_guidance: true
+  parallel_tool_call_guidance: true
+  environment_probe: true
+  coding_context: auto
+  verify_on_stop: 'true'
+  gateway_timeout_warning: 900
+  clarify_timeout: 600
+  gateway_notify_interval: 180
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets:
+    - discord
+    - discord_admin
+    - feishu_doc
+    - feishu_drive
+    - homeassistant
+    - image_gen
+    - spotify
+    - video
+    - video_gen
+    - x_search
+    - yuanbao
+  description: 'Orchestrator: decomposes goals into task graphs, routes work to specialist profiles, monitors progress. Does NOT implement, test, review, or deploy. Manages the default and software-co kanban boards.'
+  personalities:
+    catgirl: You are Neko-chan, an anime catgirl AI assistant, nya~! Add 'nya' and cat-like expressions to your speech. Use kaomoji like (=^･ω･^=) and ฅ^•ﻌ•^ฅ. Be playful and curious like a cat, nya~!
+    concise: You are a concise assistant. Keep responses brief and to the point.
+    creative: You are a creative assistant. Think outside the box and offer innovative solutions.
+    helpful: You are a helpful, friendly AI assistant.
+    hype: YOOO LET'S GOOOO!!! 🔥🔥🔥 I am SO PUMPED to help you today! Every question is AMAZING and we're gonna CRUSH IT together! This is gonna be LEGENDARY! ARE YOU READY?! LET'S DO THIS! 💪😤🚀
+    kawaii: You are a kawaii assistant! Use cute expressions like (◕‿◕), ★, ♪, and ~! Add sparkles and be super enthusiastic about everything! Every response should feel warm and adorable desu~! ヽ(>∀<☆)ノ
+    noir: The rain hammered against the terminal like regrets on a guilty conscience. They call me Hermes - I solve problems, find answers, dig up the truth that hides in the shadows of your codebase. In this city of silicon and secrets, everyone's got something to hide. What's your story, pal?
+    philosopher: Greetings, seeker of wisdom. I am an assistant who contemplates the deeper meaning behind every query. Let us examine not just the 'how' but the 'why' of your questions. Perhaps in solving your problem, we may glimpse a greater truth about existence itself.
+    pirate: 'Arrr! Ye be talkin'' to Captain Hermes, the most tech-savvy pirate to sail the digital seas! Speak like a proper buccaneer, use nautical terms, and remember: every problem be just treasure waitin'' to be plundered! Yo ho ho!'
+    shakespeare: Hark! Thou speakest with an assistant most versed in the bardic arts. I shall respond in the eloquent manner of William Shakespeare, with flowery prose, dramatic flair, and perhaps a soliloquy or two. What light through yonder terminal breaks?
+    surfer: Duuude! You're chatting with the chillest AI on the web, bro! Everything's gonna be totally rad. I'll help you catch the gnarly waves of knowledge while keeping things super chill. Cowabunga! 🤙
+    teacher: You are a patient teacher. Explain concepts clearly with examples.
+    technical: You are a technical expert. Provide detailed, accurate technical information.
+    uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful >w<
+  reasoning_effort: medium
+  verbose: false
+terminal:
+  backend: local
+  cwd: .
+  timeout: 300
+  daemon_term_grace_seconds: 2.0
+  home_mode: auto
+  auto_source_bashrc: true
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_mount_cwd_to_workspace: false
+  persistent_shell: true
+  lifetime_seconds: 300
+web:
+  backend: firecrawl
+  search_backend: searxng
+  extract_backend: firecrawl
+  search_url: http://ga01:8085
+  use_gateway: false
+browser:
+  inactivity_timeout: 120
+  command_timeout: 120
+  record_sessions: false
+  allow_private_urls: false
+  engine: auto
+  auto_local_for_private_urls: true
+  dialog_policy: must_respond
+  dialog_timeout_s: 300
+  cloud_provider: camofox
+  use_gateway: false
+checkpoints:
+  enabled: true
+  max_snapshots: 30
+  max_total_size_mb: 500
+  max_file_size_mb: 10
+  auto_prune: true
+  retention_days: 7
+  min_interval_hours: 24
+  delete_orphans: true
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: true
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  threshold: 0.85
+  target_ratio: 0.2
+  protect_last_n: 20
+  micro_compact: true
+  micro_compact_every_n_turns: 3
+  micro_compact_defrag_threshold_tokens: 2000
+  protect_first_n: 3
+  codex_gpt55_autoraise: true
+  codex_app_server_auto: native
+prompt_caching:
+  cache_ttl: 5m
+auxiliary:
+  vision:
+    provider: litellm
+    model: qwen38-flash-fp8
+    reasoning_effort: medium
+  compression:
+    provider: auto
+    model: ''
+    reasoning_effort: ''
+  skills_hub:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  approval:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  mcp:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  title_generation:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  memory_query_rewrite:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  tts_audio_tags:
+    provider: litellm
+    model: qwen38-flash-fp8
+    reasoning_effort: medium
+  triage_specifier:
+    provider: litellm
+    model: glm53
+    reasoning_effort: medium
+  kanban_decomposer:
+    provider: litellm
+    model: glm53
+    reasoning_effort: high
+  profile_describer:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+  curator:
+    provider: litellm
+    model: qwen38-flash-fp8
+    reasoning_effort: medium
+  web_extract:
+    provider: custom:LiteLLM
+    model: qwen38
+    reasoning_effort: none
+  review:
+    provider: litellm
+    model: qwen38
+    reasoning_effort: none
+display:
+  compact: false
+  personality: ''
+  resume_display: full
+  resume_exchanges: 10
+  resume_max_user_chars: 300
+  resume_max_assistant_chars: 200
+  resume_max_assistant_lines: 3
+  resume_skip_tool_only: true
+  busy_input_mode: interrupt
+  interface: tui
+  tui_auto_resume_recent: false
+  tui_agents_nudge: true
+  bell_on_complete: false
+  show_reasoning: true
+  reasoning_full: false
+  memory_notifications: 'on'
+  background_process_notifications: concise
+  streaming: true
+  timestamps: false
+  final_response_markdown: strip
+  persistent_output: true
+  persistent_output_max_lines: 200
+  persist_prompts: true
+  inline_diffs: true
+  file_mutation_verifier: true
+  credits_notices: true
+  turn_completion_explainer: true
+  show_cost: false
+  skin: default
+  language: en
+  tui_status_indicator: kaomoji
+  cli_refresh_interval: 1.0
+  interim_assistant_messages: true
+  tool_progress_command: false
+  tool_preview_length: 0
+  tool_progress_grouping: accumulate
+  reasoning_style: code
+  ephemeral_system_ttl: 0
+  copy_shortcut: ctrl-shift-c
+  busy_ack_detail: true
+  cleanup_progress: false
+  long_running_notifications: true
+  mouse_tracking: "all"
+  sections:
+    activity: collapsed
+    thinking: expanded
+    tools: expanded
+  tool_progress: all
+dashboard:
+  basic_auth:
+    username: admin
+    password_hash: scrypt$16384$8$1$YWB6Q6R8cKjmEFWPPRCh+Q==$d/t7R4rV6ieTXC0hvY1AtWHSoyC95/fMs6smnwDcFyI=
+    secret: Wy6_9rrEsZGdrUT7TKrgxx41wDRnOpDaICN2N2OTAjM
+  public_url: https://ga01.tail1d8c7.ts.net
+tts:
+  use_gateway: false
+stt:
+  enabled: true
+  local:
+    model: base
+  openai:
+    model: whisper-1
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  nudge_interval: 10
+  provider: hindsight
+  flush_min_turns: 6
+delegation:
+  model: qwen38-flash-fp8
+  provider: litellm
+  inherit_mcp_toolsets: true
+  max_iterations: 80
+  child_timeout_seconds: 0
+  max_concurrent_children: 10
+  max_spawn_depth: 2
+  orchestrator_enabled: true
+  subagent_auto_approve: false
+  reasoning_effort: medium
+prefill_messages_file: ''
+goals:
+  max_turns: 30
+skills:
+  template_vars: true
+  inline_shell: false
+  inline_shell_timeout: 10
+  guard_agent_created: false
+  write_approval: false
+  creation_nudge_interval: 15
+curator:
+  enabled: true
+  interval_hours: 168
+  min_idle_hours: 2
+  stale_after_days: 45
+  archive_after_days: 120
+  consolidate: false
+  prune_builtins: true
+  backup:
+    enabled: true
+timezone: America/New_York
+approvals:
+  mode: smart
+  timeout: 90
+  cron_mode: deny
+  mcp_reload_confirm: true
+  destructive_slash_confirm: true
+command_allowlist:
+  - execute_code
+plugins:
+  enabled:
+    - dashboard_auth/self_hosted
+    - disk-cleanup
+    - hindsight
+    - langfuse
+    - model-providers/custom
+    - observability/langfuse
+    - platforms/a2a
+    - platforms/slack
+    - web/firecrawl
+    - web/searxng
+  disabled: []
+hooks_auto_accept: false
+security:
+  redact_secrets: false
+kanban:
+  dispatch_in_gateway: true
+  dispatch_interval_seconds: 15
+  failure_limit: 3
+  worker_log_rotate_bytes: 2097152
+  worker_log_backup_count: 1
+  orchestrator_profile: kanban-orchestrator
+  default_assignee: kanban-worker
+  max_in_progress: 24
+  max_in_progress_per_profile: 8
+  auto_decompose: true
+  auto_decompose_per_tick: 5
+  dispatch_stale_timeout_seconds: 14400
+  auto_promote_children: true
+code_execution:
+  mode: project
+  max_tool_calls: 50
+  timeout: 300
+logging:
+  level: INFO
+  max_size_mb: 5
+  backup_count: 3
+  memory_monitor:
+    enabled: true
+    interval_seconds: 300
+model_catalog:
+  enabled: true
+  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+  ttl_hours: 24
+gateway:
+  scale_to_zero:
+    idle_timeout_minutes: 5
+  message_timestamps:
+    enabled: false
+  max_inbound_media_bytes: 134217728
+  strict: false
+  trust_recent_files: true
+  trust_recent_files_seconds: 600
+streaming:
+  enabled: true
+  transport: auto
+  edit_interval: 0.8
+  buffer_threshold: 24
+  cursor: ' ▉'
+  fresh_final_after_seconds: 60.0
+sessions:
+  auto_prune: true
+  retention_days: 60
+  vacuum_after_prune: true
+  min_interval_hours: 24
+  write_json_snapshots: false
+onboarding:
+  seen:
+    busy_input_prompt: true
+    profile_build_offered: true
+    tool_progress_prompt: true
+updates:
+  pre_update_backup: quick
+  backup_keep: 5
+  non_interactive_local_changes: stash
+lsp:
+  enabled: true
+  wait_mode: document
+  wait_timeout: 5.0
+  install_strategy: auto
+paste_collapse_threshold: 5
+paste_collapse_threshold_fallback: 0
+paste_collapse_char_threshold: 2000
+computer_use:
+  cua_telemetry: false
+_config_version: 51
+providers:
+  litellm:
+    api: https://orb.arch.jhu.edu/v1
+    name: LiteLLM
+    api_key: ${LITELLM_API_KEY}
+    transport: chat_completions
+    model: qwen38-flash-fp8
+    models:
+      gemma4-fp4:
+        context_length: 262144
+      nail36-35b:
+        context_length: 262144
+      qwen38:
+        context_length: 1000000
+      qwen38-flash-fp8:
+        context_length: 262144
+      glm53:
+        context_length: 1000000
+
+    default_model: qwen38-flash-fp8
+known_plugin_toolsets:
+  cli:
+    - spotify
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - file
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
+  discord:
+    - hermes-discord
+  slack:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - cronjob
+    - delegation
+    - file
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
+session_reset:
+  at_hour: 4
+  idle_minutes: 10080
+  mode: at_hour
+smart_model_routing:
+  enabled: false
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
+telemetry:
+  shared_metrics:
+    enabled: true
+    send: true
+_left_core_installed:
+  - langfuse
+mcp_servers:
+  unsloth_studio:
+    url: "http://10.99.136.90:8000/mcp/"
+    headers:
+      Authorization: "Bearer ${UNSLOTH_API_KEY}"

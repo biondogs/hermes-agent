@@ -1,0 +1,317 @@
+[
+  {
+    "profile": ".deleted",
+    "bank_id": null,
+    "active_env_pin": null
+  },
+  {
+    "profile": "coding",
+    "bank_id": null,
+    "active_env_pin": null
+  },
+  {
+    "profile": "distiller",
+    "bank_id": "hb-distiller",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-auditor",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-butler",
+    "bank_id": "g01-butler",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-ops",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-orchestrator",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-planner",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-scribe",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g01-watcher",
+    "bank_id": "g01-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-auditor",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-butler",
+    "bank_id": "g02-butler",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-ops",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-orchestrator",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-planner",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-scribe",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "g02-watcher",
+    "bank_id": "g02-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-analyst",
+    "bank_id": "gaudi-hpu-perf",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-arch",
+    "bank_id": "gaudi-hpu-sdk",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-auditor",
+    "bank_id": "gaudi-hpu",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-benchrunner",
+    "bank_id": "gaudi-hpu-perf",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-butler",
+    "bank_id": "gaudi-butler",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-deployer",
+    "bank_id": "gaudi-hpu",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-dockerops",
+    "bank_id": "gaudi-hpu-hostops",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-liaison",
+    "bank_id": "gaudi-hpu-upstream",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-orchestrator",
+    "bank_id": "gaudi-hpu",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-perfeng",
+    "bank_id": "gaudi-hpu-sdk",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-planner",
+    "bank_id": "gaudi-hpu",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-scribe",
+    "bank_id": "gaudi-hpu",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-synapse",
+    "bank_id": "gaudi-hpu-sdk",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-sysadmin",
+    "bank_id": "gaudi-hpu-hostops",
+    "active_env_pin": null
+  },
+  {
+    "profile": "gaudi-watcher",
+    "bank_id": "gaudi-hpu-perf",
+    "active_env_pin": null
+  },
+  {
+    "profile": "kanban-board-architect",
+    "bank_id": "hb-architect",
+    "active_env_pin": null
+  },
+  {
+    "profile": "kanban-orchestrator",
+    "bank_id": "hb-orchestrator",
+    "active_env_pin": null
+  },
+  {
+    "profile": "kanban-worker",
+    "bank_id": "hb-kanban-worker",
+    "active_env_pin": null
+  },
+  {
+    "profile": "kworker-muse-probe",
+    "bank_id": null,
+    "active_env_pin": null
+  },
+  {
+    "profile": "plugin-ab",
+    "bank_id": null,
+    "active_env_pin": null
+  },
+  {
+    "profile": "research",
+    "bank_id": "hb-research",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sampling-test",
+    "bank_id": "hb-sampling-test",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-auditor",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-ops",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-orchestrator",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-planner",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-scribe",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sj-watcher",
+    "bank_id": "skipjack-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-auditor",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-ops",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-orchestrator",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-planner",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-scribe",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjp-watcher",
+    "bank_id": "skipjack-prototype-infra",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sjproto-butler",
+    "bank_id": "sjproto-butler",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-architect",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-dev-a",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-dev-b",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-devops",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-docs",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-pm",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-qa",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-reviewer",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "sw-ux",
+    "bank_id": "software-co",
+    "active_env_pin": null
+  },
+  {
+    "profile": "swco-butler",
+    "bank_id": "swco-butler",
+    "active_env_pin": null
+  },
+  {
+    "profile": "unsloth-litellm",
+    "bank_id": "hb-unsloth-studio",
+    "active_env_pin": null
+  }
+]

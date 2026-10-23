@@ -1,0 +1,563 @@
+{
+  "Hermes q38": {
+    "bank_id": "Hermes q38",
+    "created_at": "2026-10-01T04:56:55.242047+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 6092,
+    "last_document_at": "2026-10-23T17:03:24.071246+00:00",
+    "last_write_at": "2026-10-23T17:04:28.672157+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "Hermes q38",
+    "updated_at": "2026-10-01T04:56:55.242047+00:00"
+  },
+  "g01-butler": {
+    "bank_id": "g01-butler",
+    "created_at": "2026-10-22T14:03:05.096025+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 37,
+    "last_document_at": "2026-10-22T17:36:03.820383+00:00",
+    "last_write_at": "2026-10-22T17:36:24.208991+00:00",
+    "matched_aliases": [],
+    "mission": "Isolated memory bank for the g01-butler Topology-B board butler (gargantua01 board front-end). Per-board butler banks per operator-approved policy \u2014 butler memories stay isolated, never in shared banks.",
+    "name": "g01-butler",
+    "updated_at": "2026-10-22T14:03:05.698743+00:00"
+  },
+  "g01-infra": {
+    "bank_id": "g01-infra",
+    "created_at": "2026-10-23T17:22:37.348005+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 4,
+    "last_document_at": "2026-10-23T17:24:28.554642+00:00",
+    "last_write_at": "2026-10-23T17:24:29.551328+00:00",
+    "matched_aliases": [],
+    "mission": "Gargantua01 hardware-environment bank (prototype k8s). Single bank for every g01 lane profile (orchestrator, planner, auditor, scribe, ops, watcher). Fresh start 2026-10-23 per operator ruling \u2014 deliberately empty, repopulates from live g01 runs only; never mix other environments.",
+    "name": "g01-infra",
+    "updated_at": "2026-10-23T17:23:00.331727+00:00"
+  },
+  "g02-butler": {
+    "bank_id": "g02-butler",
+    "created_at": "2026-10-22T14:39:11.298675+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 89,
+    "last_document_at": "2026-10-23T03:43:34.767400+00:00",
+    "last_write_at": "2026-10-23T17:03:28.558245+00:00",
+    "matched_aliases": [],
+    "mission": "Isolated memory bank for the g02-butler Topology-B board butler (gargantua02 board front-end). Per-board butler banks per operator-approved policy \u2014 butler memories stay isolated, never in shared banks.",
+    "name": "g02-butler",
+    "updated_at": "2026-10-22T14:39:11.876480+00:00"
+  },
+  "g02-infra": {
+    "bank_id": "g02-infra",
+    "created_at": "2026-10-23T17:23:00.345249+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 3,
+    "last_document_at": "2026-10-23T17:24:36.716775+00:00",
+    "last_write_at": "2026-10-23T17:24:37.632713+00:00",
+    "matched_aliases": [],
+    "mission": "Gargantua02 hardware-environment bank (production k8s on Azure VMs 413-418). Single bank for every g02 lane profile (orchestrator, planner, auditor, scribe, ops, watcher). Fresh start 2026-10-23 per operator ruling \u2014 deliberately empty, repopulates from live g02 runs only; never mix other environments.",
+    "name": "g02-infra",
+    "updated_at": "2026-10-23T17:23:00.861774+00:00"
+  },
+  "gargantua01": {
+    "bank_id": "gargantua01",
+    "created_at": "2026-10-12T16:04:38.775008+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 18,
+    "last_document_at": "2026-10-12T16:05:37.639985+00:00",
+    "last_write_at": "2026-10-12T16:05:49.798442+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "gargantua01",
+    "updated_at": "2026-10-12T16:04:38.775008+00:00"
+  },
+  "gargantua02": {
+    "bank_id": "gargantua02",
+    "created_at": "2026-10-12T16:05:37.664797+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 14,
+    "last_document_at": "2026-10-12T16:06:39.601400+00:00",
+    "last_write_at": "2026-10-12T16:06:43.890667+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "gargantua02",
+    "updated_at": "2026-10-12T16:05:37.664797+00:00"
+  },
+  "gaudi": {
+    "bank_id": "gaudi",
+    "created_at": "2026-10-12T16:02:03.929779+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 125,
+    "last_document_at": "2026-10-22T13:17:05.221798+00:00",
+    "last_write_at": "2026-10-22T13:25:33.524169+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "gaudi",
+    "updated_at": "2026-10-12T16:02:03.929779+00:00"
+  },
+  "gaudi-butler": {
+    "bank_id": "gaudi-butler",
+    "created_at": "2026-10-22T14:03:04.479365+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 116,
+    "last_document_at": "2026-10-23T16:44:59.306366+00:00",
+    "last_write_at": "2026-10-23T16:57:45.588428+00:00",
+    "matched_aliases": [],
+    "mission": "Isolated memory bank for the gaudi-butler Topology-B board butler (gaudi board front-end). Per-board butler banks per operator-approved policy \u2014 butler memories stay isolated, never in shared banks.",
+    "name": "gaudi-butler",
+    "updated_at": "2026-10-22T14:03:05.077547+00:00"
+  },
+  "gaudi-hpu": {
+    "bank_id": "gaudi-hpu",
+    "created_at": "2026-10-23T17:23:01.865263+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 3,
+    "last_document_at": "2026-10-23T17:24:56.175673+00:00",
+    "last_write_at": "2026-10-23T17:24:57.237502+00:00",
+    "matched_aliases": [],
+    "mission": "Gaudi host (ga01, Habana HPU) environment bank \u2014 general board/infra lane for gaudi orchestrator, planner, auditor, scribe, deployer. Fresh start 2026-10-23 per operator ruling; deliberately empty, repopulates from live gaudi runs only. Sister banks: gaudi-hpu-perf (bench/inference), gaudi-hpu-sdk (SDK/kernel), gaudi-hpu-hostops, gaudi-hpu-upstream.",
+    "name": "gaudi-hpu",
+    "updated_at": "2026-10-23T17:23:02.334005+00:00"
+  },
+  "gaudi-hpu-perf": {
+    "bank_id": "gaudi-hpu-perf",
+    "created_at": "2026-10-23T17:23:02.347609+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 2,
+    "last_document_at": "2026-10-23T17:25:12.177371+00:00",
+    "last_write_at": "2026-10-23T17:25:12.926791+00:00",
+    "matched_aliases": [],
+    "mission": "Gaudi host inference/bench lane bank \u2014 gaudi analyst, benchrunner, watcher. Preserves the operator ORCH-AMEND doctrine (inference knowledge stays out of general board knowledge) inside the env-axis taxonomy. Fresh start 2026-10-23; deliberately empty, repopulates from live runs only.",
+    "name": "gaudi-hpu-perf",
+    "updated_at": "2026-10-23T17:23:02.817975+00:00"
+  },
+  "gaudi-hpu-sdk": {
+    "bank_id": "gaudi-hpu-sdk",
+    "created_at": "2026-10-23T17:23:02.831317+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 4,
+    "last_document_at": "2026-10-23T17:34:10.778675+00:00",
+    "last_write_at": "2026-10-23T17:34:11.861789+00:00",
+    "matched_aliases": [],
+    "mission": "Gaudi SynapsePT/SDK/kernel engineering lane bank \u2014 gaudi arch, perfeng, synapse. Fresh start 2026-10-23 per operator ruling (replaces mixed-pool hb-synapse-sdk); deliberately empty, repopulates from live runs only.",
+    "name": "gaudi-hpu-sdk",
+    "updated_at": "2026-10-23T17:23:03.298480+00:00"
+  },
+  "hb-architect": {
+    "bank_id": "hb-architect",
+    "created_at": "2026-10-22T20:21:29.462798+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 240,
+    "last_document_at": "2026-10-23T16:44:38.099757+00:00",
+    "last_write_at": "2026-10-23T16:44:56.737208+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the kanban-board-architect profile: profile/board provisioning, memory-bank routing, SOUL/toolset design knowledge from architect-lane runs. Fresh start 2026-10-22 per operator GO \u2014 deliberately empty, repopulates from live runs only.",
+    "name": "hb-architect",
+    "updated_at": "2026-10-22T20:21:30.024622+00:00"
+  },
+  "hb-distiller": {
+    "bank_id": "hb-distiller",
+    "created_at": "2026-10-22T20:21:31.244030+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 304,
+    "last_document_at": "2026-10-23T17:04:14.640782+00:00",
+    "last_write_at": "2026-10-23T17:05:49.845645+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the distiller profile: cross-board memory curation and distillation knowledge. Fresh start 2026-10-22 per operator GO \u2014 deliberately empty, repopulates from live runs only.",
+    "name": "hb-distiller",
+    "updated_at": "2026-10-22T20:21:31.763002+00:00"
+  },
+  "hb-host-ops": {
+    "bank_id": "hb-host-ops",
+    "created_at": "2026-10-05T16:09:05.346869+00:00",
+    "display_alias": "gaudi-hpu-hostops",
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 139,
+    "last_document_at": "2026-10-23T17:39:42.727568+00:00",
+    "last_write_at": "2026-10-23T17:39:43.926133+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hb-host-ops",
+    "updated_at": "2026-10-05T16:09:05.346869+00:00"
+  },
+  "hb-inference-bench": {
+    "bank_id": "hb-inference-bench",
+    "created_at": "2026-10-08T15:03:15.733172+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 2038,
+    "last_document_at": "2026-10-23T17:03:18.484573+00:00",
+    "last_write_at": "2026-10-23T17:04:20.533470+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hb-inference-bench",
+    "updated_at": "2026-10-08T15:03:15.733172+00:00"
+  },
+  "hb-infra-release": {
+    "bank_id": "hb-infra-release",
+    "created_at": "2026-10-05T19:18:39.170012+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 3027,
+    "last_document_at": "2026-10-23T03:43:41.023806+00:00",
+    "last_write_at": "2026-10-23T03:45:08.957126+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hb-infra-release",
+    "updated_at": "2026-10-05T19:18:39.170012+00:00"
+  },
+  "hb-kanban-worker": {
+    "bank_id": "hb-kanban-worker",
+    "created_at": "2026-10-22T20:21:30.036473+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 67,
+    "last_document_at": "2026-10-23T16:46:55.640229+00:00",
+    "last_write_at": "2026-10-23T16:47:20.122984+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the kanban-worker profile: general kanban task-execution knowledge. Fresh start 2026-10-22 per operator GO \u2014 deliberately empty, repopulates from live runs only.",
+    "name": "hb-kanban-worker",
+    "updated_at": "2026-10-22T20:21:30.656325+00:00"
+  },
+  "hb-orchestrator": {
+    "bank_id": "hb-orchestrator",
+    "created_at": "2026-10-22T20:21:28.854615+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 96,
+    "last_document_at": "2026-10-23T17:03:42.377166+00:00",
+    "last_write_at": "2026-10-23T17:04:38.459589+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the kanban-orchestrator profile: kanban dispatch, routing, task-graph and board-ops knowledge from orchestrator-lane runs. Fresh start 2026-10-22 per operator GO \u2014 deliberately empty, repopulates from live runs only.",
+    "name": "hb-orchestrator",
+    "updated_at": "2026-10-22T20:21:29.452181+00:00"
+  },
+  "hb-research": {
+    "bank_id": "hb-research",
+    "created_at": "2026-10-22T20:21:30.666284+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 3,
+    "last_document_at": "2026-10-22T20:25:31.052829+00:00",
+    "last_write_at": "2026-10-22T20:25:44.636043+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the research profile: research digests, source-monitoring and reconnaissance knowledge. Fresh start 2026-10-22 per operator GO \u2014 deliberately empty, repopulates from live runs only.",
+    "name": "hb-research",
+    "updated_at": "2026-10-22T20:21:31.232348+00:00"
+  },
+  "hb-sampling-test": {
+    "bank_id": "hb-sampling-test",
+    "created_at": "2026-10-22T20:21:31.774497+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 3,
+    "last_document_at": "2026-10-22T20:25:47.763441+00:00",
+    "last_write_at": "2026-10-22T20:26:01.565661+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the sampling-test profile: throwaway test lane, safe to delete freely. Fresh start 2026-10-22 per operator GO.",
+    "name": "hb-sampling-test",
+    "updated_at": "2026-10-22T20:21:32.315291+00:00"
+  },
+  "hb-synapse-sdk": {
+    "bank_id": "hb-synapse-sdk",
+    "created_at": "2026-10-05T17:41:33.953960+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 186,
+    "last_document_at": "2026-10-14T16:31:31.822144+00:00",
+    "last_write_at": "2026-10-14T16:32:36.118416+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hb-synapse-sdk",
+    "updated_at": "2026-10-05T17:41:33.953960+00:00"
+  },
+  "hb-unsloth-studio": {
+    "bank_id": "hb-unsloth-studio",
+    "created_at": "2026-10-23T03:11:27.672366+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 4,
+    "last_document_at": "2026-10-23T03:14:05.066090+00:00",
+    "last_write_at": "2026-10-23T03:14:12.194256+00:00",
+    "matched_aliases": [],
+    "mission": "Memory bank for the unsloth-litellm profile: Unsloth Studio server management and LiteLLM database-configuration working knowledge from server-manager runs. Created 2026-10-23 (t_7601b273) per ratified bank policy \u2014 fresh start, repopulates from live runs only.",
+    "name": "hb-unsloth-studio",
+    "updated_at": "2026-10-23T03:11:28.251380+00:00"
+  },
+  "hb-upstream-comm": {
+    "bank_id": "hb-upstream-comm",
+    "created_at": "2026-10-05T22:32:34.429794+00:00",
+    "display_alias": "gaudi-hpu-upstream",
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 421,
+    "last_document_at": "2026-10-23T17:41:44.111077+00:00",
+    "last_write_at": "2026-10-23T17:41:45.426542+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hb-upstream-comm",
+    "updated_at": "2026-10-05T22:32:34.429794+00:00"
+  },
+  "hermes": {
+    "bank_id": "hermes",
+    "created_at": "2026-07-04T01:50:11.660734+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 29814,
+    "last_document_at": "2026-10-23T17:22:09.193524+00:00",
+    "last_write_at": "2026-10-23T17:30:40.868917+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "hermes",
+    "updated_at": "2026-10-22T05:09:39.345971+00:00"
+  },
+  "hermes-general": {
+    "bank_id": "hermes-general",
+    "created_at": "2026-08-21T08:59:49.223511+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 6011,
+    "last_document_at": "2026-10-23T04:27:43.177060+00:00",
+    "last_write_at": "2026-10-23T17:41:47.960736+00:00",
+    "matched_aliases": [],
+    "mission": "General-purpose memory for the default, coding, research, and class-manager profiles.",
+    "name": "Hermes General",
+    "updated_at": "2026-10-13T17:07:32.913228+00:00"
+  },
+  "sjproto-butler": {
+    "bank_id": "sjproto-butler",
+    "created_at": "2026-10-22T14:39:12.441294+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 28,
+    "last_document_at": "2026-10-22T15:42:37.588696+00:00",
+    "last_write_at": "2026-10-22T15:42:37.588696+00:00",
+    "matched_aliases": [],
+    "mission": "Isolated memory bank for the sjproto-butler Topology-B board butler (skipjack-prototype board front-end). Per-board butler banks per operator-approved policy \u2014 butler memories stay isolated, never in shared banks.",
+    "name": "sjproto-butler",
+    "updated_at": "2026-10-22T14:39:12.952650+00:00"
+  },
+  "skipjack": {
+    "bank_id": "skipjack",
+    "created_at": "2026-10-12T16:04:20.500977+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 6,
+    "last_document_at": "2026-10-12T16:04:38.740429+00:00",
+    "last_write_at": "2026-10-12T16:04:47.808372+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "skipjack",
+    "updated_at": "2026-10-12T16:04:20.500977+00:00"
+  },
+  "skipjack-infra": {
+    "bank_id": "skipjack-infra",
+    "created_at": "2026-10-23T17:23:00.874825+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 4,
+    "last_document_at": "2026-10-23T17:24:44.079144+00:00",
+    "last_write_at": "2026-10-23T17:24:45.123269+00:00",
+    "matched_aliases": [],
+    "mission": "Skipjack hardware-environment bank (HPC/AI hybrid cluster, mgmt02). Single bank for every sj lane profile (orchestrator, planner, auditor, scribe, ops, watcher). Fresh start 2026-10-23 per operator ruling \u2014 deliberately empty, repopulates from live skipjack runs only; never mix other environments.",
+    "name": "skipjack-infra",
+    "updated_at": "2026-10-23T17:23:01.368667+00:00"
+  },
+  "skipjack-prototype": {
+    "bank_id": "skipjack-prototype",
+    "created_at": "2026-10-12T16:03:57.505351+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 6,
+    "last_document_at": "2026-10-12T16:04:20.456042+00:00",
+    "last_write_at": "2026-10-12T16:04:25.254404+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "skipjack-prototype",
+    "updated_at": "2026-10-12T16:03:57.505351+00:00"
+  },
+  "skipjack-prototype-infra": {
+    "bank_id": "skipjack-prototype-infra",
+    "created_at": "2026-10-23T17:23:01.381734+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 4,
+    "last_document_at": "2026-10-23T17:24:49.481751+00:00",
+    "last_write_at": "2026-10-23T17:24:50.494786+00:00",
+    "matched_aliases": [],
+    "mission": "Skipjack Prototype hardware-environment bank (k8s on gh207+gh208). Single bank for every sjp lane profile (orchestrator, planner, auditor, scribe, ops, watcher). Fresh start 2026-10-23 per operator ruling \u2014 deliberately empty, repopulates from live sjp runs only; never mix other environments.",
+    "name": "skipjack-prototype-infra",
+    "updated_at": "2026-10-23T17:23:01.852141+00:00"
+  },
+  "software-co": {
+    "bank_id": "software-co",
+    "created_at": "2026-10-08T02:29:25.377440+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 2744,
+    "last_document_at": "2026-10-23T16:50:09.809799+00:00",
+    "last_write_at": "2026-10-23T17:01:08.827620+00:00",
+    "matched_aliases": [],
+    "mission": "",
+    "name": "software-co",
+    "updated_at": "2026-10-08T02:29:25.377440+00:00"
+  },
+  "swco-butler": {
+    "bank_id": "swco-butler",
+    "created_at": "2026-10-22T14:39:11.887149+00:00",
+    "display_alias": null,
+    "disposition": {
+      "empathy": 3,
+      "literalism": 3,
+      "skepticism": 3
+    },
+    "fact_count": 635,
+    "last_document_at": "2026-10-23T17:41:11.827854+00:00",
+    "last_write_at": "2026-10-23T17:41:20.109576+00:00",
+    "matched_aliases": [],
+    "mission": "Isolated memory bank for the swco-butler Topology-B board butler (software-co board front-end). Per-board butler banks per operator-approved policy \u2014 butler memories stay isolated, never in shared banks.",
+    "name": "swco-butler",
+    "updated_at": "2026-10-22T14:39:12.432182+00:00"
+  }
+}

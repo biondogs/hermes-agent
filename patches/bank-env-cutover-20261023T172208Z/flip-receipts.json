@@ -1,0 +1,268 @@
+[
+  {
+    "profile": "g01-auditor",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g01-ops",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-infra-release"
+  },
+  {
+    "profile": "g01-orchestrator",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g01-planner",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g01-scribe",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g01-watcher",
+    "bank_id": "g01-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-inference-bench"
+  },
+  {
+    "profile": "g02-auditor",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g02-ops",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-infra-release"
+  },
+  {
+    "profile": "g02-orchestrator",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g02-planner",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g02-scribe",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "g02-watcher",
+    "bank_id": "g02-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-inference-bench"
+  },
+  {
+    "profile": "gaudi-analyst",
+    "bank_id": "gaudi-hpu-perf",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-arch",
+    "bank_id": "gaudi-hpu-sdk",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-synapse-sdk"
+  },
+  {
+    "profile": "gaudi-auditor",
+    "bank_id": "gaudi-hpu",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-benchrunner",
+    "bank_id": "gaudi-hpu-perf",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-deployer",
+    "bank_id": "gaudi-hpu",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-infra-release"
+  },
+  {
+    "profile": "gaudi-dockerops",
+    "bank_id": "gaudi-hpu-hostops",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-host-ops"
+  },
+  {
+    "profile": "gaudi-liaison",
+    "bank_id": "gaudi-hpu-upstream",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-upstream-comm"
+  },
+  {
+    "profile": "gaudi-orchestrator",
+    "bank_id": "gaudi-hpu",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-perfeng",
+    "bank_id": "gaudi-hpu-sdk",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-synapse-sdk"
+  },
+  {
+    "profile": "gaudi-planner",
+    "bank_id": "gaudi-hpu",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-scribe",
+    "bank_id": "gaudi-hpu",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "gaudi-synapse",
+    "bank_id": "gaudi-hpu-sdk",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-synapse-sdk"
+  },
+  {
+    "profile": "gaudi-sysadmin",
+    "bank_id": "gaudi-hpu-hostops",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-host-ops"
+  },
+  {
+    "profile": "gaudi-watcher",
+    "bank_id": "gaudi-hpu-perf",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-inference-bench"
+  },
+  {
+    "profile": "sj-auditor",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sj-ops",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-infra-release"
+  },
+  {
+    "profile": "sj-orchestrator",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sj-planner",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sj-scribe",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sj-watcher",
+    "bank_id": "skipjack-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-inference-bench"
+  },
+  {
+    "profile": "sjp-auditor",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sjp-ops",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-infra-release"
+  },
+  {
+    "profile": "sjp-orchestrator",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sjp-planner",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sjp-scribe",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "Hermes q38"
+  },
+  {
+    "profile": "sjp-watcher",
+    "bank_id": "skipjack-prototype-infra",
+    "changed": true,
+    "error": null,
+    "old_bank_id": "hb-inference-bench"
+  }
+]

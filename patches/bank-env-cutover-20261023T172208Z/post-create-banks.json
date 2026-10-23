@@ -1,0 +1,134 @@
+{
+  "Hermes q38": {
+    "fact_count": 6092,
+    "last_write_at": "2026-10-23T17:04:28.672157+00:00"
+  },
+  "g01-butler": {
+    "fact_count": 37,
+    "last_write_at": "2026-10-22T17:36:24.208991+00:00"
+  },
+  "g01-infra": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "g02-butler": {
+    "fact_count": 89,
+    "last_write_at": "2026-10-23T17:03:28.558245+00:00"
+  },
+  "g02-infra": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "gargantua01": {
+    "fact_count": 18,
+    "last_write_at": "2026-10-12T16:05:49.798442+00:00"
+  },
+  "gargantua02": {
+    "fact_count": 14,
+    "last_write_at": "2026-10-12T16:06:43.890667+00:00"
+  },
+  "gaudi": {
+    "fact_count": 125,
+    "last_write_at": "2026-10-22T13:25:33.524169+00:00"
+  },
+  "gaudi-butler": {
+    "fact_count": 116,
+    "last_write_at": "2026-10-23T16:57:45.588428+00:00"
+  },
+  "gaudi-hpu": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "gaudi-hpu-perf": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "gaudi-hpu-sdk": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "hb-architect": {
+    "fact_count": 240,
+    "last_write_at": "2026-10-23T16:44:56.737208+00:00"
+  },
+  "hb-distiller": {
+    "fact_count": 304,
+    "last_write_at": "2026-10-23T17:05:49.845645+00:00"
+  },
+  "hb-host-ops": {
+    "fact_count": 134,
+    "last_write_at": "2026-10-22T14:45:26.905279+00:00"
+  },
+  "hb-inference-bench": {
+    "fact_count": 2038,
+    "last_write_at": "2026-10-23T17:04:20.533470+00:00"
+  },
+  "hb-infra-release": {
+    "fact_count": 3027,
+    "last_write_at": "2026-10-23T03:45:08.957126+00:00"
+  },
+  "hb-kanban-worker": {
+    "fact_count": 67,
+    "last_write_at": "2026-10-23T16:47:20.122984+00:00"
+  },
+  "hb-orchestrator": {
+    "fact_count": 96,
+    "last_write_at": "2026-10-23T17:04:38.459589+00:00"
+  },
+  "hb-research": {
+    "fact_count": 3,
+    "last_write_at": "2026-10-22T20:25:44.636043+00:00"
+  },
+  "hb-sampling-test": {
+    "fact_count": 3,
+    "last_write_at": "2026-10-22T20:26:01.565661+00:00"
+  },
+  "hb-synapse-sdk": {
+    "fact_count": 186,
+    "last_write_at": "2026-10-14T16:32:36.118416+00:00"
+  },
+  "hb-unsloth-studio": {
+    "fact_count": 4,
+    "last_write_at": "2026-10-23T03:14:12.194256+00:00"
+  },
+  "hb-upstream-comm": {
+    "fact_count": 417,
+    "last_write_at": "2026-10-23T17:04:18.328144+00:00"
+  },
+  "hermes": {
+    "fact_count": 29806,
+    "last_write_at": "2026-10-23T17:22:16.270699+00:00"
+  },
+  "hermes-general": {
+    "fact_count": 5923,
+    "last_write_at": "2026-10-23T17:19:00.003574+00:00"
+  },
+  "sjproto-butler": {
+    "fact_count": 28,
+    "last_write_at": "2026-10-22T15:42:37.588696+00:00"
+  },
+  "skipjack": {
+    "fact_count": 6,
+    "last_write_at": "2026-10-12T16:04:47.808372+00:00"
+  },
+  "skipjack-infra": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "skipjack-prototype": {
+    "fact_count": 6,
+    "last_write_at": "2026-10-12T16:04:25.254404+00:00"
+  },
+  "skipjack-prototype-infra": {
+    "fact_count": 0,
+    "last_write_at": null
+  },
+  "software-co": {
+    "fact_count": 2744,
+    "last_write_at": "2026-10-23T17:01:08.827620+00:00"
+  },
+  "swco-butler": {
+    "fact_count": 627,
+    "last_write_at": "2026-10-23T17:05:58.513437+00:00"
+  }
+}

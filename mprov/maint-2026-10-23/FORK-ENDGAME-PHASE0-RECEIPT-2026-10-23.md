@@ -46,3 +46,9 @@ Successor poll card created (+24h). Deletion requires operator explicit GO comme
 - Phase 1: card t_74e17627 (MPROV-M-OCT15-MIGRATE) still running (run 96); mprov/maint-2026-10-23/OCT15-COVERAGE.md absent (grep-row check N/A) ✗
 - Gate counters: PRs resolved 2/4 · Phase-0 cards done 0/1 · Phase-1 cards done 0/1 · coverage rows 0/120.
 - Successor poll #3 created (+24h, SCHEDULED_UNTIL 2026-10-24T15:01Z). Scope guard unchanged: four mprov forks only; NEVER biondogs/hermes-agent; deletion ONLY on explicit operator GO comment.
+
+## Phase 0 — mash rescue PRs UP (2026-10-23, card t_e5c9b3a3 / MPROV-M-RESCUE-MASH)
+- Fix A (fork PR mash#29, fork issue #13 / MASH-013): **https://github.com/mprov-ng/mash/pull/21** — branch `fix/config-shapes-clean-error`, head 823062f (cherry-pick -x of fe8c8f3, Rahul Ranjan authorship preserved). One adaptation: test pins `shell.configfiles` (master's load_config now rescans the search list per merged #14). Local fresh-venv pytest 39/39 (base 33/33).
+- Fix B (fork PR mash#30, fork issue #14 / MASH-014): **https://github.com/mprov-ng/mash/pull/22** — branch `fix/foreach-hash-items`, head 01bfcb8 (cherry-pick -x of f6a0374, authorship preserved, no changes vs fork). Local fresh-venv pytest 40/40.
+- Gate compliance: both head-commit messages + both PR bodies carry exact line `Assisted by JoeBot`; uberlinuxguy requested as reviewer on both; Agent-Profile/Agent-Run hook trailers stripped pre-push per butler guidance; docs-sweep commit f9bb463 NOT carried (superseded by mash#17); base = mprov-ng/mash master @ 36b6a5e.
+- CI: pytest (3.9/3.11/3.13) pass on both PRs. Rescue patches had been wiped from t_afc04040/rescue/ mid-run (sprint-sync lane); rebuilt via direct fetch from rahul05ranjan/mash (branch tips matched pinned SHAs fe8c8f3/f6a0374 exactly).

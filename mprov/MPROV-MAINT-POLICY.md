@@ -38,6 +38,21 @@ mprov work until the operator amends them.
   Fixes ref, issue-item column). PRs are tracked **through the issue**: do
   not create PR-level project-9 items. See the **PR tracking** section
   below for the full contract and the no-automation finding behind it.
+  *(The no-PR-items clause was superseded same-day by the PR-ROWS
+  amendment below; the Fixes-line and issue-item clauses stand.)*
+
+- **2026-10-23 — PR-ROWS amendment: our fix PRs GET project-9 PR rows
+  (operator ruling "match Jason's pattern", kanban t_5a84e78b).** This
+  **supersedes** the "do not create PR-level project-9 items" clause of the
+  entry above. At publication, the lane adds the PR itself as a **type
+  PullRequest** project-9 item set to **In Progress**, and moves it to
+  **Done** when the PR merges or closes resolved; the publication read-back
+  grows from four gates to **five** (PR open + reviewer + Fixes ref +
+  issue-item column + PR-row present). Column rationale: the operator's
+  standing instruction is PR → In Progress; the maintainer's own open PR
+  rows sit inconsistently (Todo / Testing Pending), so **In Progress** is
+  our consistent, honest state. See the **PR tracking** section for the
+  full contract.
 
 - **2026-10-23 — Rule A standing line changed (operator amendment, kanban
   t_9e433953).** The required standing line on mprov commits/PRs is now
@@ -121,12 +136,15 @@ Scope is bidirectional and absolute:
 Every PR opened against an mprov repo (fork-side or `mprov-ng` side)
 requests **`uberlinuxguy`** as reviewer at PR creation time.
 
-## PR tracking (2026-10-23, operator ruling — kanban t_3dde7503)
+## PR tracking (2026-10-23, operator ruling — kanban t_3dde7503; PR-row step + five-gate read-back added same day per "match Jason's pattern", kanban t_5a84e78b)
 
-A fix PR is tracked **through the issue it fixes**. The project board
-tracks issues, not PRs: **do not create PR-level project-9 items**
-(operator ruling 2026-10-23; the maintainer's own hand-curated PR items on
-that board are his practice, not ours to imitate).
+A fix PR is tracked on **two** board surfaces: through the issue it fixes
+(issue-item column) **and** by its own PR row. Per the operator's
+2026-10-23 ruling "match Jason's pattern", every sprint fix PR gets a
+**type PullRequest** project-9 item at publication (the maintainer
+hand-curates PR rows on this board; our lanes now do the same — the
+earlier same-day "do not create PR-level project-9 items" clause is
+superseded).
 
 Every sprint fix PR must satisfy, **at publication time**:
 
@@ -147,13 +165,27 @@ Every sprint fix PR must satisfy, **at publication time**:
    the lane moves the item to **Done** and re-reads it — do not rely on
    issue auto-close to move the board item (no board automation has ever
    been observed firing unattended).
-3. **Publication read-back (all four gates, by live re-fetch after the PR
+3. **PR row.** The lane adds the PR itself as a **type PullRequest**
+   project-9 item set to **In Progress** at publication (GraphQL
+   `addProjectV2ItemById` + `updateProjectV2ItemFieldValue` — or
+   `gh project item-add` + `item-edit`). When the PR merges, or closes
+   with its issue resolved, the lane moves the row to **Done** and
+   re-reads it. The row is the PR's own status surface, independent of
+   the issue-item column in gate 2. **Read-back pitfall (t_5a84e78b
+   receipt):** a freshly added row can be absent from every list view
+   (`gh project item-list` AND the raw GraphQL `items` connection) while
+   `node(id:)` already resolves it — a GitHub-side index lag. Poll by
+   `node(id:)`; if still invisible after ~5 minutes, delete and re-add
+   the row (proven remedy; `addProjectV2ItemById` is content-idempotent,
+   so re-adding an already-indexed PR cannot create a duplicate).
+4. **Publication read-back (all five gates, by live re-fetch after the PR
    is opened):** (i) PR state is open, (ii) `uberlinuxguy` reviewer is
    attached, (iii) the live body still carries the exact `Fixes #N` line,
-   and (iv) the issue's project-9 item reads **In Progress** (e.g.
+   (iv) the issue's project-9 item reads **In Progress** (e.g.
    `gh project item-list 9 --owner mprov-ng --limit 500 --format json`,
-   match the issue URL and re-read its Status). A publication is not
-   complete until all four read green.
+   match the issue URL and re-read its Status), and (v) the PR's own
+   project-9 row (type PullRequest) is present and reads **In Progress**.
+   A publication is not complete until all five read green.
 
 **No-automation finding (2026-10-23 audit, t_3dde7503):** project #9 has no
 automation that puts PRs on the board. All 23 PR-type items on it were
@@ -164,9 +196,15 @@ sprint PRs with valid `Fixes` refs produced zero board items on their own.
 GitHub's native merge automation (close-the-issue via Fixes) does fire —
 mprov_jobserver#171 auto-closed 2s after merge — but no board movement has
 ever been observed without the maintainer at the keyboard. Therefore the
-fix-lane publication checklist itself owns gates 2 and 4 (move it yourself,
-read it back); this section exists because that contract step was missing
-when mprov_jobserver#192 opened untracked.
+fix-lane publication checklist itself owns gates 2, 3 and 5 (move it
+yourself, read it back); this section exists because that contract step was
+missing when mprov_jobserver#192 opened untracked. **State update
+(t_5a84e78b, same day):** the 23 hand-curated PR rows counted above were
+subsequently deleted from the board by the intervening "no PR items" sync
+sweep (the board briefly carried zero PR rows, including the maintainer's
+own JS#191/JS#192 Done rows); the 25-row PR backfill for our open sprint
+fix PRs re-established PR-type tracking — restoring the maintainer's own
+deleted rows, if wanted, is an operator/butler decision, not lane work.
 
 ## Rule C — Issue-filing distillation standard
 

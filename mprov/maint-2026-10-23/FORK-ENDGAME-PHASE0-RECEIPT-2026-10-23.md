@@ -35,3 +35,14 @@ Successor poll card created (+24h). Deletion requires operator explicit GO comme
 
 ## Ops note
 `/local/projects/mprov-maint/*` shared clones were re-provisioned by a concurrent lane mid-run (2026-10-23 ~14:57Z, upstream remote refs wiped). Rescue artifacts therefore pinned to SHAs + saved patch files, not local branches.
+
+## Phase 2 — deletion gate poll #2: **NOT MET** (2026-10-23 15:01Z, card t_9ae0e2b2)
+- mprov-ng/mprov_jobserver#153 MERGED 2026-10-23T14:22:16Z ✓
+- mprov-ng/mprov_control_center#307 MERGED 2026-10-23T14:42:23Z ✓
+- mprov-ng/mprov_scripts#19 OPEN ✗
+- mprov-ng/mash#17 OPEN ✗
+- Docs-PR resolution: 2/4.
+- Phase 0: card t_e5c9b3a3 (MPROV-M-RESCUE-MASH) still running (run 95) — mash rescue PRs not yet up ✗
+- Phase 1: card t_74e17627 (MPROV-M-OCT15-MIGRATE) still running (run 96); mprov/maint-2026-10-23/OCT15-COVERAGE.md absent (grep-row check N/A) ✗
+- Gate counters: PRs resolved 2/4 · Phase-0 cards done 0/1 · Phase-1 cards done 0/1 · coverage rows 0/120.
+- Successor poll #3 created (+24h, SCHEDULED_UNTIL 2026-10-24T15:01Z). Scope guard unchanged: four mprov forks only; NEVER biondogs/hermes-agent; deletion ONLY on explicit operator GO comment.

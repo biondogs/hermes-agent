@@ -63,6 +63,15 @@ cd ~/.hermes/plugins/kanban-stream && git revert --no-edit bc9b220
 # then re-run the profile propagation loop above to resync the 57 copies
 ```
 
+## Gateway bounce receipt
+
+Per card acceptance, a graceful drain-restart of `hermes-gateway` was launched
+deferred+dettached from the t_df30ec0c worker shell (`setsid`, waits for the card
+to leave `running`), via the operator's proven `hermes gateway restart` (SIGUSR1
+drain → systemd relaunch). Launcher: `patches/gateway-bounce-fix2.sh`; runtime
+receipt log: `patches/gateway-bounce-fix2-2026-10-23.log` (written by the
+detached process after card completion).
+
 ---
 
 # kanban_archive local hotfix — re-apply notes

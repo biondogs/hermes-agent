@@ -1,0 +1,131 @@
+kanban-stream FIX2 — replay proof receipt (card t_df30ec0c, 2026-10-23)
+
+Method: the exact tool sequence of proof card t_40bf70a1 (kanban-worker run 61,
+16:38:26-16:38:40 UTC: one approval-BLOCKED sh -c terminal call = genuine structured
+failure {error: 'BLOCKED...', status: 'blocked'}, one successful echo, plus two
+browser_console-style STRING successes mentioning 'error') was replayed offline through
+BOTH the pre-patch blob (d6c3e80, sha256 1a3efb60… = verified pre-patch install state)
+and the live patched install (bc9b220). Telegram path neutralized; output = the exact
+DM history lines each version pushes.
+
+-------------------------------- RUN OUTPUT --------------------------------
+== PRE-PATCH (d6c3e80, old code) ==
+  🔍 terminal command='sh -c 'echo stream-fix2-proof-genuine-failure; exit 1''
+  ❌ terminal failed
+  🔍 terminal command='echo stream-fix2-proof-after-failure'
+  🔍 browser_console
+  ❌ browser_console failed
+  🔍 browser_console
+  ❌ browser_console failed
+  error lines pushed: 3
+
+== POST-PATCH (bc9b220, live install) ==
+  🔍 terminal command='sh -c 'echo stream-fix2-proof-genuine-failure; exit 1''
+  ❌ terminal failed
+  🔍 terminal command='echo stream-fix2-proof-after-failure'
+  🔍 browser_console
+  🔍 browser_console
+  error lines pushed: 1
+
+== acceptance assertions ==
+PASS old code: ❌ spam = 3 (real failure + 2 false-positive string successes)
+PASS new code: exactly ONE ❌ line for ONE genuine failure (D1+D2 acceptance)
+PASS new code: genuine blocked failure still flagged (no D1 regression)
+PASS new code: string result mentioning 'error' NOT flagged (D1 fixed)
+PASS new code: single failure pushed once, no repeat lines (×1 path)
+
+REPLAY OK
+EXIT=0
+
+-------------------------------- HARNESS --------------------------------
+(replay_fix2.py, verbatim — imports old blob + live install; env pinned to)
+(HERMES_SESSION_SOURCE=kanban, HERMES_KANBAN_TASK=t_40bf70a1)
+
+#!/usr/bin/env python3
+"""FIX2 replay harness — feeds the exact tool sequence observed on proof card
+t_40bf70a1 (kanban-worker, 2026-10-23 16:38 UTC) through BOTH the pre-patch
+and post-patch kanban-stream plugin, offline (Telegram path neutralized),
+and prints the exact DM lines each version would have pushed.
+
+Old module: replay of git blob d6c3e80:__init__.py (sha256 1a3efb60…, matches
+the verified pre-patch install).  New module: the live patched root install.
+"""
+import importlib.util
+import os
+import sys
+
+os.environ["HERMES_SESSION_SOURCE"] = "kanban"
+os.environ["HERMES_KANBAN_TASK"] = "t_40bf70a1"
+
+ROOT = "/home/arch/.hermes/plugins/kanban-stream/__init__.py"
+OLD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "old___init__.py")
+
+
+def load(path, name):
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+# The exact tool calls the proof worker made (from run 61 record +
+# worker_result on t_40bf70a1):
+BLOCKED_RESULT = {
+    "output": "",
+    "exit_code": -1,
+    "error": "BLOCKED: Command flagged as dangerous (shell command via "
+             "-c/-lc flag) but single-query mode (-q) runs without a user "
+             "present to approve it.",
+    "status": "blocked",
+}
+OK_RESULT = {"output": "stream-fix2-proof-after-failure", "exit_code": 0, "error": None}
+# D1 real-world false-positive input: a success result that merely mentions
+# "error" (like browser_console "no JavaScript errors"):
+CONSOLE_STRING = "No JavaScript errors logged for this page. 0 errors, 0 warnings."
+
+CALLS = [
+    ("terminal", {"command": "sh -c 'echo stream-fix2-proof-genuine-failure; exit 1'"}, BLOCKED_RESULT),
+    ("terminal", {"command": "echo stream-fix2-proof-after-failure"}, OK_RESULT),
+    ("browser_console", {}, CONSOLE_STRING),          # success, string result
+    ("browser_console", {}, CONSOLE_STRING),          # sent twice (D2 string case)
+]
+
+
+def run(mod, label):
+    s = mod._stream()
+    s.schedule_edit = lambda force=False: None        # offline: no Telegram
+    s.tool_history.clear()
+    s.current_line = "💭 Thinking…"
+    for tool, args, result in CALLS:
+        mod.on_pre_tool_call(tool, args)
+        mod.on_post_tool_call(tool, result)
+    print("== %s ==" % label)
+    for line in s.tool_history:
+        print("  " + line)
+    print("  error lines pushed: %d" % sum(1 for l in s.tool_history if l.startswith("❌")))
+    print()
+    return s.tool_history
+
+
+old_lines = run(load(OLD, "kanban_stream_old"), "PRE-PATCH (d6c3e80, old code)")
+new_lines = run(load(ROOT, "kanban_stream_new"), "POST-PATCH (bc9b220, live install)")
+
+ok = True
+def expect(cond, msg):
+    global ok
+    print(("PASS " if cond else "FAIL ") + msg)
+    ok = ok and cond
+
+print("== acceptance assertions ==")
+expect(sum(1 for l in old_lines if l.startswith("❌")) == 3,
+       "old code: ❌ spam = 3 (real failure + 2 false-positive string successes)")
+expect(sum(1 for l in new_lines if l.startswith("❌")) == 1,
+       "new code: exactly ONE ❌ line for ONE genuine failure (D1+D2 acceptance)")
+expect(any(l == "❌ terminal failed" for l in new_lines),
+       "new code: genuine blocked failure still flagged (no D1 regression)")
+expect(not any("browser_console" in l and l.startswith("❌") for l in new_lines),
+       "new code: string result mentioning 'error' NOT flagged (D1 fixed)")
+expect("×2" not in " ".join(new_lines) and new_lines.count("❌ terminal failed") == 1,
+       "new code: single failure pushed once, no repeat lines (×1 path)")
+print("\nREPLAY %s" % ("OK" if ok else "FAILED"))
+sys.exit(0 if ok else 1)

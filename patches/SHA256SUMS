@@ -1,3 +1,4 @@
 b7b711468c0db4f25ec88246e40ebca12110b3819e1d48c88c3b88b56f36b206  patches/kanban-archive-local.patch
 f39ca5e918c5eafcdb8e8238900757ae44f5545fea1dd15e2edf8ddb056a9eb7  chat-oneshot-source-local.patch
 767bb0b2b5745bd61859a87d54d6ea7a1b5f6288cc529c1e277777f0db143ee9  kanban-stream-fix2.patch
+e2c12744a80fc84133ed9b1e331455ff1cf80a22f11595a4210ae23b78f6e54b  kanban-stream-fix2-replay-proof.txt

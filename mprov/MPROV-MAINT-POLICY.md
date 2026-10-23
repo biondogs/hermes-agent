@@ -7,6 +7,23 @@ mprov work until the operator amends them.
 
 ## Amendments
 
+- **2026-10-23 — Filing venue changed: mprov-ng repos + project 9 (operator
+  ruling, kanban t_2beff046).** ISSUE filings target the live
+  **`mprov-ng/<repo>`** repositories — never the biondogs forks — and every
+  filed issue is added to the org project **“2026 Issue Sprint”**
+  (https://github.com/orgs/mprov-ng/projects/9) in its **Todo** column at
+  filing time. PR venue is **unchanged**: fork topic branch → PR against
+  `mprov-ng/<repo>`, `uberlinuxguy` requested as reviewer (Rule B), standing
+  line `Assisted by JoeBot` (Rule A). Verbatim operator venue wording:
+  *“biondogs forks are disused as work venue for issues, clones, and all
+  maintenance going forward; PR head branches remain until the four open
+  docs PRs resolve, after final fork disposition is operator-decided.”*
+  Local maintenance clones are re-provisioned with
+  `origin = https://github.com/mprov-ng/<repo>` (see `MPROV-MAINT-PINS.md`).
+  Until the operator decides final fork disposition the four fork repos are
+  **read-only legacy**: do not delete them, do not file there, do not touch
+  the Oct-15 wave fork issues, and do not touch any fork branch carrying an
+  open PR (deleting a fork kills its open PR).
 - **2026-10-23 — Rule A standing line changed (operator amendment, kanban
   t_9e433953).** The required standing line on mprov commits/PRs is now
   exactly `Assisted by JoeBot`. The previous required line
@@ -19,9 +36,12 @@ mprov work until the operator amends them.
 
 ## Scope — what "mprov repos" means
 
-Exactly these four products (fork side and upstream side both in scope):
+Exactly these four products (fork side and upstream side both in scope).
+**Venue note (2026-10-23 amendment below):** `mprov-ng` is the filing and
+clone venue; the fork column is retained only because open-PR head branches
+still live there.
 
-| Product | Fork (our working remote) | Upstream |
+| Product | Fork (legacy, read-only) | Upstream (filing venue) |
 |---|---|---|
 | control center | `biondogs/mprov_control_center` | `mprov-ng/mprov_control_center` |
 | jobserver | `biondogs/mprov_jobserver` | `mprov-ng/mprov_jobserver` |

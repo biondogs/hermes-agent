@@ -1,0 +1,524 @@
+[
+ {
+  "id": "CC-041",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_control_center/issues/309",
+  "number": 309,
+  "title": "[S3] IPv6 jobserver addresses lack bracket wrapping in image URLs",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "451ddde882b1",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/44"
+ },
+ {
+  "id": "CC-042",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_control_center/issues/310",
+  "number": 310,
+  "title": "[S3] Script save crashes with AttributeError when script type is null",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "bcd97faf7cd7",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/45"
+ },
+ {
+  "id": "CC-043",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_control_center/issues/311",
+  "number": 311,
+  "title": "[S3] PXE bootdev ipmitool exit status ignored so failed setup reports success",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "05ef7e33d7ba",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/46"
+ },
+ {
+  "id": "CC-044",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_control_center/issues/312",
+  "number": 312,
+  "title": "[S3] Change signals reset in-flight jobs to pending under the same name",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "9011481235cd",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/47"
+ },
+ {
+  "id": "CC-045",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#268",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/48"
+ },
+ {
+  "id": "CC-046",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#270",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/49"
+ },
+ {
+  "id": "CC-047",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#288",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/50"
+ },
+ {
+  "id": "CC-048",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#290",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/51"
+ },
+ {
+  "id": "CC-049",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#273",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/52"
+ },
+ {
+  "id": "CC-050",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_control_center#274",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/53"
+ },
+ {
+  "id": "CC-051",
+  "repo": "mprov-ng/mprov_control_center",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_control_center/issues/313",
+  "number": 313,
+  "title": "[S1] OSDistro API serializer returns the distro root password in cleartext",
+  "labels": [
+   "bug",
+   "s1-blocker",
+   "review-found"
+  ],
+  "sha256": "b4c03e957171",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_control_center/issues/54"
+ },
+ {
+  "id": "JSR2-01",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_jobserver#142",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/32"
+ },
+ {
+  "id": "JSR2-02",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_jobserver#144",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/33"
+ },
+ {
+  "id": "JSR2-03",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "SKIP-COVERED",
+  "covering_ref": "mprov-ng/mprov_jobserver#149",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/34"
+ },
+ {
+  "id": "JSR2-07",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/156",
+  "number": 156,
+  "title": "[S3] script-runner silently falls back to the nads image on any -i fetch failure",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "b8d6126eea89",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/35"
+ },
+ {
+  "id": "JSR2-08",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/157",
+  "number": 157,
+  "title": "[S3] repo-update never joins its worker threads \u2014 overlapping reposyncs, orphaned work at shutdown",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "9a81fc173b3e",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/36"
+ },
+ {
+  "id": "JSR2-09",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/158",
+  "number": 158,
+  "title": "[S3] image-delete rmtree path built from unvalidated job param (traversal) and crashes on missing key",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "ba2158499d01",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/37"
+ },
+ {
+  "id": "JSR2-11",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/159",
+  "number": 159,
+  "title": "[S3] register_server exits the whole daemon on a transient mPCC 500",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "796fc368d1eb",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/38"
+ },
+ {
+  "id": "JSR2-12",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/160",
+  "number": 160,
+  "title": "[S3] MProvScript assigns a sockaddr tuple to ip_address",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "992f2c8a349c",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/39"
+ },
+ {
+  "id": "JSR2-13",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/161",
+  "number": 161,
+  "title": "[S3] repo-delete module is a stub that claims jobs and simulates success",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "40fa87aa34eb",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/40"
+ },
+ {
+  "id": "JSR2-14",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/162",
+  "number": 162,
+  "title": "[S3] setup.py feeds requirements lines with inline comments into install_requires (invalid PEP 508)",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "150f66bf9d6d",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/41"
+ },
+ {
+  "id": "JSR2-15",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/163",
+  "number": 163,
+  "title": "[S4] Dead enableDHCP=False in the dnsmasq no-jobs branch misleads readers",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "c0f5b06abe48",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/42"
+ },
+ {
+  "id": "JSR2-16",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/164",
+  "number": 164,
+  "title": "[S4] Image build runs 'dnf -y clean all' against the build host",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "41105041dcc9",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/43"
+ },
+ {
+  "id": "JSR2-17",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/165",
+  "number": 165,
+  "title": "[S4] Installer fetches the systemd unit from the upstream main tip over the network",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "e9ba6addec66",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/44"
+ },
+ {
+  "id": "JSR2-18",
+  "repo": "mprov-ng/mprov_jobserver",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_jobserver/issues/166",
+  "number": 166,
+  "title": "[S4] Runtime dependencies are unpinned in requirements.txt",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "76c1e6ee05c8",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_jobserver/issues/45"
+ },
+ {
+  "id": "SCR-022",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/20",
+  "number": 20,
+  "title": "[S2] Database backup written world-readable to volatile /tmp",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "6d907318bfce",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/22"
+ },
+ {
+  "id": "SCR-023",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/21",
+  "number": 21,
+  "title": "[S3] Data-share fstab append corrupts fstab or skips the mount via loose match",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "76816eea397a",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/23"
+ },
+ {
+  "id": "SCR-024",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/22",
+  "number": 22,
+  "title": "[S3] Shadow file rewritten in place with no atomic write or backup",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "e08c74b137e9",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/24"
+ },
+ {
+  "id": "SCR-025",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/23",
+  "number": 23,
+  "title": "[S3] Slurmd config rebuilt through fixed world-writable tmp path",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "0a2c99dc728c",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/25"
+ },
+ {
+  "id": "SCR-026",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/24",
+  "number": 24,
+  "title": "[S3] Unpinned network installs of jobserver and yq at image build time",
+  "labels": [
+   "enhancement",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "cb50b4e10f63",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/26"
+ },
+ {
+  "id": "SCR-027",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/25",
+  "number": 25,
+  "title": "[S3] Image name unvalidated into destructive rsync delete target",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "9fa8a955ed61",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/27"
+ },
+ {
+  "id": "SCR-028",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/26",
+  "number": 26,
+  "title": "[S3] CSV import keeps CR and splits records on whitespace corrupting fields",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "8adf0a6772ce",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/28"
+ },
+ {
+  "id": "SCR-029",
+  "repo": "mprov-ng/mprov_scripts",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mprov_scripts/issues/27",
+  "number": 27,
+  "title": "[S4] Duplicated ipmitool netmask block in BMC setup with trailing-space arg",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "f3137e50ac68",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mprov_scripts/issues/29"
+ },
+ {
+  "id": "MASH-101",
+  "repo": "mprov-ng/mash",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mash/issues/18",
+  "number": 18,
+  "title": "[S2] Script text is compiled as an unsandboxed Jinja2 template",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "10ba59358187",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mash/issues/31"
+ },
+ {
+  "id": "MASH-102",
+  "repo": "mprov-ng/mash",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mash/issues/19",
+  "number": 19,
+  "title": "[S3] GET and DELETE query values are concatenated unencoded into the query string",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "e161fd62a4fd",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mash/issues/32"
+ },
+ {
+  "id": "MASH-103",
+  "repo": "mprov-ng/mash",
+  "action": "FILED",
+  "url": "https://github.com/mprov-ng/mash/issues/20",
+  "number": 20,
+  "title": "[S4] Plugin output and plugin help bypass the shell's redirectable stdout",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "ab6c2a457bd7",
+  "readback_title_labels_exact": true,
+  "readback_body": "modulo-trailing-newline",
+  "fork_issue": "https://github.com/biondogs/mash/issues/33"
+ }
+]

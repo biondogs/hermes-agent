@@ -1,0 +1,114 @@
+{
+ "twins_verified": {
+  "CC-045": {
+   "ref": "mprov-ng/mprov_control_center#268",
+   "state": "OPEN",
+   "title": "POST /jobservers/ returns a double-encoded JSON string"
+  },
+  "CC-046": {
+   "ref": "mprov-ng/mprov_control_center#270",
+   "state": "OPEN",
+   "title": "Audit the admin add wizard in common/admin.py"
+  },
+  "CC-047": {
+   "ref": "mprov-ng/mprov_control_center#288",
+   "state": "OPEN",
+   "title": "init_mpcc.sh captures the manage.py shell banner in the API key"
+  },
+  "CC-048": {
+   "ref": "mprov-ng/mprov_control_center#290",
+   "state": "OPEN",
+   "title": "mPCC container ignores SIGTERM, so docker stop waits for the timeout"
+  },
+  "CC-049": {
+   "ref": "mprov-ng/mprov_control_center#273",
+   "state": "OPEN",
+   "title": "Stateful installer checks the wrong partition when writing the fill partition's fstab entry"
+  },
+  "CC-050": {
+   "ref": "mprov-ng/mprov_control_center#274",
+   "state": "OPEN",
+   "title": "Stateful installer uses an unset or stale dev when a RAID member's disklayout doesn't match"
+  },
+  "JSR2-01": {
+   "ref": "mprov-ng/mprov_jobserver#142",
+   "state": "OPEN",
+   "title": "image_update: hosting images from other job servers doesn't work"
+  },
+  "JSR2-02": {
+   "ref": "mprov-ng/mprov_jobserver#144",
+   "state": "OPEN",
+   "title": "image_update: other error-path bugs in handle_jobs()"
+  },
+  "JSR2-03": {
+   "ref": "mprov-ng/mprov_jobserver#149",
+   "state": "OPEN",
+   "title": "nads: registers None without LLDP, and keeps the Port ID subtype byte"
+  }
+ },
+ "fork_deletions": [
+  {
+   "fork": "biondogs/mprov_control_center#48",
+   "id": "CC-045",
+   "covered_by": "mprov-ng/mprov_control_center#268",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_control_center#49",
+   "id": "CC-046",
+   "covered_by": "mprov-ng/mprov_control_center#270",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_control_center#50",
+   "id": "CC-047",
+   "covered_by": "mprov-ng/mprov_control_center#288",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_control_center#51",
+   "id": "CC-048",
+   "covered_by": "mprov-ng/mprov_control_center#290",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_control_center#52",
+   "id": "CC-049",
+   "covered_by": "mprov-ng/mprov_control_center#273",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_control_center#53",
+   "id": "CC-050",
+   "covered_by": "mprov-ng/mprov_control_center#274",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_jobserver#32",
+   "id": "JSR2-01",
+   "covered_by": "mprov-ng/mprov_jobserver#142",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_jobserver#33",
+   "id": "JSR2-02",
+   "covered_by": "mprov-ng/mprov_jobserver#144",
+   "deleted": true,
+   "fallback_note": null
+  },
+  {
+   "fork": "biondogs/mprov_jobserver#34",
+   "id": "JSR2-03",
+   "covered_by": "mprov-ng/mprov_jobserver#149",
+   "deleted": true,
+   "fallback_note": null
+  }
+ ]
+}

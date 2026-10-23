@@ -21,23 +21,30 @@ that means: push to the fork, open the PR against `mprov-ng`, request
 
 ## Fresh clones (maintenance workspace area)
 
-Per the management-repo convention (`/local/projects/<repo>` per-repo work),
-maintenance clones live under `/local/projects/mprov-maint/<repo>`. Each has
-`origin = biondogs/<repo>` and `upstream = mprov-ng/<repo>`.
+**Re-provisioned 2026-10-23 (kanban t_2beff046)** per the venue amendment:
+`/local/projects/mprov-maint/<repo>` are fresh clones with
+**`origin = https://github.com/mprov-ng/<repo>`** (no `upstream` remote; the
+forks are disused). The old fork-oriented clones are archived intact at
+`/local/projects/mprov-maint/.archive-2026-10-23/<repo>` — the archived
+`mash` clone carries unique unpushed work (`rescue/js29`, `rescue/js30`
+branches + staged `src/mash/app.py`/`tests/test_load_config.py` changes,
+fixing fork issues #29/#30) that was preserved, not deleted; it needs its
+own card to land or retire that work.
 
-| Repo | Clone path | Default | `origin` head | `upstream` head | ahead / behind |
-|---|---|---|---|---|---|
-| mprov_control_center | `/local/projects/mprov-maint/mprov_control_center` | `main` | `7384c6364fb2e052db1be64bcc44788326d7ee5e` | `d7c2094137b4b9b781d80760382445fcef6a6278` | 1 / 264 |
-| mprov_jobserver | `/local/projects/mprov-maint/mprov_jobserver` | `main` | `00d00bfd71899f9b638a2a093065278c79a05723` | `1fd4b123295a06831ac2b670c940bb5c17184eab` | 1 / 28 |
-| mprov_scripts | `/local/projects/mprov-maint/mprov_scripts` | `master` | `aae84eecc57c37205206f92ebe71b9a78d5bedb4` | `eb806171457b2c9494488e1fe44b01fa4247eb38` | 1 / 10 |
-| mash | `/local/projects/mprov-maint/mash` | `master` | `f9bb463c24306a5a873d8bb8833f7a69a714b72f` | `36b6a5efc68fa620812b401a412a469bdb6dcf3f` | 1 / 12 |
+| Repo | Clone path | Default | `origin` (= mprov-ng) head |
+|---|---|---|---|
+| mprov_control_center | `/local/projects/mprov-maint/mprov_control_center` | `main` | `6afb41436df003f04a6cf00c09c6ea7121bc2f30` |
+| mprov_jobserver | `/local/projects/mprov-maint/mprov_jobserver` | `main` | `b07393d39256707d743db7490d7d33c244f195a4` |
+| mprov_scripts | `/local/projects/mprov-maint/mprov_scripts` | `master` | `eb806171457b2c9494488e1fe44b01fa4247eb38` |
+| mash | `/local/projects/mprov-maint/mash` | `master` | `36b6a5efc68fa620812b401a412a469bdb6dcf3f` |
 
-Fork URLs: `https://github.com/biondogs/<repo>`; upstream URLs:
-`https://github.com/mprov-ng/<repo>`.
+### Historical topology (superseded 2026-10-23, kept for audit)
 
-The single fork-side commit on every repo is `docs: openwiki generation +
-documentation sweep (mprov CI/CD phase)` — the Oct-15 docs lane merge. No
-fork carries product-code divergence.
+Originally (kanban t_f46200db) each clone had `origin = biondogs/<repo>`
+and `upstream = mprov-ng/<repo>`, with fork heads
+CC `7384c63`, JS `00d00bfd`, SCR `aae84ee`, MASH `f9bb463` — each exactly 1
+commit ahead of upstream (the Oct-15 openwiki docs sweep commit; no
+fork-side product-code divergence).
 
 ## Drift warning for the sweep
 

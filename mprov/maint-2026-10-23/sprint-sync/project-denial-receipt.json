@@ -1,0 +1,5 @@
+{
+ "attempted_url": "https://github.com/mprov-ng/mprov_control_center/issues/309",
+ "rc": 1,
+ "error": "error: your authentication token is missing required scopes [read:project]\nTo request it, run:  gh auth refresh -s read:project"
+}

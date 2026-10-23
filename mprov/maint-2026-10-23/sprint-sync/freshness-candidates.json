@@ -1,0 +1,242 @@
+[
+ {
+  "id": "CC-041",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] IPv6 jobserver addresses lack bracket wrapping in image URLs",
+  "candidates": []
+ },
+ {
+  "id": "CC-042",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Script save crashes with AttributeError when script type is null",
+  "candidates": []
+ },
+ {
+  "id": "CC-043",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] PXE bootdev ipmitool exit status ignored so failed setup reports success",
+  "candidates": []
+ },
+ {
+  "id": "CC-044",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Change signals reset in-flight jobs to pending under the same name",
+  "candidates": []
+ },
+ {
+  "id": "CC-045",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S4] Jobserver registration endpoint returns double-encoded JSON",
+  "candidates": [
+   [
+    0.4,
+    268,
+    "POST /jobservers/ returns a double-encoded JSON string"
+   ]
+  ]
+ },
+ {
+  "id": "CC-046",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Admin add wizard mutates shared ModelAdmin state per request",
+  "candidates": []
+ },
+ {
+  "id": "CC-047",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Container init captures Django shell banner into the jobserver API key",
+  "candidates": [
+   [
+    0.43,
+    288,
+    "init_mpcc.sh captures the manage.py shell banner in the API key"
+   ]
+  ]
+ },
+ {
+  "id": "CC-048",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S4] Container runs bash as PID 1 and ignores SIGTERM so docker stop kills hard",
+  "candidates": [
+   [
+    0.36,
+    290,
+    "mPCC container ignores SIGTERM, so docker stop waits for the timeout"
+   ]
+  ]
+ },
+ {
+  "id": "CC-049",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Stateful installer judges the fill partition by the previous loop variable",
+  "candidates": []
+ },
+ {
+  "id": "CC-050",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S3] Stateful installer RAID member loop can use a stale or unset disk variable",
+  "candidates": [
+   [
+    0.33,
+    274,
+    "Stateful installer uses an unset or stale dev when a RAID member's disklayout doesn't match"
+   ]
+  ]
+ },
+ {
+  "id": "CC-051",
+  "repo": "mprov-ng/mprov_control_center",
+  "title": "[S1] OSDistro API serializer returns the distro root password in cleartext",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-01",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S2] Pulled images are re-downloaded in full every heartbeat, forever",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-02",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S2] Configured imageList path crashes: removal during iteration, then .items() on a list",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-03",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S2] nads reports LLDP-detection failure as success and registers null switch/port",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-07",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] script-runner silently falls back to the nads image on any -i fetch failure",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-08",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] repo-update never joins its worker threads \u2014 overlapping reposyncs, orphaned work at shutdown",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-09",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] image-delete rmtree path built from unvalidated job param (traversal) and crashes on missing key",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-11",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] register_server exits the whole daemon on a transient mPCC 500",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-12",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] MProvScript assigns a sockaddr tuple to ip_address",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-13",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] repo-delete module is a stub that claims jobs and simulates success",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-14",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S3] setup.py feeds requirements lines with inline comments into install_requires (invalid PEP 508)",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-15",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S4] Dead enableDHCP=False in the dnsmasq no-jobs branch misleads readers",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-16",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S4] Image build runs 'dnf -y clean all' against the build host",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-17",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S4] Installer fetches the systemd unit from the upstream main tip over the network",
+  "candidates": []
+ },
+ {
+  "id": "JSR2-18",
+  "repo": "mprov-ng/mprov_jobserver",
+  "title": "[S4] Runtime dependencies are unpinned in requirements.txt",
+  "candidates": []
+ },
+ {
+  "id": "SCR-022",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S2] Database backup written world-readable to volatile /tmp",
+  "candidates": []
+ },
+ {
+  "id": "SCR-023",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] Data-share fstab append corrupts fstab or skips the mount via loose match",
+  "candidates": []
+ },
+ {
+  "id": "SCR-024",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] Shadow file rewritten in place with no atomic write or backup",
+  "candidates": []
+ },
+ {
+  "id": "SCR-025",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] Slurmd config rebuilt through fixed world-writable tmp path",
+  "candidates": []
+ },
+ {
+  "id": "SCR-026",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] Unpinned network installs of jobserver and yq at image build time",
+  "candidates": []
+ },
+ {
+  "id": "SCR-027",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] Image name unvalidated into destructive rsync delete target",
+  "candidates": []
+ },
+ {
+  "id": "SCR-028",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S3] CSV import keeps CR and splits records on whitespace corrupting fields",
+  "candidates": []
+ },
+ {
+  "id": "SCR-029",
+  "repo": "mprov-ng/mprov_scripts",
+  "title": "[S4] Duplicated ipmitool netmask block in BMC setup with trailing-space arg",
+  "candidates": []
+ },
+ {
+  "id": "MASH-101",
+  "repo": "mprov-ng/mash",
+  "title": "[S2] Script text is compiled as an unsandboxed Jinja2 template",
+  "candidates": []
+ },
+ {
+  "id": "MASH-102",
+  "repo": "mprov-ng/mash",
+  "title": "[S3] GET and DELETE query values are concatenated unencoded into the query string",
+  "candidates": []
+ },
+ {
+  "id": "MASH-103",
+  "repo": "mprov-ng/mash",
+  "title": "[S4] Plugin output and plugin help bypass the shell's redirectable stdout",
+  "candidates": []
+ }
+]

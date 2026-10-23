@@ -1,0 +1,297 @@
+# CC: parsed 11 findings, 62 open upstream issues
+# JS: parsed 14 findings, 28 open upstream issues
+{
+ "CC-043": [
+  {
+   "up": 298,
+   "up_created": "2026-10-21",
+   "paths": [
+    "systems/views.py"
+   ],
+   "shared_tokens": 7,
+   "title": "Move SystemAPIView, NetworkAPIView and JobAPIView onto MProvView's detail handling"
+  }
+ ],
+ "CC-044": [
+  {
+   "up": 298,
+   "up_created": "2026-10-21",
+   "paths": [
+    "systems/views.py"
+   ],
+   "shared_tokens": 8,
+   "title": "Move SystemAPIView, NetworkAPIView and JobAPIView onto MProvView's detail handling"
+  },
+  {
+   "up": 269,
+   "up_created": "2026-10-20",
+   "paths": [
+    "common/__init__.py",
+    "systems/models.py"
+   ],
+   "shared_tokens": 9,
+   "title": "Reconcile System.flatten_config with render_config and parse_config_params"
+  },
+  {
+   "up": 258,
+   "up_created": "2026-10-20",
+   "paths": [
+    "systems/models.py"
+   ],
+   "shared_tokens": 5,
+   "title": "Add docstrings to undocumented classes and functions"
+  }
+ ],
+ "JSR2-01": [
+  {
+   "up": 144,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 9,
+   "title": "image_update: other error-path bugs in handle_jobs()"
+  },
+  {
+   "up": 143,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 7,
+   "title": "image_update: a failed build fails every running job on the job server"
+  },
+  {
+   "up": 142,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 18,
+   "title": "image_update: hosting images from other job servers doesn't work"
+  },
+  {
+   "up": 141,
+   "up_created": "2026-10-23",
+   "paths": [
+    "image_sync.py"
+   ],
+   "shared_tokens": 10,
+   "title": "image_sync and repo_sync crash when an image or repo was deleted from the mPCC"
+  },
+  {
+   "up": 128,
+   "up_created": "2026-10-22",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 10,
+   "title": "image_update doesn't write the distro's root SSH keys into a fresh image, and mangles some root passwords"
+  }
+ ],
+ "JSR2-02": [
+  {
+   "up": 144,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 14,
+   "title": "image_update: other error-path bugs in handle_jobs()"
+  },
+  {
+   "up": 143,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 6,
+   "title": "image_update: a failed build fails every running job on the job server"
+  },
+  {
+   "up": 142,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 9,
+   "title": "image_update: hosting images from other job servers doesn't work"
+  },
+  {
+   "up": 128,
+   "up_created": "2026-10-22",
+   "paths": [
+    "src/mprov_jobserver/plugins/image_update.py"
+   ],
+   "shared_tokens": 9,
+   "title": "image_update doesn't write the distro's root SSH keys into a fresh image, and mangles some root passwords"
+  }
+ ],
+ "JSR2-03": [
+  {
+   "up": 149,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/nads.py"
+   ],
+   "shared_tokens": 12,
+   "title": "nads: registers None without LLDP, and keeps the Port ID subtype byte"
+  }
+ ],
+ "JSR2-07": [
+  {
+   "up": 146,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/script_runner.py"
+   ],
+   "shared_tokens": 9,
+   "title": "script_runner: scripts with dependencies crash"
+  }
+ ],
+ "JSR2-08": [
+  {
+   "up": 145,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/plugins/repo_update.py"
+   ],
+   "shared_tokens": 6,
+   "title": "repo_update: the error paths crash instead of failing the job"
+  },
+  {
+   "up": 144,
+   "up_created": "2026-10-23",
+   "paths": [
+    "image_update.py"
+   ],
+   "shared_tokens": 14,
+   "title": "image_update: other error-path bugs in handle_jobs()"
+  },
+  {
+   "up": 143,
+   "up_created": "2026-10-23",
+   "paths": [
+    "image_update.py"
+   ],
+   "shared_tokens": 8,
+   "title": "image_update: a failed build fails every running job on the job server"
+  },
+  {
+   "up": 142,
+   "up_created": "2026-10-23",
+   "paths": [
+    "image_update.py"
+   ],
+   "shared_tokens": 8,
+   "title": "image_update: hosting images from other job servers doesn't work"
+  },
+  {
+   "up": 128,
+   "up_created": "2026-10-22",
+   "paths": [
+    "image_update.py"
+   ],
+   "shared_tokens": 11,
+   "title": "image_update doesn't write the distro's root SSH keys into a fresh image, and mangles some root passwords"
+  },
+  {
+   "up": 112,
+   "up_created": "2026-10-19",
+   "paths": [
+    "image_update.py"
+   ],
+   "shared_tokens": 9,
+   "title": "Job servers claim every pending job of a module, including jobs for other job servers"
+  }
+ ],
+ "JSR2-11": [
+  {
+   "up": 147,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/app.py"
+   ],
+   "shared_tokens": 6,
+   "title": "loadmon is read from config_data, where it never is"
+  },
+  {
+   "up": 143,
+   "up_created": "2026-10-23",
+   "paths": [
+    "src/mprov_jobserver/app.py"
+   ],
+   "shared_tokens": 4,
+   "title": "image_update: a failed build fails every running job on the job server"
+  }
+ ],
+ "JSR2-12": [
+  {
+   "up": 147,
+   "up_created": "2026-10-23",
+   "paths": [
+    "app.py"
+   ],
+   "shared_tokens": 3,
+   "title": "loadmon is read from config_data, where it never is"
+  },
+  {
+   "up": 143,
+   "up_created": "2026-10-23",
+   "paths": [
+    "app.py"
+   ],
+   "shared_tokens": 1,
+   "title": "image_update: a failed build fails every running job on the job server"
+  },
+  {
+   "up": 115,
+   "up_created": "2026-10-19",
+   "paths": [
+    "app.py"
+   ],
+   "shared_tokens": 4,
+   "title": "Some plugins build mPCC URLs with a double slash"
+  },
+  {
+   "up": 113,
+   "up_created": "2026-10-19",
+   "paths": [
+    "app.py"
+   ],
+   "shared_tokens": 2,
+   "title": "Keep heartbeating under load and send a stable host id, instead of going quiet"
+  },
+  {
+   "up": 112,
+   "up_created": "2026-10-19",
+   "paths": [
+    "app.py"
+   ],
+   "shared_tokens": 2,
+   "title": "Job servers claim every pending job of a module, including jobs for other job servers"
+  }
+ ],
+ "JSR2-14": [
+  {
+   "up": 111,
+   "up_created": "2026-10-16",
+   "paths": [
+    "requirements.txt"
+   ],
+   "shared_tokens": 6,
+   "title": "Move the jobserver image to Rocky Linux 9 and a supported Python"
+  }
+ ],
+ "JSR2-18": [
+  {
+   "up": 111,
+   "up_created": "2026-10-16",
+   "paths": [
+    "requirements.txt"
+   ],
+   "shared_tokens": 10,
+   "title": "Move the jobserver image to Rocky Linux 9 and a supported Python"
+  }
+ ]
+}

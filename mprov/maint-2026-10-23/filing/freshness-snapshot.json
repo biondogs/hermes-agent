@@ -1,0 +1,3899 @@
+{
+ "biondogs/mprov_control_center": {
+  "issues": [
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 43,
+    "title": "[S1] Power endpoint hostname parameter is a substring match hitting wrong nodes",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/43"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 42,
+    "title": "[S3] Config comment filter removes list items while iterating them",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/42"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 41,
+    "title": "[S2] PATCH handler silently substitutes admin user for anonymous requests",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/41"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 40,
+    "title": "[S3] LDAP group search built with set literal instead of string",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/40"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ42Q",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXHg",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 39,
+    "title": "[S4] No linting or static analysis in CI",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/39"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 38,
+    "title": "[S3] Power endpoint returns 500 for missing params and unknown ids",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/38"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 37,
+    "title": "[S3] Admin mark_rebuild action does not persist version and slug changes",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/37"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 36,
+    "title": "[S3] Image slug regenerated on every save silently drops renames",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/36"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 35,
+    "title": "[S3] Unguarded request data access returns 500 instead of 400",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/35"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 34,
+    "title": "[S3] Model signals recover the request via stack-frame inspection",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/34"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 33,
+    "title": "[S3] BMC ipmitool command built by string interpolation breaks on spaces",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/33"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ42Q",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 32,
+    "title": "[S3] Installer pipes remote script from main branch into root shell",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/32"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ42Q",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 31,
+    "title": "[S3] Requirements are fully unpinned allowing silent dependency drift",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/31"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 30,
+    "title": "[S3] Unauthenticated datamodel and status-changes endpoints leak internals",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/30"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 29,
+    "title": "[S3] Unguarded get lookups return 500 on unknown identifiers",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/29"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 28,
+    "title": "[S3] Error path references unbound response variable",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/28"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 27,
+    "title": "[S3] Installer exception hook is never registered and is itself broken",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/27"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 26,
+    "title": "[S3] Installer continues after failing to disable netboot",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/26"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 25,
+    "title": "[S3] Image download loop cannot detect gunzip or tar failures",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/25"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 24,
+    "title": "[S2] LDAP self-signed cert flag sets global options to None",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/24"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 23,
+    "title": "[S2] Production installs never load jobqueue fixtures breaking job pipeline",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/23"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 22,
+    "title": "[S2] Image detail view returns list data and poisons its serializer class",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/22"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 21,
+    "title": "[S2] JobServer save purges other jobservers on minute-boundary races",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/21"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 20,
+    "title": "[S2] Scripts detail route uses int converter against slug primary key",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/20"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 19,
+    "title": "[S2] NIC reconcile loop removes entries while iterating the same list",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/19"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 18,
+    "title": "[S2] IP calculation fallback can assign the same address to many NICs",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/18"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 17,
+    "title": "[S2] NetworkInterface save silently overwrites user-set hostname",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/17"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 16,
+    "title": "[S2] Detail retrieval globally mutates serializer Meta depth and never resets",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/16"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 15,
+    "title": "[S2] System config dict mutates a class attribute shared by all instances",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/15"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 14,
+    "title": "[S2] IPXE endpoint crashes with 500 when no bootable NIC exists",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/14"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWXA",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 13,
+    "title": "[S2] Unauthenticated GET permanently removes jobservers from images",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/13"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 12,
+    "title": "[S3] DRF default permissions require both session and API key",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/12"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 11,
+    "title": "[S1] NFS export with no_root_squash exposes provisioning image share",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/11"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtWsg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 10,
+    "title": "[S3] Authenticated system endpoints trust spoofable X-Forwarded-For",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/10"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 9,
+    "title": "[S1] Unauthenticated image endpoints trust spoofable X-Forwarded-For",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/9"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 8,
+    "title": "[S1] Unauthenticated register endpoint binds attacker MAC to systems",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/8"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 7,
+    "title": "[S1] Installers bake in admin:admin and changemenow default credentials",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/7"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 6,
+    "title": "[S1] BMC credentials printed to stdout and embedded in ipmitool argv",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/6"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 5,
+    "title": "[S1] API serializers expose BMC and image root passwords in cleartext",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/5"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Eec8AAAACKfZ4rg",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtV4Q",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Eec8AAAAC9TtXiQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 4,
+    "title": "[S1] Any API key grants unrestricted read-write access to every model endpoint",
+    "url": "https://github.com/biondogs/mprov_control_center/issues/4"
+   }
+  ],
+  "prs": [
+   {
+    "headRefName": "copilot/add-wysiwyg-text-editor",
+    "number": 3,
+    "title": "Add WYSIWYG text editor to scripts section",
+    "url": "https://github.com/biondogs/mprov_control_center/pull/3"
+   },
+   {
+    "headRefName": "copilot/fix-7acece7a-d163-4f72-a742-0036dd5e5183",
+    "number": 2,
+    "title": "Fix critical security vulnerabilities and code quality issues",
+    "url": "https://github.com/biondogs/mprov_control_center/pull/2"
+   }
+  ]
+ },
+ "biondogs/mprov_jobserver": {
+  "issues": [
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaEJw",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtY2Q",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 31,
+    "title": "[S4] Document the image-sync and nads job modules in the README example",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/31"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaEJw",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtY2Q",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 30,
+    "title": "[S4] Enable flake8 and shellcheck lint gates in CI",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/30"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtY2Q",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 29,
+    "title": "[S4] Include the promised genders.include file in generated genders output",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/29"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 28,
+    "title": "[S3] Send job timestamps in UTC as the code intends",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/28"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 27,
+    "title": "[S3] Close the file descriptor opened for connection-limit size checks",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/27"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 26,
+    "title": "[S3] Stop interpolating mPCC-sourced values into shell command strings",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/26"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 25,
+    "title": "[S3] Clean up image build bind mounts on failure and before archiving",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/25"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 24,
+    "title": "[S3] Fix handler attribute reference that breaks high-load shedding in the webserver",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/24"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 23,
+    "title": "[S3] Match the dnsmasq restart target precisely instead of killing by substring",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/23"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaEJw",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 22,
+    "title": "[S3] Reap jobs orphaned in running state when a worker dies mid-job",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/22"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 21,
+    "title": "[S3] Stop changing the daemon working directory from worker threads",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/21"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 20,
+    "title": "[S3] Fix undefined jid reference in image-update error path",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/20"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 19,
+    "title": "[S3] Fix broken error paths in repo-update that crash instead of failing jobs",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/19"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 18,
+    "title": "[S3] Claim jobs per jobserver and atomically to prevent double processing",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/18"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 17,
+    "title": "[S3] Check dnsmasq worker outcomes before marking jobs successful",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/17"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYkg",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 16,
+    "title": "[S3] Tolerate unset optional network fields in DHCP config generation",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/16"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 15,
+    "title": "[S2] Fix repack_image so it does not destroy the image it repacks",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/15"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 14,
+    "title": "[S2] Report the one-minute load average the field name promises",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/14"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 13,
+    "title": "[S2] Create the authorized_keys directory inside the image, not on the build host",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/13"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 12,
+    "title": "[S2] Fix load monitor guard that crashes the daemon under high load",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/12"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 11,
+    "title": "[S2] Fix inverted switch merge so switches get DHCP entries",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/11"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 10,
+    "title": "[S2] Propagate post-boot and image script failures instead of reporting success",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/10"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 9,
+    "title": "[S2] Stop creating /etc/nologin before validation and leaking it on error paths",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/9"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 8,
+    "title": "[S2] Fix group script dependency handling that crashes the resolver",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/8"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 7,
+    "title": "[S2] Fix malformed job query that claims every pending job in the queue",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/7"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtYMQ",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 6,
+    "title": "[S2] Fix status_code 404 comparisons that never match and crash sync loops",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/6"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtX3g",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 5,
+    "title": "[S1] Guard sweep cleanups so a mis-set image or repo directory cannot be wiped",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/5"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtX3g",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 4,
+    "title": "[S1] Do not execute an unverified binary fetched to world-writable tmp",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/4"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtX3g",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 3,
+    "title": "[S1] Stop writing the fleet API key to world-readable files during provisioning",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/3"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtX3g",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 2,
+    "title": "[S1] Stop exposing the distro root password in process argv and daemon logs",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/2"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fms8AAAACKfaD-w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtX3g",
+      "name": "s1-blocker",
+      "description": "Severity S1: security hole or data-loss path; release blocker",
+      "color": "b60205"
+     },
+     {
+      "id": "LA_kwDOPw-Fms8AAAAC9TtZHQ",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 1,
+    "title": "[S1] Remove the committed mPCC API key from stack.env",
+    "url": "https://github.com/biondogs/mprov_jobserver/issues/1"
+   }
+  ],
+  "prs": []
+ },
+ "biondogs/mprov_scripts": {
+  "issues": [
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaUw",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 21,
+    "title": "[S4] Rsync errors bypass the log file due to redirect order",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/21"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF4g",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaUw",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 20,
+    "title": "[S4] Enable shellcheck for shell scripts in CI",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/20"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaUw",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 19,
+    "title": "[S4] Error messages print literal placeholder instead of exception detail",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/19"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaUw",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 18,
+    "title": "[S4] Broken shebang in gpfs_mmsdrrestore.sh prevents direct execution",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/18"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF4g",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 17,
+    "title": "[S3] No guard against repartitioning the running OS disk",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/17"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 16,
+    "title": "[S3] Hardcoded python3.8 site-packages path breaks Rocky 9 installs silently",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/16"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF4g",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 15,
+    "title": "[S3] Twelve shipped scripts missing from the mpcc_scripts manifest",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/15"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 14,
+    "title": "[S3] Node import writes BMC credentials to world-readable temp file",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/14"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 13,
+    "title": "[S3] BMC and InfiniBand IPs silently wrong when node IP misses mgmt prefix",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/13"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 12,
+    "title": "[S3] Backup script always reports success even when every dump failed",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/12"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 11,
+    "title": "[S3] Post-boot python scripts exit 0 after reporting errors",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/11"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 10,
+    "title": "[S3] BMC setup crashes with NameError when systembmcs request fails",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/10"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 9,
+    "title": "[S3] BMC password passed on ipmitool command line is visible in process list",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/9"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 8,
+    "title": "[S3] Fill-partition handling reads stale loop variable for filesystem checks",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/8"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 7,
+    "title": "[S3] Root fstab file deleted before rebuild with no failure isolation",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/7"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 6,
+    "title": "[S3] Service install scripts continue after failed commands and report success",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/6"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtaFQ",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 5,
+    "title": "[S3] Unguarded cd before entity.json read leaves config variables empty",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/5"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtZ6Q",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 4,
+    "title": "[S2] RAID build crashes: member disk id compared against disk slug string",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/4"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtZ6Q",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 3,
+    "title": "[S2] Disk formatter crashes mounting non-RAID partitions: disk-level mount is None",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/3"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtZ6Q",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 2,
+    "title": "[S2] Missing-key jq null literal bypasses guards and corrupts root config",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/2"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-Fys8AAAACKfaF0w",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9TtZ6Q",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-Fys8AAAAC9Ttalg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 1,
+    "title": "[S2] Ansible loops never execute: over-escaped jq program is a compile error",
+    "url": "https://github.com/biondogs/mprov_scripts/issues/1"
+   }
+  ],
+  "prs": []
+ },
+ "biondogs/mash": {
+  "issues": [
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIdg",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 28,
+    "title": "[S4] Add linting to CI",
+    "url": "https://github.com/biondogs/mash/issues/28"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIdg",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 27,
+    "title": "[S3] Bound dependency versions in requirements.txt",
+    "url": "https://github.com/biondogs/mash/issues/27"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIdg",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 26,
+    "title": "[S3] Validate config file and warn about unknown keys",
+    "url": "https://github.com/biondogs/mash/issues/26"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIdg",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 25,
+    "title": "[S3] Add dry-run mode to destructive verbs",
+    "url": "https://github.com/biondogs/mash/issues/25"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIdg",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 24,
+    "title": "[S3] Add machine-readable JSON output mode",
+    "url": "https://github.com/biondogs/mash/issues/24"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 23,
+    "title": "[S3] Release workflow uses retired actions and removed set-output syntax",
+    "url": "https://github.com/biondogs/mash/issues/23"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 22,
+    "title": "[S4] Bmc power help omits pxe and pxeefi actions supported by the server",
+    "url": "https://github.com/biondogs/mash/issues/22"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 21,
+    "title": "[S4] Changelog generator links to the mprov_jobserver repository",
+    "url": "https://github.com/biondogs/mash/issues/21"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 20,
+    "title": "[S4] Dead exception handler is defined but never installed",
+    "url": "https://github.com/biondogs/mash/issues/20"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 19,
+    "title": "[S4] Connect help documents the wrong config file paths",
+    "url": "https://github.com/biondogs/mash/issues/19"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttb2A",
+      "name": "s4-hygiene",
+      "description": "Severity S4: hygiene only, no behavioral risk",
+      "color": "c2e0c6"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 18,
+    "title": "[S4] Connect silently ignores non-200 responses from the control center",
+    "url": "https://github.com/biondogs/mash/issues/18"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 17,
+    "title": "[S3] Trailing ampersand on bmc commands silently disables the command",
+    "url": "https://github.com/biondogs/mash/issues/17"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 16,
+    "title": "[S3] Unparseable query tokens are silently swallowed and sent anyway",
+    "url": "https://github.com/biondogs/mash/issues/16"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 15,
+    "title": "[S3] Dict-typed argument kills the whole interactive session",
+    "url": "https://github.com/biondogs/mash/issues/15"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 14,
+    "title": "[S3] Foreach silently drops list items containing a hash character",
+    "url": "https://github.com/biondogs/mash/issues/14"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 13,
+    "title": "[S3] Common config file shapes crash connect with raw tracebacks",
+    "url": "https://github.com/biondogs/mash/issues/13"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 12,
+    "title": "[S3] Nonexistent script file argument is silently ignored",
+    "url": "https://github.com/biondogs/mash/issues/12"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 11,
+    "title": "[S3] Script mode always exits 0 regardless of command failures",
+    "url": "https://github.com/biondogs/mash/issues/11"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 10,
+    "title": "[S3] Error messages are written to stdout, polluting piped script output",
+    "url": "https://github.com/biondogs/mash/issues/10"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 9,
+    "title": "[S3] Signal handlers swallow SIGINT and SIGTERM during hung requests",
+    "url": "https://github.com/biondogs/mash/issues/9"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 8,
+    "title": "[S3] API calls have no timeout and hang the shell indefinitely",
+    "url": "https://github.com/biondogs/mash/issues/8"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9Ttbiw",
+      "name": "s3-robustness",
+      "description": "Severity S3: robustness/edge-case weakness or missing protective feature",
+      "color": "fbca04"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 7,
+    "title": "[S3] Malformed command arguments crash the entire shell with a traceback",
+    "url": "https://github.com/biondogs/mash/issues/7"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 6,
+    "title": "[S2] Pvar cannot print comma-separated variables with multi-character names",
+    "url": "https://github.com/biondogs/mash/issues/6"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 5,
+    "title": "[S2] Failed API calls leave stale MPROV_RESULT from the previous command",
+    "url": "https://github.com/biondogs/mash/issues/5"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 4,
+    "title": "[S2] BMC power commands give no success or failure feedback",
+    "url": "https://github.com/biondogs/mash/issues/4"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 3,
+    "title": "[S2] BMC power commands fail unless mprovURL ends with a slash",
+    "url": "https://github.com/biondogs/mash/issues/3"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 2,
+    "title": "[S2] Plugin dispatch mangles arguments containing the plugin name",
+    "url": "https://github.com/biondogs/mash/issues/2"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOPw-GDs8AAAACKfaIXQ",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtbUg",
+      "name": "s2-functional",
+      "description": "Severity S2: functional bug in normal operation",
+      "color": "d93f0b"
+     },
+     {
+      "id": "LA_kwDOPw-GDs8AAAAC9TtcGg",
+      "name": "review-found",
+      "description": "Found by 2026-10 comprehensive mProv review",
+      "color": "c5def5"
+     }
+    ],
+    "number": 1,
+    "title": "[S2] Connect with user and password never authenticates",
+    "url": "https://github.com/biondogs/mash/issues/1"
+   }
+  ],
+  "prs": [
+   {
+    "headRefName": "fix/foreach-hash-items",
+    "number": 30,
+    "title": "fix(app): stop foreach dropping list items after a hash",
+    "url": "https://github.com/biondogs/mash/pull/30"
+   },
+   {
+    "headRefName": "fix/config-shapes-clean-error",
+    "number": 29,
+    "title": "fix(app): accept mapping-shaped configs and report config errors cleanly",
+    "url": "https://github.com/biondogs/mash/pull/29"
+   }
+  ]
+ },
+ "mprov-ng/mprov_control_center": {
+  "issues": [
+   {
+    "labels": [],
+    "number": 298,
+    "title": "Move SystemAPIView, NetworkAPIView and JobAPIView onto MProvView's detail handling",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/298"
+   },
+   {
+    "labels": [],
+    "number": 297,
+    "title": "Use slugs as identifiers across the mPCC models",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/297"
+   },
+   {
+    "labels": [],
+    "number": 296,
+    "title": "Let job servers claim a job atomically",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/296"
+   },
+   {
+    "labels": [],
+    "number": 295,
+    "title": "requirements.txt doesn't pin Django, and a migration fails on Django 5",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/295"
+   },
+   {
+    "labels": [],
+    "number": 294,
+    "title": "Release workflow passes MPROV_INSTALL_OPTS, which the Dockerfile doesn't use",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/294"
+   },
+   {
+    "labels": [],
+    "number": 293,
+    "title": "Dockerfile CustomLog sed never matches",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/293"
+   },
+   {
+    "labels": [],
+    "number": 292,
+    "title": "gen_changelog.sh prints '## 0 ()' for the first tag",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/292"
+   },
+   {
+    "labels": [],
+    "number": 291,
+    "title": "gen_changelog.sh links commits to the mprov_jobserver repository",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/291"
+   },
+   {
+    "labels": [],
+    "number": 290,
+    "title": "mPCC container ignores SIGTERM, so docker stop waits for the timeout",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/290"
+   },
+   {
+    "labels": [],
+    "number": 289,
+    "title": "init_mpcc.sh doesn't create /etc/mprov when SECRET_KEY comes from the environment",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/289"
+   },
+   {
+    "labels": [],
+    "number": 288,
+    "title": "init_mpcc.sh captures the manage.py shell banner in the API key",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/288"
+   },
+   {
+    "labels": [],
+    "number": 287,
+    "title": "default6.script still uses IPv4 variables and route commands",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/287"
+   },
+   {
+    "labels": [],
+    "number": 286,
+    "title": "Image download retry only checks tar's exit status",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/286"
+   },
+   {
+    "labels": [],
+    "number": 285,
+    "title": "get_kcmdline_opt matches substrings and truncates values containing '='",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/285"
+   },
+   {
+    "labels": [],
+    "number": 284,
+    "title": "genNetworkInterfaces.py shebang is misspelled",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/284"
+   },
+   {
+    "labels": [],
+    "number": 283,
+    "title": "genNetworkInterfaces.py always appends a second slash to netscriptDir",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/283"
+   },
+   {
+    "labels": [],
+    "number": 282,
+    "title": "genNetworkInterfaces.py leaves netmask unset when the network has none",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/282"
+   },
+   {
+    "labels": [],
+    "number": 281,
+    "title": "genNetworkInterfaces.py disagrees about whether mprovURL ends with a slash",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/281"
+   },
+   {
+    "labels": [],
+    "number": 280,
+    "title": "genNetworkInterfaces.py reads response in the except block where it's unbound",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/280"
+   },
+   {
+    "labels": [],
+    "number": 279,
+    "title": "Verify partition.setFlag(18) in the stateful installer",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/279"
+   },
+   {
+    "labels": [],
+    "number": 278,
+    "title": "Stateful installer's netboot disable uses requests.post and builds a double-slash URL",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/278"
+   },
+   {
+    "labels": [],
+    "number": 277,
+    "title": "Stateful installer joins auto-detected modules without a space",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/277"
+   },
+   {
+    "labels": [],
+    "number": 276,
+    "title": "Stateful installer drops kernel arguments without '=' from GRUB_CMDLINE_LINUX",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/276"
+   },
+   {
+    "labels": [],
+    "number": 275,
+    "title": "Stateful installer creates /newroot/none for swap entries",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/275"
+   },
+   {
+    "labels": [],
+    "number": 274,
+    "title": "Stateful installer uses an unset or stale dev when a RAID member's disklayout doesn't match",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/274"
+   },
+   {
+    "labels": [],
+    "number": 273,
+    "title": "Stateful installer checks the wrong partition when writing the fill partition's fstab entry",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/273"
+   },
+   {
+    "labels": [],
+    "number": 272,
+    "title": "Default DRF permissions require both a login and an API key",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/272"
+   },
+   {
+    "labels": [],
+    "number": 270,
+    "title": "Audit the admin add wizard in common/admin.py",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/270"
+   },
+   {
+    "labels": [],
+    "number": 269,
+    "title": "Reconcile System.flatten_config with render_config and parse_config_params",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/269"
+   },
+   {
+    "labels": [],
+    "number": 268,
+    "title": "POST /jobservers/ returns a double-encoded JSON string",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/268"
+   },
+   {
+    "labels": [],
+    "number": 258,
+    "title": "Add docstrings to undocumented classes and functions",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/258"
+   },
+   {
+    "labels": [],
+    "number": 256,
+    "title": "Create job modules only from job server registration",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/256"
+   },
+   {
+    "labels": [],
+    "number": 255,
+    "title": "Job toasts: stop polling and go to the login page when the session expires",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/255"
+   },
+   {
+    "labels": [],
+    "number": 254,
+    "title": "Track job servers per network, route requests by network, and flag stale job servers instead of deleting them",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/254"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 197,
+    "title": "Move the mPCC image to Rocky Linux 9 and a supported Python",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/197"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 180,
+    "title": "For Files in the UI, allow links to point to the file without version",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/180"
+   },
+   {
+    "labels": [],
+    "number": 179,
+    "title": "Suggested Menu Restructure and Script Behavior changes",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/179"
+   },
+   {
+    "labels": [],
+    "number": 173,
+    "title": "Allow for categorization of scripts and enable a way to filter by type",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/173"
+   },
+   {
+    "labels": [],
+    "number": 171,
+    "title": "Add column to System Images for Current OS Distribution",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/171"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 170,
+    "title": "journald logging for new systems identified in NADS",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/170"
+   },
+   {
+    "labels": [],
+    "number": 169,
+    "title": "Provide \"filter\" options on the systems menu",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/169"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWD",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     }
+    ],
+    "number": 168,
+    "title": "mprov_boot.sh doesn't properly detect virtio_scsi based vm disk adapters.",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/168"
+   },
+   {
+    "labels": [],
+    "number": 176,
+    "title": "Add an action button to immediately rebuild an image.",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/176"
+   },
+   {
+    "labels": [],
+    "number": 160,
+    "title": "re-work how provisioning is \"enabled\" on systems",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/160"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 159,
+    "title": "add a stateful safety net",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/159"
+   },
+   {
+    "labels": [],
+    "number": 156,
+    "title": "Add a bool to repos to only download newest packages.",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/156"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 155,
+    "title": "Tagging of scripts in MPCC",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/155"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 154,
+    "title": "a \"final configuration\" tab on systems and images",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/154"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWD",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 153,
+    "title": "time values not consistent with time zone",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/153"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 152,
+    "title": "add a button to toggle system id light",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/152"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWD",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 149,
+    "title": "Root ssh key not reading from Distro config",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/149"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWD",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     },
+     {
+      "id": "LA_kwDOHGrfpc7t3rWI",
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+     }
+    ],
+    "number": 148,
+    "title": "root pw not set on new image generation",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/148"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 128,
+    "title": "Add MTU to bulk editor, maybe other network settings",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/128"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 124,
+    "title": "Selectable / Adjustable columns headers for system page",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/124"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 123,
+    "title": "Network View Tab feature",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/123"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 87,
+    "title": "import feature for system images.",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/87"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 65,
+    "title": "add the ability to upload/download switch config.",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/65"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 60,
+    "title": "Serial number tracking with history on systems",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/60"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 38,
+    "title": "System Add Wizard for range",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/38"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 45,
+    "title": "Job / task logging for jobs ",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/45"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 19,
+    "title": "Mprov scripts backed by Git",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/19"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 6,
+    "title": "versioning for system images",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/6"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHGrfpc7t3rWH",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 5,
+    "title": "Allow API calls to add to Admin Site History",
+    "url": "https://github.com/mprov-ng/mprov_control_center/issues/5"
+   }
+  ],
+  "prs": [
+   {
+    "headRefName": "fix/provision-flag-160",
+    "number": 306,
+    "title": "Add System.provision as the netboot switch (replaces #166)",
+    "url": "https://github.com/mprov-ng/mprov_control_center/pull/306"
+   }
+  ]
+ },
+ "mprov-ng/mprov_jobserver": {
+  "issues": [
+   {
+    "labels": [],
+    "number": 149,
+    "title": "nads: registers None without LLDP, and keeps the Port ID subtype byte",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/149"
+   },
+   {
+    "labels": [],
+    "number": 148,
+    "title": "mprov_webserver: the per-image connection limit never applies",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/148"
+   },
+   {
+    "labels": [],
+    "number": 147,
+    "title": "loadmon is read from config_data, where it never is",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/147"
+   },
+   {
+    "labels": [],
+    "number": 146,
+    "title": "script_runner: scripts with dependencies crash",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/146"
+   },
+   {
+    "labels": [],
+    "number": 145,
+    "title": "repo_update: the error paths crash instead of failing the job",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/145"
+   },
+   {
+    "labels": [],
+    "number": 144,
+    "title": "image_update: other error-path bugs in handle_jobs()",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/144"
+   },
+   {
+    "labels": [],
+    "number": 143,
+    "title": "image_update: a failed build fails every running job on the job server",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/143"
+   },
+   {
+    "labels": [],
+    "number": 142,
+    "title": "image_update: hosting images from other job servers doesn't work",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/142"
+   },
+   {
+    "labels": [],
+    "number": 141,
+    "title": "image_sync and repo_sync crash when an image or repo was deleted from the mPCC",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/141"
+   },
+   {
+    "labels": [],
+    "number": 136,
+    "title": "libgenders: /etc/genders.include is never appended",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/136"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR5x",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     }
+    ],
+    "number": 128,
+    "title": "image_update doesn't write the distro's root SSH keys into a fresh image, and mangles some root passwords",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/128"
+   },
+   {
+    "labels": [],
+    "number": 115,
+    "title": "Some plugins build mPCC URLs with a double slash",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/115"
+   },
+   {
+    "labels": [],
+    "number": 114,
+    "title": "Register on every network the job server serves",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/114"
+   },
+   {
+    "labels": [],
+    "number": 113,
+    "title": "Keep heartbeating under load and send a stable host id, instead of going quiet",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/113"
+   },
+   {
+    "labels": [],
+    "number": 112,
+    "title": "Job servers claim every pending job of a module, including jobs for other job servers",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/112"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 111,
+    "title": "Move the jobserver image to Rocky Linux 9 and a supported Python",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/111"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 110,
+    "title": "Disable List for scripts at the system level",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/110"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR5x",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     }
+    ],
+    "number": 108,
+    "title": "reassess when dnsmasq gets a full restart",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/108"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 105,
+    "title": "journald logging for time to provision",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/105"
+   },
+   {
+    "labels": [],
+    "number": 104,
+    "title": "journald logging info for warnings, alerts, informational",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/104"
+   },
+   {
+    "labels": [],
+    "number": 103,
+    "title": "journald logging info for job status",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/103"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR5x",
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+     }
+    ],
+    "number": 102,
+    "title": "jobserver cannot talk https to the mpcc.",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/102"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 96,
+    "title": "File Copier mechanism",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/96"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     }
+    ],
+    "number": 95,
+    "title": "implement newest packages only in repo sync.",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/95"
+   },
+   {
+    "labels": [],
+    "number": 94,
+    "title": "restart of the jobserver should set all jobs running on that jobserver to failed.",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/94"
+   },
+   {
+    "labels": [],
+    "number": 92,
+    "title": "move to using cloud images for creating the base image.",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/92"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7yN1NK",
+      "name": "jobserver module request",
+      "description": "",
+      "color": "E69C06"
+     }
+    ],
+    "number": 29,
+    "title": "job server push-receiver module",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/29"
+   },
+   {
+    "labels": [
+     {
+      "id": "LA_kwDOHMnv-c7xPR53",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+     },
+     {
+      "id": "LA_kwDOHMnv-c7yN1NK",
+      "name": "jobserver module request",
+      "description": "",
+      "color": "E69C06"
+     }
+    ],
+    "number": 15,
+    "title": "PLUGIN: ib fabric auto detection ",
+    "url": "https://github.com/mprov-ng/mprov_jobserver/issues/15"
+   }
+  ],
+  "prs": []
+ },
+ "mprov-ng/mprov_scripts": {
+  "issues": [],
+  "prs": [
+   {
+    "headRefName": "docs/openwiki-2026-10-23",
+    "number": 19,
+    "title": "docs: regenerate OpenWiki wiki against eb80617 (supersedes 2026-10-15 sweep)",
+    "url": "https://github.com/mprov-ng/mprov_scripts/pull/19"
+   }
+  ]
+ },
+ "mprov-ng/mash": {
+  "issues": [],
+  "prs": [
+   {
+    "headRefName": "docs/openwiki-2026-10-23",
+    "number": 17,
+    "title": "Add OpenWiki-generated docs: quickstart, architecture, testing guide",
+    "url": "https://github.com/mprov-ng/mash/pull/17"
+   }
+  ]
+ }
+}

@@ -1,0 +1,794 @@
+[
+ {
+  "id": "CC-041",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] IPv6 jobserver addresses lack bracket wrapping in image URLs",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "a41764d4b634",
+  "words": 131,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/44",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 900,
+  "pack_body_len": 900
+ },
+ {
+  "id": "CC-042",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Script save crashes with AttributeError when script type is null",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "4d883f27619f",
+  "words": 121,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/45",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 862,
+  "pack_body_len": 862
+ },
+ {
+  "id": "CC-043",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] PXE bootdev ipmitool exit status ignored so failed setup reports success",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "7db3bccc736b",
+  "words": 121,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/46",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 836,
+  "pack_body_len": 836
+ },
+ {
+  "id": "CC-044",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Change signals reset in-flight jobs to pending under the same name",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "f64723c57256",
+  "words": 128,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/47",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 920,
+  "pack_body_len": 920
+ },
+ {
+  "id": "CC-045",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S4] Jobserver registration endpoint returns double-encoded JSON",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "723701b1e82d",
+  "words": 107,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/48",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 714,
+  "pack_body_len": 714
+ },
+ {
+  "id": "CC-046",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Admin add wizard mutates shared ModelAdmin state per request",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "0c1a8b82ad72",
+  "words": 126,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/49",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 854,
+  "pack_body_len": 854
+ },
+ {
+  "id": "CC-047",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Container init captures Django shell banner into the jobserver API key",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "08be2a37649a",
+  "words": 128,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/50",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 877,
+  "pack_body_len": 877
+ },
+ {
+  "id": "CC-048",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S4] Container runs bash as PID 1 and ignores SIGTERM so docker stop kills hard",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "9ed610f1a73b",
+  "words": 110,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/51",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 710,
+  "pack_body_len": 710
+ },
+ {
+  "id": "CC-049",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Stateful installer judges the fill partition by the previous loop variable",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "d3456761a155",
+  "words": 142,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/52",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 1007,
+  "pack_body_len": 1007
+ },
+ {
+  "id": "CC-050",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S3] Stateful installer RAID member loop can use a stale or unset disk variable",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "b804ef608032",
+  "words": 149,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/53",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 945,
+  "pack_body_len": 945
+ },
+ {
+  "id": "CC-051",
+  "repo": "biondogs/mprov_control_center",
+  "title": "[S1] OSDistro API serializer returns the distro root password in cleartext",
+  "labels": [
+   "bug",
+   "s1-blocker",
+   "review-found"
+  ],
+  "sha256": "feac445a0fde",
+  "words": 142,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_control_center/issues/54",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s1-blocker",
+   "review-found"
+  ],
+  "readback_body_len": 987,
+  "pack_body_len": 987
+ },
+ {
+  "id": "JSR2-01",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S2] Pulled images are re-downloaded in full every heartbeat, forever",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "9e6bef082034",
+  "words": 122,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/32",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "readback_body_len": 924,
+  "pack_body_len": 924
+ },
+ {
+  "id": "JSR2-02",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S2] Configured imageList path crashes: removal during iteration, then .items() on a list",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "9078cafcd992",
+  "words": 119,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/33",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "readback_body_len": 856,
+  "pack_body_len": 856
+ },
+ {
+  "id": "JSR2-03",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S2] nads reports LLDP-detection failure as success and registers null switch/port",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "196a98eb3098",
+  "words": 115,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/34",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "readback_body_len": 825,
+  "pack_body_len": 825
+ },
+ {
+  "id": "JSR2-07",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] script-runner silently falls back to the nads image on any -i fetch failure",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "3526d7ad409c",
+  "words": 137,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/35",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 953,
+  "pack_body_len": 953
+ },
+ {
+  "id": "JSR2-08",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] repo-update never joins its worker threads \u2014 overlapping reposyncs, orphaned work at shutdown",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "977911b9f415",
+  "words": 86,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/36",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 630,
+  "pack_body_len": 630
+ },
+ {
+  "id": "JSR2-09",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] image-delete rmtree path built from unvalidated job param (traversal) and crashes on missing key",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "45652fb720f7",
+  "words": 120,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/37",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 876,
+  "pack_body_len": 876
+ },
+ {
+  "id": "JSR2-11",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] register_server exits the whole daemon on a transient mPCC 500",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "e359b29b3a27",
+  "words": 117,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/38",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 805,
+  "pack_body_len": 805
+ },
+ {
+  "id": "JSR2-12",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] MProvScript assigns a sockaddr tuple to ip_address",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "05ce201f619a",
+  "words": 75,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/39",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 606,
+  "pack_body_len": 606
+ },
+ {
+  "id": "JSR2-13",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] repo-delete module is a stub that claims jobs and simulates success",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "ec38fd89da61",
+  "words": 107,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/40",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 779,
+  "pack_body_len": 779
+ },
+ {
+  "id": "JSR2-14",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S3] setup.py feeds requirements lines with inline comments into install_requires (invalid PEP 508)",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "1572276d3063",
+  "words": 92,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/41",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 764,
+  "pack_body_len": 764
+ },
+ {
+  "id": "JSR2-15",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S4] Dead enableDHCP=False in the dnsmasq no-jobs branch misleads readers",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "1d15e5f1bb7b",
+  "words": 83,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/42",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 591,
+  "pack_body_len": 591
+ },
+ {
+  "id": "JSR2-16",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S4] Image build runs 'dnf -y clean all' against the build host",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "0b2fe081bf6a",
+  "words": 84,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/43",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 619,
+  "pack_body_len": 619
+ },
+ {
+  "id": "JSR2-17",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S4] Installer fetches the systemd unit from the upstream main tip over the network",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "4924598203cb",
+  "words": 84,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/44",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 731,
+  "pack_body_len": 731
+ },
+ {
+  "id": "JSR2-18",
+  "repo": "biondogs/mprov_jobserver",
+  "title": "[S4] Runtime dependencies are unpinned in requirements.txt",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "30920c62f755",
+  "words": 76,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_jobserver/issues/45",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 587,
+  "pack_body_len": 587
+ },
+ {
+  "id": "SCR-022",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S2] Database backup written world-readable to volatile /tmp",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "90d35aca56f8",
+  "words": 140,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/22",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "readback_body_len": 968,
+  "pack_body_len": 968
+ },
+ {
+  "id": "SCR-023",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] Data-share fstab append corrupts fstab or skips the mount via loose match",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "4140dfcd0364",
+  "words": 140,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/23",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 903,
+  "pack_body_len": 903
+ },
+ {
+  "id": "SCR-024",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] Shadow file rewritten in place with no atomic write or backup",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "f5bad7321e2d",
+  "words": 111,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/24",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 814,
+  "pack_body_len": 814
+ },
+ {
+  "id": "SCR-025",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] Slurmd config rebuilt through fixed world-writable tmp path",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "8356b5766eff",
+  "words": 111,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/25",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 821,
+  "pack_body_len": 821
+ },
+ {
+  "id": "SCR-026",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] Unpinned network installs of jobserver and yq at image build time",
+  "labels": [
+   "enhancement",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "1f4fd3b4bd7f",
+  "words": 123,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/26",
+  "readback_exact": true,
+  "readback_labels": [
+   "enhancement",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 968,
+  "pack_body_len": 968
+ },
+ {
+  "id": "SCR-027",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] Image name unvalidated into destructive rsync delete target",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "21ef853705cd",
+  "words": 115,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/27",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 827,
+  "pack_body_len": 827
+ },
+ {
+  "id": "SCR-028",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S3] CSV import keeps CR and splits records on whitespace corrupting fields",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "37deef268163",
+  "words": 120,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/28",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 844,
+  "pack_body_len": 844
+ },
+ {
+  "id": "SCR-029",
+  "repo": "biondogs/mprov_scripts",
+  "title": "[S4] Duplicated ipmitool netmask block in BMC setup with trailing-space arg",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "cef0ddb806b4",
+  "words": 110,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mprov_scripts/issues/29",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 745,
+  "pack_body_len": 745
+ },
+ {
+  "id": "MASH-101",
+  "repo": "biondogs/mash",
+  "title": "[S2] Script text is compiled as an unsandboxed Jinja2 template",
+  "labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "sha256": "caa2a335c8e5",
+  "words": 144,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mash/issues/31",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s2-functional",
+   "review-found"
+  ],
+  "readback_body_len": 1096,
+  "pack_body_len": 1096
+ },
+ {
+  "id": "MASH-102",
+  "repo": "biondogs/mash",
+  "title": "[S3] GET and DELETE query values are concatenated unencoded into the query string",
+  "labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "sha256": "4f275c1759d7",
+  "words": 145,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mash/issues/32",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s3-robustness",
+   "review-found"
+  ],
+  "readback_body_len": 1008,
+  "pack_body_len": 1008
+ },
+ {
+  "id": "MASH-103",
+  "repo": "biondogs/mash",
+  "title": "[S4] Plugin output and plugin help bypass the shell's redirectable stdout",
+  "labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "sha256": "2195c5388320",
+  "words": 129,
+  "action": "FILED",
+  "url": "https://github.com/biondogs/mash/issues/33",
+  "readback_exact": true,
+  "readback_labels": [
+   "bug",
+   "s4-hygiene",
+   "review-found"
+  ],
+  "readback_body_len": 954,
+  "pack_body_len": 954
+ }
+]

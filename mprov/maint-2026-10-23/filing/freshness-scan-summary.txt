@@ -1,0 +1,34 @@
+# Freshness pass record — t_31448dcb filing run, 2026-10-23 ~15:00 EDT
+
+Scope: pinned operator requirement — per-issue live open-issue + open-PR re-check immediately before filing.
+Snapshot: freshness-snapshot.json (open issues + PRs, fork AND upstream remotes, all four repos), taken immediately before filing.
+
+Open-issue dedupe: Jaccard title-similarity scan (pack 36 titles vs every open issue on fork+upstream, threshold 0.4)
+returned exactly 4 pairs: CC-045/#268, CC-047/#288, CC-048/#290, CC-050/#274 (all mprov-ng upstream twins).
+Decision: FILE — adjudication kept fork filings for upstream twins (parallel maintenance tracks); pack bodies cite the
+upstream twin. No fork-side duplicate titles. 0 skips from issue lists.
+
+Open-PR evidence-area review (hunk/file level where files overlap):
+- biondogs/mprov_control_center#2 (security/quality sweep): touches scripts/models.py, static/mprov_stateful.py,
+  osmanagement/models.py — hunks are bare-except/logging/dos2unix/typo only. NOT covered: CC-042 (scriptType null
+  deref still unguarded), CC-044 (Job.objects.update_or_create signal pattern untouched), CC-049/050 (fill-partition
+  :219-226 / RAID-member :240-246 loops untouched), CC-051 (osmanagement/serializers.py not in PR). FILE all.
+- biondogs/mprov_control_center#3 (WYSIWYG): scripts/models.py diff = +6 import/verbose_name lines only; views_noauth.py
+  0 changes. CC-041/CC-042 not covered. FILE.
+- biondogs/mash#30: do_foreach line 362 only (MASH-014). MASH-101/102/103 evidence (renderString/precmd, query build
+  :572-580, plugin streams) untouched. FILE all 3. (Pack had this documented; re-verified live.)
+- biondogs/mash#29: covers already-filed #13 only (MASH-013). No NEW finding. FILE 3.
+- mprov-ng/mprov_control_center#306: adjudication hunk-pass (not covering CC-041/043/049/050, #43/CC-040); unchanged.
+- mprov-ng/mprov_scripts#19 + mprov-ng/mash#17: docs-only (OpenWiki). No coverage.
+- mprov-ng/mprov_jobserver#152/#153: MERGED since adjudication — tests-only + docs-only; zero product-code coverage of
+  any JSR2 finding; no filed finding became redundant.
+
+Result: 36/36 filed, 0 skipped-as-newly-covered, 0 failures. Bodies read back byte-identical to committed pack text at
+67f5109 (gh readback: title, all 3 labels, full body — see filing-receipts.json readback_exact=true x36). No GitHub
+template injection occurred (org/repos have no issue templates), so zero mechanical body edits were needed.
+
+Out-of-scope, for follow-up (pack §C/§D, drafted text in packs):
+- JSR2-19 fold-comment on biondogs/mprov_jobserver#3 (drafted in APPROVED-FILING-JS.md §C).
+- CC 18 close-with-ref + 4 narrowed comments; JS #11/#21/#30 comments; SCR #2/#5/#6/#15 actions;
+  MASH 4 close-with-ref + #13 pointer to PR #29. Per the butler's pinned rule, PR-in-flight item #13 gets a pointer
+  on PR biondogs/mash#29, NOT a still-live comment.

@@ -1,0 +1,30 @@
+{
+  "_comment": "CC board permission allowlist for profile g02-ops ENGINEERING FRACTION ONLY (wired t_0f3b5c1e): offline composition (PromQL/alert rules, k8s/chart YAML, scripts, proposal docs). No kubectl/helm/docker/ssh — cluster mutation and GO-gated actions stay outside Claude Code by design. Denies network, push, external comms tooling, credential reads, other-agents, and web tools.",
+  "permissions": {
+    "allow": [
+      "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep",
+      "Bash(git status)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git checkout:*)",
+      "Bash(git branch:*)", "Bash(git stash:*)", "Bash(git restore:*)", "Bash(git grep:*)",
+      "Bash(git ls-files:*)", "Bash(git rev-parse:*)",
+      "Bash(python:*)", "Bash(python3:*)", "Bash(pip:*)", "Bash(pip3:*)",
+      "Bash(pytest:*)", "Bash(ruff:*)", "Bash(yamllint:*)", "Bash(yq:*)", "Bash(jq:*)",
+      "Bash(promtool:*)",
+      "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(grep:*)",
+      "Bash(rg:*)", "Bash(find:*)", "Bash(wc:*)", "Bash(diff:*)", "Bash(sort:*)",
+      "Bash(uniq:*)", "Bash(sed:*)", "Bash(awk:*)", "Bash(tree:*)", "Bash(which:*)",
+      "Bash(file:*)", "Bash(stat:*)", "Bash(du:*)", "Bash(date:*)", "Bash(env)",
+      "Bash(echo:*)", "Bash(printf:*)", "Bash(pwd)", "Bash(true)", "Bash(false)",
+      "Bash(mkdir:*)", "Bash(touch:*)", "Bash(cp:*)", "Bash(mv:*)", "Bash(chmod:*)"
+    ],
+    "deny": [
+      "Bash(git push:*)", "Bash(git reset --hard:*)", "Bash(git clean:*)",
+      "Bash(rm:*)", "Bash(sudo:*)", "Bash(claude:*)", "Bash(opencode:*)", "Bash(codex:*)",
+      "Bash(curl:*)", "Bash(wget:*)", "Bash(ssh:*)", "Bash(scp:*)", "Bash(nc:*)",
+      "Bash(kubectl:*)", "Bash(helm:*)", "Bash(docker:*)", "Bash(systemctl:*)", "Bash(az:*)",
+      "Read(.env)", "Read(.env.*)", "Read(**/.env)", "Read(**/.env.*)",
+      "Read(**/secrets/**)", "Read(**/credentials*)", "Read(**/*.pem)", "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)", "WebFetch", "WebSearch"
+    ]
+  }
+}

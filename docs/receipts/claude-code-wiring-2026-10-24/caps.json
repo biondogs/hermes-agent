@@ -1,0 +1,14 @@
+{
+  "_comment": "CC board-lane caps (t_0f3b5c1e). Operator allocation flip 2026-10-24: board lane may draw up to ~90% of the rolling window; operator keeps a >=10% floor. Anchors: t_b83974bc conservative 5h-window floor estimate $20 API-equiv -> 90% = $18. Weekly floor unknown (unobservable member-side); assumed ~3.6x session floor (~$72) -> 90% = $65, which also stays under the ~$91/wk 'average active developer' org-analytics visibility line. Per-profile cap keeps one lane from monopolizing. If this file is missing or unparseable the wrapper fails CLOSED to the conservative pilot-era caps below.",
+  "cap_5h_usd": 18.00,
+  "cap_7d_usd": 65.00,
+  "per_profile_cap_5h_usd": 12.00,
+  "conservative_fallback": {
+    "cap_5h_usd": 2.00,
+    "cap_7d_usd": 10.00,
+    "per_profile_cap_5h_usd": 1.50
+  },
+  "max_shot_budget_usd": 0.50,
+  "max_shot_turns": 10,
+  "quota_wall_cooldown_s": 1800
+}

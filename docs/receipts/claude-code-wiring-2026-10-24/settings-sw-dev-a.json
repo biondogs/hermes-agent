@@ -1,0 +1,30 @@
+{
+  "_comment": "CC board permission allowlist for profile sw-dev-a (wired t_0f3b5c1e). Grants print-mode Edit/Write plus a repo-toolchain Bash allowlist. Denies network, push, destructive ops, cluster/docker control, credential reads, other-agents, and web tools. Replaces pilot-era --dangerously-skip-permissions.",
+  "permissions": {
+    "allow": [
+      "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep",
+      "Bash(git status)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git checkout:*)",
+      "Bash(git branch:*)", "Bash(git stash:*)", "Bash(git restore:*)", "Bash(git grep:*)",
+      "Bash(git ls-files:*)", "Bash(git rev-parse:*)",
+      "Bash(python:*)", "Bash(python3:*)", "Bash(pip:*)", "Bash(pip3:*)",
+      "Bash(pytest:*)", "Bash(mypy:*)", "Bash(ruff:*)", "Bash(uv:*)",
+      "Bash(npm:*)", "Bash(node:*)", "Bash(npx:*)", "Bash(make:*)",
+      "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(grep:*)",
+      "Bash(rg:*)", "Bash(find:*)", "Bash(wc:*)", "Bash(diff:*)", "Bash(sort:*)",
+      "Bash(uniq:*)", "Bash(sed:*)", "Bash(awk:*)", "Bash(tree:*)", "Bash(which:*)",
+      "Bash(file:*)", "Bash(stat:*)", "Bash(du:*)", "Bash(date:*)", "Bash(env)",
+      "Bash(echo:*)", "Bash(printf:*)", "Bash(pwd)", "Bash(true)", "Bash(false)",
+      "Bash(mkdir:*)", "Bash(touch:*)", "Bash(cp:*)", "Bash(mv:*)", "Bash(chmod:*)"
+    ],
+    "deny": [
+      "Bash(git push:*)", "Bash(git reset --hard:*)", "Bash(git clean:*)",
+      "Bash(rm:*)", "Bash(sudo:*)", "Bash(claude:*)", "Bash(opencode:*)", "Bash(codex:*)",
+      "Bash(curl:*)", "Bash(wget:*)", "Bash(ssh:*)", "Bash(scp:*)", "Bash(nc:*)",
+      "Bash(kubectl:*)", "Bash(helm:*)", "Bash(docker:*)", "Bash(systemctl:*)",
+      "Read(.env)", "Read(.env.*)", "Read(**/.env)", "Read(**/.env.*)",
+      "Read(**/secrets/**)", "Read(**/credentials*)", "Read(**/*.pem)", "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)", "WebFetch", "WebSearch"
+    ]
+  }
+}

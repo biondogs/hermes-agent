@@ -1,0 +1,2 @@
+{"ts":1792866200,"kind":"quota_wall","profile":"sw-dev-a","detail":"limit-class failure, wall +600s"}
+{"ts":1792866200,"kind":"refused_quota_wall","profile":"g02-ops","detail":"wall active"}

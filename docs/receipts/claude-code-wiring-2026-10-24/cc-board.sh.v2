@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+# cc-board.sh v2 — sanctioned board-lane wrapper for the shared `claude` CLI.
+# Lineage: t_b83974bc design §7 (caps+ledger) -> pilot v1 (t_93b6f033) -> wiring v2 (t_0f3b5c1e).
+#
+# v2 changes vs pilot v1:
+#   - caps read from $BOARD_DIR/caps.json (fail-closed to conservative values if missing/bad);
+#     caps encode the operator's flipped allocation (board lane <=~90% of rolling window,
+#     operator reserve ~10%) instead of v1's hard-coded $2/5h + $10/7d.
+#   - per-profile 5h sub-cap (no single wired profile monopolizes the lane).
+#   - cross-profile quota-wall: an Anthropic usage-limit-class failure writes
+#     $BOARD_DIR/quota-wall.json and every wired profile is refused until it expires,
+#     so exhaustion is discovered once, not re-discovered per profile.
+#   - permissions via --settings allowlist (per-profile file) instead of
+#     --dangerously-skip-permissions. No bypass by default.
+#   - refusal/wall events logged to $BOARD_DIR/events.jsonl for the alert cron.
+#   - per-shot ceilings enforced: --max-turns <= 10, --max-budget-usd <= 0.50, effort <= medium,
+#     model allowlist haiku-5-5/sonnet-5-5.
+#
+# Usage: cc-board.sh <profile> <workdir> <max_turns> <budget_usd> <receipt_out> <prompt...>
+# Exit: 0 ok | 41 refused-bad-args/model/effort | 42 board- or profile-cap exhausted (pre-run)
+#       43 claude run failed (no meterable receipt, non-limit) | 44 quota wall active (pre-run)
+#       45 Anthropic usage-limit-class failure (wall written — fall back)
+set -u
+PROFILE="$1"; WORKDIR="$2"; MAXTURNS="$3"; BUDGET="$4"; RECEIPT="$5"; shift 5
+PROMPT="$*"
+MODEL="${CC_BOARD_MODEL:-sonnet-5-5}"
+EFFORT="${CC_BOARD_EFFORT:-medium}"
+BOARD_DIR="${CC_BOARD_DIR:-$HOME/.claude-board}"
+LEDGER="$BOARD_DIR/ledger.jsonl"
+CAPS="$BOARD_DIR/caps.json"
+WALL="$BOARD_DIR/quota-wall.json"
+EVENTS="$BOARD_DIR/events.jsonl"
+mkdir -p "$BOARD_DIR"; touch "$LEDGER" "$EVENTS"
+
+log_event() { printf '{"ts":%s,"kind":"%s","profile":"%s","detail":"%s"}\n' "$(date +%s)" "$1" "$PROFILE" "$2" >> "$EVENTS"; }
+
+case "$MODEL" in haiku-5-5|sonnet-5-5|claude-haiku-5-5|claude-sonnet-5-5) MODEL="claude-$MODEL" ;; *) echo "REFUSED: model '$MODEL' not on board allowlist" >&2; log_event refused_model "$MODEL"; exit 41;; esac
+if [ "$EFFORT" != "low" ] && [ "$EFFORT" != "medium" ]; then echo "REFUSED: effort '$EFFORT' > medium" >&2; log_event refused_effort "$EFFORT"; exit 41; fi
+case "$MAXTURNS" in ''|*[!0-9]*) echo "REFUSED: bad max_turns" >&2; exit 41;; esac
+case "$BUDGET" in ''|*[!0-9.]*) echo "REFUSED: bad budget" >&2; exit 41;; esac
+
+# --- caps (fail-closed) ---
+CAP5=$(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(c.get("conservative_fallback",{}).get("cap_5h_usd",2.00))' "$CAPS" 2>/dev/null || echo 2.00)
+CAP7=$(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(c.get("conservative_fallback",{}).get("cap_7d_usd",10.00))' "$CAPS" 2>/dev/null || echo 10.00)
+CAPP=$(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(c.get("conservative_fallback",{}).get("per_profile_cap_5h_usd",1.50))' "$CAPS" 2>/dev/null || echo 1.50)
+SHOTBUD=$(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(c.get("max_shot_budget_usd",0.50))' "$CAPS" 2>/dev/null || echo 0.50)
+MAXT=$(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(c.get("max_shot_turns",10))' "$CAPS" 2>/dev/null || echo 10)
+if python3 - "$CAPS" <<'PYEOF' 2>/dev/null
+import json,sys
+try: c=json.load(open(sys.argv[1]))
+except Exception: sys.exit(1)
+sys.exit(0 if all(isinstance(c.get(k),(int,float)) and c[k]>0 for k in ("cap_5h_usd","cap_7d_usd","per_profile_cap_5h_usd")) else 1)
+PYEOF
+then
+  CAP5=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["cap_5h_usd"])' "$CAPS")
+  CAP7=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["cap_7d_usd"])' "$CAPS")
+  CAPP=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["per_profile_cap_5h_usd"])' "$CAPS")
+else
+  echo "WARN: caps.json missing/invalid — failing CLOSED to conservative caps ($CAP5/5h, $CAP7/7d, $CAPP/profile)" >&2
+fi
+if python3 -c 'import sys; sys.exit(0 if float(sys.argv[1])>float(sys.argv[2]) else 1)' "$BUDGET" "$SHOTBUD" 2>/dev/null; then
+  echo "REFUSED: per-shot budget $BUDGET > ceiling $SHOTBUD" >&2; log_event refused_shot_budget "$BUDGET>$SHOTBUD"; exit 41
+fi
+if [ "$MAXTURNS" -gt "$MAXT" ]; then echo "REFUSED: max_turns $MAXTURNS > ceiling $MAXT" >&2; log_event refused_shot_turns "$MAXTURNS>$MAXT"; exit 41; fi
+
+# --- quota-wall check (shared Anthropic-pool exhaustion state) ---
+if [ -f "$WALL" ]; then
+  python3 - "$WALL" <<'PYEOF' || { echo "REFUSED: quota wall active (shared Claude account limit hit recently) — profile falls back to own model" >&2; log_event refused_quota_wall "wall active"; exit 44; }
+import json,sys,time
+try: w=json.load(open(sys.argv[1]))
+except Exception: sys.exit(0)  # unparseable wall -> treat as expired, run
+sys.exit(1 if time.time() < float(w.get("until",0)) else 0)
+PYEOF
+fi
+
+# --- rolling-cap check under flock (board lane + per-profile) ---
+python3 - "$PROFILE" "$LEDGER" "$CAP5" "$CAP7" "$CAPP" <<'PYEOF' || { log_event refused_cap "cap check failed"; exit 42; }
+import sys, time, json
+profile, ledger, cap5, cap7, capp = sys.argv[1:6]
+cap5, cap7, capp = float(cap5), float(cap7), float(capp)
+now = time.time()
+c5 = c7 = p5 = 0.0
+with open(ledger) as f:
+    for line in f:
+        line = line.strip()
+        if not line: continue
+        try: e = json.loads(line)
+        except Exception: continue
+        age = now - e.get("ts", 0)
+        if age <= 5*3600:
+            c5 += e.get("cost_usd", 0)
+            if e.get("profile") == profile: p5 += e.get("cost_usd", 0)
+        if age <= 7*24*3600: c7 += e.get("cost_usd", 0)
+if c5 >= cap5 or c7 >= cap7:
+    print(f"REFUSED: board-lane rolling cap hit (5h=${c5:.2f}/{cap5}, 7d=${c7:.2f}/{cap7}) — profile {profile} falls back to own model", file=sys.stderr)
+    sys.exit(1)
+if p5 >= capp:
+    print(f"REFUSED: per-profile rolling cap hit (profile {profile}: ${p5:.2f}/{capp} in 5h) — falls back to own model", file=sys.stderr)
+    sys.exit(1)
+print(f"OK: headroom board 5h=${c5:.2f}/{cap5} 7d=${c7:.2f}/{cap7} | profile {profile} 5h=${p5:.2f}/{capp}", file=sys.stderr)
+PYEOF
+
+# --- permission grant: per-profile settings allowlist (NO bypass in default wiring) ---
+SETTINGS="$BOARD_DIR/settings-$PROFILE.json"
+[ -f "$SETTINGS" ] || SETTINGS="$BOARD_DIR/settings-default.json"
+if [ -f "$SETTINGS" ]; then
+  SETTINGS_ARG=(--settings "$SETTINGS")
+else
+  echo "REFUSED: no settings allowlist found ($BOARD_DIR/settings-$PROFILE.json) — refusing rather than running ungranted" >&2
+  log_event refused_no_settings "no allowlist"; exit 41
+fi
+EXTRA_FLAGS="${CC_BOARD_FLAGS:-}"
+
+# --- one-shot invocation ---
+cd "$WORKDIR" || exit 43
+timeout 500 claude -p "$PROMPT" \
+  --model "$MODEL" --effort "$EFFORT" \
+  --max-turns "$MAXTURNS" --max-budget-usd "$BUDGET" \
+  --no-session-persistence --output-format json \
+  "${SETTINGS_ARG[@]}" $EXTRA_FLAGS \
+  > "$RECEIPT" 2> "$RECEIPT.stderr"
+RC=$?
+
+LIMIT_RE='usage limit|rate limit|quota|too many requests|429'
+if [ $RC -ne 0 ]; then
+  if ! grep -q '"total_cost_usd"' "$RECEIPT" 2>/dev/null; then
+    if grep -qiE "$LIMIT_RE" "$RECEIPT.stderr" 2>/dev/null; then
+      COOLDOWN=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("quota_wall_cooldown_s",1800))' "$CAPS" 2>/dev/null || echo 1800)
+      printf '{"until":%s,"ts":%s,"profile":"%s","reason":"usage-limit-class failure","stderr_tail":"%s"}\n' \
+        "$(( $(date +%s) + COOLDOWN ))" "$(date +%s)" "$PROFILE" "$(tail -c 300 "$RECEIPT.stderr" | tr '\n"\\' ' ')" > "$WALL"
+      echo "QUOTA WALL: Anthropic usage-limit-class failure — wall written (+${COOLDOWN}s); fall back to own model, do NOT retry" >&2
+      log_event quota_wall "limit-class failure, wall +${COOLDOWN}s"; exit 45
+    fi
+    echo "claude exited rc=$RC with NO meterable receipt; stderr tail:" >&2
+    tail -5 "$RECEIPT.stderr" >&2
+    log_event run_failed "rc=$RC no receipt"; exit 43
+  fi
+fi
+
+# --- ledger append under flock (failed runs still meter — pilot lesson L4) ---
+python3 - "$PROFILE" "$MODEL" "$RECEIPT" "$LEDGER" <<'PYEOF'
+import sys, time, json, fcntl
+profile, model, receipt, ledger = sys.argv[1:5]
+try:
+    r = json.load(open(receipt))
+except Exception as e:
+    print(f"WARN: receipt unparseable: {e}", file=sys.stderr); sys.exit(0)
+u = r.get("usage") or {}
+entry = {
+  "ts": time.time(), "profile": profile, "model": model,
+  "subtype": r.get("subtype"), "num_turns": r.get("num_turns"),
+  "cost_usd": r.get("total_cost_usd", 0.0) or 0.0,
+  "duration_ms": r.get("duration_ms"),
+  "input_tokens": u.get("input_tokens"), "output_tokens": u.get("output_tokens"),
+  "cache_read": u.get("cache_read_input_tokens"), "cache_write": u.get("cache_creation_input_tokens"),
+  "session_id": r.get("session_id"),
+}
+if r.get("subtype") not in ("success", None):
+    print(f"NOTE: non-success subtype {r.get('subtype')} — ledgered (yes, failed runs meter)", file=sys.stderr)
+with open(ledger, "a") as f:
+    fcntl.flock(f, fcntl.LOCK_EX)
+    f.write(json.dumps(entry) + "\n")
+    fcntl.flock(f, fcntl.LOCK_UN)
+print(f"LEDGER: profile={profile} cost=${entry['cost_usd']:.4f} turns={entry['num_turns']} subtype={entry['subtype']}", file=sys.stderr)
+PYEOF
+log_event run_done "rc=$RC"
+exit 0

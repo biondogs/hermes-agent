@@ -73,6 +73,15 @@ mprov work until the operator amends them.
   open-filing restyle PROPOSAL (awaiting operator GO — nothing live edited
   yet) in `FILING-STYLE-REMEDIATION-2026-10-23.md`.
 
+- **2026-10-24 — SEVERITY MODEL added: `[SEC]` tier; S tiers reserved for
+  crisis/break only (operator standing rule, kanban t_5e7399b2).** Operator
+  rule verbatim: *"You need to tag all filings that are security
+  enhancements as security in the repo and recategorize them, s1 should be
+  reserved for crisis or break/bug fix security should be considered future
+  nice to have."* See the **Severity model** section below; applied
+  retroactively across the four repos (30 items labeled, 8 `[SEC]`
+  retitled, 0 verification failures) — receipts on kanban card t_5e7399b2.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -257,7 +266,9 @@ issue median is 41 words); lanes never merge.
 - **FS1 — issue titles.** Declarative failure sentences for defects ("X
   never reboots: Y unmounts /proc before Z"), imperative for enhancement
   asks ("Let job servers claim a job atomically"). ≤14 words. NO `[Sx]` or
-  any tag prefix, no trailing period. The `fact: mechanism` colon form is
+  any tag prefix, no trailing period — sole exception: the `[SEC]` prefix on
+  security-enhancement filings per the Severity model section (2026-10-24).
+  The `fact: mechanism` colon form is
   encouraged where it reads naturally.
 - **FS2 — issue bodies.** Prose paragraphs only: no `## ` headings, and
   NEVER the visible five-label block (`Symptom:` / `Evidence:` / `Root
@@ -299,7 +310,9 @@ issue median is 41 words); lanes never merge.
 - **FS7 — labels/milestones.** Issue-object labels stay the filing lane's
   (`bug|enhancement` + `review-found` + `sN-*`) — tooling metadata under
   operator adjudication (conflict #2); severity appears NOWHERE ELSE but
-  the body's Severity line. Milestones: none (matches his current practice).
+  the body's Severity line. Exception (2026-10-24): the `security` label is
+  mandatory on every security-classified filing per the Severity model
+  section. Milestones: none (matches his current practice).
 - **FS8 — corpus boundaries.** Closed issues/PRs, all historical comments
   (ours and his), commits, and project-9 rows are never restyled. Restyle
   applies to NEW filings immediately and to OPEN filings only per the
@@ -320,9 +333,16 @@ in order:
 3. `Fixes #N` present as first-line plain standalone match `^Fixes #N$`.
 4. Rule C contents: all five (symptom / evidence / root cause / proposed
    fix / severity) semantically present — as prose under FS2, NOT as labels.
-5. Style (FS rules): no `[Sx]`/tag title prefix; no visible five-label
+5. Style (FS rules): no `[Sx]`/tag title prefix (sole exception `[SEC]` per
+   the Severity model); no visible five-label
    block; no generic `##` headings; section names content-shaped or absent;
    ≤2 bold mini-labels, allowed vocabulary only; body ≤150 words.
+5a. Severity classification at the gate (operator rule 2026-10-24): a
+   security ENHANCEMENT (hardening/scoping with no active breakage) must
+   carry `[SEC]` title prefix + `security` label and NO S tier — REJECT an
+   `s1-blocker` (or `[S1]`) on such a filing unless the body evidences an
+   ongoing crisis or breakage of default deployments; crisis-tier security
+   keeps its S tier and must also carry the `security` label.
 6. Evidence: defect-site `file:line`/permalink present; error output quoted
    verbatim where the claim is observational; test evidence has counts AND
    a base comparison.
@@ -352,6 +372,39 @@ in order:
    section as an input per the ruleset above — the distiller reads repo
    etiquette files FRESH by design, so the policy file is canonical.
 
+
+## Severity model — S tiers reserved; the `[SEC]` security tier (2026-10-24, operator standing rule, kanban t_5e7399b2)
+
+Operator rule verbatim: *"You need to tag all filings that are security
+enhancements as security in the repo and recategorize them, s1 should be
+reserved for crisis or break/bug fix security should be considered future
+nice to have."*
+
+- **S1–S4 are for crisis or break/bug fixes only** — things broken today.
+  An item keeps or receives `s1-blocker` ONLY if it is an ongoing crisis or
+  breaks default deployments (e.g. credential exposure actively live,
+  unauthenticated destructive endpoint open by default, root code execution
+  on the shipped install path).
+- **Security enhancement** — hardening, permission scoping, authn/authz
+  improvement, secret-handling hygiene, injection/traversal prevention with
+  no active breakage — files as the nice-to-have tier: title prefix
+  `[SEC]`, repo label `security`, NO S tier. The `[SEC]` prefix is the one
+  tag-title exception to FS1.
+- **Crisis-tier security keeps its S tier** (it must not demote below the
+  break it represents) and ALSO gets the `security` label — no `[SEC]`
+  prefix. `[SEC]` means nice-to-have; crisis items stay in the S taxonomy.
+- **Classification tie-break:** unsure whether crisis? keep the S tier and
+  still add the `security` label. Never retitle an item a maintainer has
+  already commented on — label only, and receipt the skipped retitle.
+- **Label:** `security` exists in all four repos. `mprov_control_center` /
+  `mprov_jobserver` carried it since before this wave (FF0000, no
+  description); `mprov_scripts` / `mash` got it 2026-10-24 (color 5319e7,
+  description "Security enhancement / hardening").
+- **Retitled items keep their legacy `sN-*` labels** untouched (removal was
+  not in the operator directive's scope); the `[SEC]` title prefix is the
+  authoritative tier for them. New `[SEC]` filings get no `sN-*` label.
+- Project 9: recategorized items stay in their current column — the tier
+  change is not a state transition.
 
 ## Rule D — Review-phase scope (this wave)
 

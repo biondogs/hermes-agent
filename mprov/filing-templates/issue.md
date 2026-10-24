@@ -6,7 +6,8 @@ proposed fix, severity) MUST all be present — as prose, not as labels.
 
 ````markdown
 <Declarative title: the concrete failure, `fact: mechanism` when a colon
-helps. No [Sx] prefix, no trailing period. e.g.
+helps. No [Sx] prefix, no trailing period. Sole prefix exception: `[SEC]`
+on security ENHANCEMENTS (see Severity model, MPROV-MAINT-POLICY.md). e.g.
 "Stateful install never reboots: mprov_boot_init.sh unmounts /proc before
 writing /proc/sysrq-trigger">
 
@@ -29,7 +30,11 @@ cause:**`, `**To decide:**`, `**Coordinate with:**`, `**Check first:**` —
 at most one or two of these per issue.>
 
 Severity: S<N> — <one clause of impact, e.g. "happy path (IPv4) works; IPv6
-transport degrades">.
+transport degrades">. Security ENHANCEMENTS (no active breakage) instead
+write `Severity: [SEC] — future nice-to-have security enhancement: <one
+clause>` and carry the `security` label with NO sN-* label; crisis-tier
+security (credential exposure live, break by default) keeps its S tier and
+also carries `security`.
 
 Found while <what you were doing> for #<N>. Related: #<N>,
 mprov-ng/<repo>#<N>.
@@ -39,5 +44,7 @@ Rules recap: body ≤150 words is a cap, not a target — his median is 41.
 No `## ` headings. No `**Symptom.**`/`**Evidence.**`/`**Root cause.**`
 labels. Keep the `review-found`/`sN-*` labels on the ISSUE object (tooling
 metadata; under operator adjudication) — they stay off the title and out of
-the prose. No "Migrated from ..." footer on new filings unless a real
-provenance line; when present, keep it to the one closing sentence.
+the prose; add the `security` label on every security-classified filing
+(Severity model, 2026-10-24). No "Migrated from ..." footer on new filings
+unless a real provenance line; when present, keep it to the one closing
+sentence.

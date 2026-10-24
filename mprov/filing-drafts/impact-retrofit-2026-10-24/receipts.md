@@ -160,3 +160,13 @@ uberlinuxguy comments timestamped 2026-10-24T03:59-04:00Z, i.e. PRE-existing the
 | mprov_scripts | p#49 | patched | 0a07dba369b0f48f→d61c651ac8228c8a | read-back byte-compare MATCH |
 
 Machine-readable twin: `receipt.jsonl` (same dir). All sha values are sha256 first-16-hex.
+
+## Addendum — cc#349 repair apply (t_b6698a16, post-GATE2 t_d35fbaf2 PASS)
+
+Closes the held-for-repair line above. Re-draft (pack commit 5c84fcc: finding-1 EOF-LF fix + FS5 `Fixes #322` line 1 + `Assisted by JoeBot` trailer, Impact block verbatim) re-gated PASS (comment 733), then applied as body-only single REST PATCH.
+
+| repo | item | action | before→after sha16 | result |
+| --- | --- | --- | --- | --- |
+| mprov_control_center | pr#349 | patched | b1bc4d3ee0927086→2ca5cdaa2161e9f6 | read-back byte-compare MATCH (1202 B, head 47934c7 unchanged, reviewer uberlinuxguy still requested, 0 reviews) |
+
+Full byte-level receipts: `mprov_control_center/RECEIPTS.json`. Words 103→144 (cap 175). Patch ts 2026-10-24T15:14:44Z.

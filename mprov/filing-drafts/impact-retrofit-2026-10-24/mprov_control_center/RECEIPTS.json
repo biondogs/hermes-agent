@@ -1,0 +1,43 @@
+{
+  "item": "mprov_control_center PR #349",
+  "repair_card": "t_b6698a16",
+  "gate": "t_25418f17 FAIL comment 723 -> GATE2 t_d35fbaf2 PASS comment 733",
+  "pack_commit": "5c84fcc",
+  "original_fetch": {
+    "fetched_at_utc": "2026-10-24T15:13Z (pre-PATCH gh api, this session)",
+    "body_bytes": 858,
+    "body_sha256": "b1bc4d3ee0927086e8410d886e0909cbec3e452c050691d2e300df4d5d11ac72",
+    "words": 103,
+    "head_sha": "47934c7380d0a21c4aa791ab5249c86dab9699bc",
+    "matches_pin": true
+  },
+  "payload": {
+    "source": "349.md minus exactly one artifact trailing LF",
+    "draft_file_sha256": "cd76f325b196131e58ff16b4007c318afa4e2b2a23785f109ac9cd6daad0e6b3",
+    "draft_file_bytes": 1203,
+    "payload_bytes": 1202,
+    "payload_sha256": "2ca5cdaa2161e9f6f21f2242dde936c8e1881a071af65009ac790ede93d7e384",
+    "words": 144,
+    "matches_pin": true
+  },
+  "patch": {
+    "method": "gh api -X PATCH repos/mprov-ng/mprov_control_center/pulls/349 --input payload.json",
+    "scope": "body only (single request; no title/reviewer/label touches)",
+    "at_utc": "2026-10-24T15:14:44Z",
+    "exit": 0
+  },
+  "read_back": {
+    "body_bytes": 1202,
+    "body_sha256": "2ca5cdaa2161e9f6f21f2242dde936c8e1881a071af65009ac790ede93d7e384",
+    "match": true,
+    "head_sha": "47934c7380d0a21c4aa791ab5249c86dab9699bc",
+    "state": "open",
+    "merged": false,
+    "title_unchanged": true,
+    "requested_reviewers": [
+      "uberlinuxguy"
+    ],
+    "reviews": 0
+  },
+  "preflight_assertions": "16/16 PASS (incl. strip-reconstruct (a)(b)(c) == live body 858 B)"
+}

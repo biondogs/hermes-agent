@@ -1,0 +1,312 @@
+# KANBAN-SYSTEM-AS-BUILT — The Hermes Kanban Estate on ga01 (Doc of Record)
+
+**Date-stamp:** 2026-10-24 (UTC) — authored 2026-10-23 22:45 EDT · **Author:** `kanban-board-architect` lane (card **t_3eed159c**, operator directive 2026-10-24)
+**CANON STATUS:** This is the **document of record for the kanban estate** (boards, profile fleet, memory banks, routing laws, governance rails, and automation). It describes the system **as verified against live state** on the stamp date — every board count, bank id, model pin, cron schedule and law quote below was read back from the source (board DBs, profile configs, Hindsight API, root `config.yaml`, `cron/jobs.json`) during this review, not copied from prior docs. It is **superseded only by newer operator rulings**. Companion docs of record: `docs/BANK-MAP.md` (bank law — linked, not duplicated), `docs/butler-routing-doctrine-2026-10-22.md` (routing topology), `docs/multi-bot-board-isolation-design-2026-10-22.md` (isolation design + W-* incident receipts), `docs/butler-qr-runbook-2026-10-22.md` (butler provisioning), `docs/PLATFORM-CREDS-2026-10-23.md` (credentials canon), `~/kanban-audit/ESTATE-DESIGN.md` + `~/kanban-audit/reports/` (estate design + incident reports).
+
+**Caveat on the read window:** cards **t_3eed159c** (this review) and **t_0eec511d** (operator disposition of the PROF-SWEEP escalations: deleting husk profiles `coding`, `kworker-muse-probe`, `sampling-test`, and re-wiring `sw-docs` off the muse lane) ran concurrently by dispatcher admission. As of the final re-probe (22:46 EDT) t_0eec511d had **not yet landed its mutations** (all three husk dirs and `sw-docs`/muse and bank `hb-sampling-test` still present; banks still 23). Where a table below shows a member marked *(retiring)*, the authoritative post-ruling state is the one t_0eec511d converges to, and the BANK-MAP owes a 23→22 amendment when `hb-sampling-test` goes. Everything else in this doc is settled post-PROF-SWEEP-OPT (t_a386103a, receipts @4b1349e) state.
+
+---
+
+## 1. System overview
+
+Hermes Agent v0.22.4+4.g602ea0a runs on **ga01** as a single **multiplex gateway** (systemd **user** unit `hermes-gateway`, PID 2830557, up since 2026-10-23 12:46 EDT) serving all profiles over Telegram adapters. A **single dispatcher** (in-gateway, 15 s tick) claims work from **7 SQLite boards** into worker processes; each worker is a fresh process carrying only its assigned profile's config. Operator chat reaches the estate through per-board **butler bots**; a **Hindsight memory server** (ga01:8888) holds **23 banks**; a **kanban-stream plugin** mirrors worker activity into a Telegram ops channel; a set of **root + profile crons** provides governance automation.
+
+```
+                      ┌────────────────────── OPERATOR ──────────────────────┐
+                      │  Telegram DMs: default bot + 5 butler bots  ·  CLI   │
+                      └───────┬──────────────────────────┬───────────────────┘
+                              │                          │
+                  ┌───────────▼───────────┐   ┌──────────▼──────────┐
+                  │  MULTIPLEX GATEWAY    │   │  butler bots ×5     │
+                  │  (user systemd unit)  │   │  g01·g02·gaudi·     │
+                  │  - multiplexes every  │   │  sjproto·swco       │
+                  │    profile session    │   │  (board pins +      │
+                  │  - scrubs HERMES_     │   │   tool-layer fence) │
+                  │    KANBAN_* env       │   └──────────┬──────────┘
+                  │  - runs dispatcher    │              │ create/route
+                  └───────────┬───────────┘              │ (board= explicit)
+                              │ 15 s tick               ▼
+   ┌──────────────────────────▼──────────────────────────────────────────────┐
+   │                        DISPATCHER (single, global)                      │
+   │  orchestrator_profile=kanban-orchestrator · default_assignee=kanban-worker│
+   │  max_in_progress 24 global / 8 per-profile · failure_limit 3            │
+   │  auto_decompose (glm53, 5/tick) · stale reclaim 4 h · auto-promote kids │
+   │  spawns env-pinned worker processes (HERMES_KANBAN_DB/BOARD per board)  │
+   └──────┬────────┬────────┬────────┬────────┬────────┬────────┬────────────┘
+          ▼        ▼        ▼        ▼        ▼        ▼        ▼
+      default  gargantua01 gargantua02 gaudi  skipjack skipjack- software-co
+      (root     k8s proto   k8s prod   HPU    HPC      prototype  SDLC staff
+       DB)      g01 fleet ×6 g02 fleet  fleet  sj fleet gh207/208 sw fleet ×9
+                butler ✓     ×6 + butler ×13+butler ×6, no   sjp fleet
+                             ✓          ✓      butler   ×6+butler ✓
+          │        │          │         │        │        │        │
+          └────┬───┴────┬─────┴──┬──────┴────────┴───┬────┴────────┘
+               ▼        ▼        ▼                   ▼
+        HINDSIGHT (ga01:8888)  23 banks          CRONS (root + profile)
+        general ×3 · butler ×5       nightly audits, skill-evolution/curator,
+        env ×5 · role ×10            archive-gc, watchdogs, DR backups
+               ▼
+        KANBAN-STREAM plugin → Telegram ops channel (worker activity feed)
+```
+
+**Core design decisions (each earned by an incident — full ledger in §8):**
+
+- **One board per project/estate** — queues, workspaces and audit are physically isolated (separate SQLite DB per board). Tenant/project axis (`project_id`) is universally `null`: boards, not tenants, are the isolation unit on this host.
+- **Butler-first intake** — the operator talks to a board-scoped butler bot; the default profile is the fail-safe and meta hub; workers never intake chat requests.
+- **Per-profile `kanban.board` pin + tool-layer fence** (LOCAL HOTFIX `851d9e9231`) — structural enforcement of board scope for pinned profiles.
+- **Least-privilege toolsets** — butlers are terminalless; research is read-only; kanban-orchestrator is kanban+memory+session_search+delegation only; workers get what their role needs.
+- **Model tiers** — `glm53` (judgment seats), `qwen38-flash-fp8` (generalist), `muse` (temporary coder lane with a revert plan), `qwen36-fast` (auxiliary fleet: compression, approvals, titles, etc.).
+- **Env-axis memory taxonomy** — 23 banks: 3 general + 5 butler + 5 environment + 10 role/specialist; resolution via `hindsight/config.json`, never live `.env` pins.
+
+---
+
+## 2. Boards
+
+Seven active boards. Dispatch settings are **global** (root `config.yaml` `kanban:` block — boards carry no per-board dispatch knobs; `board.json` holds name/description/workdir/presentation only): `dispatch_interval_seconds: 15`, `max_in_progress: 24`, `max_in_progress_per_profile: 8`, `failure_limit: 3`, `auto_decompose: true` (5 per tick, decomposer model `glm53` @ high effort), `dispatch_stale_timeout_seconds: 14400` (with heartbeat reclaim), `auto_promote_children: true`, `orchestrator_profile: kanban-orchestrator`, `default_assignee: kanban-worker`, `dispatch_in_gateway: true`.
+
+Workspaces: per-board workdirs live under `/local/projects/<slug>`; the default board uses scratch workspaces under `~/.hermes/kanban/workspaces`. Coding cards use `worktree` kinds inside the board workdir; everything else defaults to ephemeral `scratch` (deleted on completion — deliverables must be declared via `kanban_complete(artifacts=…)` or committed to a repo).
+
+| Board | Created | Workdir | Live counts (todo/ready/running/blocked/sched/done/arch) | Intake | Roster |
+|---|---|---|---|---|---|
+| `default` | pre-boards era (root DB) | `~/.hermes/kanban/workspaces (scratch)` | 0/0/2/4/0/50/11 | default (all classes); butlers never; workers: follow-up children only | default, kanban-board-architect, kanban-orchestrator, kanban-worker, distiller, research, plugin-ab, (cron-filed audit cards) |
+| `gargantua01` | 2026-10-20 | `/local/projects/gargantua01` | 0/0/0/0/0/19/4 | g01-butler; default as fail-safe (stamped) | g01-orchestrator, -planner, -ops, -auditor, -scribe, -watcher; intake g01-butler |
+| `gargantua02` | 2026-10-13 | `/local/projects/gargantua02` | 4/0/0/2/2/199/121 | g02-butler; default as fail-safe (stamped) | g02-orchestrator, -planner, -ops, -auditor, -scribe, -watcher; intake g02-butler |
+| `gaudi` | 2026-10-13 | `/local/projects/gaudi` | 0/0/0/0/1/53/228 | gaudi-butler; default as fail-safe (stamped) | 13 specialist workers (orchestrator, planner, auditor, scribe, deployer, analyst, arch, perfeng, benchrunner, dockerops, sysadmin, synapse, liaison, watcher); intake gaudi-butler |
+| `skipjack` | 2026-10-12 | `/local/projects/skipjack` | 0/0/0/0/0/13/36 | default until a sixth butler is stamped | sj-orchestrator, -planner, -ops, -auditor, -scribe, -watcher; intake default (no butler) |
+| `skipjack-prototype` | 2026-10-20 | `/local/projects/skipjack-prototype` | 0/0/0/0/0/1/1 | sjproto-butler; default as fail-safe (stamped) | sjp-orchestrator, -planner, -ops, -auditor, -scribe, -watcher; intake sjproto-butler |
+| `software-co` | 2026-10-07 | `/local/projects/software-co` | 0/0/0/0/8/133/29 | swco-butler; default as fail-safe (stamped) | sw-pm, sw-architect, sw-dev-a/b, sw-reviewer, sw-qa, sw-devops, sw-docs, sw-ux; intake swco-butler (+kanban-orchestrator co-scoped) |
+
+**Archived boards** (DB snapshots in `~/.hermes/kanban/boards/_archived/`): `metatron-dev` (2026-07-21), `capexp` + `flashnext-gaudi` (2026-10-12), `azure-fleet` + `qwen38-perf` (2026-10-13; `qwen38-perf` is the pre-rename identity of the live `gaudi` board), plus two **empty** rebuild snapshots (`gargantua01-1792497635`, `skipjack-prototype-1792497637`, both 0 tasks). Rebuild history: `gargantua01` and `skipjack-prototype` were rebuilt 2026-10-20 08:00 EDT.
+
+**Who may create where:** butlers create intake cards **only** on their own board (pinned + fenced + `idempotency_key` dedup-guard); the default profile creates anywhere when acting as fail-safe (must stamp `fail-safe intake: <butler> unavailable (<evidence>)`) and owns meta/cross-board work, which executes on the `kanban-board-architect` lane; workers create **only follow-up child cards on their assigned card's board**; crons create on the default board (`NIGHTLY-BOARD-AUDIT` etc.). Every create carries an explicit `board=` — the explicit-board law (§5).
+
+---
+
+## 3. Profile topology (62 → ~59 post-ruling)
+
+As of stamp: **62 profile directories** — 59 config-bearing + husks `coding`/`kworker-muse-probe` (no `config.yaml`) + `.deleted/` graveyard (`gaudi-reviewer`, `unsloth-litellm`; deleted-profile parking, not a live profile), plus the **root `default` profile** (home `~/.hermes`, not in `profiles/`). Card **t_0eec511d** is mid-flight deleting the two husks + `sampling-test` (experiment profile).
+
+**Lanes:**
+
+- **Per-board worker fleets** — g01×6, g02×6, sj×6, sjp×6 (uniform kit: orchestrator, planner, ops, auditor, scribe, watcher), gaudi×13 specialists + sw fleet×9 (SDLC staff: pm, architect, dev-a/b, reviewer, qa, devops, docs, ux). Names are the routing API: every profile's `agent.description` is capability-first, board-scoped, boundary-last ("Works ONLY on the <board> board … never here").
+- **Butlers ×5** (g01-, g02-, gaudi-, sjproto-, swco-butler) — Telegram front-ends, one per board (skipjack deliberately has none). Toolsets exactly `[kanban, memory, session_search, web]` on CLI **and** Telegram surfaces; **terminal/browser/file/code_execution explicitly disabled** — butlers cannot execute. Each carries `kanban.board: <own slug>` pin. Model `qwen38-flash-fp8`.
+- **Meta pair** — `kanban-board-architect` (glm53, full toolset, owns ALL Hermes meta-work: profiles, boards, SOULs, toolsets, models, dispatcher design, decommissioning) + `kanban-orchestrator` (qwen38-flash-fp8, toolsets `[kanban, memory, session_search, delegation]` only — decomposes and routes, never implements; scoped "for the software-co and default boards only").
+- **Shared gates** — `distiller` (glm53; sanity/style gate; `browser`, `code_execution`, `vision`, `memory`, `delegation`, `cronjob` toolsets **disabled** — deliberately memory-light despite bank `hb-distiller`) and `research` (qwen38-flash-fp8; **read-only**: `terminal`/`code_execution` disabled, custom research toolset = web_search/web_extract/vision_analyze).
+- **Global default-assignee** — `kanban-worker` (muse, full toolset) catches any card whose assignee doesn't resolve; SOUL redirects software-co work to the sw staff.
+- **Experiments/specials** — `sampling-test` (throwaway test lane, bank `hb-sampling-test` "safe to delete freely"; **retiring per t_0eec511d**), `plugin-ab` (A/B plugin benchmark harness; glm53; **no `agent.description` → unroutable by the decomposer**, see F8).
+- **Husks (retiring per t_0eec511d)** — `coding`, `kworker-muse-probe`: full home dirs, no config.yaml; acknowledged husks in BANK-MAP §3 rule 3.
+
+**Model assignments (live census):** `glm53` judgment seats = all estate auditors/planners/orchestrators except the (qwen38) kanban-orchestrator meta seat, `gaudi-arch/-perfeng/-benchrunner/-deployer`, `gaudi-liaison`, `distiller`, `kanban-board-architect`, `sw-architect`, `sw-reviewer`, `plugin-ab`. `qwen38-flash-fp8` generalist = ops/scribes(sj, sjp)/watchers/butlers/all-of-g01-or-g02-`-ops`, `research`, `sw-pm`, `sw-ux`, `kanban-orchestrator`. `muse` temporary coder lane (8 wired profiles, ctx-pinned 262144, Hermes-side fallback `qwen38-flash-fp8`, rollback manifests in `docs/muse-wiring-v2/`) = `kanban-worker`, `g01-scribe`, `g02-scribe`, `sw-docs`*(rewiring off muse per t_0eec511d → 7-profile lane)*, `sw-dev-a/b`, `sw-qa`, `sw-devops`. `qwen36-fast` = the **auxiliary fleet** only (root `auxiliary:` block: compression, skills_hub, approval, mcp, title_generation, memory_query_rewrite, profile_describer, web_extract, review; true context window **131,072**, verified empirically — `QWEN36-FAST-CTX-PROBE @e1f9993`); aux vision = qwen38-flash-fp8; `triage_specifier` + `kanban_decomposer` = glm53.
+
+| Profile | Lane | Board | Bank | Model | Purpose (description head) |
+|---|---|---|---|---|---|
+| `(root) default` | Orchestrator / meta-seat / intake hub | default + all (fail-safe) | `hermes` | qwen38-flash-fp8 | Root profile: multiplex gateway host, meta & skipjack intake, fail-safe intake for all butlered boards |
+| `coding` | Husk (retiring) | — | (none) | — | no config.yaml — husk |
+| `distiller` | Shared gate | default | `hb-distiller` | glm53 | Owns ALL Hermes meta-work on this host: creating/optimizing/auditing profiles, authoring SOUL.md, toolset and model assignment, provisioning |
+| `g01-auditor` | g01 fleet | gargantua01 | `g01-infra` | glm53 | Independent auditor for Gargantua01: verifies card claims and receipts, guardrail compliance, and evidentiary honesty |
+| `g01-butler` | Butler | gargantua01 | `g01-butler` | qwen38-flash-fp8 | Board butler for gargantua01: operator chat front-end on its own Telegram bot (gargantua01_proto_bot) — board status, card creation and rout |
+| `g01-ops` | g01 fleet | gargantua01 | `g01-infra` | qwen38-flash-fp8 | Infra ops engineer for Gargantua01: executes build/config/migrate/cutover per card with receipts; production actions gated on operator GO |
+| `g01-orchestrator` | g01 fleet | gargantua01 | `g01-infra` | glm53 | Board orchestrator for Gargantua01: decomposes infra goals into task graphs, routes to the g01 fleet, judges completion on evidence |
+| `g01-planner` | g01 fleet | gargantua01 | `g01-infra` | glm53 | Infra planner for Gargantua01: hypothesis-first change designs with rollback plans and falsifiable checks; writes cards g01-ops executes ver |
+| `g01-scribe` | g01 fleet | gargantua01 | `g01-infra` | muse | Documentation scribe for Gargantua01: runbooks, decision logs, and the git/docs trail from verified card evidence |
+| `g01-watcher` | g01 fleet | gargantua01 | `g01-infra` | qwen38-flash-fp8 | Monitoring watcher for Gargantua01: watches long operations, heartbeats, classifies anomalies, reports drift |
+| `g02-auditor` | g02 fleet | gargantua02 | `g02-infra` | glm53 | Independent auditor for Gargantua02: verifies card claims and receipts, guardrail compliance, and evidentiary honesty |
+| `g02-butler` | Butler | gargantua02 | `g02-butler` | qwen38-flash-fp8 | Board butler for gargantua02: operator chat front-end on its own Telegram bot (gargantua02_ops_bot) — board status, card creation and routin |
+| `g02-ops` | g02 fleet | gargantua02 | `g02-infra` | qwen38-flash-fp8 | Infra ops engineer for Gargantua02: executes build/config/migrate/cutover per card with receipts; production actions gated on operator GO |
+| `g02-orchestrator` | g02 fleet | gargantua02 | `g02-infra` | glm53 | Board orchestrator for Gargantua02: decomposes infra goals into task graphs, routes to the g02 fleet, judges completion on evidence |
+| `g02-planner` | g02 fleet | gargantua02 | `g02-infra` | glm53 | Infra planner for Gargantua02: hypothesis-first change designs with rollback plans and falsifiable checks; writes cards g02-ops executes ver |
+| `g02-scribe` | g02 fleet | gargantua02 | `g02-infra` | muse | Documentation scribe for Gargantua02: runbooks, decision logs, and the git/docs trail from verified card evidence |
+| `g02-watcher` | g02 fleet | gargantua02 | `g02-infra` | qwen38-flash-fp8 | Monitoring watcher for Gargantua02: watches long operations, heartbeats, classifies anomalies, reports drift |
+| `gaudi-analyst` | gaudi fleet | gaudi | `gaudi-hpu-perf` | qwen38-flash-fp8 | High-throughput results analyst |
+| `gaudi-arch` | gaudi fleet | gaudi | `gaudi-hpu-sdk` | glm53 | Upstream and inference-engine researcher: tracks vLLM/vllm-gaudi/HF upstream, designs kernel/quant/spec-decode/KV experiments upstream of fl |
+| `gaudi-auditor` | gaudi fleet | gaudi | `gaudi-hpu` | glm53 | Independent verifier and adversarial reviewer |
+| `gaudi-benchrunner` | gaudi fleet | gaudi | `gaudi-hpu-perf` | glm53 | Performance experiment executor |
+| `gaudi-butler` | Butler | gaudi | `gaudi-butler` | qwen38-flash-fp8 | Board butler for gaudi: operator chat front-end on its own Telegram bot (gaudi_local_bot) — board status, card creation and routing to the g |
+| `gaudi-deployer` | gaudi fleet | gaudi | `gaudi-hpu` | glm53 | Production cutovers and restores: identity-spec gate, image-swap execution with ceremony, the emergency restore path for qwen38 (port 8001) |
+| `gaudi-dockerops` | gaudi fleet | gaudi | `gaudi-hpu-hostops` | glm53 | Container lifecycle owner: image builds and lineage pinning, qwen38t launch/teardown under bench cards, registry hygiene, containerized-work |
+| `gaudi-liaison` | gaudi fleet | gaudi | `gaudi-hpu-upstream` | glm53 | Upstream filing lane end-to-end EXCEPT the submit action: PR series craft, venue norms (vLLM/vllm-gaudi/HF), filing checklists, fork/worktre |
+| `gaudi-orchestrator` | gaudi fleet | gaudi | `gaudi-hpu` | glm53 | Board-level orchestrator for the qwen38 Gaudi performance campaign |
+| `gaudi-perfeng` | gaudi fleet | gaudi | `gaudi-hpu-sdk` | glm53 | Performance engineer: roofline and KV-cache arithmetic, hardware-identity receipts, measured-vs-modeled deltas, bottleneck hypotheses |
+| `gaudi-planner` | gaudi fleet | gaudi | `gaudi-hpu` | glm53 | Campaign scientist and decomposer |
+| `gaudi-scribe` | gaudi fleet | gaudi | `gaudi-hpu` | qwen38-flash-fp8 | Documentation and git scribe |
+| `gaudi-synapse` | gaudi fleet | gaudi | `gaudi-hpu-sdk` | glm53 | Habana SDK kernel/toolchain developer: Synapse graph analysis, TPC kernel work on tpc-clang 2.7.33 + libtpcsim (deviceless-first), gc/recipe |
+| `gaudi-sysadmin` | gaudi fleet | gaudi | `gaudi-hpu-hostops` | glm53 | Host hygiene steward (recommend-only): mounts under /local, systemd state, driver/firmware update STAGING as spec files + cards, tailscale/n |
+| `gaudi-watcher` | gaudi fleet | gaudi | `gaudi-hpu-perf` | qwen38-flash-fp8 | Window babysitter: watcher start/stop, F-hit classification, heartbeats, window-sit reports during benchmark windows and soaks |
+| `kanban-board-architect` | Meta pair | default | `hb-architect` | glm53 | Owns ALL Hermes meta-work on this host: creating/optimizing/auditing profiles, authoring SOUL.md, toolset and model assignment, provisioning |
+| `kanban-orchestrator` | Meta pair | default+software-co | `hb-orchestrator` | qwen38-flash-fp8 | Kanban orchestrator: decomposes goals into task graphs and routes to existing profiles on one board |
+| `kanban-worker` | Default assignee | all | `hb-kanban-worker` | muse | General-purpose kanban worker for fallback task execution |
+| `kworker-muse-probe` | Husk (retiring) | — | (none) | — | no config.yaml — husk |
+| `plugin-ab` | Experiment | default | (none) | glm53 | (no agent.description) |
+| `research` | Shared gate | default+software-co | `hb-research` | qwen38-flash-fp8 | Research analyst who gathers, synthesizes, and documents information |
+| `sampling-test` | Experiment | default+software-co | `hb-sampling-test` | qwen38-flash-fp8 | Orchestrator: decomposes goals into task graphs, routes work to specialist profiles, monitors progress |
+| `sj-auditor` | sj fleet | skipjack | `skipjack-infra` | glm53 | Independent auditor for Skipjack: verifies card claims and receipts, guardrail compliance, and evidentiary honesty |
+| `sj-ops` | sj fleet | skipjack | `skipjack-infra` | qwen38-flash-fp8 | Infra ops engineer for Skipjack: executes build/config/migrate/cutover per card with receipts; production actions gated on operator GO |
+| `sj-orchestrator` | sj fleet | skipjack | `skipjack-infra` | glm53 | Board orchestrator for Skipjack: decomposes infra goals into task graphs, routes to the sj fleet, judges completion on evidence |
+| `sj-planner` | sj fleet | skipjack | `skipjack-infra` | glm53 | Infra planner for Skipjack: hypothesis-first change designs with rollback plans and falsifiable checks; writes cards sj-ops executes verbati |
+| `sj-scribe` | sj fleet | skipjack | `skipjack-infra` | qwen38-flash-fp8 | Documentation scribe for Skipjack: runbooks, decision logs, and the git/docs trail from verified card evidence |
+| `sj-watcher` | sj fleet | skipjack | `skipjack-infra` | qwen38-flash-fp8 | Monitoring watcher for Skipjack: watches long operations, heartbeats, classifies anomalies, reports drift |
+| `sjp-auditor` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | glm53 | Independent auditor for Skipjack Prototype: verifies card claims and receipts, guardrail compliance, and evidentiary honesty |
+| `sjp-ops` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | qwen38-flash-fp8 | Infra ops engineer for Skipjack Prototype: executes build/config/migrate/cutover per card with receipts; production actions gated on operato |
+| `sjp-orchestrator` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | glm53 | Board orchestrator for Skipjack Prototype: decomposes infra goals into task graphs, routes to the sjp fleet, judges completion on evidence |
+| `sjp-planner` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | glm53 | Infra planner for Skipjack Prototype: hypothesis-first change designs with rollback plans and falsifiable checks; writes cards sjp-ops execu |
+| `sjp-scribe` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | qwen38-flash-fp8 | Documentation scribe for Skipjack Prototype: runbooks, decision logs, and the git/docs trail from verified card evidence |
+| `sjp-watcher` | sjp fleet | skipjack-prototype | `skipjack-prototype-infra` | qwen38-flash-fp8 | Monitoring watcher for Skipjack Prototype: watches long operations, heartbeats, classifies anomalies, reports drift |
+| `sjproto-butler` | Butler | skipjack-prototype | `sjproto-butler` | qwen38-flash-fp8 | Board butler for skipjack-prototype: operator chat front-end on its own Telegram bot (skipjack_proto_bot) — board status, card creation and  |
+| `sw-architect` | sw fleet | software-co | `software-co` | glm53 | Software architect |
+| `sw-dev-a` | sw fleet | software-co | `software-co` | muse | Implementer lane A |
+| `sw-dev-b` | sw fleet | software-co | `software-co` | muse | Implementer lane B |
+| `sw-devops` | sw fleet | software-co | `software-co` | muse | Release and ops engineer |
+| `sw-docs` | sw fleet | software-co | `software-co` | muse | Documentation engineer |
+| `sw-pm` | sw fleet | software-co | `software-co` | qwen38-flash-fp8 | Technical product manager |
+| `sw-qa` | sw fleet | software-co | `software-co` | muse | QA and test engineer |
+| `sw-reviewer` | sw fleet | software-co | `software-co` | glm53 | Code reviewer |
+| `sw-ux` | sw fleet | software-co | `software-co` | qwen38-flash-fp8 | Implementer lane A |
+| `swco-butler` | Butler | software-co | `swco-butler` | qwen38-flash-fp8 | Board butler for software-co: operator chat front-end on its own Telegram bot (swco_bot) — board status, card creation and routing to the so |
+
+*Lane annotation for the scribes: g01/g02-scribes ride the muse lane; sj/sjp/gaudi scribes are qwen38. `gaudi-scribe` (qwen38) vs `gaudi-auditor` (glm53) — role tier, not drift.*
+
+---
+
+## 4. Memory architecture (23-bank canon)
+
+**Doc of record: [`docs/BANK-MAP.md`](BANK-MAP.md) (committed `f17fedd`)** — this section links it and records the as-built verification, it does not duplicate the map.
+
+**Live verification (2026-10-23 22:46 EDT):** Hindsight server (`http://ga01:8888`, mode `local_external`, aistack instance) holds **exactly 23 banks**; the BANK-MAP's ratified canon (2026-10-23) is **3 general + 5 butler + 5 environment + 10 role/specialist = 23** and matches the server listing id-for-id: `hermes` (root/default lane, LIVE), `hermes-general` = display `laptop` (operator's laptop Hermes — **external client, never a deletion candidate**), `software-co` (fleet bank); butler banks `g01-butler`, `g02-butler`, `gaudi-butler`, `sjproto-butler`, `swco-butler` (butler memory is never shared); environment banks `g01-infra`, `g02-infra`, `skipjack-infra`, `skipjack-prototype-infra`, `gaudi-hpu` (one per hardware estate — a worker recalls ONLY its own environment); role/specialist banks `gaudi-hpu-perf`, `gaudi-hpu-sdk`, `hb-host-ops` (alias `gaudi-hpu-hostops`), `hb-upstream-comm` (alias `gaudi-hpu-upstream`), `hb-orchestrator`, `hb-architect`, `hb-kanban-worker`, `hb-research`, `hb-distiller`, `hb-sampling-test`. Profile→bank bindings verified 1:1 with the map (see per-profile rows in §3). *(t_0eec511d will retire `sampling-test` + its bank → expect 22.)*
+
+**Resolution order** (BANK-MAP "Bank resolution rule", verified in plugin source): `HINDSIGHT_BANK_ID` in the profile `.env` **wins when set** (Hindsight plugin #5171) → `hindsight/config.json` `bank_id` (+`banks{}` carrier) → root `~/.hermes/hindsight/config.json` → default `hermes`. **Canon practice: the `.env` pin is never used live** — abolished after the 2026-10-22 stray-pins incident; every one of the 44 `.env` references across the fleet is now a comment (`# removed: HINDSIGHT_BANK_ID=…` or deliberate-unset notes in butlers). Bank flips take effect at next process start; running sessions cache their bank.
+
+**Historical defect classes retired** (both verified fixed): (1) 2026-10-22: 10–12 stray `.env` pins silently overriding config.json — fixed by pin removal, kept fixed through two sweeps; (2) 2026-10-23: shared role-axis pools mixing 4–5 estates' facts (a g02 worker recalling Habana/HPU lore) — fixed by the env-axis cutover (33 → 24 banks) and the same-day deletion GO (24 → 23; frozen legacy + mixed pools deleted with readback receipts, BANK-MAP §1.6). Rollback bundle: `~/kanban-backups/env-bank-cutover-20261023T172208Z/`.
+
+---
+
+## 5. Routing & intake (butler-first doctrine)
+
+Doc of record: `docs/butler-routing-doctrine-2026-10-22.md`. The doctrine in one line, verbatim: **"Board intake flows through the board's butler bot by default. The default (orchestrator) profile keeps full meta + cross-board capability as the fail-safe, and workers write only to their assigned card's board. Nobody below the butler intakes operator requests."**
+
+**Routing classes:**
+
+| Class | Owner |
+|---|---|
+| Per-board intake (g01, g02, gaudi, software-co, skipjack-prototype) | that board's **butler bot** |
+| Meta / fleet-wide / cross-board / operator-direct | **default profile** (executes meta-work on the `kanban-board-architect` lane) |
+| Card execution | workers, on their assigned card's board only |
+| Skipjack board intake | **default profile**, until a sixth butler is stamped (deliberate, doctrine §1) |
+
+**Butler intake behavior:** create the card on its board with explicit `board=` always, assign the right specialist (never itself), encode prerequisites via `parents=[...]` at create time (never gate-then-link), DEDUP-FIRST (list-before-create + `idempotency_key` on every intake create — added after the 2026-10-23 duplicate-spawn race), report card id + assignee in one line. Escalation: cross-board/meta requests get the exact reply `route this to the default orchestrator`.
+
+**Fail-safe clause (verbatim stamp format):** if a butler is demonstrably down, the default profile may create board cards directly, stamping the body:
+
+```
+fail-safe intake: <butler> unavailable (<evidence>)
+```
+
+**Board resolution chain (tool layer, post-hotfix `851d9e9231`):** context override → `HERMES_KANBAN_BOARD` env → **profile `kanban.board` pin** → `~/.hermes/kanban/current` pointer (a top-level file; deleted 2026-10-23 after it had gone stale and mis-aimed every env-less chat session) → `default`. The **fence**: when a profile pins a board, an unpinned call resolves to the pinned board and an explicit foreign `board=` is **refused**. The gateway strips all `HERMES_KANBAN_*` env at boot, so chat sessions never carry env pins; dispatcher-spawned workers are env-pinned by the dispatcher itself. ⚠ The running gateway process predates the hotfix (see F14): until the operator-gated restart, butler **chat sessions** still run old resolution (unpinned calls degrade to the default board — safe-but-wrong, not the original cross-board bug); newly-spawned worker processes load the fenced code at boot.
+
+**Explicit-board law** (kanban-orchestrator skill, checklist): `board=` passed EXPLICITLY on every create/link/comment; quoting the earned-by rationale verbatim: *"Omitting it has been observed to return `{ok: true, task_id: ...}` while the task never persists on any board (silent task loss)"* — the g01-archive task-loss incident class, reproduced on v0.22.4 whenever an ambient env pin names an archived slug (receipts in the isolation design doc). Companion trap: an empty ready/todo list right after create is not proof of loss (the dispatcher claims within ~15 s); blind recreation double-dispatches twins.
+
+**Dedup-Close Law** (operator ruling 2026-10-23, verbatim): *"When any card stops on a dedup check (duplicate work, upstream coverage, sibling card), CLOSE it by default: complete with disposition `KILLED-BY-DEDUP` and a one-line note naming the covering item (link/card id). Keep a duplicate alive only with a stated strong reason. Never park a dedup block awaiting ceremony."*
+
+**Collision doctrine** (one agent process per profile at a time): twin/duplicate dispatches onto one profile must be adjudicated — first-landed canonical, duplicates killed or stand-down-blocked read-only before external writes. Earned by three incidents (§8 ledger): the 2026-10-17 g02 block-loop/twin-fanout detonation; the R7-W10 duplicate-dispatch boot corruption (archived `flashnext-gaudi` board, cards `t_b79345da`/`t_1abdfa45`, both assignee `q38p-benchrunner`, created 2026-10-01 09:12 EDT — one archived without completion after arbitration voided the duplicate's claim, one done); and two live specimens on 2026-10-23/24 involving this very lane (F10).
+
+**ARCHIVE-GC stamp protocol:** butlers are terminalless and (until recently) Hermes had no `kanban_archive` tool — the bridge is the nightly garbage collector (`archive_gc.py`, cron 21:30) that scans every board DB for `HOUSEKEEPING: archive — <reason>` comments (authors must be `*-butler` or `default`; a later `HOUSEKEEPING: cancel` vetoes; running cards never touched; ≤20/run; `ARCHIVE-GC:` receipt comment before archiving). Upstream `kanban_archive` has since shipped (PR #143372, locally hot-applied, watched every 6 h by `watch-143372`) — the bridge is self-retiring by design.
+
+**Kanban-stream ops feed:** plugin `kanban-stream` v1.0.2 (enabled root + fleet-wide via the standard aux config block) streams worker activity (tool calls, phases, tokens/sec, final state — one message per task, edited in place, pinned) to the dedicated Telegram ops bot `@ga01_kanbanops_23_bot` (its own token, out of the creds canon scope). It is the operator's live observability surface for dispatched work.
+
+---
+
+## 6. Governance rails
+
+- **External Comms Law** (operator directive 2026-10-21, binding; text of record in `g02-ops` SOUL.md): outbound posts on Azure support tickets are externally visible, full-scan — **no internal specifics ever**: no task ids (`t_…`), card titles, board/lane names, gate names ("distiller gate", "operator GO"), approval/workflow vocabulary, admin tasks. Deny-listed and destructive operations always go through the operator-GO ceremony; "If reality contradicts the spec, STOP, record the mismatch, and file findings — do not improvise production changes."
+- **Credentials canon** (operator ruling 2026-10-23, verbatim from `docs/PLATFORM-CREDS-2026-10-23.md`): *"On ga01 only the default profile should have access to my slack and it should not be actively listening to the platform anywhere. Nothing should share default telegram credentials at all, if the profile isn't associated with default or a butler it probably shouldn't have telegram at all."* Enforced as D1 (slack creds only in default), D2 (no slack inbound listener; `platforms.slack.enabled: false` beats env auto-enable), D3 (Telegram tokens: default + the five butlers, each **distinct**). Violator creds were stripped from `coding`/`kworker-muse-probe` with sha256 inventories (values never recorded). All credential changes are operator-gated; tokens never appear in cards, comments, or git.
+- **Push doctrine + Agent-Run trailers:** public repos carry no agent-identifying trailers (skill `github/strip-agent-trailers-public-commits`); estate docs land in the local-only `software-co` repo (`/local/projects/software-co`, no remote).
+- **Gateway restart = operator action**, by design: restarts kill in-flight workers; the approvals policy (`approvals.single_query_mode: approve` for unattended runs, `cron_mode: deny`) correctly blocks agents from self-restarting. One restart is currently pending (F14).
+- **Meta-work routing:** all profile/board/toolset/SOUL/skill/fleet meta-work routes to the `kanban-board-architect` lane (its description is the routing contract; see F1 for the known collision with `distiller`'s description).
+- **Dispatch autonomy envelope** (nightly-audit card template): safe hygiene may be self-executed with receipts; structural/destructive changes (board rename/archive/delete, profile create/modify/retire, dispatcher/config changes, touching RUNNING workers) are recommendation-only — operator GO required, never self-executed.
+
+---
+
+## 7. Automation inventory
+
+**Dispatcher** — single, global, in-gateway (root `kanban:` block): 15 s tick · `max_in_progress` 24 global / 8 per-profile · `failure_limit` 3 (circuit breaker) · `auto_decompose` 5/tick (decomposer `glm53` @ high; triage-specifier `glm53` @ medium) · stale-claim reclaim at 4 h without heartbeat (no failure-counter tick; re-queues `ready`) · `auto_promote_children` on · spawned workers get env-pinned boards and env-scrubbed context.
+
+**Root crons** (`~/.hermes/cron/jobs.json`, 18 jobs, 12 enabled):
+
+| Cron | Schedule | Guards/does |
+|---|---|---|
+| `session-gc` | 02:30 | Prunes old session DBs (`sessions.retention_days: 60`) |
+| `nightly-skill-evolution` | 03:00 | DSPy+GEPA lint/auto-evolve of skills — *proposes*, applies nothing (3 h script budget) |
+| `nightly-board-audit` | 04:00 | Files one `NIGHTLY-BOARD-AUDIT <date>` card on default → `kanban-board-architect`: hygiene, graph integrity, dead-assignee routing coherence, board metadata (safe hygiene self-serve; structural = recommendations) |
+| `nightly-skill-curator` | 05:00 | Closes the self-improvement loop: reviews evolution candidates, branches skill dirs, writes the skills report |
+| `OpenWiki Doc Update (Local)` | 08:00 | Refreshes OpenWiki docs for `/local/projects` repos with code changes |
+| `hindsight-stats-watchdog` | every 15 m | Hindsight stats canary: alerts on server unreachable or pending+processing ≥ 50 spike |
+| `gpu418 VM monitor` | every 5 m | Read-only Azure VM gpu418 health watch (g02 estate) |
+| `gaudi-contributor-scan` | Mon 09:00 | Weekly vllm-gaudi contributor/trust tracking |
+| `archive-gc` | 21:30 | The ARCHIVE-GC sweeper (see §5) |
+| `watch-143206-kanban-archive-fr` / `watch-143372-kanban-archive-pr` | every 6 h | Upstream watcher for `kanban_archive` FR/PR (hot-apply confirmation) |
+| `watch-142456-chatq-upstream` | every 6 h | Watches upstream PR #142456 (obsoletes local hotfix `c69ae0d911`) |
+| `plugin-pilot-soak-collector` | once 2026-10-25 05:00 | Collects soak receipts for the plugin-pilot A/B card |
+| *(disabled)* `intel-dossier-reminder`, `ci-watch-wake-1300z`, `g02-wake-driver-vigil`, `botfather-retry-reminder` | — | Retired one-shots/vigils (F17) |
+
+**Profile crons:** `kanban-board-architect` — `kanban-dr-backup` daily 02:17 (DR backup of all 7 board DBs, after the 02:05 base backups) + `weekly-estate-maintenance` Sun 04:00; `g02-watcher` — `g02-azure-watch-vigil` every 20 m; `gaudi-watcher` — `1843-replyloop-monitor-v3` every 30 m (live), `watch-1890-horizon` (disabled); `gaudi-liaison` — `contrib5-1840-wake-1020` (disabled).
+
+**Cron governance:** unattended cron runs execute under `approvals.cron_mode: deny` for dangerous commands; long cron budgets are explicit (`cron.script_timeout_seconds: 10800` for the skill-evolution batch).
+
+---
+
+## 8. Design-intent ledger (arrangement → intent → earned-by → status)
+
+| # | Arrangement | Intent | Earned by (incident) | Status @ stamp |
+|---|---|---|---|---|
+| 1 | One board per project (7 boards, tenants unused) | Isolate queue/workspace/audit per estate | Cross-board task-loss & fleet-collision history (g01-archive task-loss via stale env pin → silent default-board write; reproduced on v0.22.4 — W-R receipt in isolation design doc) | ✅ matches intent |
+| 2 | Butler-first intake (5 butlers, skipjack gap deliberate) | 1:1 operator↔board chat front-end that never executes | Single-plane bottleneck; 2026-10-22 butler duplicate-spawn race (MPROV twins); operator directive | ✅ live; skipjack documented |
+| 3 | Per-profile `kanban.board` pin + tool-layer fence (hotfix `851d9e9231`) | Make board scope structural, not prompt-level | **2026-10-23 swco-butler cross-board misfile**: SOUL guardrails omitted `board=` on 7/58 calls; stale `kanban/current` pointer (gargantua02, 10 days) re-aimed every env-less chat session (incident report `~/kanban-audit/reports/incident-2026-10-23-butler-crossboard-misfiling.md`, commit `ed8c96c`) | ⚠ code live in tree; **gateway bounce pending** (F14) — worker processes fenced, chat sessions not yet |
+| 4 | Explicit-board law (`board=` on every call) | Eradicate silent task-loss writes | g01-archive task-loss incident + v0.22.4 archived-slug reproduction ("`ok: true` … never persists on any board") | ✅ law in SOULs + skill checklist |
+| 5 | Dedup-Close Law (`KILLED-BY-DEDUP`) | Duplicates close fast, never park | Duplicate-card accretion drifting into blocked purgatory (operator ruling 2026-10-23) | ✅ live ruling in skill |
+| 6 | Collision doctrine (one live agent per profile) | No two agents on one profile's state/memory | (a) 2026-10-17 g02 block-loop/twin-fanout detonation (6 clone children, 3 workers redoing landed work); (b) **R7-W10 duplicate-dispatch boot corruption** (flashnext-gaudi, 2026-10-01: dispatcher retried duplicate executor onto same profile mid-window; corrupted live boot; arbitration voided duplicate's completion); (c) 2026-10-23/24: PROF-SWEEP-OPT + this card double-dispatched onto `kanban-board-architect`, and this card's follow-up t_0eec511d dispatched link-too-late | ⚠ doctrine live, enforcement still procedural (F10) |
+| 7 | Env-axis bank taxonomy (23 banks; one env = one env bank) | A worker recalls only its own hardware estate's texture | 2026-10-23 measured contamination of shared pools (38k facts across 3 mixed pools; g02 workers recalling gaudi HPU lore as if it applied to Azure H100s) | ✅ cutover complete + verified; deletion receipts in BANK-MAP §1.6 |
+| 8 | `.env` bank-pin abolition (config.json precedence) | Kill the silent env-wins override class | **2026-10-22 incident: 10–12 stray `HINDSIGHT_BANK_ID` `.env` pins** silently overriding config.json (plugin #5171: env wins) | ✅ clean — 44 comment-only refs, zero live pins (verified this run + PROF-SWEEP) |
+| 9 | Butler bank isolation (`<slug>-butler` banks) | Butler memory never mixes with fleet banks | Operator-approved policy t_fd8ca6f0 | ✅ live, 5 banks |
+| 10 | External Comms Law | Nothing internal leaks to external tickets | Operator directive 2026-10-21 (Azure ticket posts, full-scan) | ✅ binding text in g02-ops SOUL + runbook |
+| 11 | Credentials canon (D1–D3, distinct butler tokens) | No credential sharing; slack default-only, not listening | Doctor "both hold the same" duplicate-token warnings (coding + kworker-muse-probe held default's slack+telegram); operator ruling 2026-10-23 | ✅ enforced, sha-verified inventory |
+| 12 | Gateway restart = operator action | Restarts kill in-flight workers | Gateway bounce cost (see incident §7) | ✅ live policy; currently queued behind F14 |
+| 13 | Muse temporary coder lane (+ revert manifests) | Cheap coder capacity, easily revertible | Cost/capacity experiment (muse-wiring-v2): ctx pin 262144, fallback qwen38-flash-fp8 | ✅ live; 8→7 profiles per t_0eec511d |
+| 14 | qwen36-fast aux fleet | Cheap auxiliary models; honest ctx pins | True window empirically 131,072 vs suspected 262,144 (`QWEN36-FAST-CTX-PROBE @e1f9993`) | ✅ pins correct post-probe |
+| 15 | ARCHIVE-GC stamp bridge | Terminalless butlers get an archive path | Upstream `kanban_archive` tool gap (gap 1 of BUTLER-VERIFY) | ⚠ self-retiring: upstream shipped (PR #143372, hot-applied); bridge still active for butlers |
+| 16 | kanban-stream plugin | Live operator observability of dispatched work | Ops-blindness of background dispatching | ✅ live v1.0.2, dedicated ops bot |
+| 17 | Nightly audits + DR backups + watchdogs | Continuous governance without humans on watch | Operational scaling of a 7-board estate | ✅ live (see §7) |
+| 18 | Nightly skill-evolution + curator | Self-improvement with a human-safe apply gate | Skill sprawl (97→108 master skills) needing curation | ✅ live: evolution proposes, curator applies with reports |
+| 19 | Least-privilege toolsets | Smallest blast radius per role | Butlers/routing incidents above; read-only research design | ✅ verified in every config (§3) |
+| 20 | `.deleted/` profile graveyard | Reversible decommission parking | unsloth-litellm + gaudi-reviewer retirements | ⚠ mechanism works but is undocumented outside this doc (F20) |
+
+---
+
+## 9. DRIFT / FINDINGS (read-only review — recommendations only, no in-place changes)
+
+**Top actionable:** F14.
+
+- **F1 — distiller/kanban-board-architect description collision.** `distiller`'s `agent.description` is **byte-identical** to `kanban-board-architect`'s ("Owns ALL Hermes meta-work on this host… Route any request to create, modify, review, or decommission profiles, boards, or agent fleets here."). Distiller is actually the shared sanity/memory-light gate; the text is legacy pre-split blur. The auto-decomposer cannot disambiguate meta-work routing. *Recommend:* rewrite distiller's description to its true role (sanity gate, style gate, distillation — never meta-work). *(Open for operator disposition — flagged by orchestrator.)*
+- **F2 — sw-ux routing description is a copy of sw-dev-a.** Config description says "Implementer lane A…"; SOUL.md says "Front-End & UX Engineer". The routing API is wrong, so UX tasks are unroutable via the decomposer. *Recommend:* refresh the description to match the SOUL. *(Open for operator disposition.)*
+- **F3 — skipjack has no butler (documented intent).** Only 5 butlers; skipjack intake stays on default. Deliberate per doctrine §1 until a sixth butler is stamped from the kit. *Recommend:* nothing, or stamp `sj-butler` when skipjack busies up.
+- **F4 — boards/ housekeeping husks.** `azure-fleet/`, `capexp/`, `flashnext-gaudi/`, `qwen38-perf/` sit at `boards/` top level as `board.json`-only husks while their real DB snapshots are in `_archived/`; `_archived/` also holds two **empty** rebuild snapshots (gargantua01-, skipjack-prototype-1792497635/7: 0 tasks). Harmless but misleading (`boards list` shows four archived rows twice). *Recommend:* delete the four husk dirs, prune empty snapshots, keep `_archived/` as the only archive location.
+- **F5 — stale board slug `qwen38-perf` in 14 gaudi profile descriptions.** The board was renamed qwen38-perf → gaudi on 2026-10-13; every gaudi fleet description still says "Works ONLY on the Gaudi board (slug qwen38-perf)". Routing text references an **archived** slug. *Recommend:* fleet-wide description refresh (one converge script, same as prior sweeps).
+- **F6 — husks `coding` + `kworker-muse-probe`.** Full home dirs with no `config.yaml`; acknowledged in BANK-MAP §3 ("ignore until provisioned or removed"); PROF-SWEEP escalated for ruling; **t_0eec511d is deleting them** (also clears their stale default-cred history). *Recommend:* let t_0eec511d land; then drop them from BANK-MAP §3.
+- **F7 — `sampling-test` retirement → BANK-MAP 23→22 owed.** Experiment profile with provider-shape outliers (`provider: custom`, not `custom:LiteLLM`; orchestrator-clone description; intentionally stale skill mirror). Deletion ruled (t_0eec511d), bank `hb-sampling-test` marked "safe to delete freely". *Recommend:* after deletion, amend BANK-MAP (23→22) and this doc's §4 in one commit.
+- **F8 — CLI precedence hazard in worker shells.** Ambient `HERMES_KANBAN_DB`/`HERMES_KANBAN_BOARD` env pins (default board) **shadow** the `--board <slug>` flag: `hermes kanban --board gaudi diagnostics` inside a dispatched worker returned the default board's results, and `boards list` under env pin showed default's counts on every row. Scripts authored by workers must env-pin (`env -u HERMES_KANBAN_DB -u HERMES_KANBAN_BOARD …`), never flag-pin, inside worker contexts. *Recommend:* upstream the precedence (flag should beat env), or at minimum document in the kanban skills.
+- **F9 — (resolved) "W10" lineage.** Previously untraceable label; verified this run on the archived board: `flashnext-gaudi` cards **t_b79345da** ("R7-W10: EXECUTE window #10…") and **t_1abdfa45** ("R7-W10: window #10 — launch-plane ladder…"), both assignee `q38p-benchrunner`, created 23 s apart on **2026-10-01 09:12 EDT** (DB timestamps authoritative; the earlier "2026-09-27" recollection was ~4 days off). Duplicate archived without completion; window card done — consistent with the duplicate-dispatch + arbitration account. Now part of the F10/ledger-6 lineage.
+- **F10 — collision enforcement is still procedural.** Two live specimens this week on `kanban-board-architect` alone: (a) t_a386103a + t_3eed159c double-dispatched (sequencing existed only as prose — survived costlessly this time via the dependency block); (b) t_0eec511d dispatched immediately despite being a follow-on to _this_ card, mutating configs mid-review (expected, per orchestrator note). `max_in_progress_per_profile: 8` legitimately allows concurrent cards on one profile; nothing makes "one profile = one live agent *for dependent cards*" structural. *Recommend:* filers must encode sequencing as `parents=[...]` at create time (never prose), and consider a dispatcher-side guard: refuse a *second concurrent* claim on a profile when the cards are in a dependency relation, or at least when both were created by the same filer within N minutes.
+- **F11 — default board has no `board.json`.** The default board is the root `~/.hermes/kanban.db`; only the 7 project boards have manifests. Accepted legacy (dispatchers and `boards list` handle it), but board-metadata tooling can't see it. *Recommend:* optionally mint a manifest, or leave documented (this section).
+- **F12 — (positive) `.env` bank pins: zero live.** All 44 references across the fleet are comments. The 2026-10-22 incident class stays fixed. No action.
+- **F13 — (positive) BANK-MAP ↔ live: exact.** Server count 23, id-for-id match with BANK-MAP @ `f17fedd`; profile→bank bindings verified. Only the pending 23→22 (F7) will need the next amendment.
+- **F14 — gateway bounce still pending (top actionable).** The board-pin hotfix `851d9e9231` has been in the tree since 2026-10-23, but the running gateway (systemd **user** unit, PID 2830557, up since 12:46 EDT 2026-10-23) predates it, so **chat-layer board resolution still runs the old code**: butler chat sessions are unfenced, and an unpinned butler call degrades to the _default_ board (safe-but-wrong interim state; the stale `current` pointer that caused the original misfile is deleted). Restart is operator-gated by design (kills in-flight workers). Related loose end: the PLATFORM-CREDS restart-verify run (2026-10-23 15:41) logged `restart: rc=1 … VERDICT: FAIL` with adapters-settled=0 — unexplained, and the gateway PID shows **no restart actually happened**. *Recommend:* one operator-command bounce (`hermes -p default gateway restart`), then rerun the hotfix verification (`receipts/t_30e77179/verify_pins.py`) and post-restart checks, and diagnose the earlier rc=1/FAIL.
+- **F15 — butler-routing-doctrine §2 is stale on bank pins.** It claims ".env agreeing-pin on g02/swco/sjproto"; live `.env` shows all three commented out by the fresh-bank cutover (t_0fbb3c61) — which is the *correct* end-state; the doctrine text predates it. *Recommend:* one-line amendment pointing at BANK-MAP as bank law.
+- **F16 — root/default `agent.description` understates its scope.** "…Manages the default and software-co kanban boards" — but per doctrine §2 default owns meta + skipjack intake + fail-safe intake for **all** boards. Harmless prose, wrong routing signal for meta requests aimed at the root assistant. *Recommend:* refresh the description.
+- **F17 — six disabled cron leftovers** (root: `intel-dossier-reminder`, `ci-watch-wake-1300z`, `g02-wake-driver-vigil`, `botfather-retry-reminder`; profile: `contrib5-1840-wake-1020` in gaudi-liaison, `watch-1890-horizon` in gaudi-watcher). *Recommend:* delete or annotate as intentional keeps.
+- **F18 — Hermes update available** upstream of the local tree (v0.22.4+4.g602ea0a), which carries ≥3 local hotfixes/watches (`851d9e9231` board fence, `c69ae0d911` chat-q fix watched by PR #142456, PR #143372 kanban_archive hot-apply). Upgrades are operator-gated and must not strand the hotfixes. *Recommend:* plan rebase/upstream check next maintenance window; the 6-hourly watches already track two of the three.
+- **F19 — gaudi board lineage unrecorded in its manifest.** The live `gaudi` board descends from archived `qwen38-perf` (and `flashnext-gaudi` before that era), but its `board.json` description doesn't say so — which is exactly why F5's stale slugs and the original "W10 not found" confusion existed. *Recommend:* one sentence in the board description + this doc is now the durable record.
+- **F20 — `.deleted/` graveyard is an undocumented convention.** It works (unsloth-litellm, gaudi-reviewer parked reversibly) but appears in no doctrine doc. *Recommend:* record it in the board-provisioning skill/architect lane conventions (partially done by this doc).
+
+**Mid-flight capture disclosures (per orchestrator note):** the recon banked in this card's comments (run 1, 22:23–22:40 EDT) caught pre-sweep states that are now converged: `gaudi-liaison` was briefly seen unpinned with hindsight carrier config and an odd `gpt-oss-fp8` model reading mid-sweep; as-built it is `glm53`, bank `gaudi-hpu-upstream`, clean. `coding`'s transient `hb-coding` bank dir and `kworker-muse-probe`'s vanishing `.env` pin were the same class of mid-mutation reads. None are drift.
+
+---
+
+*End of document. Canon until superseded by newer operator rulings. Next known amendments owed: post-t_0eec511d roster/bank flesh-out (F6/F7), post-bounce fence confirmation (F14).*

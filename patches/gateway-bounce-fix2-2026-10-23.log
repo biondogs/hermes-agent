@@ -1,0 +1,193 @@
+2026-10-23T16:41:28Z deferred bounce launcher started (pid 2761476)
+2026-10-23T16:42:38Z t_df30ec0c state before bounce: done
+2026-10-23T16:42:38Z t_40bf70a1 (proof card) state before bounce: done
+2026-10-23T16:42:39Z gateway pid before bounce: 1648307
+2026-10-23T16:42:39Z pre-bounce status:
+⚠ Installed gateway service definition is outdated
+  Run: hermes gateway restart  # auto-refreshes the unit
+
+● hermes-gateway.service - Hermes Agent Gateway - Messaging Platform Integration
+     Loaded: loaded (/home/arch/.config/systemd/user/hermes-gateway.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-10-23 15:14:53 UTC; 1h 27min ago
+   Main PID: 1648307 (hermes)
+      Tasks: 1405 (limit: 629145)
+     Memory: 3.5G (peak: 4.3G)
+        CPU: 1h 23min 10.706s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service
+             ├─1648307 /home/arch/.hermes/tools/python-3.14.7+20260901-linux-x64/bin/python3 -I -c "import os, re, sys\nimport contextlib, hashlib, io, pathlib, shutil, subprocess\nos.environ.pop('PYTHONHOME', None)\nos.environ.pop('PYTHONPATH', None)\nsys.path.insert(0, '/home/arch/.hermes/hermes-agent')\ndef _hermes_closure_repair():\n    import contextlib, hashlib, io, shutil, subprocess\n    from pathlib import Path\n    root = Path('/home/arch/.hermes/hermes-agent')\n    git = root / '.git'\n    try:\n        if git.is_file():\n            text = git.read_text(encoding='utf-8-sig').strip()\n            git = root / text[7:].strip() if text.startswith('gitdir:') else git\n        fields = dict(line.partition('=')[::2] for line in (git / 'hermes-update-pull').read_text(encoding='utf-8-sig').splitlines())\n    except OSError:\n        return\n    pre = fields.get('pre', '').strip()\n    if not re.fullmatch('[0-9a-f]{40}|[0-9a-f]{64}', pre):\n        return\n    closure = git / 'hermes-update-recovery' / pre\n    files = (*('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py'), 'hermes_cli/__init__.py')\n\n    def blob_id(data):\n        return hashlib.new('sha1' if len(pre) == 40 else 'sha256', b'blob %d\\0' % len(data) + data).hexdigest()\n\n    def verified():\n        try:\n            listed = dict(line.split(' ', 1)[::-1] for line in (closure / 'MANIFEST').read_text(encoding='utf-8-sig').splitlines())\n            return (set(listed) == set(files) and listed['hermes_cli/__init__.py'] == blob_id(b'')\n                    and all(blob_id((closure / rel).read_bytes()) == oid for rel, oid in listed.items()))\n        except (OSError, ValueError):\n            return False\n\n    if not verified():\n        exe = fields.get('git', '').strip()\n        if not (os.path.isabs(exe) and os.path.isfile(exe)):\n            names = ('git.exe',) if os.name == 'nt' else ('git',)\n            exe = next((os.path.join(d, n) for d in os.environ.get('PATH', '').split(os.pathsep) if os.path.isabs(d)\n                        for n in names if os.path.isfile(os.path.join(d, n))), '')\n        if not exe:\n            return\n\n        def git_out(*args):\n            done = subprocess.run([exe, '--no-replace-objects', '-C', str(root), *args], capture_output=True, timeout=60,\n                                  stdin=subprocess.DEVNULL, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))\n            if done.returncode != 0:\n                raise OSError(done.stderr)\n            return done.stdout\n\n        staging = closure.with_name('.%s.%d.launch' % (pre, os.getpid()))\n        try:\n            ids = {}\n            for entry in git_out('ls-tree', '-z', '--full-tree', pre, '--', *('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py')).split(b'\\0'):\n                meta, _, rel = entry.decode('utf-8', 'replace').partition('\\t')\n                if meta.split()[1:2] == ['blob']:\n                    ids[rel] = meta.split()[2]\n            blobs = {'hermes_cli/__init__.py': b''}\n            for rel in ('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py'):\n                blobs[rel] = git_out('cat-file', 'blob', ids[rel])\n                if blob_id(blobs[rel]) != ids[rel]:  # an object that inflates to bytes pre never had\n                    raise OSError('%s does not hash to %s' % (rel, ids[rel]))\n            blobs['MANIFEST'] = ''.join('%s %s\\n' % (blob_id(data), rel) for rel, data in blobs.items()).encode('utf-8')\n            for rel, data in blobs.items():\n                (staging / rel).parent.mkdir(parents=True, exist_ok=True)\n                (staging / rel).write_bytes(data)\n            shutil.rmtree(closure, ignore_errors=True)\n            os.replace(staging, closure)\n        except (OSError, KeyError, subprocess.SubprocessError):\n            pass\n        finally:\n            shutil.rmtree(staging, ignore_errors=True)\n        if not verified():\n            return\n    for name in [n for n in sys.modules if n.split('.')[0] in ('hermes_cli', 'hermes_bootstrap', 'hermes_constants', 'pm')]:\n        del sys.modules[name]\n    tree = os.path.normcase(os.path.realpath(root))\n    sys.path[:] = [str(closure)] + [p for p in sys.path if p and os.path.normcase(os.path.realpath(p)) != tree\n                                    and not os.path.normcase(os.path.realpath(p)).startswith(tree + os.sep)]\n    sys.dont_write_bytecode = True\n    said = io.StringIO()\n    restored = False\n    try:\n        with contextlib.redirect_stderr(said):\n            from hermes_cli import _early_recovery\n            restored = _early_recovery.restore_interrupted_pull(root)\n    except Exception as exc:\n        said.write('hermes: the checkout cannot start after an interrupted \`hermes update\`, and it was not '\n                   'repaired: %s\\n' % (exc,))\n    if restored:\n        sys.stderr.write('hermes: the checkout could not start after an interrupted \`hermes update\`; '\n                         'repaired it with the recovery code saved before the update.\\n' + said.getvalue())\n        _early_recovery.relaunch_after_restore()\n    sys.stderr.write(said.getvalue() or 'hermes: the checkout cannot start after an interrupted \`hermes update\`; '\n                     'launch again once the update that owns it finishes.\\n')\n    raise SystemExit(1)\nif sys.argv[1:2] == ['--print-runtime-command']:\n    sys.dont_write_bytecode = True\n    from pathlib import Path\n    try:\n        from hermes_cli import _early_recovery\n    except Exception as exc:\n        if _hermes_closure_repair() or not isinstance(exc, ImportError):\n            raise\n        _early_recovery = None  # a tree without the repair: the imports below report real damage\n    if _early_recovery is not None and _early_recovery.restore_interrupted_pull(Path('/home/arch/.hermes/hermes-agent')):\n        _early_recovery.relaunch_after_restore()\n    from hermes_constants import get_default_hermes_root\n    os.environ['HERMES_HOME'] = os.environ.get('HERMES_HOME') or str(get_default_hermes_root())\n    from hermes_cli._launchers import print_runtime_command\n    print_runtime_command(Path('/home/arch/.hermes/hermes-agent'), sys.argv[2:])\n    sys.exit(0)\nsys._hermes_pin_default_home = True\ntry:\n    import hermes_bootstrap\nexcept Exception:\n    _hermes_closure_repair()\n    raise\nif not os.environ.get('HERMES_HOME'):\n    from hermes_constants import get_default_hermes_root\n    os.environ['HERMES_HOME'] = str(get_default_hermes_root())\nif sys.argv[1:2] == ['--run-module']:\n    import runpy\n    if len(sys.argv) < 3: sys.exit('hermes: --run-module needs a module')\n    module = sys.argv.pop(2)\n    del sys.argv[1]\n    runpy.run_module(module, run_name='__main__', alter_sys=True)\n    sys.exit(0)\nfrom hermes_cli.main import main\nsys.argv[0] = re.sub(r'(-script\\.pyw|\\.exe)?\$', '', sys.argv[0])\nsys.exit(main())\n" gateway run
+             ├─2197910 /home/arch/.hermes/tools/python-3.14.7+20260901-linux-x64/bin/python3 -m agent.managed_worker
+             ├─2603783 /home/arch/.hermes/tools/python-3.14.7+20260901-linux-x64/bin/python3 -m agent.managed_worker
+             ├─2638454 /home/arch/.hermes/tools/python-3.14.7+20260901-linux-x64/bin/python3 -m agent.managed_worker
+             ├─2674099 node /home/arch/.hermes/profiles/kanban-board-architect/lsp/bin/pyright-langserver --stdio
+             ├─2697044 node /home/arch/.hermes/profiles/kanban-board-architect/lsp/bin/pyright-langserver --stdio
+             ├─2701394 node /home/arch/.hermes/profiles/kanban-board-architect/lsp/bin/bash-language-server start
+             ├─2724279 node /home/arch/.hermes/profiles/kanban-board-architect/lsp/bin/bash-language-server start
+             ├─2752815 node /home/arch/.hermes/lsp/bin/yaml-language-server --stdio
+             ├─2760753 /bin/bash -lic "set +m; __hermes_exit_file=/home/arch/.hermes/profiles/kanban-board-architect/logs/process-output/proc_cb9ca77a8a3a.exit; trap 'printf \"%s\\n\" \"\$?\" > \"\$__hermes_exit_file\"' EXIT\nbash /local/projects/software-co/patches/gateway-bounce-fix2.sh"
+             ├─2761476 bash /local/projects/software-co/patches/gateway-bounce-fix2.sh
+             ├─2762537 /usr/bin/bash -c "source /home/arch/.hermes/profiles/sw-dev-a/cache/scratch/hermes-snap-2ef3ff93a22a.sh >/dev/null 2>&1 || true\nexport AI_AGENT=\"\${AI_AGENT:-hermes-agent}\" HERMES_AGENT=\"\${HERMES_AGENT:-true}\"\nexport GIT_PAGER=\"\${GIT_PAGER:-cat}\" PAGER=\"\${PAGER:-cat}\"\nbuiltin cd -- /home/arch/.hermes/kanban/boards/software-co/workspaces/t_1678e983/repo || exit 126\neval 'cd /home/arch/.hermes/kanban/boards/software-co/workspaces/t_1678e983/repo/frontend/app && for i in \$(seq 1 25); do timeout 30 node --test >/tmp/t.log 2>&1; rc=\$?; if [ \$rc -ne 0 ]; then echo \"FAIL run \$i rc=\$rc\"; grep -E \"^✖|pending\" /tmp/t.log | head -4; fi; done; echo \"loop done\"'\n__hermes_ec=\$?\numask 077\n__hermes_snap_tmp=\$(mktemp /home/arch/.hermes/profiles/sw-dev-a/cache/scratch/hermes-snap-2ef3ff93a22a.sh.tmp.XXXXXXXXXX) && { { ( unset \${!HERMES_SESSION_*} \${!HERMES_CRON_AUTO_DELIVER_*} \${!HERMES_BROWSER_CONTROL_*} AI_AGENT HERMES_AGENT HERMES_DELEGATED_CHILD_CONTEXT HERMES_CRON_SESSION \${!HERMES_RPC_*} HERMES_KERNEL_DIR HERMES_UI_SESSION_ID 2>/dev/null; export -p; ) || true; } > \"\$__hermes_snap_tmp\" && mv -f \"\$__hermes_snap_tmp\" /home/arch/.hermes/profiles/sw-dev-a/cache/scratch/hermes-snap-2ef3ff93a22a.sh; } 2>/dev/null || rm -f \"\$__hermes_snap_tmp\" 2>/dev/null || true\nprintf '\\n__HERMES_CWD_2ef3ff93a22a__%s__HERMES_CWD_2ef3ff93a22a__\\n' \"\$(pwd -P)\"\nexit \$__hermes_ec"
+             ├─2778800 timeout 30 node --test
+             ├─2778803 node --test
+             ├─2778834 /home/arch/.hermes/tools/node-26.7.0-linux-x64/bin/node --test-coverage-functions=0 --test-concurrency=0 --experimental-addon-modules --inspect-publish-uid=stderr,http --inspect-port=127.0.0.1:9229 --stack-trace-limit=10 --report-signal=SIGUSR2 --test-coverage-lines=0 --test-isolation=process --heap-prof-interval=524288 --cpu-prof-interval=1000 "--trace-event-file-pattern=node_trace.\${rotation}.log" --secure-heap-min=2 --test-coverage-branches=0 "--tls-cipher-list=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA256:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA" --max-http-header-size=16384 --use-largepages=off --test-timeout=0 --node-snapshot --secure-heap=0 --watch-kill-signal=SIGTERM --v8-pool-size=4 --network-family-autoselection-attempt-timeout=500 --heapsnapshot-near-heap-limit=0 test/session.test.mjs
+             ├─2780630 /home/arch/.hermes/tools/python-3.14.7+20260901-linux-x64/bin/python3 -I -c "import os, re, sys\nimport contextlib, hashlib, io, pathlib, shutil, subprocess\nos.environ.pop('PYTHONHOME', None)\nos.environ.pop('PYTHONPATH', None)\nsys.path.insert(0, '/home/arch/.hermes/hermes-agent')\ndef _hermes_closure_repair():\n    import contextlib, hashlib, io, shutil, subprocess\n    from pathlib import Path\n    root = Path('/home/arch/.hermes/hermes-agent')\n    git = root / '.git'\n    try:\n        if git.is_file():\n            text = git.read_text(encoding='utf-8-sig').strip()\n            git = root / text[7:].strip() if text.startswith('gitdir:') else git\n        fields = dict(line.partition('=')[::2] for line in (git / 'hermes-update-pull').read_text(encoding='utf-8-sig').splitlines())\n    except OSError:\n        return\n    pre = fields.get('pre', '').strip()\n    if not re.fullmatch('[0-9a-f]{40}|[0-9a-f]{64}', pre):\n        return\n    closure = git / 'hermes-update-recovery' / pre\n    files = (*('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py'), 'hermes_cli/__init__.py')\n\n    def blob_id(data):\n        return hashlib.new('sha1' if len(pre) == 40 else 'sha256', b'blob %d\\0' % len(data) + data).hexdigest()\n\n    def verified():\n        try:\n            listed = dict(line.split(' ', 1)[::-1] for line in (closure / 'MANIFEST').read_text(encoding='utf-8-sig').splitlines())\n            return (set(listed) == set(files) and listed['hermes_cli/__init__.py'] == blob_id(b'')\n                    and all(blob_id((closure / rel).read_bytes()) == oid for rel, oid in listed.items()))\n        except (OSError, ValueError):\n            return False\n\n    if not verified():\n        exe = fields.get('git', '').strip()\n        if not (os.path.isabs(exe) and os.path.isfile(exe)):\n            names = ('git.exe',) if os.name == 'nt' else ('git',)\n            exe = next((os.path.join(d, n) for d in os.environ.get('PATH', '').split(os.pathsep) if os.path.isabs(d)\n                        for n in names if os.path.isfile(os.path.join(d, n))), '')\n        if not exe:\n            return\n\n        def git_out(*args):\n            done = subprocess.run([exe, '--no-replace-objects', '-C', str(root), *args], capture_output=True, timeout=60,\n                                  stdin=subprocess.DEVNULL, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))\n            if done.returncode != 0:\n                raise OSError(done.stderr)\n            return done.stdout\n\n        staging = closure.with_name('.%s.%d.launch' % (pre, os.getpid()))\n        try:\n            ids = {}\n            for entry in git_out('ls-tree', '-z', '--full-tree', pre, '--', *('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py')).split(b'\\0'):\n                meta, _, rel = entry.decode('utf-8', 'replace').partition('\\t')\n                if meta.split()[1:2] == ['blob']:\n                    ids[rel] = meta.split()[2]\n            blobs = {'hermes_cli/__init__.py': b''}\n            for rel in ('hermes_cli/_early_recovery.py', 'hermes_cli/update_lock.py', 'hermes_cli/update_custody.py'):\n                blobs[rel] = git_out('cat-file', 'blob', ids[rel])\n                if blob_id(blobs[rel]) != ids[rel]:  # an object that inflates to bytes pre never had\n                    raise OSError('%s does not hash to %s' % (rel, ids[rel]))\n            blobs['MANIFEST'] = ''.join('%s %s\\n' % (blob_id(data), rel) for rel, data in blobs.items()).encode('utf-8')\n            for rel, data in blobs.items():\n                (staging / rel).parent.mkdir(parents=True, exist_ok=True)\n                (staging / rel).write_bytes(data)\n            shutil.rmtree(closure, ignore_errors=True)\n            os.replace(staging, closure)\n        except (OSError, KeyError, subprocess.SubprocessError):\n            pass\n        finally:\n            shutil.rmtree(staging, ignore_errors=True)\n        if not verified():\n            return\n    for name in [n for n in sys.modules if n.split('.')[0] in ('hermes_cli', 'hermes_bootstrap', 'hermes_constants', 'pm')]:\n        del sys.modules[name]\n    tree = os.path.normcase(os.path.realpath(root))\n    sys.path[:] = [str(closure)] + [p for p in sys.path if p and os.path.normcase(os.path.realpath(p)) != tree\n                                    and not os.path.normcase(os.path.realpath(p)).startswith(tree + os.sep)]\n    sys.dont_write_bytecode = True\n    said = io.StringIO()\n    restored = False\n    try:\n        with contextlib.redirect_stderr(said):\n            from hermes_cli import _early_recovery\n            restored = _early_recovery.restore_interrupted_pull(root)\n    except Exception as exc:\n        said.write('hermes: the checkout cannot start after an interrupted \`hermes update\`, and it was not '\n                   'repaired: %s\\n' % (exc,))\n    if restored:\n        sys.stderr.write('hermes: the checkout could not start after an interrupted \`hermes update\`; '\n                         'repaired it with the recovery code saved before the update.\\n' + said.getvalue())\n        _early_recovery.relaunch_after_restore()\n    sys.stderr.write(said.getvalue() or 'hermes: the checkout cannot start after an interrupted \`hermes update\`; '\n                     'launch again once the update that owns it finishes.\\n')\n    raise SystemExit(1)\nif sys.argv[1:2] == ['--print-runtime-command']:\n    sys.dont_write_bytecode = True\n    from pathlib import Path\n    try:\n        from hermes_cli import _early_recovery\n    except Exception as exc:\n        if _hermes_closure_repair() or not isinstance(exc, ImportError):\n            raise\n        _early_recovery = None  # a tree without the repair: the imports below report real damage\n    if _early_recovery is not None and _early_recovery.restore_interrupted_pull(Path('/home/arch/.hermes/hermes-agent')):\n        _early_recovery.relaunch_after_restore()\n    from hermes_constants import get_default_hermes_root\n    os.environ['HERMES_HOME'] = os.environ.get('HERMES_HOME') or str(get_default_hermes_root())\n    from hermes_cli._launchers import print_runtime_command\n    print_runtime_command(Path('/home/arch/.hermes/hermes-agent'), sys.argv[2:])\n    sys.exit(0)\nsys._hermes_pin_default_home = True\ntry:\n    import hermes_bootstrap\nexcept Exception:\n    _hermes_closure_repair()\n    raise\nif not os.environ.get('HERMES_HOME'):\n    from hermes_constants import get_default_hermes_root\n    os.environ['HERMES_HOME'] = str(get_default_hermes_root())\nif sys.argv[1:2] == ['--run-module']:\n    import runpy\n    if len(sys.argv) < 3: sys.exit('hermes: --run-module needs a module')\n    module = sys.argv.pop(2)\n    del sys.argv[1]\n    runpy.run_module(module, run_name='__main__', alter_sys=True)\n    sys.exit(0)\nfrom hermes_cli.main import main\nsys.argv[0] = re.sub(r'(-script\\.pyw|\\.exe)?\$', '', sys.argv[0])\nsys.exit(main())\n" gateway status
+             └─2781037 systemctl --user status hermes-gateway --no-pager
+
+Oct 23 16:40:55 ga01 hermes[1648307]: 2026-10-23 16:40:55,090 WARNING agent.message_sanitization: Normalized provider-minted parallel tool-call ids for replay compatibility
+Oct 23 16:41:01 ga01 hermes[1648307]: 2026-10-23 16:41:01,296 WARNING agent.message_sanitization: Normalized provider-minted parallel tool-call ids for replay compatibility
+Oct 23 16:41:12 ga01 hermes[1648307]: 👁️ Hindsight — recalled 16 memories
+Oct 23 16:41:18 ga01 hermes[1648307]: 2026-10-23 16:41:18,006 WARNING agent.tool_executor: Tool terminal returned error (0.67s): {"output": "cols: ['id', 'source', 'user_id', 'session_key', 'chat_id', 'chat_type', 'thread_id', 'display_name', 'origin_json', 'expiry_finalized', 'model', 'model_config', 'system_prompt', 'parent_s
+Oct 23 16:41:30 ga01 hermes[1648307]: 2026-10-23 16:41:30,460 WARNING _hermes_user_memory.hindsight__source_cb40ee7307f8edc8: Prefetch: server retain visibility timed out after 10.0s; dropping 1 unresolved op(s) so later prefetches stay bounded (recall may miss the just-completed turn)
+Oct 23 16:42:15 ga01 hermes[1648307]: 2026-10-23 16:42:15,200 WARNING tools.mcp_tool: MCP server 'unsloth_studio': Streamable HTTP rejected the initial connect (Server returned an error response (HTTP 401 from POST http://10.99.136.90:8000/mcp/: {"detail": "Unsloth Studio MCP needs an Unsloth Studio API key (sk-unsloth-\u2026). Create one in Settings > API."})) — retrying over SSE. If this connects, set `transport: sse` for this server in config.yaml to skip the failed attempt on future startups.
+Oct 23 16:42:16 ga01 hermes[1648307]: 2026-10-23 16:42:16,249 WARNING tools.mcp_tool: MCP server 'unsloth_studio': Streamable HTTP rejected the initial connect (Server returned an error response (HTTP 401 from POST http://10.99.136.90:8000/mcp/: {"detail": "Unsloth Studio MCP needs an Unsloth Studio API key (sk-unsloth-\u2026). Create one in Settings > API."})) — retrying over SSE. If this connects, set `transport: sse` for this server in config.yaml to skip the failed attempt on future startups.
+Oct 23 16:42:17 ga01 hermes[1648307]: 2026-10-23 16:42:17,970 WARNING tools.mcp_tool: MCP server 'unsloth_studio': Streamable HTTP rejected the initial connect (Server returned an error response (HTTP 401 from POST http://10.99.136.90:8000/mcp/: {"detail": "Unsloth Studio MCP needs an Unsloth Studio API key (sk-unsloth-\u2026). Create one in Settings > API."})) — retrying over SSE. If this connects, set `transport: sse` for this server in config.yaml to skip the failed attempt on future startups.
+Oct 23 16:42:22 ga01 hermes[1648307]: 2026-10-23 16:42:22,101 WARNING tools.mcp_tool: MCP server 'unsloth_studio': Streamable HTTP rejected the initial connect (Server returned an error response (HTTP 401 from POST http://10.99.136.90:8000/mcp/: {"detail": "Unsloth Studio MCP needs an Unsloth Studio API key (sk-unsloth-\u2026). Create one in Settings > API."})) — retrying over SSE. If this connects, set `transport: sse` for this server in config.yaml to skip the failed attempt on future startups.
+Oct 23 16:42:31 ga01 hermes[1648307]: 2026-10-23 16:42:31,883 WARNING agent.message_sanitization: Normalized provider-minted parallel tool-call ids for replay compatibility
+✓ User gateway service is running
+
+Recent gateway health:
+  ⚠ coding:telegram: Profile 'default' and 'coding' both configure telegram with the same credential. Give each profile its own telegram credential.
+  ⚠ coding:slack: Profile 'default' and 'coding' both configure slack with the same credential. Give each profile its own slack credential.
+  ⚠ kworker-muse-probe:telegram: Profile 'default' and 'kworker-muse-probe' both configure telegram with the same credential. Give each profile its own telegram credential.
+  ⚠ kworker-muse-probe:slack: Profile 'default' and 'kworker-muse-probe' both configure slack with the same credential. Give each profile its own slack credential.
+✓ Systemd linger is enabled (service survives logout)
+
+Inbound callback URLs on the shared listener:
+  coding/api_server: http://127.0.0.1:8642/p/coding/v1
+  coding/webhook: http://127.0.0.1:8644/p/coding/webhooks/<route>
+  distiller/api_server: http://127.0.0.1:8642/p/distiller/v1
+  distiller/webhook: http://127.0.0.1:8644/p/distiller/webhooks/<route>
+  g01-auditor/api_server: http://127.0.0.1:8642/p/g01-auditor/v1
+  g01-auditor/webhook: http://127.0.0.1:8644/p/g01-auditor/webhooks/<route>
+  g01-butler/api_server: http://127.0.0.1:8642/p/g01-butler/v1
+  g01-butler/webhook: http://127.0.0.1:8644/p/g01-butler/webhooks/<route>
+  g01-ops/api_server: http://127.0.0.1:8642/p/g01-ops/v1
+  g01-ops/webhook: http://127.0.0.1:8644/p/g01-ops/webhooks/<route>
+  g01-orchestrator/api_server: http://127.0.0.1:8642/p/g01-orchestrator/v1
+  g01-orchestrator/webhook: http://127.0.0.1:8644/p/g01-orchestrator/webhooks/<route>
+  g01-planner/api_server: http://127.0.0.1:8642/p/g01-planner/v1
+  g01-planner/webhook: http://127.0.0.1:8644/p/g01-planner/webhooks/<route>
+  g01-scribe/api_server: http://127.0.0.1:8642/p/g01-scribe/v1
+  g01-scribe/webhook: http://127.0.0.1:8644/p/g01-scribe/webhooks/<route>
+  g01-watcher/api_server: http://127.0.0.1:8642/p/g01-watcher/v1
+  g01-watcher/webhook: http://127.0.0.1:8644/p/g01-watcher/webhooks/<route>
+  g02-auditor/api_server: http://127.0.0.1:8642/p/g02-auditor/v1
+  g02-auditor/webhook: http://127.0.0.1:8644/p/g02-auditor/webhooks/<route>
+  g02-butler/api_server: http://127.0.0.1:8642/p/g02-butler/v1
+  g02-butler/webhook: http://127.0.0.1:8644/p/g02-butler/webhooks/<route>
+  g02-ops/api_server: http://127.0.0.1:8642/p/g02-ops/v1
+  g02-ops/webhook: http://127.0.0.1:8644/p/g02-ops/webhooks/<route>
+  g02-orchestrator/api_server: http://127.0.0.1:8642/p/g02-orchestrator/v1
+  g02-orchestrator/webhook: http://127.0.0.1:8644/p/g02-orchestrator/webhooks/<route>
+  g02-planner/api_server: http://127.0.0.1:8642/p/g02-planner/v1
+  g02-planner/webhook: http://127.0.0.1:8644/p/g02-planner/webhooks/<route>
+  g02-scribe/api_server: http://127.0.0.1:8642/p/g02-scribe/v1
+  g02-scribe/webhook: http://127.0.0.1:8644/p/g02-scribe/webhooks/<route>
+  g02-watcher/api_server: http://127.0.0.1:8642/p/g02-watcher/v1
+  g02-watcher/webhook: http://127.0.0.1:8644/p/g02-watcher/webhooks/<route>
+  gaudi-analyst/api_server: http://127.0.0.1:8642/p/gaudi-analyst/v1
+  gaudi-analyst/webhook: http://127.0.0.1:8644/p/gaudi-analyst/webhooks/<route>
+  gaudi-arch/api_server: http://127.0.0.1:8642/p/gaudi-arch/v1
+  gaudi-arch/webhook: http://127.0.0.1:8644/p/gaudi-arch/webhooks/<route>
+  gaudi-auditor/api_server: http://127.0.0.1:8642/p/gaudi-auditor/v1
+  gaudi-auditor/webhook: http://127.0.0.1:8644/p/gaudi-auditor/webhooks/<route>
+  gaudi-benchrunner/api_server: http://127.0.0.1:8642/p/gaudi-benchrunner/v1
+  gaudi-benchrunner/webhook: http://127.0.0.1:8644/p/gaudi-benchrunner/webhooks/<route>
+  gaudi-butler/api_server: http://127.0.0.1:8642/p/gaudi-butler/v1
+  gaudi-butler/webhook: http://127.0.0.1:8644/p/gaudi-butler/webhooks/<route>
+  gaudi-deployer/api_server: http://127.0.0.1:8642/p/gaudi-deployer/v1
+  gaudi-deployer/webhook: http://127.0.0.1:8644/p/gaudi-deployer/webhooks/<route>
+  gaudi-dockerops/api_server: http://127.0.0.1:8642/p/gaudi-dockerops/v1
+  gaudi-dockerops/webhook: http://127.0.0.1:8644/p/gaudi-dockerops/webhooks/<route>
+  gaudi-liaison/api_server: http://127.0.0.1:8642/p/gaudi-liaison/v1
+  gaudi-liaison/webhook: http://127.0.0.1:8644/p/gaudi-liaison/webhooks/<route>
+  gaudi-orchestrator/api_server: http://127.0.0.1:8642/p/gaudi-orchestrator/v1
+  gaudi-orchestrator/webhook: http://127.0.0.1:8644/p/gaudi-orchestrator/webhooks/<route>
+  gaudi-perfeng/api_server: http://127.0.0.1:8642/p/gaudi-perfeng/v1
+  gaudi-perfeng/webhook: http://127.0.0.1:8644/p/gaudi-perfeng/webhooks/<route>
+  gaudi-planner/api_server: http://127.0.0.1:8642/p/gaudi-planner/v1
+  gaudi-planner/webhook: http://127.0.0.1:8644/p/gaudi-planner/webhooks/<route>
+  gaudi-scribe/api_server: http://127.0.0.1:8642/p/gaudi-scribe/v1
+  gaudi-scribe/webhook: http://127.0.0.1:8644/p/gaudi-scribe/webhooks/<route>
+  gaudi-synapse/api_server: http://127.0.0.1:8642/p/gaudi-synapse/v1
+  gaudi-synapse/webhook: http://127.0.0.1:8644/p/gaudi-synapse/webhooks/<route>
+  gaudi-sysadmin/api_server: http://127.0.0.1:8642/p/gaudi-sysadmin/v1
+  gaudi-sysadmin/webhook: http://127.0.0.1:8644/p/gaudi-sysadmin/webhooks/<route>
+  gaudi-watcher/api_server: http://127.0.0.1:8642/p/gaudi-watcher/v1
+  gaudi-watcher/webhook: http://127.0.0.1:8644/p/gaudi-watcher/webhooks/<route>
+  kanban-board-architect/api_server: http://127.0.0.1:8642/p/kanban-board-architect/v1
+  kanban-board-architect/webhook: http://127.0.0.1:8644/p/kanban-board-architect/webhooks/<route>
+  kanban-orchestrator/api_server: http://127.0.0.1:8642/p/kanban-orchestrator/v1
+  kanban-orchestrator/webhook: http://127.0.0.1:8644/p/kanban-orchestrator/webhooks/<route>
+  kanban-worker/api_server: http://127.0.0.1:8642/p/kanban-worker/v1
+  kanban-worker/webhook: http://127.0.0.1:8644/p/kanban-worker/webhooks/<route>
+  kworker-muse-probe/api_server: http://127.0.0.1:8642/p/kworker-muse-probe/v1
+  kworker-muse-probe/webhook: http://127.0.0.1:8644/p/kworker-muse-probe/webhooks/<route>
+  plugin-ab/api_server: http://127.0.0.1:8642/p/plugin-ab/v1
+  plugin-ab/webhook: http://127.0.0.1:8644/p/plugin-ab/webhooks/<route>
+  research/api_server: http://127.0.0.1:8642/p/research/v1
+  research/webhook: http://127.0.0.1:8644/p/research/webhooks/<route>
+  sampling-test/api_server: http://127.0.0.1:8642/p/sampling-test/v1
+  sampling-test/webhook: http://127.0.0.1:8644/p/sampling-test/webhooks/<route>
+  sj-auditor/api_server: http://127.0.0.1:8642/p/sj-auditor/v1
+  sj-auditor/webhook: http://127.0.0.1:8644/p/sj-auditor/webhooks/<route>
+  sj-ops/api_server: http://127.0.0.1:8642/p/sj-ops/v1
+  sj-ops/webhook: http://127.0.0.1:8644/p/sj-ops/webhooks/<route>
+  sj-orchestrator/api_server: http://127.0.0.1:8642/p/sj-orchestrator/v1
+  sj-orchestrator/webhook: http://127.0.0.1:8644/p/sj-orchestrator/webhooks/<route>
+  sj-planner/api_server: http://127.0.0.1:8642/p/sj-planner/v1
+  sj-planner/webhook: http://127.0.0.1:8644/p/sj-planner/webhooks/<route>
+  sj-scribe/api_server: http://127.0.0.1:8642/p/sj-scribe/v1
+  sj-scribe/webhook: http://127.0.0.1:8644/p/sj-scribe/webhooks/<route>
+  sj-watcher/api_server: http://127.0.0.1:8642/p/sj-watcher/v1
+  sj-watcher/webhook: http://127.0.0.1:8644/p/sj-watcher/webhooks/<route>
+  sjp-auditor/api_server: http://127.0.0.1:8642/p/sjp-auditor/v1
+  sjp-auditor/webhook: http://127.0.0.1:8644/p/sjp-auditor/webhooks/<route>
+  sjp-ops/api_server: http://127.0.0.1:8642/p/sjp-ops/v1
+  sjp-ops/webhook: http://127.0.0.1:8644/p/sjp-ops/webhooks/<route>
+  sjp-orchestrator/api_server: http://127.0.0.1:8642/p/sjp-orchestrator/v1
+  sjp-orchestrator/webhook: http://127.0.0.1:8644/p/sjp-orchestrator/webhooks/<route>
+  sjp-planner/api_server: http://127.0.0.1:8642/p/sjp-planner/v1
+  sjp-planner/webhook: http://127.0.0.1:8644/p/sjp-planner/webhooks/<route>
+  sjp-scribe/api_server: http://127.0.0.1:8642/p/sjp-scribe/v1
+  sjp-scribe/webhook: http://127.0.0.1:8644/p/sjp-scribe/webhooks/<route>
+  sjp-watcher/api_server: http://127.0.0.1:8642/p/sjp-watcher/v1
+  sjp-watcher/webhook: http://127.0.0.1:8644/p/sjp-watcher/webhooks/<route>
+  sjproto-butler/api_server: http://127.0.0.1:8642/p/sjproto-butler/v1
+  sjproto-butler/webhook: http://127.0.0.1:8644/p/sjproto-butler/webhooks/<route>
+  sw-architect/api_server: http://127.0.0.1:8642/p/sw-architect/v1
+  sw-architect/webhook: http://127.0.0.1:8644/p/sw-architect/webhooks/<route>
+  sw-dev-a/api_server: http://127.0.0.1:8642/p/sw-dev-a/v1
+  sw-dev-a/webhook: http://127.0.0.1:8644/p/sw-dev-a/webhooks/<route>
+  sw-dev-b/api_server: http://127.0.0.1:8642/p/sw-dev-b/v1
+  sw-dev-b/webhook: http://127.0.0.1:8644/p/sw-dev-b/webhooks/<route>
+  sw-devops/api_server: http://127.0.0.1:8642/p/sw-devops/v1
+  sw-devops/webhook: http://127.0.0.1:8644/p/sw-devops/webhooks/<route>
+  sw-docs/api_server: http://127.0.0.1:8642/p/sw-docs/v1
+  sw-docs/webhook: http://127.0.0.1:8644/p/sw-docs/webhooks/<route>
+  sw-pm/api_server: http://127.0.0.1:8642/p/sw-pm/v1
+  sw-pm/webhook: http://127.0.0.1:8644/p/sw-pm/webhooks/<route>
+  sw-qa/api_server: http://127.0.0.1:8642/p/sw-qa/v1
+  sw-qa/webhook: http://127.0.0.1:8644/p/sw-qa/webhooks/<route>
+  sw-reviewer/api_server: http://127.0.0.1:8642/p/sw-reviewer/v1
+  sw-reviewer/webhook: http://127.0.0.1:8644/p/sw-reviewer/webhooks/<route>
+  sw-ux/api_server: http://127.0.0.1:8642/p/sw-ux/v1
+  sw-ux/webhook: http://127.0.0.1:8644/p/sw-ux/webhooks/<route>
+  swco-butler/api_server: http://127.0.0.1:8642/p/swco-butler/v1
+  swco-butler/webhook: http://127.0.0.1:8644/p/swco-butler/webhooks/<route>
+  unsloth-litellm/api_server: http://127.0.0.1:8642/p/unsloth-litellm/v1
+  unsloth-litellm/webhook: http://127.0.0.1:8644/p/unsloth-litellm/webhooks/<route>
+
+⚠ Profiles 'default' and 'coding' both hold the same telegram credential (TELEGRAM_BOT_TOKEN): one platform token can serve only one gateway, so the bot answers from whichever profile claims it first and the other's adapter is parked. Give 'coding' its own bot token, or remove TELEGRAM_BOT_TOKEN from the profile that should not own it (or keep it in default and route coding's chats with profile_routes — gateway.profile_routes in default's config.yaml), then run hermes gateway migrate --multiplex.
+⚠ Profiles 'default' and 'coding' both hold the same slack credential (SLACK_APP_TOKEN/SLACK_BOT_TOKEN): one platform token can serve only one gateway, so the bot answers from whichever profile claims it first and the other's adapter is parked. Give 'coding' its own bot token, or remove SLACK_APP_TOKEN/SLACK_BOT_TOKEN from the profile that should not own it (or keep it in default and route coding's chats with profile_routes — gateway.profile_routes in default's config.yaml), then run hermes gateway migrate --multiplex.
+⚠ Profiles 'default' and 'kworker-muse-probe' both hold the same telegram credential (TELEGRAM_BOT_TOKEN): one platform token can serve only one gateway, so the bot answers from whichever profile claims it first and the other's adapter is parked. Give 'kworker-muse-probe' its own bot token, or remove TELEGRAM_BOT_TOKEN from the profile that should not own it (or keep it in default and route kworker-muse-probe's chats with profile_routes — gateway.profile_routes in default's config.yaml), then run hermes gateway migrate --multiplex.
+⚠ Profiles 'default' and 'kworker-muse-probe' both hold the same slack credential (SLACK_APP_TOKEN/SLACK_BOT_TOKEN): one platform token can serve only one gateway, so the bot answers from whichever profile claims it first and the other's adapter is parked. Give 'kworker-muse-probe' its own bot token, or remove SLACK_APP_TOKEN/SLACK_BOT_TOKEN from the profile that should not own it (or keep it in default and route kworker-muse-probe's chats with profile_routes — gateway.profile_routes in default's config.yaml), then run hermes gateway migrate --multiplex.
+2026-10-23T16:43:01Z issuing graceful drain-restart: hermes gateway restart (SIGUSR1 drain, systemd relaunch)
+✗ Refusing to restart the gateway: 4 live session(s) would be interrupted.
+  • chat turn agent:main:telegram:dm:8158007517 pid 1648307, running 17s [model qwen38-flash-fp8]
+  • chat turn agent:main:local:dm:local-004ff51549c8b7a8bc7a2b9e34fbc5a0bad46d8e00c916fecdebe1ce28d73361 pid 1648307, running 2m19s [model qwen38-flash-fp8, tool terminal]
+  • managed run pid 1648307
+  • managed run pid 1648307
+  Let them finish, or interrupt them deliberately:
+    hermes gateway restart --yes   # interrupts 4 live session(s)
+2026-10-23T16:43:03Z hermes gateway restart exit code: 1
+2026-10-23T16:45:03Z pid unchanged after restart command (1648307) — sending direct SIGUSR1 drain

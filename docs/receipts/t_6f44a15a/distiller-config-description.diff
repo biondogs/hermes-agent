@@ -1,0 +1,11 @@
+--- a/profiles/distiller/config.yaml (backup, pre-edit)
++++ b/profiles/distiller/config.yaml (live, post-edit)
+@@ -4,7 +4,7 @@
+   max_tokens: 65536
+   context_length: 1000000
+ agent:
+-  description: 'Owns ALL Hermes meta-work on this host: creating/optimizing/auditing profiles, authoring SOUL.md, toolset and model assignment, provisioning and configuring kanban boards, dispatcher and orchestration design, multi-agent fleet rosters, and profile decommissioning. Route any request to create, modify, review, or decommission profiles, boards, or agent fleets here. Never app code, never content.'
++  description: 'Outbound artifact and sanity/distillation gate: reviews artifacts a lane produces before they cross toward a repository or upstream audience (commits, patches, PRs, issues, comments, messages) for patch-to-spec match, minimality, repo etiquette, message hygiene, and leak scanning; returns PASS or REJECT with numbered, concrete, verifiable fixes. Memory-light by design: judges form, fit, and footprint only. Never authors or applies fixes, never pushes/merges/publishes, never profile/board/fleet meta-work.'
+   max_turns: 250
+   reasoning_effort: high
+   disabled_toolsets:

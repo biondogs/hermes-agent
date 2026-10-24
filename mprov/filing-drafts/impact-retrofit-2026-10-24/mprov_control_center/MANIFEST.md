@@ -39,7 +39,7 @@ against main tip `058886d` (fetched 2026-10-24); PR file lists from
 | 330 | issue | 122 | zero ruff/flake8/shellcheck refs in workflows at tip |
 | 331 | issue | 146 | `request.user = User.objects.get(username='admin')` live `common/views.py:214` |
 | 342 | PR | 165 | `## Impact` before `## Testing`; files from real diff |
-| 349 | PR | 141 | `## Impact` before `Fixes #322`; files from real diff |
+| 349 | PR | 144 | GATE2 re-draft (see addendum): `## Impact` kept verbatim; `Fixes #322` moved to FS5 line 1; `Assisted by JoeBot` trailer added (operator standing rule); file ends LF+LF per pack convention (one-byte finding-1 fix) |
 
 ## Skipped — receipts (live enumeration 2026-10-24: 88 open items)
 
@@ -79,3 +79,29 @@ filings): #19 #45 #123 #124 #128.
   and each names >=1 repo-relative file path (gate check 5b).
 - Original bodies already carry severity lines / Rule-A trailers where
   required; nothing else added or removed.
+
+## GATE2 addendum — item 349 re-draft (t_b6698a16, 2026-10-24)
+
+Gate t_25418f17 (VERDICT comment 723) rejected 349.md: under the pack
+convention (file = exact body + one artifact trailing newline) the file's
+single final LF meant the represented body dropped the live body's trailing
+LF — delete-block != live by one 0x0a. The same verdict flagged 349's
+pre-existing FS5 deviations (Fixes #322 at bottom, no `Assisted by JoeBot`
+trailer); operator standing rule requires the trailer on every mprov PR,
+so those deviations are corrected in the same single PATCH rather than a
+second churn edit (T-A/T-B anti-churn precedent; same procedure as
+js 199/200 re-draft t_87d974be).
+
+Revised 349.md = live body with exactly three documented text ops plus the
+EOF fix — no other changes: (1) gate-approved `## Impact` block inserted
+verbatim at its approved position; (2) `Fixes #322` moved to FS5 line 1
+(`^Fixes #322$` standalone); (3) `Assisted by JoeBot` exact last line after
+the pre-existing "Requesting review" line (blank-line separated). File now
+ends LF+LF (body retains live's trailing-LF semantics + artifact newline).
+Asserted programmatically (build_redraft.py, 18/18 PASS): stripping trailer,
+un-moving Fixes, deleting the Impact block restores the live body
+byte-identically (858 B, sha256 b1bc4d3e…ac72). Words 144 <= 175; leak-scan
+clean. PATCH bytes (payload = file minus artifact LF, sha256 2ca5cdaa…e384)
+go to GitHub via REST PATCH only after GATE2 PASS, with GET read-back
+byte-verify; receipt in RECEIPTS.json next to this manifest. 342 and the
+20 issues are untouched — approved verbatim, not re-gated.

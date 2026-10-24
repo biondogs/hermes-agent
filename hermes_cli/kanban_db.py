@@ -314,6 +314,13 @@ KANBAN_RATE_LIMIT_EXIT_CODE = 75
 # the FIRST occurrence instead of spending ``failure_limit`` identical spawns. 78 == BSD EX_CONFIG.
 KANBAN_TERMINAL_PROVIDER_EXIT_CODE = 78
 
+# Worker exit "owner refused the spawn because it is draining": the gateway/runtime is in a
+# graceful-restart deferred drain (SIGUSR1 / `hermes update` window) and answered
+# ``runtime_draining`` — a HOST condition, not a card failure. Nothing about the card ran
+# (no admission marker), so the requeue must never consume the retry budget or trip the
+# breaker; the respawn guard spaces the retries like a rate-limit cooldown. 76 == BSD EX_PROTOCOL.
+KANBAN_DRAIN_REFUSED_EXIT_CODE = 76
+
 
 def _resolve_crash_grace_seconds() -> int:
     """``HERMES_KANBAN_CRASH_GRACE_SECONDS`` (0 = immediate, for tests) else default."""

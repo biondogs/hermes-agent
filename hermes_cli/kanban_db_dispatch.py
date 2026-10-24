@@ -142,6 +142,12 @@ class DispatchResult:
     """Task ids whose workers bailed on a provider rate-limit / quota wall
     (EX_TEMPFAIL sentinel exit) and were released to ``ready`` WITHOUT counting
     a failure — a long quota window must never trip the circuit breaker."""
+    drain_refused: list[str] = field(default_factory=list)
+    """Task ids whose workers exited on the owner-drain sentinel
+    (``KANBAN_DRAIN_REFUSED_EXIT_CODE``: the profile owner refused the spawn
+    because the runtime/gateway is draining) and were released to ``ready``
+    WITHOUT counting a failure — a restart/update window must never burn the
+    card's retry budget. Spaced by the respawn guard's rate-limit cooldown."""
     skipped_locked: bool = False
     """True when another process held the board's dispatch lock: this tick did
     no DB writes; the lock holder is making progress on the same board."""
@@ -170,6 +176,8 @@ def describe_suppression(results: Iterable[Optional[DispatchResult]]) -> str:
             counts[reason] = counts.get(reason, 0) + 1
         if res.rate_limited:
             counts["rate_limited"] = counts.get("rate_limited", 0) + len(res.rate_limited)
+        if res.drain_refused:
+            counts["drain_refused"] = counts.get("drain_refused", 0) + len(res.drain_refused)
         if res.skipped_locked:
             counts["skipped_locked"] = counts.get("skipped_locked", 0) + 1
         if res.memory_pressure:
@@ -249,6 +257,8 @@ def _exit_code_kind(code: int) -> tuple[str, int]:
         return ("clean_exit", 0)
     if code == _kb.KANBAN_RATE_LIMIT_EXIT_CODE:
         return ("rate_limited", code)
+    if code == _kb.KANBAN_DRAIN_REFUSED_EXIT_CODE:
+        return ("drain_refused", code)
     if code == _kb.KANBAN_TERMINAL_PROVIDER_EXIT_CODE:
         return ("terminal_provider", code)
     return ("nonzero_exit", code)
@@ -1046,14 +1056,20 @@ class _DeadWorker:
     event_payload: dict
     protocol_violation: bool = False
     rate_limited: bool = False
+    drain_refused: bool = False
+    """``KANBAN_DRAIN_REFUSED_EXIT_CODE``: the owner refused the spawn because the
+    runtime/gateway is draining (graceful-restart deferred drain, update window). A host
+    condition — requeued WITHOUT counting a failure, spaced by the respawn guard's cooldown."""
     terminal_provider: bool = False
     """``KANBAN_TERMINAL_PROVIDER_EXIT_CODE``: the provider rejected the worker's
     credential/model — trips the breaker on this first occurrence."""
 
     @property
     def run_outcome(self) -> str:
-        # A rate-limited requeue is recorded as ``rate_limited`` so board history
-        # doesn't show a phantom crash for a quota wall.
+        # A rate-limited / drain-refused requeue is recorded under its own outcome so board
+        # history doesn't show a phantom crash for a quota wall or a host drain window.
+        if self.drain_refused:
+            return "drain_refused"
         return "rate_limited" if self.rate_limited else "crashed"
 
 
@@ -1068,7 +1084,7 @@ def _classify_dead_worker(
     worker see WHY instead of a bare label; a rate-limited requeue does not need it.
     """
     dead = _classify_dead_worker_exit(pid, claimer, exit_code, task_id=task_id, board=board)
-    if task_id and not dead.rate_limited:
+    if task_id and not (dead.rate_limited or dead.drain_refused):
         worker_output = _worker_final_output(task_id, board=board)
         if worker_output:
             dead.error_text += f"{WORKER_OUTPUT_SEP}{worker_output!r}"
@@ -1122,6 +1138,21 @@ def _classify_dead_worker_exit(
             {"pid": pid, "claimer": claimer, "exit_code": code},
             rate_limited=True,
         )
+    if kind == "drain_refused":
+        # The owner refused the spawn because the runtime/gateway is draining (a
+        # graceful-restart deferred drain or an update window). NOTHING about the
+        # card ran — the admission marker was never written — so this is a host
+        # condition, not a card failure: requeue WITHOUT counting against the
+        # retry budget and without a gave_up, exactly like a quota wall but with
+        # its own outcome so board history stays tellable apart.
+        return _DeadWorker(
+            kind, code,
+            f"pid {pid} exited drain-refused (owner draining: graceful-restart/update "
+            "window) — requeued without counting a failure",
+            "drain_refused",
+            {"pid": pid, "claimer": claimer, "exit_code": code},
+            drain_refused=True,
+        )
     if kind == "terminal_provider":
         # The worker classified its own provider failure as unhealable (credential
         # revoked, model gone): every further spawn would hit the same wall, so
@@ -1153,6 +1184,9 @@ class _CrashSweep:
 
     crashed: list[str] = field(default_factory=list)
     rate_limited: list[str] = field(default_factory=list)
+    drain_refused: list[str] = field(default_factory=list)
+    # Workers that exited ``KANBAN_DRAIN_REFUSED_EXIT_CODE`` (owner draining): requeued
+    # without counting, like ``rate_limited`` but a distinct outcome.
     # ``(task_id, pid, claimer, dead_worker)``: accounted after the txn via
     # ``_record_task_failure`` (needs its own write_txn).
     crash_details: list[tuple[str, int, str, _DeadWorker]] = field(default_factory=list)
@@ -1221,18 +1255,22 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
                 "outcome": dead.run_outcome,
                 "retry_status": retry_status,
             })
-            if dead.rate_limited or dead.protocol_violation:
+            if dead.rate_limited or dead.protocol_violation or dead.drain_refused:
                 # Stamp last_failure_error WITHOUT touching ``consecutive_failures``:
                 # a rate-limited requeue must show ``check_respawn_guard`` a quota
                 # blocker; a below-budget protocol violation never reaches
                 # ``_record_task_failure`` (which stamps this column), yet the
-                # board UI and retry worker need the corrective message.
+                # board UI and retry worker need the corrective message; a
+                # drain-refused requeue shares the rate-limit cooldown so the
+                # stamped text must never re-trap it as a blocker.
                 conn.execute(
                     "UPDATE tasks SET last_failure_error = ? WHERE id = ?",
                     (dead.error_text[:500], row["id"]),
                 )
             if dead.rate_limited:
                 sweep.rate_limited.append(row["id"])
+            elif dead.drain_refused:
+                sweep.drain_refused.append(row["id"])
             else:
                 sweep.crashed.append(row["id"])
                 sweep.crash_details.append((row["id"], pid, row["claim_lock"], dead))
@@ -1326,17 +1364,20 @@ def detect_crashed_workers(conn: sqlite3.Connection, board: Optional[str] = None
     tasks claimed by *this host* only — other hosts' PIDs are meaningless.
     Clean exit while ``running`` is a protocol violation with a bounded
     violation-only retry budget; ``KANBAN_RATE_LIMIT_EXIT_CODE`` is a quota
-    wall, released WITHOUT counting a failure and surfaced via the
-    ``_last_rate_limited`` attribute (the return stays crashed-only).
+    wall and ``KANBAN_DRAIN_REFUSED_EXIT_CODE`` an owner-drain refusal —
+    both released WITHOUT counting a failure, surfaced via the
+    ``_last_rate_limited`` / ``_last_drain_refused`` attributes (the return
+    stays crashed-only).
     """
     sweep = _reclaim_dead_workers(conn, board=board)
     # Outside the main txn: account each crash and maybe trip the breaker.
     auto_blocked = _account_crashes(conn, sweep.crash_details) if sweep.crash_details else []
     # Side-channel attributes keep the public ``list[str]`` return stable;
     # ``dispatch_once`` reads them to populate ``DispatchResult``. Rate-limited
-    # requeues did NOT count a failure and are NOT crashes.
+    # and drain-refused requeues did NOT count a failure and are NOT crashes.
     detect_crashed_workers._last_auto_blocked = auto_blocked  # type: ignore[attr-defined]
     detect_crashed_workers._last_rate_limited = sweep.rate_limited  # type: ignore[attr-defined]
+    detect_crashed_workers._last_drain_refused = sweep.drain_refused  # type: ignore[attr-defined]
     # Fired only now, after the reclaim txn AND breaker accounting have
     # committed, so subscribers always observe fully durable board state.
     if sweep.exited_hook_payloads and _kb._kanban_observer_consumed("on_kanban_worker_exited"):
@@ -1587,7 +1628,8 @@ def check_respawn_guard(
     #    LATEST run only: a newer crash/completion supersedes the rate-limit run.
     #    An infrastructure spawn refusal (#114720) shares the cooldown: the host
     #    condition is not the card's, so it retries forever, spaced, and never
-    #    reaches the breaker.
+    #    reaches the breaker. A drain-refused requeue (owner draining: graceful
+    #    restart / update window) shares it for the same reason.
     rl_cooldown = _kb._resolve_rate_limit_cooldown_seconds()
     latest_run = conn.execute(
         "SELECT outcome, ended_at, metadata FROM task_runs "
@@ -1600,7 +1642,7 @@ def check_respawn_guard(
             ended_at = _kb._to_epoch(latest_run["ended_at"])
             if ended_at is not None and (now - ended_at) < rl_cooldown:
                 return "infrastructure_cooldown"
-    if latest_run is not None and latest_run["outcome"] == "rate_limited":
+    if latest_run is not None and latest_run["outcome"] in ("rate_limited", "drain_refused"):
         if rl_cooldown <= 0:
             # Cooldown disabled — respawn immediately, skipping blocker_auth so
             # the stamped rate-limit text doesn't re-trap the task.
@@ -2224,10 +2266,12 @@ def _run_reclaim_phase(
         result.reconciled_orphans = reconcile_orphaned_running(conn)
     result.stale = detect_stale_running(conn, stale_timeout_seconds=stale_timeout_seconds)
     result.crashed = detect_crashed_workers(conn, board=board)
-    # Side-channel attributes (see detect_crashed_workers); rate-limited tasks
-    # went back to ``ready`` and the respawn guard defers them until quota clears.
+    # Side-channel attributes (see detect_crashed_workers); rate-limited and
+    # drain-refused tasks went back to ``ready`` and the respawn guard defers
+    # them until quota clears / the drain window ends (cooldown-spaced).
     result.auto_blocked.extend(getattr(detect_crashed_workers, "_last_auto_blocked", []))
     result.rate_limited.extend(getattr(detect_crashed_workers, "_last_rate_limited", []))
+    result.drain_refused.extend(getattr(detect_crashed_workers, "_last_drain_refused", []))
     result.timed_out = enforce_max_runtime(conn)
     result.promoted = _kb.recompute_ready(conn, failure_limit=failure_limit)
 

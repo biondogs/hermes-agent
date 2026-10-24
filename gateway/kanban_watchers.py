@@ -295,6 +295,7 @@ class GatewayKanbanWatchersMixin:
         dispatcher = _KanbanDispatcher(_kb, settings)
 
         logger.info("kanban dispatcher: embedded in gateway (interval=%.1fs)", interval)
+        drain_notice_logged = False
         while self._running:
             try:
                 # Reap zombies before per-board work so a board DB failure
@@ -311,7 +312,25 @@ class GatewayKanbanWatchersMixin:
                 # dispatch while paused; running workers finish naturally.
                 if not _kanban_dispatch_allowed():
                     bad_ticks = 0
+                elif getattr(self, "_draining", False):
+                    # Gateway draining (SIGUSR1 deferred drain / service restart): every
+                    # spawn would be refused by its owner with ``runtime_draining`` within
+                    # seconds and — before this gate — booked as a crash, burning retry
+                    # budgets until cards parked ``gave_up`` that never ran (observed in a
+                    # live graceful bounce: 8 cards across 3 boards). Hold ALL claims and
+                    # spawns until the drain ends. Zombie reaping above still runs, and
+                    # holding ticks cannot strand a card: the restart's retry regime
+                    # re-queues drained in-flight work when the new gateway takes over
+                    # the dispatcher lock.
+                    if not drain_notice_logged:
+                        logger.info(
+                            "kanban dispatcher: gateway draining — holding dispatch ticks "
+                            "(no claims, no spawns) until the drain ends"
+                        )
+                        drain_notice_logged = True
+                    bad_ticks = 0
                 else:
+                    drain_notice_logged = False
                     # Re-read the auto-decompose toggle live so disabling it
                     # takes effect on the next tick, not on restart.
                     _ad_enabled, _ad_per_tick = _resolve_auto_decompose_settings(_load_config)

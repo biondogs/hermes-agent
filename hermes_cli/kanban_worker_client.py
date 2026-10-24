@@ -90,6 +90,14 @@ async def run(params, board_db):
             if not _restartable(exc):
                 raise
             if claim.silent_for() >= OWNER_WAIT_S:
+                if claim.admission_id is None and _is_drain_refusal(exc):
+                    # F27: a drain refusal that never admitted the claim (no marker written,
+                    # nothing about the card ran) that outlived the owner-wait (deferred drains
+                    # run past 10 min) propagates as the REFUSAL itself, not the generic silent
+                    # error, so ``_submit`` maps it to the drain-refused sentinel exit and the
+                    # dispatcher books a non-counting requeue — the host's drain, never the
+                    # card's failure. An ALREADY-ADMITTED attempt keeps the silent-error contract.
+                    raise
                 # WebSocket errors can embed remote bodies; only our own messages are quoted.
                 status = getattr(getattr(exc, 'response', None), 'status_code', None)
                 detail = exc if isinstance(exc, GatewayClientError) else type(exc).__name__ + (
@@ -172,6 +180,14 @@ def main():
     return rc
 
 
+def _is_drain_refusal(exc) -> bool:
+    """True when the owner refused the spawn because it is DRAINING (graceful-restart deferred
+    drain / ``hermes update`` window): either the connect-time ``GatewayUnavailableError``
+    (``state == 'draining'``) or the ``GatewayRPCError`` whose bounded reason is
+    ``runtime_draining``. A host condition, never a card failure."""
+    return getattr(exc, 'state', None) == 'draining' or str(exc) == 'runtime_draining'
+
+
 def _submit():
     try:
         params = {'board': os.environ['HERMES_KANBAN_BOARD'], 'task_id': os.environ['HERMES_KANBAN_TASK'],
@@ -187,6 +203,11 @@ def _submit():
         return asyncio.run(run(params, board_db))
     except (KeyError, ValueError, OSError) as exc:
         print(f'Kanban owner refused: {exc}', file=sys.stderr)
+        if _is_drain_refusal(exc):
+            # Refused for the host's drain window — exit on the dedicated sentinel so the
+            # dispatcher books a non-counting requeue instead of a crash against the card.
+            from hermes_cli.kanban_db import KANBAN_DRAIN_REFUSED_EXIT_CODE
+            return KANBAN_DRAIN_REFUSED_EXIT_CODE
         return 1
 
 

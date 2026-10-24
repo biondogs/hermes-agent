@@ -1,0 +1,1 @@
+Fenced worker sessions: scoped kanban_* tools silently redirect an explicit board= to the pinned board — kanban_create(board=X) returns ok:true and misfiles the card

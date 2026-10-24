@@ -29,7 +29,10 @@
 # full run log in ~/.hermes/logs/gateway-bounce-runs/<ts>.log.
 
 set -u
-export HERMES_HOME="${HERMES_HOME:-/home/arch/.hermes}"
+# PIN the root home: the caller is often a dispatched worker whose HERMES_HOME points at a
+# profile home, but the gateway log, default-board DB and the default bot's Telegram
+# credential (for `hermes send`) all live under the ROOT home.
+export HERMES_HOME="/home/arch/.hermes"
 export PATH="/home/arch/.local/bin:$PATH"
 
 SCRIPT_PATH="/home/arch/.hermes/scripts/gateway-graceful-bounce.sh"

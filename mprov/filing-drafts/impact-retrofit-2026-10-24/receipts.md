@@ -170,3 +170,21 @@ Closes the held-for-repair line above. Re-draft (pack commit 5c84fcc: finding-1 
 | mprov_control_center | pr#349 | patched | b1bc4d3ee0927086→2ca5cdaa2161e9f6 | read-back byte-compare MATCH (1202 B, head 47934c7 unchanged, reviewer uberlinuxguy still requested, 0 reviews) |
 
 Full byte-level receipts: `mprov_control_center/RECEIPTS.json`. Words 103→144 (cap 175). Patch ts 2026-10-24T15:14:44Z.
+
+## Addendum — CC engaged re-drafts apply (t_8d3c01cc, post-gate t_73dc0a37 PASS)
+
+Closes the 11 engaged-skip lines in the main table above. The receipted single uberlinuxguy triage comment per issue (MANIFEST THREAD RECEIPTS, ids 6379586565–6379590659) was whitelisted by the disposition (t_00ad011d); pre-PATCH re-checks confirmed open / biondogs / thread unchanged / live body == rev2-minus-Impact-block. Payload = REV2 pack 1d196af file bytes exactly (no trailing LF), re-hashed 11/11 against MANIFEST pre-PATCH. Body-only REST PATCH (B1 310 312 315 318 320 321; B2 322 325 327 329 331), GET read-back byte-compare via raw JSON (no jq LF); final independent sweep all 11 CLEAN (titles, labels, state, author, threads unchanged; zero re-skips, zero failures).
+
+| repo | item | action | before→after sha16 | result |
+| --- | --- | --- | --- | --- |
+| mprov_control_center | i#310 | patched | 2997096711465650→b204b557a50eeaf8 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:48Z) |
+| mprov_control_center | i#312 | patched | 1a8b42688797cde4→daa4ce2791398c8b | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:50Z) |
+| mprov_control_center | i#315 | patched | 3318c0a6e4fbc06a→e6d52dba09e4ba20 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:52Z) |
+| mprov_control_center | i#318 | patched | cc92169d924f7f27→cdf7b08a88c28b4e | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:53Z) |
+| mprov_control_center | i#320 | patched | eea9ea9141226af8→7c03230faacd00dc | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:55Z) |
+| mprov_control_center | i#321 | patched | 94e7ef8dcf8afa3f→3813bc44192f2ad6 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:26:57Z) |
+| mprov_control_center | i#322 | patched | c10c12d34ef764c9→8218a3e7e2280b37 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:27:01Z) |
+| mprov_control_center | i#325 | patched | 2d721885ccf41ff4→b5162dc69e24f063 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:27:03Z) |
+| mprov_control_center | i#327 | patched | 2f752372272288f2→8ead1bfddcc78148 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:27:04Z) |
+| mprov_control_center | i#329 | patched | a0ea8f1e0bd510b8→c42ec63efffcffb7 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:27:06Z) |
+| mprov_control_center | i#331 | patched | 98c532fa085957a9→580578e64498a569 | read-back byte-compare MATCH (rev2 engaged re-draft, patch ts 2026-10-24T15:27:07Z) |

@@ -32,7 +32,7 @@ Read-side twin: `kanban_show(task_id=<card on board-b>, board="board-b")` return
 
 ## Suggested fix
 
-Loud, structured refusal at the tool layer — the one place where `board=` is unambiguously caller intent. In `tools/kanban_tools.py::_board`, after the existing profile-pin fence:
+Loud, structured refusal at the tool layer — the one place where `board=` is unambiguously caller intent. In `tools/kanban_tools.py::_board` (which at main performs no board-intent check at all):
 
 ```python
 db_pin = (os.environ.get("HERMES_KANBAN_DB", "") or "").strip()

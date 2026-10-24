@@ -1,5 +1,5 @@
 #!/bin/bash
-# gateway-graceful-bounce.sh — CANONICAL graceful Hermes-gateway bounce (v1.0, t_d2f0a30f).
+# gateway-graceful-bounce.sh — CANONICAL graceful Hermes-gateway bounce (v1.1, t_d2f0a30f).
 #
 # OPERATOR RULING (2026-10-24, card t_d2f0a30f): Hermes agents MAY restart the Hermes
 # gateway. This script is the ONLY sanctioned mechanism (operator-approved method: the
@@ -14,10 +14,22 @@
 #     change: abort, write a FAILURE receipt, notify, and let a human look.
 #   * Single-flight: flock-guarded, two agents can never bounce at once.
 #   * Rate limit: MIN_INTERVAL_SECONDS (1800s = 30 min) between bounced triggers.
-#   * Self-detaching: called from inside a gateway worker (which WILL DIE in the
-#     bounce), it re-launches itself via setsid so the bounce completes after the
-#     caller is gone. The caller must bank its receipts BEFORE invoking this script
-#     and let its dispatcher auto-retry do the post-bounce verification.
+#   * Self-detaching into its OWN CGROUP (v1.1): the detached copy is launched as a
+#     transient `systemd-run --user` unit. setsid alone is NOT enough — the v1.0
+#     verification bounce proved systemd KillMode=mixed SIGKILLs cgroup stragglers at
+#     unit stop (journal 17:01:05 "Killing process … (bash)"), which killed the v1.0
+#     detached copy mid-verification. If systemd-run is unavailable the bounce ABORTS
+#     (exit 9): a detach we cannot make restart-surviving must never run.
+#   * DISPATCH PAUSE for the drain window (v1.1, orchestrator mandate 2026-10-24):
+#     the gateway's own dispatcher keeps ticking while it drains and re-spawns
+#     interrupted cards into `runtime_draining` refusals, burning their retry budgets
+#     (8 cards went gave_up→blocked in the v1.0 bounce). Until the dispatcher fix
+#     lands, this script engages the global emergency stop (`hermes pause`, ESTOP
+#     sentinel) right before the signal and resumes (`hermes resume`) after the new
+#     gateway is verified up. ESTOP halts NEW dispatch only; the drain itself is
+#     untouched. A trap disengages pause on every exit path; the retry-run checklist
+#     in the skill also checks for a stray bounce ESTOP.
+#   * The initiating worker WILL DIE in the bounce: bank receipts BEFORE triggering.
 #   * Notifies the operator once before and once after (hermes send, one line each).
 #
 # Usage:
@@ -46,6 +58,8 @@ MIN_INTERVAL_SECONDS=1800          # rate limit: >=30 min between bounced trigge
 DRAIN_CAP_SECONDS=1800             # gateway core's own deferred-drain cap (#77184)
 BOOT_WAIT_SECONDS=420              # extra wait for teardown + cold boot beyond drain cap
 MARKER_WAIT_SECONDS=300            # wait for butler/dispatcher markers post-boot
+DISPATCH_SETTLE_SECONDS=70         # one dispatcher tick (>60s interval) to observe the pause
+ESTOP_MARKER="$SCRIPT_PATH.estop-owned"  # proof THIS run engaged ESTOP (any run's trap resumes)
 OPERATOR_TARGET="telegram:8158007517"
 BUTLERS="g01-butler g02-butler gaudi-butler sjproto-butler swco-butler"
 BOARDS=(
@@ -85,6 +99,31 @@ notify() {  # one-liner to the operator; best-effort, failures recorded not fata
 }
 
 gw_pid() { systemctl --user show -p MainPID --value "$UNIT" 2>/dev/null | tr -d '[:space:]'; }
+
+# ---- dispatch pause (v1.1): `hermes pause` writes the ESTOP sentinel under the root
+#      home; the embedded dispatcher checks it EVERY tick (gateway/kanban_watchers_common
+#      _kanban_dispatch_allowed) and skips reclaim/spawn while engaged. In-flight work is
+#      never touched. This stops the drain-window `runtime_draining` retry-budget burn.
+estop_engage() {
+  /home/arch/.local/bin/hermes pause --reason "gateway graceful bounce drain window (this pause auto-resumes after restart verification; receipt log: $RECEIPTS)" >>"$RUN_LOG" 2>&1
+  echo "$$" > "$ESTOP_MARKER"
+  receipt "PAUSE-DISPATCH estop engaged (root home) — dispatch halted for drain window"
+}
+estop_release() {
+  /home/arch/.local/bin/hermes resume >>"$RUN_LOG" 2>&1
+  rm -f "$ESTOP_MARKER"
+  receipt "RESUME-DISPATCH estop cleared — dispatch re-enabled"
+}
+_resume_if_owned() {  # EXIT trap: never leave the fleet paused by a dead bounce run
+  if [ -f "$ESTOP_MARKER" ]; then
+    /home/arch/.local/bin/hermes resume >>"$RUN_LOG" 2>&1 || true
+    rm -f "$ESTOP_MARKER"
+    receipt "RESUME-DISPATCH exit-trap: recovered stray bounce ESTOP ($1)"
+  fi
+}
+# NO trap for --self-check: the preflight punch must stay read-only even if a stray
+# bounce ESTOP exists (self-check only REPORTS it; recovery is a deliberate act).
+[ "$SELF_CHECK" -eq 0 ] && trap '_resume_if_owned "exit rc=$?"' EXIT
 
 count_running() {  # $1 = slug:uri -> prints "<slug>:<n>"  (no sqlite3 CLI on host; use python3)
   local slug="${1%%:*}" db="${1#*:}"
@@ -231,12 +270,25 @@ post_notice_boards() {  # AFTER verification: one-line restart-complete note on 
 
 
 # ---- self-detach (the caller — possibly a gateway worker — will die in the bounce)
+#      The detached copy MUST live OUTSIDE the hermes-gateway.service cgroup: the unit
+#      is KillMode=mixed, and at stop systemd SIGKILLs every cgroup straggler (that is
+#      what killed the v1.0 setsid copy — journal "Killing process … (bash)"). A
+#      transient systemd --user unit has its own cgroup and survives the restart.
 if [ "$SELF_CHECK" -eq 0 ] && [ "$FOREGROUND" -eq 0 ] && [ "${GGB_DETACHED:-0}" != "1" ]; then
   TS_TAG=$(date -u '+%Y%m%dT%H%M%SZ')
   RUN_LOG="$RUNS_DIR/$TS_TAG.log"
   mkdir -p "$RUNS_DIR"
-  setsid env GGB_DETACHED=1 bash "$SCRIPT_PATH" "$@" >> "$RUN_LOG" 2>&1 < /dev/null &
-  echo "detached bounce launcher started (pid $!, run log: $RUN_LOG)"
+  UNIT_NAME="gateway-bounce-$TS_TAG"
+  GDBUS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"
+  if ! DBUS_SESSION_BUS_ADDRESS="$GDBUS" systemd-run --user --collect --quiet \
+        --unit="$UNIT_NAME" --description="canonical gateway graceful bounce ($REASON)" \
+        env GGB_DETACHED=1 bash "$SCRIPT_PATH" "$@" >> "$RUN_LOG" 2>&1 < /dev/null; then
+    echo "ABORT: cannot launch the detached copy as its own systemd unit (systemd-run --user failed)." >&2
+    echo "A bounce whose verifier would be SIGKILLed at unit stop must never run; no signal was sent." >&2
+    echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') ABORT systemd-run-unavailable reason='$REASON' — no signal sent (v1.1 cgroup law)" >> "$RECEIPTS"
+    exit 9
+  fi
+  echo "detached bounce launched as transient unit $UNIT_NAME (its own cgroup; run log: $RUN_LOG)"
   exit 0
 fi
 
@@ -276,6 +328,13 @@ if [ "$SELF_CHECK" -eq 1 ]; then
   else
     echo "rate limit: CLEAR (a bounce now would proceed)"
   fi
+  if [ -e "$HERMES_HOME/ESTOP" ]; then
+    echo "⚠️  ESTOP sentinel present (~/.hermes/ESTOP): the fleet is paused. If it is a stray"
+    echo "    bounce-window pause (see $ESTOP_MARKER / receipts for a PAUSE-DISPATCH with no"
+    echo "    matching RESUME-DISPATCH), recover with:  hermes resume"
+  else
+    echo "ESTOP: clear (dispatch-pause mechanism available)"
+  fi
   echo "self-check only — no signal sent."
   exit 0
 fi
@@ -307,13 +366,22 @@ for b in "${BOARDS[@]}"; do RUNNING_CARDS="$RUNNING_CARDS$(running_ids "$b" | tr
 MW=$(pgrep -fc 'agent.managed_worker' 2>/dev/null || echo 0)
 
 receipt "START reason='$REASON' old_pid=$OLD_PID running_cards=$TOTAL_RUNNING ($RUNNING_LINES ) managed_workers=$MW"
-notify "🔁 gateway graceful bounce starting (card law t_d2f0a30f): SIGUSR1 drain → systemd relaunch, old PID $OLD_PID, $TOTAL_RUNNING running cards in flight — reason: $REASON"
+notify "🔁 gateway graceful bounce starting (card law t_d2f0a30f): SIGUSR1 drain → systemd relaunch, old PID $OLD_PID, $TOTAL_RUNNING running cards in flight; dispatch PAUSED for the drain window (auto-resumes after verification) — reason: $REASON"
 echo_log "preflight: old_pid=$OLD_PID running_cards='$RUNNING_LINES' cards: $RUNNING_CARDS"
 
 # --- operator addendum A: one-line restart notice to every board BEFORE the signal
 pre_notice_boards
 
 # ---- bounce (graceful, single signal, no escalation)
+# v1.1: pause dispatch FIRST. While the OLD gateway drains it keeps ticking its embedded
+# dispatcher, which reclaims interrupted cards and re-spawns them into `runtime_draining`
+# refusals — each refusal counts as a crash and burned through 8 cards' retry budgets in
+# the v1.0 verification bounce (8× gave_up→blocked, orchestrator triage 2026-10-24 17:03).
+# ESTOP is checked by the dispatcher EVERY tick, so one settle interval guarantees it has
+# taken effect before any signal can interrupt work.
+estop_engage
+sleep "$DISPATCH_SETTLE_SECONDS"
+receipt "WAIT-SETTLE ${DISPATCH_SETTLE_SECONDS}s — draining dispatcher has observed the pause; signaling now"
 BOUNCE_EPOCH=$(date +%s)
 kill -USR1 "$OLD_PID"
 echo_log "SIGUSR1 sent to $OLD_PID at $(uts); deferring to gateway drain (cap ${DRAIN_CAP_SECONDS}s)."
@@ -369,6 +437,12 @@ for t in $RUNNING_CARDS; do
 done
 
 receipt "VERIFY banner=$found_banner dispatcher_boot=$found_dispatch default_bot_tg=$found_default butlers_reconnected=[$BUTLER_OK ] new_pid=$NEW_PID interrupted_cards=[$CARDS_AFTER ] reason='$REASON'"
+
+# v1.1: the NEW gateway dispatcher is up — re-enable dispatch so interrupted cards are
+# retried by fresh workers instead of sitting paused. The EXIT trap is the backstop if
+# anything below fails; the marker file prevents the trap from resuming a pause this
+# run did not own.
+estop_release
 
 # --- operator addendum A: one-line restart-complete note on the same targets
 post_notice_boards

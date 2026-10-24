@@ -1,7 +1,7 @@
 ---
 name: hermes-gateway-graceful-bounce
 description: "Use when the Hermes gateway needs a graceful drain-bounce."
-version: 1.0.0
+version: 1.1.0
 author: kanban-board-architect
 license: MIT
 metadata:
@@ -23,10 +23,10 @@ metadata:
 ## The one sanctioned path
 
 ```bash
-# preflight / status (never bounces, safe anytime):
+# preflight / status (never bounces, safe anytime; reports running cards, rate limit, stray ESTOP):
 bash ~/.hermes/scripts/gateway-graceful-bounce.sh --self-check
 
-# the bounce (self-detaches via setsid; survives the caller's death):
+# the bounce (detaches as its own systemd --user transient unit; survives the caller's death):
 bash ~/.hermes/scripts/gateway-graceful-bounce.sh --reason "<why - goes in the audit receipt>"
 ```
 
@@ -45,8 +45,16 @@ Do NOT work around it. No setsid escape hatches, no alternate kill paths, no cha
 The gateway drains and restarts, killing in-flight worker runs (they auto-retry; proven twice). Therefore:
 
 1. **Bank first**: post the receipt `kanban_comment` on your card BEFORE triggering — what you changed, commit hashes, and the instruction "retry run: verify from ~/.hermes/logs/gateway-bounce-receipts.log and complete". A `kanban_heartbeat(note=...)` with the same pointer also survives.
-2. **Trigger detached**: invoke `bash ~/.hermes/scripts/gateway-graceful-bounce.sh --reason "..."` from a terminal call; it self-detaches (setsid) and returns immediately. Never run it with `--foreground` from inside a worker.
+2. **Trigger detached**: invoke `bash ~/.hermes/scripts/gateway-graceful-bounce.sh --reason "..."` from a terminal call; it detaches as a transient `systemd-run --user` unit (own cgroup) and returns immediately. Never run it with `--foreground` from inside a worker.
 3. **Let the retry verify**: your run exits with unknown outcome and the dispatcher re-queues the card. The retry run reads the durable receipts and completes — including the **full addendum-B triage round** and the operator summary (see the triage section above).
+4. **Check for a stray pause FIRST on the retry** (v1.1): run `--self-check` and/or look for `~/.hermes/ESTOP` plus a `PAUSE-DISPATCH` receipt with no matching `RESUME-DISPATCH` receipt. The script pauses dispatch (`hermes pause`) for the drain window and auto-resumes after verification (plus an EXIT-trap backstop), but if the verifier died mid-window the fleet stays paused — recover with `hermes resume` and receipt it before anything else.
+
+## v1.0 verification-bounce lessons (2026-10-24, folded into v1.1)
+
+Two defects surfaced in the first real bounce (receipts + journal + orchestrator triage on t_d2f0a30f):
+
+1. **setsid does NOT survive a gateway stop** (F26). The unit is `KillMode=mixed`; at stop systemd SIGKILLs every process left in the unit's cgroup — the v1.0 detached copy (bash, pid 244667) died mid-verification at 17:01:05 (journal: `Killing process … (bash) with signal SIGKILL`), so HANDOVER/VERIFY/NOTICE-POST/TRIAGE never ran. **v1.1**: the detached copy is launched via `systemd-run --user --collect` (its own cgroup); if that is unavailable the bounce aborts BEFORE any signal (exit 9) — a verifier that cannot survive the restart must never run.
+2. **The draining dispatcher burns retry budgets** (orchestrator defect, separate fix card). While the OLD gateway drains, its embedded dispatcher keeps ticking, reclaims interrupted cards and re-spawns them into `runtime_draining` refusals; each ~15 s refusal counts as a crash, and 8 cards across 3 boards hit gave_up→blocked within 30 s (all were unblocked by the orchestrator). **v1.1**: the script engages the global emergency stop (`hermes pause`, ESTOP sentinel) immediately before the signal, waits one dispatcher tick (70 s) so the draining dispatcher has certainly observed it, and resumes (`hermes resume`) right after the new gateway's dispatcher-boot marker verifies. ESTOP halts NEW dispatch/new turns only; the graceful drain of in-flight work is untouched. Receipts: `PAUSE-DISPATCH` / `WAIT-SETTLE` / `RESUME-DISPATCH`.
 
 ## Board notices — operator addendum A (2026-10-24, declared mid-t_d2f0a30f)
 
@@ -68,6 +76,8 @@ After the gateway is verified back up, EVERY board gets a triage pass. The scrip
 
 - **Single-flight**: flock at `~/.hermes/scripts/.gateway-graceful-bounce.lock`; a concurrent bounce aborts (exit 3).
 - **Rate limit**: **1800 s (30 min)** minimum interval between bounce triggers; earlier attempts abort (exit 6) and still notify the operator.
+- **Restart-surviving verifier (v1.1)**: the detached copy runs as a transient `systemd-run --user` unit in its OWN cgroup; `systemd-run` unavailable → abort before any signal (exit 9), because setsid alone gets SIGKILLed by the unit stop (KillMode=mixed).
+- **Drain-window dispatch pause (v1.1)**: `hermes pause` (ESTOP) immediately before the signal, one-tick settle wait, `hermes resume` after the new dispatcher verifies; EXIT-trap backstop never leaves a stray bounce pause in place. This stops the draining dispatcher from re-spawning interrupted cards into `runtime_draining` refusals and burning their retry budgets.
 - **Pre-flight**: counts running cards on ALL 7 boards + managed workers; prefers a quiet window but does NOT abort on in-flight work — the gateway's own deferred drain (cap 1800 s, core #77184) finishes live chat turns before stop(). Kanban worker runs die and auto-retry; that is the accepted cost, so don't bounce without cause.
 - **Graceful signal, once**: `kill -USR1 <MainPID>` → gateway logs "SIGUSR1 received … graceful gateway restart", drains, exits; `systemd --user` relaunches `hermes-gateway.service`.
 - **Post-bounce verification** (script-side, into the receipts): new MainPID ≠ old; unit `active` + journal `Started` marker; gateway.log boot banner "Starting Hermes Gateway..."; dispatcher boot marker "kanban dispatcher: holding singleton dispatcher lock"; default-bot "✓ telegram connected" + same for all 5 butlers (g01-butler, g02-butler, gaudi-butler, sjproto-butler, swco-butler); per-card status of every pre-bounce running card (running=respawned / ready=re-queued / done).

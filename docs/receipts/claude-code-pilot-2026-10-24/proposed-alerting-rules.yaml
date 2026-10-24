@@ -1,0 +1,147 @@
+# PROPOSED (review-only, not applied). Plain Prometheus rule-file format (rule_files: glob).
+# With prometheus-operator, wrap the same groups in a PrometheusRule CRD.
+# No Alertmanager: alerts are visible via Prometheus /api/v1/rules, /api/v1/alerts, the
+# ALERTS{} series, and Grafana (Prometheus datasource -> data-source-managed rules, or a
+# panel on ALERTS{alertname=~"ModelsFs.*"}).
+#
+# PLACEHOLDERS to validate on the live Prometheus (impossible offline; none of this has
+# been run through promtool):
+#   - instance label for gpu417 (matched as instance=~"gpu417.*")
+#   - job name "node-exporter"
+#   - CADVISOR_DEVICE_REGEX: the imagefs block device label in kubelet cAdvisor series
+#   - node name "gpu417" in kube-state-metrics
+#
+# NOTE ON THE 85% LINE: kubelet evicts when imagefs.available < 15%, i.e. used > 85%, and
+# image GC also starts at 85%. A critical at >=85% therefore has ~zero lead time. The
+# spec'd 80/85 is implemented as written; ModelsFsEvictionImminent (>=83%) and the
+# predictive rule are added to give real lead time. See PROPOSAL.md.
+groups:
+  - name: models-fs-recording
+    interval: 1m
+    rules:
+      # kubelet's view: 1 - available/capacity (use avail, not free).
+      - record: models_fs:used_ratio
+        expr: |
+          1 - (
+            node_filesystem_avail_bytes{instance=~"gpu417.*",mountpoint="/mnt/models",fstype="xfs"}
+            /
+            node_filesystem_size_bytes{instance=~"gpu417.*",mountpoint="/mnt/models",fstype="xfs"}
+          )
+        labels: {source: node_exporter, node: gpu417}
+
+      # Independent second source: kubelet's embedded cAdvisor on the imagefs device.
+      # Keeps coverage if node-exporter is down/evicted.
+      - record: models_fs:used_ratio
+        expr: |
+          label_replace(
+            max by (device) (container_fs_usage_bytes{id="/",device=~"CADVISOR_DEVICE_REGEX"})
+            /
+            max by (device) (container_fs_limit_bytes{id="/",device=~"CADVISOR_DEVICE_REGEX"}),
+            "node", "gpu417", "", "")
+        labels: {source: cadvisor}
+
+      # Bytes of headroom before the 85% (eviction/GC) line; negative = already past.
+      - record: models_fs:bytes_to_85pct
+        expr: |
+          node_filesystem_avail_bytes{instance=~"gpu417.*",mountpoint="/mnt/models",fstype="xfs"}
+          - 0.15 * node_filesystem_size_bytes{instance=~"gpu417.*",mountpoint="/mnt/models",fstype="xfs"}
+        labels: {source: node_exporter, node: gpu417}
+
+      # Worst case across sources; alerts use this so either source can trigger.
+      - record: models_fs:used_ratio:max
+        expr: max by (node) (models_fs:used_ratio)
+
+  - name: models-fs-alerts
+    rules:
+      - alert: ModelsFsUsedWarning
+        expr: models_fs:used_ratio:max{node="gpu417"} >= 0.80
+        for: 15m
+        labels: {severity: warning, node: gpu417}
+        annotations:
+          summary: "/mnt/models on gpu417 is {{ $value | humanizePercentage }} used (>=80%)"
+          description: "Shared with the containerd imagefs root. Eviction starts above 85%. Do not stage models onto this node."
+
+      - alert: ModelsFsUsedCritical
+        expr: models_fs:used_ratio:max{node="gpu417"} >= 0.85
+        for: 2m
+        labels: {severity: critical, node: gpu417}
+        annotations:
+          summary: "/mnt/models on gpu417 >=85%: at/over kubelet imagefs eviction threshold"
+          description: "imagefs.available<15% evicts pods (non-critical first). Free space or move the containerd root."
+
+      # Lead-time rule: fires before the 85% line is reached.
+      - alert: ModelsFsEvictionImminent
+        expr: models_fs:used_ratio:max{node="gpu417"} >= 0.83
+        for: 5m
+        labels: {severity: critical, node: gpu417}
+        annotations:
+          summary: "/mnt/models on gpu417 >=83%: <2% from kubelet eviction"
+
+      # Declining-trajectory rule: predicted to cross 85% within 24h based on last 6h.
+      - alert: ModelsFsWillHit85Within24h
+        expr: predict_linear(models_fs:bytes_to_85pct{node="gpu417"}[6h], 24 * 3600) < 0
+        for: 30m
+        labels: {severity: warning, node: gpu417}
+        annotations:
+          summary: "/mnt/models on gpu417 projected to cross 85% within 24h"
+
+      # Eviction episode in progress (kube-state-metrics; independent of node-exporter).
+      - alert: NodeDiskPressure
+        expr: kube_node_status_condition{node="gpu417",condition="DiskPressure",status="true"} == 1
+        for: 1m
+        labels: {severity: critical, node: gpu417}
+        annotations:
+          summary: "gpu417 reports DiskPressure: kubelet is evicting pods"
+
+      # kube_pod_status_reason has no node label; scope by namespace/pod when validated live.
+      - alert: PodsEvictedRecently
+        expr: sum(kube_pod_status_reason{reason="Evicted"}) > 0
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "Evicted pods present (check node gpu417 / DiskPressure)"
+
+  - name: models-fs-telemetry-blindspot
+    rules:
+      # A silent exporter must not look like a healthy disk.
+      - alert: ModelsFsNodeExporterSeriesMissing
+        expr: absent(node_filesystem_avail_bytes{instance=~"gpu417.*",mountpoint="/mnt/models"})
+        for: 10m
+        labels: {severity: warning, node: gpu417}
+        annotations:
+          summary: "No node-exporter filesystem series for /mnt/models on gpu417"
+
+      - alert: ModelsFsCadvisorSeriesMissing
+        expr: absent(models_fs:used_ratio{source="cadvisor"})
+        for: 10m
+        labels: {severity: warning, node: gpu417}
+        annotations:
+          summary: "No kubelet cAdvisor imagefs series for gpu417 (check CADVISOR_DEVICE_REGEX)"
+
+      # Both sources gone: fully blind on a node that is close to eviction.
+      - alert: ModelsFsTelemetryBlind
+        expr: |
+          absent(node_filesystem_avail_bytes{instance=~"gpu417.*",mountpoint="/mnt/models"})
+          and absent(models_fs:used_ratio{source="cadvisor"})
+        for: 5m
+        labels: {severity: critical, node: gpu417}
+        annotations:
+          summary: "gpu417 /mnt/models capacity is unobservable (no exporter, no cAdvisor)"
+
+      - alert: NodeExporterDownOnGpu417
+        expr: |
+          up{job="node-exporter",instance=~"gpu417.*"} == 0
+          or absent(up{job="node-exporter",instance=~"gpu417.*"})
+        for: 5m
+        labels: {severity: critical, node: gpu417}
+        annotations:
+          summary: "node-exporter on gpu417 not scraped (possibly evicted)"
+
+      - alert: ModelsFsSnapshotStale
+        expr: |
+          time() - max(models_snapshot_timestamp_seconds{instance=~"gpu417.*"}) > 8 * 86400
+          or absent(models_snapshot_timestamp_seconds{instance=~"gpu417.*"})
+        for: 1h
+        labels: {severity: warning, node: gpu417}
+        annotations:
+          summary: "Weekly /mnt/models du snapshot is missing or >8 days old"

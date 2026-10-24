@@ -1,0 +1,64 @@
+# PROPOSED (review-only, not applied). Would be placed by a node admin at
+#   <kubelet staticPodPath>/node-exporter-guard.yaml   (commonly /etc/kubernetes/manifests/)
+# on gpu417 ONLY. Confirm staticPodPath in /var/lib/kubelet/config.yaml first.
+#
+# Why a static pod with an explicit priority (full justification in PROPOSAL.md s5):
+#  - kubelet eviction is node-local, not the scheduler: tolerations/taints, affinity,
+#    PDBs and preemption do not bind it.
+#  - Static pods are owned by the kubelet itself, not the DaemonSet controller / API server,
+#    so they are not "recreated by a controller" and are not re-admission-gated by the
+#    DiskPressure admit handler the way a non-critical DS pod is.
+#  - Static pods get no priorityClass resolution by the kubelet, so spec.priority is set
+#    DIRECTLY (system-node-critical = 2000001000) and priorityClassName set to the same
+#    value so the mirror pod passes API admission. Verify against the cluster's kubelet
+#    version that critical/static pods are skipped by the eviction manager.
+#
+# Coexistence: the existing node-exporter DaemonSet (if any) likely uses hostNetwork :9100.
+# This guard listens on :9101 and needs its own scrape job (job: node-exporter-guard) or
+# a relabel to the "node-exporter" job; the alert rules key on job="node-exporter".
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-exporter-guard
+  namespace: monitoring            # ASSUMPTION: namespace must exist for the mirror pod
+  labels:
+    app.kubernetes.io/name: node-exporter-guard
+spec:
+  hostNetwork: true
+  hostPID: false
+  priorityClassName: system-node-critical
+  priority: 2000001000
+  restartPolicy: Always
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+  containers:
+    - name: node-exporter
+      image: quay.io/prometheus/node-exporter:v1.8.2   # ASSUMPTION: pin to the version already deployed; must be pre-pulled on node
+      imagePullPolicy: IfNotPresent                    # never depend on a registry pull under DiskPressure
+      args:
+        - --web.listen-address=:9101                   # Prometheus on the obs node scrapes over the node IP
+        - --path.rootfs=/host/root
+        - --collector.disable-defaults
+        - --collector.filesystem
+        - --collector.textfile
+        - --collector.textfile.directory=/host/textfile
+        - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/kubelet/pods/.+)($|/)
+      ports:
+        - containerPort: 9101
+          hostPort: 9101
+      resources:
+        requests: {cpu: 20m, memory: 32Mi, ephemeral-storage: 64Mi}
+        limits:   {memory: 64Mi, ephemeral-storage: 64Mi}   # tiny writable layer: low usage vs. request
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: {drop: [ALL]}
+      volumeMounts:
+        - {name: root, mountPath: /host/root, readOnly: true, mountPropagation: HostToContainer}
+        - {name: textfile, mountPath: /host/textfile, readOnly: true}
+  volumes:
+    - name: root
+      hostPath: {path: /}
+    - name: textfile                    # hostPath, NOT emptyDir: survives pod restarts/evictions
+      hostPath: {path: /var/lib/node_exporter/textfile, type: DirectoryOrCreate}

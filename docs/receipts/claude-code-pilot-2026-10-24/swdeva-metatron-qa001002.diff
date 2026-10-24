@@ -1,0 +1,205 @@
+diff --git a/src/metatron/cli/app.py b/src/metatron/cli/app.py
+index 4e08589..b94760c 100644
+--- a/src/metatron/cli/app.py
++++ b/src/metatron/cli/app.py
+@@ -25,6 +25,7 @@ import typer
+ 
+ from metatron import __version__
+ from metatron.cli.remote import RemoteRegistry, RemoteTransportError
++from metatron.lifecycle import StateDirLocked, StateLogCorrupt
+ from metatron.runtime import AppRuntime, CommandReply, RequestReply
+ from metatron.server import DEFAULT_HOST, DEFAULT_PORT, create_app, resolve_bind
+ 
+@@ -39,12 +40,22 @@ app = typer.Typer(
+ _TRANSPORT_EXIT = 4  # distinct from the CommandStatus-mapped codes above
+ 
+ 
++def _open_local(state: Any, *, hold_lock: bool = False) -> AppRuntime:
++    """Open the local runtime; a locked or corrupt state dir is a typed line (I7)."""
++    try:
++        return AppRuntime.from_env(state_dir=state, hold_lock=hold_lock)
++    except (StateDirLocked, StateLogCorrupt) as exc:
++        name = "StateDirLocked" if isinstance(exc, StateDirLocked) else "StateLogCorrupt"
++        typer.echo(f"{name}: {exc}", err=True)
++        raise typer.Exit(code=1) from exc
++
++
+ def _runtime(ctx: typer.Context) -> Runtime:
+     url = ctx.obj["url"] if ctx.obj else None
+     if url:
+         return RemoteRegistry.from_env(str(url))
+     state = ctx.obj["state"] if ctx.obj else None
+-    return AppRuntime.from_env(state_dir=state)
++    return _open_local(state)
+ 
+ 
+ def _reply_exit(status: str) -> int:
+@@ -513,7 +524,7 @@ def serve(
+     if ctx.obj and ctx.obj.get("url"):
+         typer.echo("invalid: serve attaches to nothing; --url is for client verbs", err=True)
+         raise typer.Exit(code=3)
+-    runtime = AppRuntime.from_env(state_dir=ctx.obj["state"] if ctx.obj else None)
++    runtime = _open_local(ctx.obj["state"] if ctx.obj else None, hold_lock=True)
+     server_app = create_app(runtime, token=token, editor_dir=editor)
+     posture = "token-authenticated" if (token and token.strip()) else "UNAUTHENTICATED localhost"
+     typer.echo(f"metatron serving on http://{bound_host}:{bound_port} ({posture})", err=True)
+diff --git a/src/metatron/lifecycle/__init__.py b/src/metatron/lifecycle/__init__.py
+index 56710aa..bdcca03 100644
+--- a/src/metatron/lifecycle/__init__.py
++++ b/src/metatron/lifecycle/__init__.py
+@@ -53,6 +53,7 @@ from metatron.lifecycle.state_log import (
+     LoadReport,
+     LogRecord,
+     StageRunRecord,
++    StateDirLocked,
+     StateLogCorrupt,
+     TransitionRecord,
+ )
+@@ -85,6 +86,7 @@ __all__ = [
+     "StageRunOutcome",
+     "StageRunRecord",
+     "State",
++    "StateDirLocked",
+     "StateLogCorrupt",
+     "Succeeded",
+     "TransitionAccepted",
+diff --git a/src/metatron/lifecycle/engine.py b/src/metatron/lifecycle/engine.py
+index c027608..95ecd9c 100644
+--- a/src/metatron/lifecycle/engine.py
++++ b/src/metatron/lifecycle/engine.py
+@@ -66,6 +66,7 @@ from metatron.lifecycle.state_log import (
+     LoadReport,
+     LogRecord,
+     StageRunRecord,
++    StateDirLock,
+     StateLogCorrupt,
+     TransitionRecord,
+     load_snapshot,
+@@ -139,6 +140,7 @@ class LifecycleEngine:
+         *,
+         root: Path | str | None = None,
+         clock: Callable[[], float] = time.time,
++        hold_lock: bool = False,
+     ) -> None:
+         self._lock = threading.RLock()
+         self._clock = clock
+@@ -154,12 +156,23 @@ class LifecycleEngine:
+         self._next_event_seq = 1
+         self._log: AppendOnlyLog | None = None
+         self._snapshot_path: Path | None = None
++        self._dir_lock: StateDirLock | None = None
+         if root is not None:
+             base = Path(root)
+             base.mkdir(parents=True, exist_ok=True)
++            self._dir_lock = StateDirLock(base, hold=hold_lock)
+             self._log = AppendOnlyLog(base / LOG_NAME)
+             self._snapshot_path = base / SNAPSHOT_NAME
+-        self.load_report = self._load()
++        try:
++            self.load_report = self._load()
++        except BaseException:
++            self.release_state_dir()
++            raise
++
++    def release_state_dir(self) -> None:
++        """Drop the state-dir lock a serving process holds (idempotent)."""
++        if self._dir_lock is not None:
++            self._dir_lock.release()
+ 
+     # ------------------------------------------------------------------
+     # loading / replay
+diff --git a/src/metatron/lifecycle/state_log.py b/src/metatron/lifecycle/state_log.py
+index 520dc4d..2c28624 100644
+--- a/src/metatron/lifecycle/state_log.py
++++ b/src/metatron/lifecycle/state_log.py
+@@ -27,6 +27,7 @@ what it did not capture).
+ 
+ from __future__ import annotations
+ 
++import fcntl
+ import itertools
+ import json
+ import os
+@@ -46,6 +47,36 @@ class StateLogCorrupt(Exception):
+     """The append-only log is corrupt where no torn-tail explanation exists."""
+ 
+ 
++class StateDirLocked(Exception):
++    """Another process (a server) owns this state dir; direct opens refuse (QA-001)."""
++
++
++LOCK_NAME = ".lock"
++
++
++class StateDirLock:
++    """Advisory ``flock`` on ``<state>/.lock``.
++
++    ``serve`` holds it exclusively for its lifetime; every other opener only
++    probes (shared, non-blocking, released at once) and refuses by name.
++    """
++
++    def __init__(self, base: Path, *, hold: bool) -> None:
++        self._fd: int | None = os.open(base / LOCK_NAME, os.O_RDWR | os.O_CREAT, 0o644)
++        try:
++            fcntl.flock(self._fd, (fcntl.LOCK_EX if hold else fcntl.LOCK_SH) | fcntl.LOCK_NB)
++        except OSError as exc:
++            self.release()
++            raise StateDirLocked("state-dir-locked (a server owns it — pass --url)") from exc
++        if not hold:
++            self.release()
++
++    def release(self) -> None:
++        if self._fd is not None:
++            os.close(self._fd)  # closing the fd drops the flock
++            self._fd = None
++
++
+ @dataclass(frozen=True)
+ class TransitionRecord:
+     """An attributed state transition — including every rewind (I2)."""
+diff --git a/src/metatron/runtime.py b/src/metatron/runtime.py
+index c64e983..f8b55ef 100644
+--- a/src/metatron/runtime.py
++++ b/src/metatron/runtime.py
+@@ -272,9 +272,10 @@ class AppRuntime:
+         provider_client: ProviderClient | None = None,
+         provider_config: ProviderConfig | None = None,
+         clock: Callable[[], float] = time.time,
++        hold_lock: bool = False,
+     ) -> None:
+         self.spine = spine if spine is not None else EventSpine(clock=clock)
+-        self.engine = LifecycleEngine(root=state_dir, clock=clock)
++        self.engine = LifecycleEngine(root=state_dir, clock=clock, hold_lock=hold_lock)
+         self._detach_engine = self.engine.attach(EngineSpineBridge(self.spine))
+         # A persisted log predates this process: rebuild the public stream
+         # from committed facts BEFORE serving anything.
+@@ -337,6 +338,7 @@ class AppRuntime:
+         state_dir: Path | str | None = None,
+         env: Mapping[str, str] | None = None,
+         config_file: Path | None = None,
++        hold_lock: bool = False,
+     ) -> AppRuntime:
+         """Build with the provider bound iff the user configured an endpoint.
+ 
+@@ -354,7 +356,12 @@ class AppRuntime:
+                 client = create_provider(config)
+         except ConfigError as exc:
+             note = f"provider config invalid: {exc}"
+-        runtime = cls(state_dir=state_dir, provider_client=client, provider_config=config)
++        runtime = cls(
++            state_dir=state_dir,
++            provider_client=client,
++            provider_config=config,
++            hold_lock=hold_lock,
++        )
+         if note is not None:
+             runtime._provider_note = note
+         elif client is None:
+@@ -364,6 +371,7 @@ class AppRuntime:
+     def close(self) -> None:
+         """Release process-scoped resources (idempotent)."""
+         self._detach_engine()
++        self.engine.release_state_dir()
+         if self._delegator is not None:
+             self._delegator.aclose()
+ 

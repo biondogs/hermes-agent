@@ -13,7 +13,10 @@ operator-laptop bank (`laptop`), and the 2026-10-23 deletion GO was executed —
 server held exactly **24 banks**. A third ruling the same evening
 (t_7601b273): the `unsloth-litellm` profile was declared **obsolete** —
 profile deleted and its lane bank `hb-unsloth-studio` deleted — so the
-server now holds exactly **23 banks**.
+server held exactly **23 banks**. A fourth ruling (2026-10-24, t_0eec511d):
+the `sampling-test` experiment profile was retired ("Delete it, experiments
+are done") and its throwaway lane bank `hb-sampling-test` was deleted — so the
+server now holds exactly **22 banks**.
 
 **Naming convention.** `<environment-or-host>-<texture>`: `g01-infra`,
 `g02-infra`, `skipjack-infra`, `skipjack-prototype-infra`, `gaudi-hpu*`. The
@@ -41,12 +44,12 @@ There is no `~/.hindsight/config.json` on this host — that hop in the
 client-side default chain is absent.
 
 **Server**: `http://ga01:8888` (`mode: local_external`) — the aistack Hindsight
-instance, **exactly 23 banks as of 2026-10-23** (live recount via
-`GET /v1/default/banks`, same day, post unsloth-lane retirement).
+instance, **exactly 22 banks as of 2026-10-24** (live recount via
+`GET /v1/default/banks`, post `hb-sampling-test` retirement, t_0eec511d).
 
-**Ratified canon (operator, 2026-10-23): 3 general + 5 butler + 5 environment +
-10 role/specialist = 23** (24 until the unsloth lane was retired the same
-evening). Every bank on the server falls into exactly one of
+**Ratified canon (operator, 2026-10-23; amended 2026-10-24): 3 general + 5 butler + 5 environment +
+9 role/specialist = 22** (24 until the unsloth lane was retired the same
+evening; 23 until the sampling-test lane was retired 2026-10-24). Every bank on the server falls into exactly one of
 these groups; the group counts below are live-verified.
 
 ---
@@ -89,7 +92,7 @@ grouping"). Moved to §1.3. One system = one env bank: gaudi's environment group
 is `gaudi-hpu` alone. Display names already PATCHed server-side to
 `gaudi-perf [role]` / `gaudi-sdk [role]`; **bank_ids immutable and unchanged**.
 
-### 1.3 Role / specialist banks (10)
+### 1.3 Role / specialist banks (9)
 Lane-role separation *within* an estate, plus dedicated kanban/research lanes.
 The gaudi role banks preserve the 2026-10-22 ORCH AMEND doctrine ("inference
 knowledge must NOT live in general board knowledge; do NOT propose
@@ -111,7 +114,11 @@ pollutes ops recall.
 | `hb-kanban-worker` | `hb-kanban-worker` | kanban-worker lane | `kanban-worker` | 67 |
 | `hb-research` | `hb-research` | research lane | `research` | 3 |
 | `hb-distiller` | `hb-distiller` | distiller lane | `distiller` | 810 |
-| `hb-sampling-test` | `hb-sampling-test` | throwaway test lane (safe to delete freely) | `sampling-test` | 3 |
+
+*`hb-sampling-test` (throwaway test lane, 3 facts) was removed from this table
+2026-10-24: the `sampling-test` profile was retired by operator ruling
+("Delete it, experiments are done") and its bank deleted per the §1.6 protocol
+(DELETE → 200 `deleted_count: 9`; 404 readbacks; listing recount 23 → 22).*
 
 The two `hb-host-ops` / `hb-upstream-comm` pools were gaudi-pure (no
 cross-env mixing), so the fresh-start ruling did not require cold-starting
@@ -143,7 +150,7 @@ profile (env would win over config.json — #5171). Future butlers
   handoff contract. Infra/Azure/GPU facts deliberately rejected.
 - `software-co` is the third member of the general canon group (§1).
 
-### 1.6 Deletion receipt — 2026-10-23, operator GO executed
+### 1.6 Deletion receipt — 2026-10-23/24, operator GOs executed
 Deleted from the server with 404 + listing readback verification:
 
 | Bank | Facts (at delete) | Class |
@@ -154,6 +161,7 @@ Deleted from the server with 404 + listing readback verification:
 | `hb-synapse-sdk` | 186 | gaudi SDK pool, superseded by fresh-start `gaudi-hpu-sdk` |
 | `gaudi` | 125 | frozen legacy per-board summary bank (board-migration seeder, 2026-10-12) |
 | `hb-unsloth-studio` | 4 | lane bank retired same-day: operator ruled the `unsloth-litellm` profile OBSOLETE (t_7601b273, 2026-10-23 evening); contents were canary facts from the tuning verification only — DELETE `/v1/default/banks/hb-unsloth-studio` → 200 (`deleted_count: 15`), listing recount 24 → 23 |
+| `hb-sampling-test` | 3 | throwaway test lane retired with its profile (operator ruling 2026-10-24, t_0eec511d: "Delete it, experiments are done"); all 3 facts were FBC22-CANARY cutover canaries from 2026-10-22, zero load-bearing content — DELETE `/v1/default/banks/hb-sampling-test` → 200 (`deleted_count: 9`), 404 readback on `memories/list` + `stats`, listing recount 23 → 22 |
 
 The then-live 24-bank listing (pre-unsloth-lane-retirement; see header — server
 recount is 23 as of the same evening) additionally confirms the other four frozen legacy
@@ -202,8 +210,11 @@ the acceptance of that loss is what made the delete GO possible.
    leave the pair disagreeing: the pair is a silent override waiting to happen.
 2. **Butler profiles**: `.env` keeps `HINDSIGHT_BANK_ID` unset (or explicitly
    commented with the reason) — bank comes from config.json.
-3. **Husks** (no hindsight wiring): `coding`, `kworker-muse-probe`,
-   `plugin-ab`, `.deleted` — ignore until provisioned or removed.
+3. **Husks** (no hindsight wiring): `plugin-ab`, `.deleted` — ignore until
+   provisioned or removed. (`coding` and `kworker-muse-probe` were husks here
+   until 2026-10-24, when operator ruling "Delete both — probes over, backups
+   exist" retired them: dirs deleted, tombstones in `profiles/.deleted/`,
+   full tars at `~/.hermes/backups/husk-deletion-20261024/`.)
 4. **New hardware environment?** One fresh `<env>-infra` bank + fleet flip,
    following the 2026-10-23 cutover receipts as the recipe. One system = one
    env bank; role sub-banks within an estate are allowed per §1.3 but are

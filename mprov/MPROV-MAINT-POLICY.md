@@ -82,6 +82,23 @@ mprov work until the operator amends them.
   retroactively across the four repos (30 items labeled, 8 `[SEC]`
   retitled, 0 verification failures) — receipts on kanban card t_5e7399b2.
 
+- **2026-10-24 — OPERATOR COMMENTS ruled: biondogs-login notes are FULL
+  maintainer engagement (operator ruling, kanban t_038a3543).** Operator
+  ruling verbatim: *"The lanes should respond to my comments as biondogs
+  exactly as it would to any other maintainer. If I post a comment you
+  should address it even if that makes it appear I am replying to myself."*
+  New rule **COM-OPS** in the **Comms & engagement** section below:
+  operator notes posted under the `biondogs` login (Giuseppe's in-thread
+  review notes, e.g. SCR#50 *"if this is accurate how is working in the
+  production system"*, SCR#51 backup-intent question) bind the owning/
+  watching lane to respond IN-THREAD under `biondogs` with the standard
+  response process — identical register to answering any other reviewer;
+  the appearance of self-reply is accepted house policy. Body-editing
+  skip rules TRIGGER on operator notes (see COM-OPS). This codifies the
+  FILING-WATCH duty wording already live on card t_b2d3c1c0 (comments
+  706/710 — 710 supersedes 706's surface-and-wait clause); this section
+  and that wording share one intent.
+
 - **2026-10-24 — FILING IMPACT section added: every new filing gains an
   `Impact:` block (operator directive, kanban t_b0c9922b).** Operator
   directive verbatim: *"Adjust the mprov repo posting guidance, all filings
@@ -334,7 +351,10 @@ issue median is 41 words); lanes never merge.
 - **FS8 — corpus boundaries.** Closed issues/PRs, all historical comments
   (ours and his), commits, and project-9 rows are never restyled. Restyle
   applies to NEW filings immediately and to OPEN filings only per the
-  operator-GO'd tiers in `FILING-STYLE-REMEDIATION-2026-10-23.md`.
+  operator-GO'd tiers in `FILING-STYLE-REMEDIATION-2026-10-23.md`, and
+  never on a filing with live maintainer or operator-note engagement —
+  operator notes under the `biondogs` login count as engagement per
+  COM-OPS (Comms & engagement section, 2026-10-24).
 - **FS9 — Impact section (operator directive 2026-10-24, kanban
   t_b0c9922b).** Every new biondogs filing — issues AND PRs — carries ONE
   short Impact block covering exactly three things in 2–4 lines/bullets
@@ -439,7 +459,9 @@ nice to have."*
   prefix. `[SEC]` means nice-to-have; crisis items stay in the S taxonomy.
 - **Classification tie-break:** unsure whether crisis? keep the S tier and
   still add the `security` label. Never retitle an item a maintainer has
-  already commented on — label only, and receipt the skipped retitle.
+  already commented on — label only, and receipt the skipped retitle
+  ("commented on" includes operator notes under the `biondogs` login per
+  COM-OPS, Comms & engagement section).
 - **Label:** `security` exists in all four repos. `mprov_control_center` /
   `mprov_jobserver` carried it since before this wave (FF0000, no
   description); `mprov_scripts` / `mash` got it 2026-10-24 (color 5319e7,
@@ -449,6 +471,52 @@ nice to have."*
   authoritative tier for them. New `[SEC]` filings get no `sN-*` label.
 - Project 9: recategorized items stay in their current column — the tier
   change is not a state transition.
+
+## Comms & engagement (2026-10-24, operator ruling — kanban t_038a3543)
+
+### COM-OPS — operator comments are FULL maintainer engagement
+
+Operator ruling verbatim (2026-10-24): *"The lanes should respond to my
+comments as biondogs exactly as it would to any other maintainer. If I
+post a comment you should address it even if that makes it appear I am
+replying to myself."*
+
+The operator posts review notes and questions directly on `mprov-ng`
+filings **under the `biondogs` login** — the same identity our lanes
+publish under — so these notes were historically treated as "ours" and
+ignored. That is over:
+
+- **An operator note is engagement, not noise.** The owning/watching lane
+  MUST address it IN-THREAD under `biondogs` with the standard response
+  process — distiller-gated text (FS6 register), ≤150 words,
+  evidence-backed, publication verified by API read-back — identical to
+  answering any comment from Jason. Surface-and-wait is not compliant
+  (superseded per FILING-WATCH card t_b2d3c1c0 comment 710).
+- **Self-reply appearance is accepted house policy.** A thread showing
+  `biondogs` answering `biondogs` is the intended look. No hedging,
+  disclaimers, or meta-commentary about the note's authorship may appear
+  in public text; the reply reads exactly like an answer to any reviewer.
+- **Fix-lane exception.** If the answer requires fix-lane code analysis
+  beyond existing verified evidence, the analysis is filed via the owning
+  lane's card (pattern: t_0e040611) — but the thread still gets addressed
+  (acknowledge + state what is being verified). Never go silent while the
+  analysis runs.
+- **Receipts.** Every operator-note reply (comment id) is receipted on
+  FILING-WATCH (t_b2d3c1c0).
+
+**Operator-note signature** (scan rule, same wording intent as FILING-WATCH
+comments 706/710): a `biondogs`-authored comment that is addressed to
+`@biondogs`/`@uberlinuxguy`, uses reviewer-style phrasing, or asks a direct
+question on a biondogs filing — EXCLUDING known worker-receipt shapes
+(distiller verdicts, read-back receipts, FILING-WATCH's own posts).
+
+**Engagement semantics (body-editing programs).** The
+"maintainer-engaged" skip rules used by retrofits, restyles, and reclass
+programs (FS8; the Severity model's never-retitle-a-commented-on clause)
+TRIGGER on operator notes: while a note is live on a filing, the body
+stays hands-off. The same note simultaneously triggers the duty-to-respond
+above. Expected order: **answer first; re-consider body edits only after
+the thread settles.**
 
 ## Rule D — Review-phase scope (this wave)
 

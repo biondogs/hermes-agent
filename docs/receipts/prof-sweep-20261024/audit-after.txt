@@ -1,0 +1,195 @@
+FLEET: 62 profile dirs scanned; clean=0; with-findings=62
+telegram holders: ['__root__', 'g01-butler', 'g02-butler', 'gaudi-butler', 'sjproto-butler', 'swco-butler']
+duplicate token groups: NONE (all unique)
+slack holders outside root: NONE
+
+===== CRIT (4) =====
+  [.deleted] orphan: config.yaml MISSING
+  [coding] orphan: config.yaml MISSING
+  [kworker-muse-probe] orphan: config.yaml MISSING
+  [plugin-ab] agent.description: MISSING (kanban routing needs it)
+===== WARN (118) =====
+  [distiller] _config_version: _config_version: present in profile (global-only)
+  [distiller] plugins: plugins: present in profile (global-only)
+  [g01-auditor] _config_version: _config_version: present in profile (global-only)
+  [g01-auditor] plugins: plugins: present in profile (global-only)
+  [g01-butler] _config_version: _config_version: present in profile (global-only)
+  [g01-butler] plugins: plugins: present in profile (global-only)
+  [g01-ops] _config_version: _config_version: present in profile (global-only)
+  [g01-ops] plugins: plugins: present in profile (global-only)
+  [g01-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [g01-orchestrator] plugins: plugins: present in profile (global-only)
+  [g01-planner] _config_version: _config_version: present in profile (global-only)
+  [g01-planner] plugins: plugins: present in profile (global-only)
+  [g01-scribe] _config_version: _config_version: present in profile (global-only)
+  [g01-scribe] plugins: plugins: present in profile (global-only)
+  [g01-watcher] _config_version: _config_version: present in profile (global-only)
+  [g01-watcher] plugins: plugins: present in profile (global-only)
+  [g02-auditor] _config_version: _config_version: present in profile (global-only)
+  [g02-auditor] plugins: plugins: present in profile (global-only)
+  [g02-butler] _config_version: _config_version: present in profile (global-only)
+  [g02-butler] plugins: plugins: present in profile (global-only)
+  [g02-ops] _config_version: _config_version: present in profile (global-only)
+  [g02-ops] plugins: plugins: present in profile (global-only)
+  [g02-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [g02-orchestrator] plugins: plugins: present in profile (global-only)
+  [g02-planner] _config_version: _config_version: present in profile (global-only)
+  [g02-planner] plugins: plugins: present in profile (global-only)
+  [g02-scribe] _config_version: _config_version: present in profile (global-only)
+  [g02-scribe] plugins: plugins: present in profile (global-only)
+  [g02-watcher] _config_version: _config_version: present in profile (global-only)
+  [g02-watcher] plugins: plugins: present in profile (global-only)
+  [gaudi-analyst] _config_version: _config_version: present in profile (global-only)
+  [gaudi-analyst] plugins: plugins: present in profile (global-only)
+  [gaudi-arch] _config_version: _config_version: present in profile (global-only)
+  [gaudi-arch] plugins: plugins: present in profile (global-only)
+  [gaudi-auditor] _config_version: _config_version: present in profile (global-only)
+  [gaudi-auditor] plugins: plugins: present in profile (global-only)
+  [gaudi-benchrunner] _config_version: _config_version: present in profile (global-only)
+  [gaudi-benchrunner] plugins: plugins: present in profile (global-only)
+  [gaudi-butler] _config_version: _config_version: present in profile (global-only)
+  [gaudi-butler] plugins: plugins: present in profile (global-only)
+  [gaudi-deployer] _config_version: _config_version: present in profile (global-only)
+  [gaudi-deployer] plugins: plugins: present in profile (global-only)
+  [gaudi-dockerops] _config_version: _config_version: present in profile (global-only)
+  [gaudi-dockerops] plugins: plugins: present in profile (global-only)
+  [gaudi-liaison] _config_version: _config_version: present in profile (global-only)
+  [gaudi-liaison] plugins: plugins: present in profile (global-only)
+  [gaudi-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [gaudi-orchestrator] plugins: plugins: present in profile (global-only)
+  [gaudi-perfeng] _config_version: _config_version: present in profile (global-only)
+  [gaudi-perfeng] plugins: plugins: present in profile (global-only)
+  [gaudi-planner] _config_version: _config_version: present in profile (global-only)
+  [gaudi-planner] plugins: plugins: present in profile (global-only)
+  [gaudi-scribe] _config_version: _config_version: present in profile (global-only)
+  [gaudi-scribe] plugins: plugins: present in profile (global-only)
+  [gaudi-synapse] _config_version: _config_version: present in profile (global-only)
+  [gaudi-synapse] plugins: plugins: present in profile (global-only)
+  [gaudi-sysadmin] _config_version: _config_version: present in profile (global-only)
+  [gaudi-sysadmin] plugins: plugins: present in profile (global-only)
+  [gaudi-watcher] _config_version: _config_version: present in profile (global-only)
+  [gaudi-watcher] plugins: plugins: present in profile (global-only)
+  [kanban-board-architect] _config_version: _config_version: present in profile (global-only)
+  [kanban-board-architect] plugins: plugins: present in profile (global-only)
+  [kanban-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [kanban-orchestrator] plugins: plugins: present in profile (global-only)
+  [kanban-worker] _config_version: _config_version: present in profile (global-only)
+  [kanban-worker] plugins: plugins: present in profile (global-only)
+  [plugin-ab] _config_version: _config_version: present in profile (global-only)
+  [plugin-ab] plugins: plugins: present in profile (global-only)
+  [research] _config_version: _config_version: present in profile (global-only)
+  [research] plugins: plugins: present in profile (global-only)
+  [sampling-test] _config_version: _config_version: present in profile (global-only)
+  [sampling-test] plugins: plugins: present in profile (global-only)
+  [sj-auditor] _config_version: _config_version: present in profile (global-only)
+  [sj-auditor] plugins: plugins: present in profile (global-only)
+  [sj-ops] _config_version: _config_version: present in profile (global-only)
+  [sj-ops] plugins: plugins: present in profile (global-only)
+  [sj-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [sj-orchestrator] plugins: plugins: present in profile (global-only)
+  [sj-planner] _config_version: _config_version: present in profile (global-only)
+  [sj-planner] plugins: plugins: present in profile (global-only)
+  [sj-scribe] _config_version: _config_version: present in profile (global-only)
+  [sj-scribe] plugins: plugins: present in profile (global-only)
+  [sj-watcher] _config_version: _config_version: present in profile (global-only)
+  [sj-watcher] plugins: plugins: present in profile (global-only)
+  [sjp-auditor] _config_version: _config_version: present in profile (global-only)
+  [sjp-auditor] plugins: plugins: present in profile (global-only)
+  [sjp-ops] _config_version: _config_version: present in profile (global-only)
+  [sjp-ops] plugins: plugins: present in profile (global-only)
+  [sjp-orchestrator] _config_version: _config_version: present in profile (global-only)
+  [sjp-orchestrator] plugins: plugins: present in profile (global-only)
+  [sjp-planner] _config_version: _config_version: present in profile (global-only)
+  [sjp-planner] plugins: plugins: present in profile (global-only)
+  [sjp-scribe] _config_version: _config_version: present in profile (global-only)
+  [sjp-scribe] plugins: plugins: present in profile (global-only)
+  [sjp-watcher] _config_version: _config_version: present in profile (global-only)
+  [sjp-watcher] plugins: plugins: present in profile (global-only)
+  [sjproto-butler] _config_version: _config_version: present in profile (global-only)
+  [sjproto-butler] plugins: plugins: present in profile (global-only)
+  [sw-architect] _config_version: _config_version: present in profile (global-only)
+  [sw-architect] plugins: plugins: present in profile (global-only)
+  [sw-dev-a] _config_version: _config_version: present in profile (global-only)
+  [sw-dev-a] plugins: plugins: present in profile (global-only)
+  [sw-dev-b] _config_version: _config_version: present in profile (global-only)
+  [sw-dev-b] plugins: plugins: present in profile (global-only)
+  [sw-devops] _config_version: _config_version: present in profile (global-only)
+  [sw-devops] plugins: plugins: present in profile (global-only)
+  [sw-docs] _config_version: _config_version: present in profile (global-only)
+  [sw-docs] plugins: plugins: present in profile (global-only)
+  [sw-pm] _config_version: _config_version: present in profile (global-only)
+  [sw-pm] plugins: plugins: present in profile (global-only)
+  [sw-qa] _config_version: _config_version: present in profile (global-only)
+  [sw-qa] plugins: plugins: present in profile (global-only)
+  [sw-reviewer] _config_version: _config_version: present in profile (global-only)
+  [sw-reviewer] plugins: plugins: present in profile (global-only)
+  [sw-ux] _config_version: _config_version: present in profile (global-only)
+  [sw-ux] plugins: plugins: present in profile (global-only)
+  [swco-butler] _config_version: _config_version: present in profile (global-only)
+  [swco-butler] plugins: plugins: present in profile (global-only)
+===== NOTE (0) =====
+
+CHECK-COUNTS per profile:
+  .deleted: 1
+  coding: 1
+  distiller: 2
+  g01-auditor: 2
+  g01-butler: 2
+  g01-ops: 2
+  g01-orchestrator: 2
+  g01-planner: 2
+  g01-scribe: 2
+  g01-watcher: 2
+  g02-auditor: 2
+  g02-butler: 2
+  g02-ops: 2
+  g02-orchestrator: 2
+  g02-planner: 2
+  g02-scribe: 2
+  g02-watcher: 2
+  gaudi-analyst: 2
+  gaudi-arch: 2
+  gaudi-auditor: 2
+  gaudi-benchrunner: 2
+  gaudi-butler: 2
+  gaudi-deployer: 2
+  gaudi-dockerops: 2
+  gaudi-liaison: 2
+  gaudi-orchestrator: 2
+  gaudi-perfeng: 2
+  gaudi-planner: 2
+  gaudi-scribe: 2
+  gaudi-synapse: 2
+  gaudi-sysadmin: 2
+  gaudi-watcher: 2
+  kanban-board-architect: 2
+  kanban-orchestrator: 2
+  kanban-worker: 2
+  kworker-muse-probe: 1
+  plugin-ab: 3
+  research: 2
+  sampling-test: 2
+  sj-auditor: 2
+  sj-ops: 2
+  sj-orchestrator: 2
+  sj-planner: 2
+  sj-scribe: 2
+  sj-watcher: 2
+  sjp-auditor: 2
+  sjp-ops: 2
+  sjp-orchestrator: 2
+  sjp-planner: 2
+  sjp-scribe: 2
+  sjp-watcher: 2
+  sjproto-butler: 2
+  sw-architect: 2
+  sw-dev-a: 2
+  sw-dev-b: 2
+  sw-devops: 2
+  sw-docs: 2
+  sw-pm: 2
+  sw-qa: 2
+  sw-reviewer: 2
+  sw-ux: 2
+  swco-butler: 2
+CLEAN: 

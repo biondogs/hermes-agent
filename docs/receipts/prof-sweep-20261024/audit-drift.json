@@ -1,0 +1,752 @@
+{
+ "root": [],
+ "profiles": {
+  ".deleted": [
+   {
+    "check": "orphan",
+    "detail": "config.yaml MISSING",
+    "severity": "CRIT"
+   }
+  ],
+  "coding": [
+   {
+    "check": "orphan",
+    "detail": "config.yaml MISSING",
+    "severity": "CRIT"
+   }
+  ],
+  "distiller": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-auditor": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-butler": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-ops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-planner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-scribe": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g01-watcher": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-auditor": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-butler": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-ops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-planner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-scribe": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "g02-watcher": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-analyst": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-arch": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-auditor": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-benchrunner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-butler": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-deployer": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-dockerops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-liaison": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-perfeng": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-planner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-scribe": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-synapse": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-sysadmin": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "gaudi-watcher": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "kanban-board-architect": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "kanban-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "kanban-worker": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "kworker-muse-probe": [
+   {
+    "check": "orphan",
+    "detail": "config.yaml MISSING",
+    "severity": "CRIT"
+   }
+  ],
+  "plugin-ab": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "agent.description",
+    "detail": "MISSING (kanban routing needs it)",
+    "severity": "CRIT"
+   }
+  ],
+  "research": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sampling-test": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-auditor": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-ops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-planner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-scribe": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sj-watcher": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-auditor": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-ops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-orchestrator": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-planner": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-scribe": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjp-watcher": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sjproto-butler": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-architect": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-dev-a": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-dev-b": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-devops": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-docs": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-pm": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-qa": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-reviewer": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "sw-ux": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ],
+  "swco-butler": [
+   {
+    "check": "_config_version",
+    "detail": "_config_version: present in profile (global-only)",
+    "severity": "WARN"
+   },
+   {
+    "check": "plugins",
+    "detail": "plugins: present in profile (global-only)",
+    "severity": "WARN"
+   }
+  ]
+ },
+ "fleet_size": 62,
+ "cred_inventory": {
+  "telegram_holders": [
+   "__root__",
+   "g01-butler",
+   "g02-butler",
+   "gaudi-butler",
+   "sjproto-butler",
+   "swco-butler"
+  ],
+  "duplicate_token_groups": {},
+  "slack_holders": []
+ }
+}

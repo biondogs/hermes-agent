@@ -34,6 +34,16 @@ All 31 revised bodies are within the 175-word cap (max 175: PR #195).
 Non-biondogs open items (uberlinuxguy/jhujasonw/mattcprotzman authored)
 were excluded at enumeration — never touched.
 
+## Commit receipt (shared pack dir — history is not per-lane)
+
+Management-repo commits for this lane: sibling CC-lane commit **f1b5f20**
+(t_6a9550f5) accidentally swept this lane's then-untracked drafts in — it
+already carries 29 of the 31 files at final content plus an intermediate
+`196.md`/manifest. This lane's own commit **c9e381a** adds `PACK.md` and
+the final `196.md` word-cap trim + manifest refresh. Diff this lane's
+pack against `f1b5f20` + `c9e381a` together, not `HEAD~1`. `manifest.json`
+sha256 prefixes are the per-file integrity baseline.
+
 ## Flags for the text gate
 
 1. **PR 199 / PR 200 pre-date the FS5 restyle.** Their bodies use the

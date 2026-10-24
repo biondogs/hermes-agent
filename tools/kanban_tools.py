@@ -318,24 +318,61 @@ def _board(board: Optional[str], *, quiet_close: bool = False):
     so unpinned calls resolve to it and an explicit *different* board is refused
     (swco-butler misfiling incident, 2026-10-23 — the tool layer now fences
     cross-board access for pinned profiles such as board butlers).
+
+    A second fence is the dispatcher/delegation one (t_5651fc5b, from the
+    t_c07cca9b diagnosis): a dispatched worker (``HERMES_KANBAN_TASK``) or a
+    delegate lineage would otherwise have its explicit ``board=`` SILENTLY
+    overridden by the session pin inside ``kanban_db._board_path`` — the
+    override must stay for machine flows that enumerate board slugs
+    (``pin_first_board_resolution``), but a tool call's ``board=`` is real
+    caller intent, so the tool layer rejects it loudly instead of letting the
+    card misfile onto the session board. Sanctioned cross-board work goes
+    through an unfenced caller (operator shell / env-stripped hermes CLI).
     ``quiet_close`` swallows close() errors (best-effort bridges)."""
+    from pathlib import Path
     from hermes_cli import kanban_db as kb
     from hermes_cli import kanban_db_connect as kbc
+    wanted: Optional[str] = None
+    if board is not None:
+        try:
+            wanted = kb._normalize_board_slug(board)
+        except ValueError as e:
+            raise _Reject(f"invalid board slug: {e}")
     pin = kb.profile_board_pin()
-    if pin:
-        wanted: Optional[str] = None
-        if board is not None:
-            try:
-                wanted = kb._normalize_board_slug(board)
-            except ValueError as e:
-                raise _Reject(f"invalid board slug: {e}")
-        if wanted is not None and wanted != pin:
-            raise _Reject(
-                f"this session is pinned to kanban board {pin!r} by its profile "
-                f"config (kanban.board); the tool layer refuses targeting "
-                f"{wanted!r}. Cross-board work belongs to the owning board's "
-                f"butler/profile, or to an unpinned profile (default)."
+    if pin and wanted is not None and wanted != pin:
+        raise _Reject(
+            f"this session is pinned to kanban board {pin!r} by its profile "
+            f"config (kanban.board); the tool layer refuses targeting "
+            f"{wanted!r}. Cross-board work belongs to the owning board's "
+            f"butler/profile, or to an unpinned profile (default)."
+        )
+    if wanted is not None and (pin is None or wanted != pin):
+        # Only when a HERMES_KANBAN_DB pin would actually override the explicit
+        # board FOR THIS CONTEXT (fenced: dispatched worker / delegate lineage)
+        # does the redirect happen — without the pin the explicit board is
+        # genuine caller intent and wins (see #106342).
+        db_pin = (os.environ.get("HERMES_KANBAN_DB", "") or "").strip()
+        from agent.delegation_context import explicit_board_intent_is_pinned
+        if db_pin and explicit_board_intent_is_pinned():
+            # Where the named board would live WITHOUT the session pin...
+            requested = (
+                kb.kanban_home() / "kanban.db" if wanted == kb.DEFAULT_BOARD
+                else kb.board_dir(wanted) / "kanban.db"
             )
+            # ...vs. where this call actually resolves (the env pin).
+            try:
+                diverged = requested.resolve() != Path(db_pin).expanduser().resolve()
+            except OSError:
+                diverged = True
+            if diverged:
+                raise _Reject(
+                    f"the dispatcher fence pins this session to its own kanban "
+                    f"board, so the explicit board={wanted!r} is REFUSED rather "
+                    f"than silently redirected (the card would have landed on "
+                    f"this session's board). Cross-board board= calls require "
+                    f"an unfenced caller: the operator shell, the env-stripped "
+                    f"hermes CLI subprocess, or the owning board's butler profile."
+                )
     conn = kbc.connect(board=board)
     try:
         yield kb, conn

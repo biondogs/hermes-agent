@@ -230,3 +230,83 @@ class TestToolFence:
         kt = self._handler()
         out = kt._handle_list({"board": "--bad--"})
         assert '"ok": false' in out or '"error"' in out
+
+
+# ---------------------------------------------------------------------------
+# Dispatcher fence — t_5651fc5b (from the t_c07cca9b diagnosis): a dispatched
+# worker's explicit board= must be REFUSED loudly, never silently redirected
+# to the pinned session board by kanban_db._board_path's env-pin override.
+# ---------------------------------------------------------------------------
+
+class TestDispatcherFence:
+    def _kt(self):
+        from tools import kanban_tools as kt
+        return kt
+
+    def _connect(self, board=None):
+        from hermes_cli import kanban_db_connect as kbc
+        return kbc.connect(board=board)
+
+    def test_fenced_create_foreign_board_refused_not_misfiled(self, boards_env, monkeypatch):
+        """Repro of the t_c07cca9b trap: HERMES_KANBAN_TASK + HERMES_KANBAN_DB
+        pinned to the session (default) board + explicit board='gargantua02'."""
+        import json
+        set_hermes_home_override(str(boards_env))
+        monkeypatch.setenv("HERMES_KANBAN_TASK", "t_probe_fixture")
+        monkeypatch.setenv("HERMES_KANBAN_DB", str(boards_env / "kanban.db"))
+        kt = self._kt()
+        out = kt._handle_create(
+            {"title": "fence-probe-must-not-exist", "assignee": "x", "board": "gargantua02"})
+        assert '"ok": false' in out or '"error"' in out, out
+        assert "dispatcher fence" in out and "REFUSED" in out, out
+        # The old defect: ok:true with the card silently on the SESSION board.
+        from hermes_cli import kanban_db as kb
+        from hermes_cli import kanban_db_connect as kbc
+
+        def _titles(tasks):
+            out = []
+            for t in tasks:
+                out.append(t["title"] if isinstance(t, dict) else str(getattr(t, "title", "")))
+            return out
+
+        for slug in (None, "gargantua02"):
+            conn = kbc.connect(board=slug) if slug else self._connect()
+            titles = _titles(kb.list_tasks(conn, include_archived=True))
+            assert not any("fence-probe-must-not-exist" in (title or "")
+                           for title in titles), f"misfiled on board {slug or 'default'}"
+            conn.close()
+
+    def test_fenced_worker_naming_own_board_still_ok(self, boards_env, monkeypatch):
+        """The session board itself must stay reachable — fence refuses only
+        boards the call would NOT land on."""
+        import json
+        set_hermes_home_override(str(boards_env))
+        monkeypatch.setenv("HERMES_KANBAN_TASK", "t_probe_fixture")
+        monkeypatch.setenv("HERMES_KANBAN_DB", str(boards_env / "kanban.db"))
+        from hermes_cli import kanban_db as kb
+        conn = self._connect()
+        tid = kb.create_task(conn, title="own-board probe", assignee="x")
+        conn.close()
+        kt = self._kt()
+        out = json.loads(kt._handle_show({"task_id": tid, "board": "default"}))
+        assert out.get("task", {}).get("id") == tid and "error" not in out, out
+
+    def test_env_pin_without_fence_keeps_explicit_board(self, boards_env, monkeypatch):
+        """An interactive session with a stray HERMES_KANBAN_DB export (no
+        HERMES_KANBAN_TASK / delegate marker) keeps the os-reviewer P1
+        behaviour: explicit board= is honored, not fenced."""
+        import json
+        set_hermes_home_override(str(boards_env))
+        monkeypatch.setenv("HERMES_KANBAN_DB", str(boards_env / "kanban.db"))
+        kt = self._kt()
+        out = kt._handle_create(
+            {"title": "unfenced cross-board probe", "assignee": "x", "board": "gargantua02"})
+        data = json.loads(out)
+        assert data.get("ok"), out
+        # Landed on gargantua02, NOT the env-pinned default DB.
+        conn = self._connect(board="gargantua02")
+        from hermes_cli import kanban_db as kb
+        ids = [t["id"] if isinstance(t, dict) else getattr(t, "id", None)
+               for t in kb.list_tasks(conn, include_archived=True)]
+        assert data.get("task_id") in ids, out
+        conn.close()

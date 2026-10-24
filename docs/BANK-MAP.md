@@ -155,7 +155,8 @@ Deleted from the server with 404 + listing readback verification:
 | `gaudi` | 125 | frozen legacy per-board summary bank (board-migration seeder, 2026-10-12) |
 | `hb-unsloth-studio` | 4 | lane bank retired same-day: operator ruled the `unsloth-litellm` profile OBSOLETE (t_7601b273, 2026-10-23 evening); contents were canary facts from the tuning verification only — DELETE `/v1/default/banks/hb-unsloth-studio` → 200 (`deleted_count: 15`), listing recount 24 → 23 |
 
-The live 24-bank listing additionally confirms the other four frozen legacy
+The then-live 24-bank listing (pre-unsloth-lane-retirement; see header — server
+recount is 23 as of the same evening) additionally confirms the other four frozen legacy
 per-board summary banks are gone in the same wave (the card receipt names only
 the five above; the server listing is source of truth):
 `gargantua01` (18) · `gargantua02` (14) · `skipjack` (6) ·

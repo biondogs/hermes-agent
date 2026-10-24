@@ -113,6 +113,31 @@ mprov work until the operator amends them.
   content; +25 is the minimal fit and the cap stays a cap. Forward-looking
   only: open filings are **not** retrofitted — impact text needs per-filing
   code analysis, not mechanical restyle (operator scope ruling on-card).
+  *(This forward-looking-only clause was superseded **same-day** by the
+  FILING IMPACT RETROFIT directive entry below; the per-filing code-analysis
+  requirement stands and is satisfied by drafted-then-gated analysis, not by
+  skipping open filings.)*
+
+- **2026-10-24 — FILING IMPACT RETROFIT directive: FS9 scope extended to
+  open filings (operator directive, kanban t_6a9550f5, butler intake).**
+  Operator directive verbatim: *"Operator directive 2026-10-24: retrofit ALL
+  existing open biondogs filings with the new Impact section"* — relayed via
+  butler intake and recorded in the opening line of card t_6a9550f5's body
+  ("RETROFIT PROGRAM — lane mprov_control_center. …", on-card receipt).
+  This **supersedes** the "forward-looking only / open filings are not
+  retrofitted" scope clause of the entry above and of FS9 below. Program
+  shape mirrors the operator-GO'd style-retrofit precedent (t_b19bbdd2):
+  per-filing code analysis → drafts (live body byte-identical + FS9 Impact
+  block at template position, nothing else) → distiller text gate → REST
+  PATCH → GET read-back byte-compare → receipts. Engagement law is honored,
+  not overridden: maintainer- or operator-note-engaged filings are
+  skipped-with-receipt (FS8/COM-OPS), non-biondogs-authored items are
+  untouched, and operator-era legacy issues stay excluded per the t_b19bbdd2
+  precedent — so the retrofitted population is open **unengaged biondogs**
+  filings. Running across all four lanes (mprov_control_center /
+  mprov_jobserver / mprov_scripts / mash); draft packs under
+  `filing-drafts/impact-retrofit-2026-10-24/`, gate cards to distiller
+  per lane.
 
 ## Contributor allowlist (2026-10-23, operator ruling)
 
@@ -367,9 +392,11 @@ issue median is 41 words); lanes never merge.
   line — not one of FS2's two bold mini-labels, no `##` heading); PRs use
   a content-named `## Impact` section (FS5 idiom). No other headings and no
   template bloat: an Impact block missing any of the three things, or
-  naming no file, fails the gate (check 5b). Applies to NEW filings only —
-  open filings are not retrofitted (impact text needs per-filing code
-  analysis; scope ruling 2026-10-24 on-card).
+  naming no file, fails the gate (check 5b). Applies to new filings AND —
+  per the operator's 2026-10-24 retrofit directive same-day, superseding the
+  original new-filings-only scope ruling — to open unengaged biondogs
+  filings via the impact-retrofit program (dated entry in Amendments above;
+  the original ruling stands on record there, never silently dropped).
 
 ### Distiller text-gate ruleset for mprov (amends the t_03720d69 conventions)
 

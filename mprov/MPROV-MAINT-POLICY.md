@@ -82,6 +82,21 @@ mprov work until the operator amends them.
   retroactively across the four repos (30 items labeled, 8 `[SEC]`
   retitled, 0 verification failures) — receipts on kanban card t_5e7399b2.
 
+- **2026-10-24 — FILING IMPACT section added: every new filing gains an
+  `Impact:` block (operator directive, kanban t_b0c9922b).** Operator
+  directive verbatim: *"Adjust the mprov repo posting guidance, all filings
+  should include an additional section describing the impact of the issue or
+  fix, things like what it touches and how it differs from the way it works
+  in production. Aswell as what files are touched"* New rule **FS9** below;
+  distiller gate check **5b**; mirrored in `filing-templates/issue.md` and
+  `filing-templates/pr-body.md`. Body word cap raised 150 → **175** to make
+  room — receipt: a tight 2–4-line Impact block measures 30–31 words, and
+  live open biondogs PR bodies sit at median 131 / p90 147 words (issue
+  p90 121), so 150 could not absorb the section without cutting Rule-C
+  content; +25 is the minimal fit and the cap stays a cap. Forward-looking
+  only: open filings are **not** retrofitted — impact text needs per-filing
+  code analysis, not mechanical restyle (operator scope ruling on-card).
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -229,7 +244,8 @@ deleted rows, if wanted, is an operator/butler decision, not lane work.
 A human must understand the issue AND the potential solution with minimum
 reading. Hard requirements for every new issue body:
 
-- Target **≤150 words**.
+- Target **≤175 words** (150 before 2026-10-24; the raise exists solely to
+  make room for the FS9 Impact section — see Filing style).
 - Fixed structure, in this order: **symptom / evidence (`file:line`) /
   root cause / proposed fix / severity**.
 - No filler: no preamble, no restating the title, no boilerplate sections
@@ -257,8 +273,9 @@ every commit); Rule B reviewer; contributor allowlist + pre-publication
 identity check; PR tracking with the five-gate publication read-back; the
 `Fixes #N` machine check (`^Fixes #N$`, plain, own line); distiller
 pre-publication text gate + leak-scan law; evidence quality (defect-site
-`file:line` at the verified sha; test counts + base comparison); ≤150-word
-cap on our filing bodies (a CAP, not a target — prefer his brevity: his
+`file:line` at the verified sha; test counts + base comparison); ≤175-word
+cap on our filing bodies (raised from 150 on 2026-10-24 solely to make room
+for the FS9 Impact section — a CAP, not a target; prefer his brevity: his
 issue median is 41 words); lanes never merge.
 
 ### The style rules (FS)
@@ -278,8 +295,9 @@ issue median is 41 words); lanes never merge.
   `**To decide:**`, `**Coordinate with:**`, `**Check first:**`,
   `**Needs verification:**`. House addition kept by carve-out: a final
   `Severity: S<N> — <one-clause impact>` line (he weaves impact into prose;
-  our severity must stay explicit — flagged conflict #3 below). Close with
-  his provenance/footer line ("Found while … for #N. Related: #N."); a real
+  our severity must stay explicit — flagged conflict #3 below), with the
+  FS9 `Impact:` block sitting directly above it (house addition, 2026-10-24).
+  Close with his provenance/footer line ("Found while … for #N. Related: #N."); a real
   "Migrated from …" provenance may live in that sentence.
 - **FS3 — evidence.** Defect-site evidence as a commit-pinned permalink
   (`https://github.com/mprov-ng/<repo>/blob/<sha>/<path>#L<n>`) preferred,
@@ -317,6 +335,21 @@ issue median is 41 words); lanes never merge.
   (ours and his), commits, and project-9 rows are never restyled. Restyle
   applies to NEW filings immediately and to OPEN filings only per the
   operator-GO'd tiers in `FILING-STYLE-REMEDIATION-2026-10-23.md`.
+- **FS9 — Impact section (operator directive 2026-10-24, kanban
+  t_b0c9922b).** Every new biondogs filing — issues AND PRs — carries ONE
+  short Impact block covering exactly three things in 2–4 lines/bullets
+  max: (1) what the issue/fix touches, subsystem/feature in plain words;
+  (2) current production behavior vs expected (PRs: behavior before vs
+  after the fix); (3) files touched as repo-relative paths — for issues,
+  suspected files or best-known location, marked `suspected`. Form follows
+  the medium: issues use a plain `Impact:` label block directly above the
+  `Severity:` line (house addition under the same carve-out as the Severity
+  line — not one of FS2's two bold mini-labels, no `##` heading); PRs use
+  a content-named `## Impact` section (FS5 idiom). No other headings and no
+  template bloat: an Impact block missing any of the three things, or
+  naming no file, fails the gate (check 5b). Applies to NEW filings only —
+  open filings are not retrofitted (impact text needs per-filing code
+  analysis; scope ruling 2026-10-24 on-card).
 
 ### Distiller text-gate ruleset for mprov (amends the t_03720d69 conventions)
 
@@ -336,13 +369,21 @@ in order:
 5. Style (FS rules): no `[Sx]`/tag title prefix (sole exception `[SEC]` per
    the Severity model); no visible five-label
    block; no generic `##` headings; section names content-shaped or absent;
-   ≤2 bold mini-labels, allowed vocabulary only; body ≤150 words.
+   ≤2 bold mini-labels, allowed vocabulary only; body ≤175 words.
 5a. Severity classification at the gate (operator rule 2026-10-24): a
    security ENHANCEMENT (hardening/scoping with no active breakage) must
    carry `[SEC]` title prefix + `security` label and NO S tier — REJECT an
    `s1-blocker` (or `[S1]`) on such a filing unless the body evidences an
    ongoing crisis or breakage of default deployments; crisis-tier security
    keeps its S tier and must also carry the `security` label.
+5b. Impact section (FS9, operator directive 2026-10-24): present — issues
+   carry an `Impact:` block above the Severity line, PRs a `## Impact`
+   section — AND it states what the issue/fix touches, the production-
+   behavior delta (current vs expected; PRs: before vs after), and at
+   least one repo-relative file path (issues may mark paths `suspected`).
+   REJECT a filing with no Impact section, one that names no file, or one
+   missing the prod/expected contrast; also REJECT Impact blocks over
+   4 lines/bullets (bloat guard).
 6. Evidence: defect-site `file:line`/permalink present; error output quoted
    verbatim where the claim is observational; test evidence has counts AND
    a base comparison.
@@ -365,7 +406,10 @@ in order:
    Kept as a house addition under the carve-out (severity must be
    checkable); placed as his footer-style sentence so the look stays his.
 4. **≤150-word cap vs his PR median 157 words.** Cap kept per carve-out;
-   our PRs will read marginally terser than his own — deliberate.
+   our PRs will read marginally terser than his own — deliberate. *(Raised
+   to **175** 2026-10-24 solely for the FS9 Impact section — receipt in the
+   Amendments entry; relative to his Impact-free median 157 the cap still
+   binds, so the terser-reading outcome stands.)*
 5. Profile-side sync of this ruleset into the `distiller` profile's SOUL
    checklist is profile meta-work: routed to a `kanban-board-architect`
    card (PM lacks that authority); until then, gate cards carry this

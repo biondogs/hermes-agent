@@ -3,6 +3,8 @@
 Modeled on uberlinuxguy's Oct-2026 issues (mprov_control_center #347, #346,
 #335, #296). The five Rule-C contents (symptom, evidence, root cause,
 proposed fix, severity) MUST all be present — as prose, not as labels.
+Label exceptions: the mandatory `Impact:` block (FS9, added 2026-10-24) and
+the house `Severity:` line are the only visible labels a body may carry.
 
 ````markdown
 <Declarative title: the concrete failure, `fact: mechanism` when a colon
@@ -29,6 +31,13 @@ and the root-cause mechanism named. Related sightings as `#N` /
 cause:**`, `**To decide:**`, `**Coordinate with:**`, `**Check first:**` —
 at most one or two of these per issue.>
 
+Impact: <2–4 lines max, three things only — touches <subsystem in plain
+words>; prod today <current behavior> → expected <behavior instead>; files
+`path/a.py`, `path/b.sh` (unconfirmed paths marked `suspected`). Example:
+"Impact: touches cron template rendering; prod today a `|` in a user label
+silently corrupts the generated line, expected: quoted or rejected. Files
+(suspected): `web/cron_templates.py`.">
+
 Severity: S<N> — <one clause of impact, e.g. "happy path (IPv4) works; IPv6
 transport degrades">. Security ENHANCEMENTS (no active breakage) instead
 write `Severity: [SEC] — future nice-to-have security enhancement: <one
@@ -40,9 +49,13 @@ Found while <what you were doing> for #<N>. Related: #<N>,
 mprov-ng/<repo>#<N>.
 ````
 
-Rules recap: body ≤150 words is a cap, not a target — his median is 41.
-No `## ` headings. No `**Symptom.**`/`**Evidence.**`/`**Root cause.**`
-labels. Keep the `review-found`/`sN-*` labels on the ISSUE object (tooling
+Rules recap: body ≤175 words is a cap, not a target (raised from 150 on
+2026-10-24 for the Impact block; his median is 41). No `## ` headings. No
+`**Symptom.**`/`**Evidence.**`/`**Root cause.**` labels. The `Impact:`
+block is mandatory on every new filing (FS9): touches / prod-behavior delta
+/ files touched, ≤4 lines, at least one repo-relative path — gate check 5b
+rejects a filing without it or one naming no file. Keep the
+`review-found`/`sN-*` labels on the ISSUE object (tooling
 metadata; under operator adjudication) — they stay off the title and out of
 the prose; add the `security` label on every security-classified filing
 (Severity model, 2026-10-24). No "Migrated from ..." footer on new filings

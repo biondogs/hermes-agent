@@ -70,3 +70,32 @@ Scope compliance: no branches deleted, no fork repos touched, mprov-ng/mprov_scr
 
 ### Deletion-gate amendment (same date)
 - mprov-ng/mash#21 and #22 are **resolved-as-CLOSED-UNMERGED** by operator policy (2026-10-23T17:41Z). They no longer await a merge and are removed from any gate expectation as pending-merge items; the rescue fixes they carried are preserved via the closed-PR diffs above for the separate re-approach card.
+
+## Phase 2 — deletion gate poll #3: **MET** — deletion attempted, BLOCKED on token scope (2026-10-24T15:01Z, card t_cf23a633, run 462)
+
+Dispatched at the SCHEDULED_UNTIL floor (unblocked by swco-wake-driver at 15:01Z). Full gate poll, live reads:
+
+| Gate leg | Required | Actual (2026-10-24T15:0xZ) |
+|---|---|---|
+| mprov-ng/mprov_jobserver#153 | resolved | MERGED 2026-10-23T14:22:16Z ✓ |
+| mprov-ng/mprov_control_center#307 | resolved | MERGED 2026-10-23T14:42:23Z ✓ |
+| mprov-ng/mprov_scripts#19 | resolved | MERGED 2026-10-23T15:32:24Z ✓ |
+| mprov-ng/mash#17 | resolved | MERGED 2026-10-23T15:33:05Z ✓ |
+| mprov-ng/mash#21/#22 (rescue) | resolved-as-closed per operator policy | CLOSED unmerged 2026-10-23T17:41Z (diffs durable on mprov-ng) ✓ |
+| t_e5c9b3a3 RESCUE-MASH | done | done (run 95) ✓ |
+| t_74e17627 OCT15-MIGRATE | done | done (run 103) ✓ |
+| OCT15-COVERAGE.md rows | 120 | `grep -c '^| biondogs/'` = 120 ✓ |
+| Operator GO | explicit comment on t_cf23a633 | posted 2026-10-23 (butler relay, Option A) ✓ |
+
+Counts: docs PRs resolved 4/4 · Phase-0 cards done 1/1 · Phase-1 cards done 1/1 · coverage rows 120/120. **DELETION-READY.**
+
+### Deletion execution — FAILED (capability wall)
+
+Pre-deletion sweep confirmed nothing unaccounted on the forks: CC#2/#3 dead/superseded per this receipt's Phase-0 verdicts; mash#29/#30 rescued (heads on rahul05ranjan, diffs preserved via mprov-ng/mash#21/#22 closed PRs); 120 open fork issues all dispositioned in OCT15-COVERAGE.md.
+
+`gh repo delete biondogs/{mprov_control_center,mprov_jobserver,mprov_scripts,mash} --yes` → **HTTP 403 on all four**: the biondogs gh token lacks the `delete_repo` OAuth scope. No repo was deleted; all four forks verified still present (post-attempt `gh repo view`: all exist, isFork=true, parents = mprov-ng counterparts). biondogs/hermes-agent untouched (scope guard).
+
+**Remediation (operator, one-time):** `gh auth refresh -h github.com -s delete_repo` on the biondogs account, then reply GO on card t_cf23a633. Card blocked kind=capability pending that.
+
+Agent-Profile: sw-pm
+Agent-Run: t_cf23a633

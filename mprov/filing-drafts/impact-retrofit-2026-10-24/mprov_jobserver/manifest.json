@@ -292,21 +292,21 @@
  {
   "item": 199,
   "type": "pr",
-  "pos": "before **Test evidence.**",
+  "pos": "full-body FS5 rewrite (Fixes line 1, ## Testing, Rule A trailer); Impact block verbatim, before ## Testing",
   "orig_sha256_16": "ae1f04d93f3b247c",
-  "draft_sha256_16": "e3cfb5f94e870f4f",
+  "draft_sha256_16": "ecd2ec842a1f7af6",
   "orig_words": 129,
-  "draft_words": 163,
+  "draft_words": 174,
   "over_cap_175": false
  },
  {
   "item": 200,
   "type": "pr",
-  "pos": "before **Test evidence.**",
+  "pos": "full-body FS5 rewrite (Fixes line 1, ## Testing, Rule A trailer); Impact block verbatim, before ## Testing",
   "orig_sha256_16": "c4e491491eb78740",
-  "draft_sha256_16": "71a020008c29205b",
+  "draft_sha256_16": "dd74d7d8db914190",
   "orig_words": 144,
-  "draft_words": 174,
+  "draft_words": 170,
   "over_cap_175": false
  }
 ]

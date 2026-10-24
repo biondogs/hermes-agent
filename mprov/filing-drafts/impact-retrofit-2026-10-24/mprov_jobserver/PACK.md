@@ -4,7 +4,11 @@ Program: retrofit FS9 Impact sections onto open biondogs filings (operator
 directive 2026-10-24; rule FS9 in MPROV-MAINT-POLICY.md). Drafts only — no
 GitHub writes in this pack. Each `<num>.md` is the FULL revised body:
 original text byte-identical, Impact block inserted at the FS9 template
-position, nothing else touched. Byte-identity was enforced
+position, nothing else touched — EXCEPT PR 199/200, which are
+FS5-normalized re-drafts (see Flags §1): full-body restyle to FS5
+(`Fixes #N` line 1, content-named sections, Rule A trailer) with the
+Impact block of this pack carried verbatim; byte-identity does not apply
+to those two. Byte-identity was enforced
 programmatically (re-insertion inverse reproduces the original) for every
 draft; per-item sha256 prefixes of original vs draft are in
 `manifest.json` (orig body captured via REST GET, single trailing newline
@@ -46,13 +50,20 @@ sha256 prefixes are the per-file integrity baseline.
 
 ## Flags for the text gate
 
-1. **PR 199 / PR 200 pre-date the FS5 restyle.** Their bodies use the
-   visible-label layout, carry `Fixes #N` at the BOTTOM, and have NO
-   trailing `Assisted by JoeBot` line. This card's contract is
-   byte-identical original + Impact only, so those pre-existing
-   Rule A / FS5-position violations remain in the drafts; the gate must
-   decide whether the PATCH also normalizes them (they fail gate checks 2
-   and 3 as-is).
+1. **PR 199 / PR 200 — FS5-normalized re-drafts (t_87d974be, post-gate
+   t_6afe7564).** The originals pre-date the FS5 restyle (visible-label
+   blocks, `Fixes #N` at the BOTTOM, no `Assisted by JoeBot` trailer) and
+   failed gate checks 2/3/5 as byte-identical appends. Per the gate ruling
+   these two drafts are now FULL FS5 rewrites: `^Fixes #N$` line 1, prose
+   narrative + content-named sections (199 keeps `## Change`, dropped for
+   200 to hold the cap — its bullet only restated the narrative), test
+   evidence in counts+base-comparison sentence shape with every RED/GREEN
+   fact preserved, `## Impact` verbatim from this pack's accepted draft
+   (passes check 5b), `Assisted by JoeBot` exact last line. One PATCH
+   carries restyle + Impact together (T-A/T-B anti-churn precedent);
+   apply lane t_f21df19d holds these two items until the re-draft passes
+   re-gate (one edit + re-gate per check 8). `manifest.json` `pos` reflects
+   the rewrite; `orig_sha256_16` still pins the live body.
 2. **Issue 96** (2025-01-24 enhancement) has no `Severity:` line, so its
    `Impact:` block is appended at the end of the body rather than above a
    Severity line; its files are marked `suspected` (new-module feature).

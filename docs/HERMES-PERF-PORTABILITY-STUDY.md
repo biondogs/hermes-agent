@@ -128,6 +128,10 @@ Ranked by operator priority order: tail-latency impact → portability → hygie
 
 ### R8 — Restart-cost reduction (proposal only; root fix owned by t_a3384e1e)
 - **What:** measured 10-24 bounce: 13 m 18 s total = 11 m drain + 28 s notices + 19 s swap + 1 m 46 s dispatcher boot. The staged drain-gate hotfix (t_a3384e1e) + v1.1 ESTOP already fix the *retry-budget* damage. Remaining safe shortenings: (a) schedule bounces in idle windows (dispatcher knows queue depth — a `--when-idle` pre-check in the bounce script), (b) optional drain SLA (e.g. after 5 min, cleanly requeue non-finished cards instead of waiting the full 30-min cap — needs the drain-gate hotfix loaded first), (c) pre-warm the dispatcher (~1 m 46 s of the total is post-boot dispatcher init; measure whether it can start in parallel with bot reconnect).
+- **R8(c) BOOT-TIMING measurements (receipted per bounce; skill `hermes-gateway-graceful-bounce` v1.2):**
+  - 2026-10-24 20:50Z verification bounce (t_8b461664): first_tg=+12s, last_tg≈+77s, dispatcher_lock≈+86s, first tick +91s → verdict: dispatcher init itself sub-2 s; ~95 % of the "boot" is waiting behind the serial ~13 s/bot telegram-reconnect chain. Overlap needs an in-product change (spawn the dispatcher watcher before the connect phase), NOT a script knob — upstream-able proposal, do not hotfix casually.
+  - **2026-10-25 02:30Z update bounce (t_c0969a7f, v0.22.5+9.g3a931a6): first_tg=+12s, last_tg=+78s, dispatcher_lock=+87s** — second data point, consistent with the first (dispersion across boot conditions ≈ ±2 s on the lock). Confirms the measurement is stable, not a one-off.
+  - **Knob-trial status:** the `--when-idle` / `--drain-sla` trial was NOT exercised on the update bounce (cards were running + dispatch paused at the code swap; the orchestrator ordered a short window) — **trial still pending, rides a future bounce**.
 - **Impact:** MEDIUM for maintenance windows (13 min → ~3–5 min idle-window / ~7 min loaded).
 - **Effort:** S-M (script flag + measurement; the SLA needs the hotfix + operator comfort).
 - **Risk:** M if done before the drain-gate hotfix lands; L after.
@@ -169,7 +173,7 @@ Ranked by operator priority order: tail-latency impact → portability → hygie
 | PROMPT-DIET-WORKER | R6(a): curated skill subset + protocol text tightening for kanban-worker, 1-week trial with fallback profile | kanban-board-orchestrator (protocol owner) + sw-docs | SKILLS-SHARE-PILOT | no |
 | PROMPT-DIET-ARCH | R6(c): session-reset discipline for architect/sw lanes, update skill + measure 1 week of tokens/session | kanban-board-architect | — | no |
 | STATEDB-RETENTION | R7 policy + vacuum; verify FSI consumers | sw-devops | — | no |
-| BOUNCE-IDLE-KNOBS | R8 script flags (--when-idle, drain-SLA proposal doc) — coordination-only card vs t_a3384e1e/t_c0969a7f | kanban-board-architect | t_a3384e1e lands | rides update bounce |
+| BOUNCE-IDLE-KNOBS | R8 script flags (--when-idle, drain-SLA proposal doc) — coordination-only card vs t_a3384e1e/t_c0969a7f | kanban-board-architect | t_a3384e1e lands | NOT exercised on the t_c0969a7f update bounce (short window ordered); trial rides a future bounce |
 | HOTFIX-UPSTREAM-PRs | R9: 3 upstreamable patches through distiller+operator gates | sw-dev-a | t_7e91f1b9 (rebased stack) | no |
 | CONFIG-HYGIENE-SWEEP | R10 + QW4/QW5 | sw-docs | — | no |
 

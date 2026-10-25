@@ -1,6 +1,6 @@
 # HERMES CONFIG-DIVERGENCES — the record-why file
 
-**Created:** 2026-10-24 · **Card:** PERF-PORT QW5 (t_36eda488) · **Basis:** HERMES-PERF-PORTABILITY-STUDY.md §B11 + full-fleet re-measurement 2026-10-24 (59 configs: root + 58 profiles, parsed with proper nested-yaml paths)
+**Created:** 2026-10-24 · **Card:** PERF-PORT QW5 (t_36eda488) · **Basis:** HERMES-PERF-PORTABILITY-STUDY.md §B11 + full-fleet re-measurement 2026-10-24 (59 configs: root + 58 profiles, parsed with proper nested-yaml paths) · **Amended:** 2026-10-24 by the R10 config-hygiene sweep (t_fab224e9): §4 rewritten post-R3, §10 closed, rows 11–19 added.
 
 **Purpose:** every deliberate divergence from "plain default Hermes config" gets a recorded
 reason here, so nobody "fixes" a pin that is load-bearing, and nobody re-learns why the
@@ -49,19 +49,14 @@ truth, no per-profile variation to record): model/provider/auxiliary structure,
   trusted internal network. **Security tradeoff, accepted and recorded** — revisit under
   PERF-PORT R4 (per-host overlay + CA plumbing) rather than silently.
 
-## 4. Compression policy (`compression:` section) — root + 3 heavy-lane overrides
+## 4. Compression policy (`compression:` + `auxiliary.compression:`) — root base + R3 per-lane explicit blocks
 
-- **What:** root defines the fleet policy: `threshold 0.85, target_ratio 0.2,
-  protect_last_n 20, protect_first_n 3, micro_compact on`. Only three profiles override,
-  each for measured token weight (study B6):
-  - `kanban-orchestrator`: `protect_last_n: 30`
-  - `kanban-worker`: `protect_last_n: 50`
-  - `research`: `protect_last_n: 50, target_ratio: 0.3, threshold: 0.6`
-- **Why:** policy is deliberately **single-sourced at root** so a fleet behavior change
-  is one edit; the three overrides exist because those lanes run 3–18 K-token system
-  prompts and 2–5 M cumulative input per session — they need a bigger protected tail
-  (protocol integrity) and, for research, an earlier trigger + softer ratio because its
-  sessions compress rarely and hard otherwise.
+- **What (re-measured 2026-10-24 post-R3, live read of all 59 configs):**
+  - **Root** defines the fleet base block: `threshold 0.85, target_ratio 0.2, protect_last_n 20, micro_compact on, keep_first_n 3`.
+  - **11 configs carry an explicit compression block** (live census t_fab224e9): root + the 8 heavy dev/eng lanes (`kanban-board-architect`, `kanban-worker`, `research`, `sw-architect`, `sw-dev-a/b`, `sw-qa`, `sw-reviewer`, `sw-ux`) mirroring the root block (`0.85 / 0.2 / protect 20`), plus `kanban-orchestrator` with its single override `protect_last_n: 30`. All other profiles run on the implicit default (threshold 0.75).
+  - **Superseded (historical):** the pre-R3 override set documented here originally — `kanban-worker: protect_last_n 50` and `research: 50 / target 0.3 / threshold 0.6` — was REPLACED 2026-10-24 by the R3 per-lane explicit blocks above (COMPRESSION-RCA-2026-10-23 §7(d) table, landed by t_fe23cd4b with its own receipts + backup `~/.hermes/config-backups/r3-degr-20261024/`). The old 50-value tail-protection design is retired; do not reintroduce it without a new measured reason.
+  - **1M-window caveat (RCA §7(d), standing):** `compression.threshold` on the 1 000 000-context lanes is a de-facto no-op today (aux model window 262 144 silently clamps the trigger) — don't "tune" those lanes until the aux model's window ≥ 1 M.
+- **Why:** policy is deliberately single-sourced at root; the R3 explicit blocks equalize the heavy lanes at the root's measured-storm-safe trigger (explicit 0.85 vs implicit 0.75 → −29…−80 % compression events on those lanes, per the RCA's dwell arithmetic), and `kanban-orchestrator` keeps its bigger protected tail (30) for protocol integrity. `auxiliary.compression.model: qwen36-fast` + storm guard/cooldown machinery are R3's (c) items — see row 5 below and t_fe23cd4b's receipt for the degradation-mode config (`auxiliary.compression.fallback_model: qwen38`, `agent.compression_degraded_models: [qwen38-flash-fp8]`).
 
 ## 5. `auxiliary.compression.model: qwen36-fast` — pinned on ALL 59 configs ⚠ load-bearing
 
@@ -93,8 +88,10 @@ truth, no per-profile variation to record): model/provider/auxiliary structure,
 - **What:** g01-butler→gargantua01, g02-butler→gargantua02, gaudi-butler→gaudi,
   sjproto-butler→skipjack-prototype, swco-butler→software-co.
 - **Why:** local hotfix `602ea0a874` (per-profile board pin + butler fence) — each butler
-  is fenced to exactly its own board so cross-board crosstalk is impossible. Full record:
-  KANBAN-SYSTEM-AS-BUILT.md. (Note: `kanban:` keys belong in the GLOBAL config only for
+  is fenced to exactly its own board so cross-board crosstalk is impossible. **Full record
+  (collapsed 2026-10-24, PERF-PORT R10 t_fab224e9): KANBAN-SYSTEM-AS-BUILT.md §5
+  "Documented deviation — per-profile `kanban.board` pins"** — the record of truth for
+  this deviation. (Note: `kanban:` keys belong in the GLOBAL config only for
   every profile *except* this documented butler-pin case.)
 
 ## 8. GitHub token spelling: `GH_TOKEN` only (convention, enforced 2026-10-24)
@@ -120,17 +117,114 @@ truth, no per-profile variation to record): model/provider/auxiliary structure,
   error in gateway.log: 2026-10-23 16:47:45). Recorded here because the 10-23 bounce
   banner still shows the warnings — that banner predates the fix.
 
-## 10. Not yet recorded (surveyed as divergent, reason unknown at time of writing)
+## 10. Formerly-unrecorded divergences — CLOSED by the R10 sweep (2026-10-24, t_fab224e9)
 
-- Per-profile `agent.disabled_toolsets` lists and `platform_toolsets` differences
-  (least-privilege shaping per lane — spot-checked sane, never formally tabulated).
-- `delegation.model: qwen38-flash-fp8` at root (delegate children ride the cheap
-  workhorse — deliberate cost choice, unrecorded until now).
-- `model_catalog.ttl_hours: 24`, `sessions.retention_days: 60` at root — defaults
-  changed at some point; original motivation not recoverable from history. Flag for the
-  R10 config-hygiene pass if it matters.
+The three items listed here as "not yet recorded" are now recorded (rows 11–12 + the
+flagged entry below); the R10 full-fleet nested-path re-measurement (59 configs, raw
+output attached to card t_fab224e9) is the formal tabulation the old text said was owed:
+
+- **Per-profile toolset shaping** (`toolsets`, `agent.disabled_toolsets`, `platform_toolsets`,
+  `approvals.deny`, `agent.max_turns` 100/150/200/250/300, `agent.reasoning_effort`
+  low/medium/high) → recorded as row 11.
+- **`delegation.model: qwen38-flash-fp8` at root** → recorded as row 12.
+- **`sessions.retention_days: 60`, `model_catalog.ttl_hours: 24` at root** → retention_days
+  recorded as row 13 (governed by the R7 policy); `model_catalog.ttl_hours: 24` remains
+  **flagged-accepted-unattributed**: motivation not recoverable from history, effect is a
+  24 h TTL on the model-catalog cache — harmless; revisit only if catalog staleness is
+  ever observed.
+
+## 11. Per-lane capability shaping (toolsets / disabled_toolsets / platform_toolsets / approvals.deny / max_turns / reasoning_effort) — fleet convention, RECORDED 2026-10-24
+
+- **What:** each profile's toolset list, disabled-list, per-platform lists, approval deny
+  lists, turn cap, and reasoning effort differ per lane (5 distinct `toolsets` patterns:
+  butlers, meta pair, workers, research-ro, sw staff; butlers/auditors read-only-shaped;
+  ops lanes carry docker/system deny-lists; workers carry git-destructive deny-lists).
+- **Why:** least-privilege by design — butlers are terminalless, orchestrators
+  kanban-only, research is read-only, ops lanes are fenced from infra-destroying
+  commands. The roster in KANBAN-SYSTEM-AS-BUILT §3 is the authority; the R10 sweep
+  output (card t_fab224e9) is the first full formal tabulation (22 varying paths,
+  every one mapped to a recorded row or a roster-design convention). Changing any
+  lane's toolset is a roster decision, not a hygiene fix.
+
+## 12. `delegation.model: qwen38-flash-fp8` at root — RECORDED 2026-10-24
+
+- **What/why:** delegate children ride the cheap generalist workhorse instead of the
+  delegating session's (often frontier-priced) model — deliberate cost choice for
+  mechanical subtasks. Related root keys in the same spirit: `delegation.provider: litellm`,
+  `delegation.reasoning_effort: medium`, `delegation.max_concurrent_children: 10`.
+
+## 13. `sessions.retention_days: 60` at root — RECORDED 2026-10-24 (governed by R7 policy)
+
+- **What/why:** legacy knob from the pre-R7 era (`auto_prune` was `true` with this value —
+  a live delete path, found and disabled 2026-10-24). Retention is now governed by
+  HERMES-STATEDB-RETENTION-POLICY.md (ARCHIVE-NOT-DELETE; 60-day export window; weekly
+  engine; card t_c8bd58a3). The knob itself is inert while `sessions.auto_prune: false`
+  and is kept only so a future re-enable can't silently diverge from the policy window.
+
+## 14. `security.redact_secrets` — was `false`, flipped `true` 2026-10-24 (R10, t_fab224e9)
+
+- **What:** root config carried `security.redact_secrets: false` with no recorded reason;
+  provenance unrecoverable (predates the 2026-09-23 config backup). It printed
+  "Secret redaction: DISABLED" at every gateway start.
+- **Why flipped:** upstream default is `true`; chat-platform egress was ALREADY
+  force-scrubbed regardless (fails-closed egress scrub, upstream #23810), so the flip's
+  real effect is redacting secrets in session JSONs, logs and internal state — aligning
+  runtime behavior with the estate law "no secret values in receipts". Takes effect at
+  the next gateway start (rides the t_c0969a7f update bounce; no restart done for it).
+- **Rollback:** `flock ~/.hermes/locks/profile-config.lock hermes config set
+  security.redact_secrets false`; pre-edit backup `~/.hermes/config-backups/r10-hygiene-20261024/`.
+
+## 15. Langfuse plugin — enabled with no credentials → DISABLED 2026-10-24 (R10, t_fab224e9)
+
+- **What:** root `plugins.enabled` listed both `langfuse` and its legacy core-era alias
+  `observability/langfuse` (same plugin; left-core migration keeps the alias), but ZERO
+  Langfuse credentials exist anywhere in the fleet (root + 58 profile .env files and the
+  R2 secrets manifest all checked). Every gateway start warned "missing credentials …
+  traces will NOT be emitted" and the plugin never emitted one trace.
+- **Action:** `hermes plugins disable langfuse` (both keys go with it). Rollback:
+  `hermes plugins enable langfuse` + add HERMES_LANGFUSE_PUBLIC_KEY/SECRET_KEY through
+  the R2 secrets manifest (secrets.yaml + blueprint + vault), never a raw .env edit.
+
+## 16. api_server public bind (`API_SERVER_HOST=0.0.0.0`) — deliberate, ACCEPTED, RECORDED 2026-10-24
+
+- **What/why:** the API server binds all interfaces to serve the remote dashboard
+  (CORS origins include `http://100.85.215.88:3000`); access requires `API_SERVER_KEY`;
+  terminal backend is `local` (unsandboxed) — the combination prints a "network-accessible
+  AND unsandboxed" gateway-start warning **by design**. Host firewall posture is
+  operator-owned (aistack/host law: agents don't touch firewalling).
+- **Status:** accepted deviation; the warning line stays. If the dashboard ever moves to
+  localhost-only, tighten the bind in the R2 blueprint (bp_root) + `API_SERVER_HOST`.
+
+## 17. `camofox` in `platform_toolsets` (cli/slack at root; some profiles) — forward-compat spelling, DO NOT "FIX"
+
+- **What:** `platform_toolsets.cli/.slack` name toolset `camofox`, which `hermes config
+  check` flags as "unknown toolset" on cores that still bundle the Camofox browser
+  backend (plugin inactive ⇒ name unresolvable).
+- **Why keep:** `left_core_migration` explicitly defines camofox as a plugin toolset
+  (`replaces_toolsets`: core `browser` = browser_exec; Camofox's tools = plugin `camofox`)
+  and expects saved platform lists to name the plugin spelling — it is the post-left-core
+  name. The config-check warning is transitional and disappears on a camofox-less core
+  or once the plugin activates (it stays inactive with "this Hermes core still bundles
+  the Camofox browser backend" while bundled).
+
+## 18. Provider-name case split `custom:litellm` (root) vs `custom:LiteLLM` (58 profiles) — cosmetic
+
+- **What:** root `model.provider` is `custom:litellm`, the 58 profiles use
+  `custom:LiteLLM`; every `providers:` block is keyed lowercase `litellm:`. Resolution is
+  case-insensitive (fleet runs fine; `config check` rc=0 both spellings).
+- **Status:** harmless spelling drift from profile-creation history. Do not churn 59
+  files for it; normalize opportunistically via the PROF-SWEEP byte-sync machinery if
+  it ever runs again.
+
+## 19. `telemetry.shared_metrics` off on 3 profiles (distiller, kanban-board-architect, plugin-ab) — accepted opt-outs, RECORDED 2026-10-24
+
+- **What:** `enabled/send: false` on exactly these three (root + all others: true).
+- **Why:** operator-usage telemetry deliberately off on the meta/gate lanes and the A/B
+  probe profile (probe isolation is obvious for plugin-ab; the distiller/architect
+  opt-outs predate 2026-10-24 records and are kept as deliberate judgment-seat opt-outs
+  — flipped candidates only if the operator asks for uniform telemetry).
+
 
 ---
 
-*Measurement provenance: re-measured 2026-10-24 by t_36eda488 pre-flight
-(qw_preflight.py / qw_docfacts.py in the card workspace); study baseline HERMES-PERF-PORTABILITY-STUDY.md §B11 (commit 757b729). Rollback for any row: estate hourly git snapshot.*
+*Measurement provenance: re-measured 2026-10-24 by t_36eda488 pre-flight (qw_preflight.py / qw_docfacts.py in the card workspace); study baseline HERMES-PERF-PORTABILITY-STUDY.md §B11 (commit 757b729). Re-measured again 2026-10-24 by the R10 sweep (t_fab224e9: deprecated-key collectors from hermes_cli.doctor_config + nested-path divergence scan, raw output on the card). Rollback for any row: estate hourly git snapshot.*

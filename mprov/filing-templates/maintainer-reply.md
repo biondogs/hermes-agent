@@ -34,4 +34,8 @@ Keep (content rigor, unchanged): run it before you say it; per-claim
 verdicts with receipts; mark un-runs honestly; verify your own comment
 landed (read back id/author/length via API). Change (look only): one
 paragraph, stance first, receipts inline, ≤~80 words when the maintainer's
-ask fits in one.
+ask fits in one. Security claims in replies follow the Deployment threat
+model (controlled deployments, MPROV-MAINT-POLICY.md, 2026-10-25): state
+harms that survive with no untrusted network actor; concede
+working-as-intended where the maintainer's design intent says so, without
+backpedaling on verified evidence.

@@ -43,7 +43,11 @@ transport degrades">. Security ENHANCEMENTS (no active breakage) instead
 write `Severity: [SEC] — future nice-to-have security enhancement: <one
 clause>` and carry the `security` label with NO sN-* label; crisis-tier
 security (credential exposure live, break by default) keeps its S tier and
-also carries `security`.
+also carries `security`. EVERY security-framed filing states its harm under
+the Deployment threat model (controlled deployments — see
+MPROV-MAINT-POLICY.md, 2026-10-25): what breaks, leaks, or misbehaves with
+no untrusted network actor; gate check 5c rejects framing whose only harm
+is an attacker on the deployment network.
 
 Found while <what you were doing> for #<N>. Related: #<N>,
 mprov-ng/<repo>#<N>.

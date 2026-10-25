@@ -139,6 +139,23 @@ mprov work until the operator amends them.
   `filing-drafts/impact-retrofit-2026-10-24/`, gate cards to distiller
   per lane.
 
+- **2026-10-25 — DEPLOYMENT THREAT MODEL added: security filings must state
+  harm under the controlled-deployment premise (maintainer ruling on
+  mcc#318, kanban t_2450bd52).** Maintainer direction verbatim (mcc#318
+  comment 6393012139): *"This system is in a tightly controlled setting
+  where an admin would have cabled a system in a deliberate way to use the
+  port match function in NADS.  Systems not cabled deliberately, would fall
+  into the auto detection section of the UI and require manual intervention
+  by an admin.  Unless I am missing something, the code functions as
+  intended."* and *"I would suggest you restructure your security model
+  around this and reassess all your open security issues and PRs."* All 30
+  open security-classified filings reassessed under it (verdict table +
+  receipts under `maint-2026-10-25/sec-remodel/`); mcc#318 closed
+  working-as-intended on the ruling; PR cc#336 stays open as the opt-in
+  hardening the maintainer shaped. Distiller gate check **5c**;
+  `filing-templates/` mirrored. See the **Deployment threat model** section
+  below.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -426,11 +443,18 @@ in order:
 5b. Impact section (FS9, operator directive 2026-10-24): present — issues
    carry an `Impact:` block above the Severity line, PRs a `## Impact`
    section — AND it states what the issue/fix touches, the production-
-   behavior delta (current vs expected; PRs: before vs after), and at
-   least one repo-relative file path (issues may mark paths `suspected`).
+   behavior delta (current vs expected; PRs: before vs after), and
+   at least one repo-relative file path (issues may mark paths `suspected`).
    REJECT a filing with no Impact section, one that names no file, or one
    missing the prod/expected contrast; also REJECT Impact blocks over
    4 lines/bullets (bloat guard).
+5c. Deployment threat model (maintainer ruling 2026-10-25): a security-framed
+   draft must state its harm under the controlled-deployment premise (see
+   the Deployment threat model section) — a concrete defect, leak, or
+   misbehavior that survives with NO untrusted network actor. REJECT framing
+   whose only harm is an attacker on the deployment L2 / untrusted network
+   ("an unauthenticated network caller can …", "a host on the same L2 …"):
+   under the premise that is working-as-intended, not a defect.
 6. Evidence: defect-site `file:line`/permalink present; error output quoted
    verbatim where the claim is observational; test evidence has counts AND
    a base comparison.
@@ -498,6 +522,52 @@ nice to have."*
   authoritative tier for them. New `[SEC]` filings get no `sN-*` label.
 - Project 9: recategorized items stay in their current column — the tier
   change is not a state transition.
+
+## Deployment threat model — controlled setting (maintainer ruling 2026-10-25, kanban t_2450bd52)
+
+Maintainer direction verbatim (uberlinuxguy, mcc#318 comment 6393012139,
+2026-10-25T03:35:02Z): *"Your context for implementation is flawed.  This
+system is in a tightly controlled setting where an admin would have cabled a
+system in a deliberate way to use the port match function in NADS.  Systems
+not cabled deliberately, would fall into the auto detection section of the UI
+and require manual intervention by an admin.  Unless I am missing something,
+the code functions as intended.  I would suggest you restructure your
+security model around this and reassess all your open security issues and
+PRs."* This is the standing threat model for every mprov security-framed
+filing:
+
+- **The premise.** mPCC deployments are tightly controlled: admins cable
+  systems deliberately (port-match enrollment), and unexpected systems land
+  in auto-detection until an admin assigns them. There is NO assumed
+  untrusted actor on the deployment L2/network — the network and the
+  machines reachable on it are operated by the same admin running mPCC.
+  House precedent (mcc#318, closed working-as-intended on this ruling):
+  maintainer platform-design intent wins over stricter-security defaults;
+  comply, do not counter-propose.
+- **Harms that still stand on their own** (reportable per the Severity
+  model): secret material leaking into API output or world-readable /
+  volatile files; silent data-integrity or association destruction;
+  break-on-misconfig and break-on-malformed-input; destructive tools aimed
+  by unvalidated operator input; executing fetched bytes without
+  verification; shipped default credentials; local exposure on shared
+  multi-user nodes (Slurm compute nodes are multi-user by design).
+- **Filing rule (gate check 5c).** Every security-framed filing MUST state
+  its harm under THIS premise — what breaks, leaks, or misbehaves assuming
+  no untrusted network actor. Framing whose only harm is
+  "an (unauthenticated) network attacker can …" is GATE-REJECTED going
+  forward. If the harm vanishes entirely under the premise, the item closes
+  as working-as-intended with a courteous comment citing the ruling; if the
+  harm survives but was security-escalated, it is restruck per the Severity
+  model — retitle away the attacker framing (unless maintainer-engaged:
+  never retitle a quoted item, receipt the skip), drop the security
+  classification, restate severity under the premise.
+- **2026-10-25 reassessment** (kanban t_2450bd52): all 30 open
+  security-classified filings across the four repos verdicted
+  KEEP-UNCHANGED / RESTRIKE / CLOSE-INTENDED against this premise; verdict
+  table and receipts under `maint-2026-10-25/sec-remodel/` and on the kanban
+  card. ADR-0001 v2 territory (identity layer: cc#331, cc PRs #341/#344, the
+  accepted cc#315 exposure) was cross-checked for consistency and left
+  untouched — the ADR already encodes his rulings.
 
 ## Comms & engagement (2026-10-24, operator ruling — kanban t_038a3543)
 

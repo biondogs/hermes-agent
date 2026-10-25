@@ -47,6 +47,12 @@ Hard rules (unchanged rigor):
 - `## Impact` is mandatory (FS9): touches / before-vs-after production
   behavior / repo-relative files touched, ≤4 lines — gate check 5b rejects
   a PR without it or one naming no file.
+- Security-framed PRs state their motivation under the Deployment threat
+  model (controlled deployments — see MPROV-MAINT-POLICY.md, 2026-10-25):
+  the fix stands on a defect/leak/hygiene harm that survives with no
+  untrusted network actor; gate check 5c rejects attacker-on-the-network
+  framing. Opt-in hardening PRs say so plainly ("adds the opt-in gate for
+  deployments that want one").
 - Last line exactly `Assisted by JoeBot` (Rule A). No `Agent-*` /
   `Co-Authored-By` trailers (leak-scan).
 - Section names: pick from what the PR actually contains (`## Change`,

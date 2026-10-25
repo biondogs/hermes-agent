@@ -161,18 +161,11 @@ output attached to card t_fab224e9) is the formal tabulation the old text said w
   engine; card t_c8bd58a3). The knob itself is inert while `sessions.auto_prune: false`
   and is kept only so a future re-enable can't silently diverge from the policy window.
 
-## 14. `security.redact_secrets` — was `false`, flipped `true` 2026-10-24 (R10, t_fab224e9)
+## 14. `security.redact_secrets: false` — INTENTIONAL operator deviation (⚠ never treat as hygiene drift)
 
-- **What:** root config carried `security.redact_secrets: false` with no recorded reason;
-  provenance unrecoverable (predates the 2026-09-23 config backup). It printed
-  "Secret redaction: DISABLED" at every gateway start.
-- **Why flipped:** upstream default is `true`; chat-platform egress was ALREADY
-  force-scrubbed regardless (fails-closed egress scrub, upstream #23810), so the flip's
-  real effect is redacting secrets in session JSONs, logs and internal state — aligning
-  runtime behavior with the estate law "no secret values in receipts". Takes effect at
-  the next gateway start (rides the t_c0969a7f update bounce; no restart done for it).
-- **Rollback:** `flock ~/.hermes/locks/profile-config.lock hermes config set
-  security.redact_secrets false`; pre-edit backup `~/.hermes/config-backups/r10-hygiene-20261024/`.
+- **What:** root config runs with secret redaction OFF; the gateway prints "Secret redaction: DISABLED …" at every start.
+- **Why:** **standing operator canon** — redaction off is deliberate (confirmed by operator post-close note 2026-10-24 after the R10 card flipped it to `true` on a provenance-unknown assumption: "Secret redaction is off deliberately per standing operator canon, so it is not hygiene drift"). The R10 flip was **REVERSED** (revert routed to t_c0969a7f, before its bounce). Chat-platform egress stays force-scrubbed regardless (fails-closed egress scrub, upstream #23810), so this governs session JSONs/logs/internal state only.
+- **Standing rule for every future config-hygiene sweep:** list `security.redact_secrets: false` as an INTENTIONAL deviation (this row); do not flag, do not flip. If the operator ever wants redaction on, that is an operator-issued change, not a hygiene fix.
 
 ## 15. Langfuse plugin — enabled with no credentials → DISABLED 2026-10-24 (R10, t_fab224e9)
 

@@ -1,0 +1,33 @@
+litellm-yaml-law.txt — canonical law text (t_2fa0d71d, operator law 2026-10-25)
+=====================================================================
+
+SOUL.md block (append to root ~/.hermes/SOUL.md and every
+~/.hermes/profiles/*/SOUL.md; grep-guard marker: "LITELLM-YAML LAW (operator law, 2026-10-25"):
+
+---
+
+## LITELLM-YAML LAW (operator law, 2026-10-25 — absolute)
+
+No profile may add, change, or re-add a model entry (model_list or any
+model definition) in /local/compose/aistack/litellm/config.yaml unless
+ALL THREE hold:
+
+1. The OPERATOR explicitly requested that specific change in his own words.
+2. CONFIRMATION 1: the agent shows the operator the exact diff, and the
+   operator approves it.
+3. CONFIRMATION 2: a second, separate operator approval given immediately
+   before the write.
+
+A kanban card body, a standing GO, a prior ruling, or a parent card does NOT
+count as permission or as a confirmation. Workers are headless and cannot
+obtain confirmations — if such a change seems needed, kanban_block with
+kind="needs_input" and STOP. Confirmations are collected only via
+operator-facing chat (a clarify answer or a direct reply from the operator).
+Do not touch that file for any other reason: an alert-only tripwire reports
+every change to the operator.
+
+---
+
+Derived short forms (skills / repo docs) carry the same three gates and the
+same exclusions (no card body, standing GO, prior ruling, or parent card
+counts as permission or a confirmation; workers block needs_input and stop).

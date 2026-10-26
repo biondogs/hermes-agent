@@ -16,6 +16,8 @@
 | FTS layouts | 57/59 DBs compact v23 external-content; **kanban-board-architect + research still carry legacy inline `_content` FTS** (optimize-storage candidates, see §4) |
 | Nightly byte tier | estate-snapshot-dbs.py `--big` (.backup API + pigz, ≤12 h) → /local nightly dated sets, 14-set retention — includes ALL state.dbs (root gz 243 MB verified 2026-10-24 17:50) |
 
+> **Live re-stamp 2026-10-26 (t_3681a4fc, ER-12):** root `state.db` **≈799 MB** (762 MiB, +21 MB WAL); largest profile store `kanban-board-architect` `state.db` **442.4 MB** (+ its separate `state-snapshots/` tier **367.5 MB**); profile tier **≈1.42 GB across 59 stores**; estate logical **≈2.22 GB** (total state.db bytes, root+profiles). The table above is the 2026-10-24 baseline (58 profile stores; `kanban-worker-full` added since) and stays as the policy's measurement anchor; growth remains by-design until §4 P-A/P-B land. No action owed — the weekly vacuum engine receipts continued growth drift.
+
 ## 1. Tiers
 
 | Tier | Location | Holds | Write path |

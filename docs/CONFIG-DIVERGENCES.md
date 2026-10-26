@@ -1,6 +1,6 @@
 # HERMES CONFIG-DIVERGENCES — the record-why file
 
-**Created:** 2026-10-24 · **Card:** PERF-PORT QW5 (t_36eda488) · **Basis:** HERMES-PERF-PORTABILITY-STUDY.md §B11 + full-fleet re-measurement 2026-10-24 (59 configs: root + 58 profiles, parsed with proper nested-yaml paths) · **Amended:** 2026-10-24 by the R10 config-hygiene sweep (t_fab224e9): §4 rewritten post-R3, §10 closed, rows 11–19 added.
+**Created:** 2026-10-24 · **Card:** PERF-PORT QW5 (t_36eda488) · **Basis:** HERMES-PERF-PORTABILITY-STUDY.md §B11 + full-fleet re-measurement 2026-10-24 (59 configs as of that date: root + 58 profiles, parsed with proper nested-yaml paths) · **Amended:** 2026-10-24 by the R10 config-hygiene sweep (t_fab224e9): §4 rewritten post-R3, §10 closed, rows 11–19 added · **Amended:** 2026-10-26 by ER-12 housekeeping (t_3681a4fc): row-4 key name corrected to the live `protect_first_n`, row 15 (langfuse) UNINSTALL, rows 20–21 added (claude refs explained; disk-cleanup protection verified). Fleet is now 60 configs (root + 59 profiles — `kanban-worker-full` added ~2026-10-25; counts stamped "58/59" in older rows are their measurement-date values, retained as provenance).
 
 **Purpose:** every deliberate divergence from "plain default Hermes config" gets a recorded
 reason here, so nobody "fixes" a pin that is load-bearing, and nobody re-learns why the
@@ -52,7 +52,7 @@ truth, no per-profile variation to record): model/provider/auxiliary structure,
 ## 4. Compression policy (`compression:` + `auxiliary.compression:`) — root base + R3 per-lane explicit blocks
 
 - **What (re-measured 2026-10-24 post-R3, live read of all 59 configs):**
-  - **Root** defines the fleet base block: `threshold 0.85, target_ratio 0.2, protect_last_n 20, micro_compact on, keep_first_n 3`.
+  - **Root** defines the fleet base block: `threshold 0.85, target_ratio 0.2, protect_last_n 20, micro_compact on, protect_first_n 3` (key name corrected 2026-10-26, t_3681a4fc: the live key is `protect_first_n` at config.yaml:130 — this row previously said `keep_first_n`).
   - **11 configs carry an explicit compression block** (live census t_fab224e9): root + the 8 heavy dev/eng lanes (`kanban-board-architect`, `kanban-worker`, `research`, `sw-architect`, `sw-dev-a/b`, `sw-qa`, `sw-reviewer`, `sw-ux`) mirroring the root block (`0.85 / 0.2 / protect 20`), plus `kanban-orchestrator` with its single override `protect_last_n: 30`. All other profiles run on the implicit default (threshold 0.75).
   - **Superseded (historical):** the pre-R3 override set documented here originally — `kanban-worker: protect_last_n 50` and `research: 50 / target 0.3 / threshold 0.6` — was REPLACED 2026-10-24 by the R3 per-lane explicit blocks above (COMPRESSION-RCA-2026-10-23 §7(d) table, landed by t_fe23cd4b with its own receipts + backup `~/.hermes/config-backups/r3-degr-20261024/`). The old 50-value tail-protection design is retired; do not reintroduce it without a new measured reason.
   - **1M-window caveat (RCA §7(d), standing):** `compression.threshold` on the 1 000 000-context lanes is a de-facto no-op today (aux model window 262 144 silently clamps the trigger) — don't "tune" those lanes until the aux model's window ≥ 1 M.
@@ -167,16 +167,24 @@ output attached to card t_fab224e9) is the formal tabulation the old text said w
 - **Why:** **standing operator canon** — redaction off is deliberate (confirmed by operator post-close note 2026-10-24 after the R10 card flipped it to `true` on a provenance-unknown assumption: "Secret redaction is off deliberately per standing operator canon, so it is not hygiene drift"). The R10 flip was **REVERSED** (revert routed to t_c0969a7f, before its bounce). Chat-platform egress stays force-scrubbed regardless (fails-closed egress scrub, upstream #23810), so this governs session JSONs/logs/internal state only.
 - **Standing rule for every future config-hygiene sweep:** list `security.redact_secrets: false` as an INTENTIONAL deviation (this row); do not flag, do not flip. If the operator ever wants redaction on, that is an operator-issued change, not a hygiene fix.
 
-## 15. Langfuse plugin — enabled with no credentials → DISABLED 2026-10-24 (R10, t_fab224e9)
+## 15. Langfuse plugin — UNINSTALLED 2026-10-26 (ER-12, t_3681a4fc; previously disabled 2026-10-24, R10, t_fab224e9)
 
 - **What:** root `plugins.enabled` listed both `langfuse` and its legacy core-era alias
   `observability/langfuse` (same plugin; left-core migration keeps the alias), but ZERO
-  Langfuse credentials exist anywhere in the fleet (root + 58 profile .env files and the
+  Langfuse credentials exist anywhere in the fleet (root + all profile .env files and the
   R2 secrets manifest all checked). Every gateway start warned "missing credentials …
   traces will NOT be emitted" and the plugin never emitted one trace.
-- **Action:** `hermes plugins disable langfuse` (both keys go with it). Rollback:
-  `hermes plugins enable langfuse` + add HERMES_LANGFUSE_PUBLIC_KEY/SECRET_KEY through
-  the R2 secrets manifest (secrets.yaml + blueprint + vault), never a raw .env edit.
+- **History:** 2026-10-24 (t_fab224e9) the plugin was disabled (`hermes plugins disable langfuse`);
+  **2026-10-26 (t_3681a4fc) the operator declined Langfuse for fees and the plugin was
+  fully UNINSTALLED**: `hermes plugins remove langfuse` (plugin dir `~/.hermes/plugins/langfuse`
+  deleted — pre-removal tar `~/.hermes/backups/er12-20261026-1710EDT/langfuse-plugin-dir.tar.gz`),
+  which also auto-emptied `plugins.disabled: []`; the stale `_left_core_installed` marker was
+  dropped in the same pass (`camofox` only). Fleet-wide sweep verified zero langfuse references
+  remaining (no profile config, no profile plugin dir, no .env creds). **Do not re-install;
+  re-installing would re-arm the missing-credentials warning with no possible benefit.**
+  Reversal (if ever operator-ordered): re-install from the tar, `hermes plugins enable langfuse`,
+  and add HERMES_LANGFUSE_PUBLIC_KEY/SECRET_KEY through the R2 secrets manifest
+  (secrets.yaml + blueprint + vault), never a raw .env edit.
 
 ## 16. api_server public bind (`API_SERVER_HOST=0.0.0.0`) — deliberate, ACCEPTED, RECORDED 2026-10-24
 
@@ -216,6 +224,42 @@ output attached to card t_fab224e9) is the formal tabulation the old text said w
   probe profile (probe isolation is obvious for plugin-ab; the distiller/architect
   opt-outs predate 2026-10-24 records and are kept as deliberate judgment-seat opt-outs
   — flipped candidates only if the operator asks for uniform telemetry).
+
+## 20. Claude model references — EXPLAINED + debris removed, RECORDED 2026-10-26 (ER-12, t_3681a4fc)
+
+- **What was found (estate review BUG-6):** (a) a root-config `model_overrides.anthropic.claude-sonnet-5.context_window: 1000000`
+  block; (b) 28 gateway.log lines 10-24/10-25 naming root-session model "claude-opus-5-5".
+- **Explanation (verified live 2026-10-26):** the (b) lines are the **operator's own persisted
+  interactive `/model override` in the main-bot Telegram DM session**
+  (`agent:main:telegram:dm:8158007517`) — "Rehydrated persisted /model override …
+  model=claude-opus-5-5 provider=anthropic" at 5 gateway starts (10-24 16:01 → 10-25 11:21,
+  including the current PID 2028136 boot) plus 10-24 16:50–22:36 "Restart deferred" work-unit
+  dumps that carry the same session during the update drain. Session-level operator choice,
+  NOT fleet config: the fleet default remains qwen38-flash-fp8 and no worker lane uses any
+  anthropic model. (a) was dead debris — this tree's only provider is `custom:litellm`
+  (orb), no `providers.anthropic` block exists, no `ANTHROPIC_API_KEY` in any .env —
+  **removed 2026-10-26** via `hermes config unset model_overrides` (parse + `config check` rc=0).
+- **Standing rule:** the operator may `/model` their own chat sessions to any provider at will;
+  that is never hygiene drift and never a config change. Only *config-file* model references
+  belong in this file.
+
+## 21. disk-cleanup plugin (bundled) enabled at ROOT/default only — protection verified 2026-10-26 (ER-12, t_3681a4fc)
+
+- **What:** bundled plugin `disk-cleanup` v2.0.0 enabled on the default (root) profile
+  (`plugins.enabled` — enabled continuously since at least the 2026-09-23 config backup, so
+  it is live in the current gateway; no other profile enables it — deliberate: cleanup is a
+  home-hygiene role, not a per-worker need).
+- **Protection verification (code-read of `plugins/disk-cleanup/disk_cleanup.py`, 2026-10-26):**
+  deletion operates **only on entries the plugin itself tracked at creation time** (test at
+  task end; temp >7 d; cron-output >14 d; research/chrome/`>500 MB` are prompt-only);
+  `is_safe_path()` confines everything to `$HERMES_HOME` + `/tmp/hermes-*` (the estate mirror
+  `~/hermes-estate`, `/local` nightly/archive tiers and `/local/projects` are structurally
+  unreachable); `kanban/`, `plugins/`, `logs/`, `profiles/`, `skills/`, `sessions/`, `memories/`,
+  `backups/` are in BOTH `_NEVER_TRACK_TOP_LEVEL` and `_EMPTY_DIR_PROTECTED_TOP_LEVEL`
+  (never auto-tracked, never empty-dir-swept — the kanban comment cites "Kanban owns its own
+  lifecycle"); state DBs are gateway-written and never plugin-tracked. **Confirmed safe for
+  kanban/, state DBs, plugin-data and all estate-mirror paths.** Audit trail:
+  `$HERMES_HOME/disk-cleanup/cleanup.log` + `tracked.json`.
 
 
 ---

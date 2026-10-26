@@ -9,7 +9,7 @@
 
 ## 1. System overview
 
-Hermes Agent **v0.22.5+11.g9f66ae8** (upstream release v0.22.5 `bf0203a794` + 11-commit local hotfix carry — 10th carry `fa69c0e59f` compression degradation mode, 11th carry `9f66ae8351` kanban protocol prompt diet — activated under operator GO 2026-10-24 by t_3225161d; prior update under t_c0969a7f — see §9 HERMES-UPDATE-EXEC errata) runs on **ga01** as a single **multiplex gateway** (systemd **user** unit `hermes-gateway`, PID 3929413, up since 2026-10-25 02:33 EDT) serving all profiles over Telegram adapters. A **single dispatcher** (in-gateway, 15 s tick) claims work from **7 SQLite boards** into worker processes; each worker is a fresh process carrying only its assigned profile's config. Operator chat reaches the estate through per-board **butler bots**; a **Hindsight memory server** (ga01:8888) holds **23 banks**; a **kanban-stream plugin** mirrors worker activity into a Telegram ops channel; a set of **root + profile crons** provides governance automation.
+Hermes Agent **v0.22.5+11.g9f66ae8** (upstream release v0.22.5 `bf0203a794` + 11-commit local hotfix carry — 10th carry `fa69c0e59f` compression degradation mode, 11th carry `9f66ae8351` kanban protocol prompt diet — activated under operator GO 2026-10-24 by t_3225161d; prior update under t_c0969a7f — see §9 HERMES-UPDATE-EXEC errata; re-stamp verified live 2026-10-26: running tree @ `9f66ae8351`, tag `local-hotfix-stack-20261025`) runs on **ga01** as a single **multiplex gateway** (systemd **user** unit `hermes-gateway`, PID 2028136, up since 2026-10-25 11:19 EDT — PID re-stamped live 2026-10-26, t_3681a4fc) serving all profiles over Telegram adapters. A **single dispatcher** (in-gateway, 15 s tick) claims work from **7 SQLite boards** into worker processes; each worker is a fresh process carrying only its assigned profile's config. Operator chat reaches the estate through per-board **butler bots**; a **Hindsight memory server** (ga01:8888) holds **22 banks**; a **kanban-stream plugin** mirrors worker activity into a Telegram ops channel; a set of **root + profile crons** provides governance automation.
 
 ```
                       ┌────────────────────── OPERATOR ──────────────────────┐
@@ -42,9 +42,9 @@ Hermes Agent **v0.22.5+11.g9f66ae8** (upstream release v0.22.5 `bf0203a794` + 11
           │        │          │         │        │        │        │
           └────┬───┴────┬─────┴──┬──────┴────────┴───┬────┴────────┘
                ▼        ▼        ▼                   ▼
-        HINDSIGHT (ga01:8888)  23 banks          CRONS (root + profile)
+        HINDSIGHT (ga01:8888)  22 banks          CRONS (root + profile)
         general ×3 · butler ×5       nightly audits, skill-curator,
-        env ×5 · role ×10            archive-gc, watchdogs, DR backups
+        env ×5 · role ×9             archive-gc, watchdogs, DR backups
                ▼
         KANBAN-STREAM plugin → Telegram ops channel (worker activity feed)
 ```
@@ -56,7 +56,7 @@ Hermes Agent **v0.22.5+11.g9f66ae8** (upstream release v0.22.5 `bf0203a794` + 11
 - **Per-profile `kanban.board` pin + tool-layer fence** (LOCAL HOTFIX `851d9e9231`) — structural enforcement of board scope for pinned profiles.
 - **Least-privilege toolsets** — butlers are terminalless; research is read-only; kanban-orchestrator is kanban+memory+session_search+delegation only; workers get what their role needs.
 - **Model tiers** — `glm53` (judgment seats), `qwen38-flash-fp8` (generalist), `muse` (temporary coder lane with a revert plan), `qwen36-fast` (auxiliary fleet: compression, approvals, titles, etc.).
-- **Env-axis memory taxonomy** — 23 banks: 3 general + 5 butler + 5 environment + 10 role/specialist; resolution via `hindsight/config.json`, never live `.env` pins.
+- **Env-axis memory taxonomy** — 22 banks: 3 general + 5 butler + 5 environment + 9 role/specialist; resolution via `hindsight/config.json`, never live `.env` pins. *(Bank count corrected to the live 22 everywhere in this doc 2026-10-26, t_3681a4fc — see §4 and BANK-MAP §1.6; the doc previously said 23 in three prose spots.)*
 
 ---
 
@@ -82,9 +82,9 @@ Workspaces: per-board workdirs live under `/local/projects/<slug>`; the default 
 
 ---
 
-## 3. Profile topology (62 → 59 post-ruling, landed 2026-10-24)
+## 3. Profile topology (62 → 59 post-ruling, landed 2026-10-24; live census 60 = 59 profiles + root, re-stamped 2026-10-26)
 
-As of the landing of t_0eec511d (2026-10-24): **59 entries under `profiles/`** — 58 live profile directories (all config-bearing, incl. `plugin-ab`) + `.deleted/` graveyard (`gaudi-reviewer`, `unsloth-litellm`, and since 2026-10-24 `coding`, `kworker-muse-probe`, `sampling-test`; deleted-profile parking, not a live profile), plus the **root `default` profile** (home `~/.hermes`, not in `profiles/`). Card **t_0eec511d** deleted the two husks + `sampling-test` (experiment profile) per operator ruling; full tars at `~/.hermes/backups/husk-deletion-20261024/`.
+As of the live re-stamp (2026-10-26, t_3681a4fc): **60 entries under `profiles/`** — **59 live profile directories** (all config-bearing: the 58 listed at the 2026-10-24 ruling **plus `kanban-worker-full`**, the SWE-bench running-lane profile added ~2026-10-25, incl. `plugin-ab`) + `.deleted/` graveyard (`gaudi-reviewer`, `unsloth-litellm`, and since 2026-10-24 `coding`, `kworker-muse-probe`, `sampling-test`; deleted-profile parking, not a live profile), plus the **root `default` profile** (home `~/.hermes`, not in `profiles/`). Card **t_0eec511d** deleted the two husks + `sampling-test` (experiment profile) per operator ruling; full tars at `~/.hermes/backups/husk-deletion-20261024/`.
 
 **Lanes:**
 
@@ -239,13 +239,13 @@ fail-safe intake: <butler> unavailable (<evidence>)
 
 **Dispatcher** — single, global, in-gateway (root `kanban:` block): 15 s tick · `max_in_progress` 24 global / 8 per-profile · `failure_limit` 3 (circuit breaker) · `auto_decompose` 5/tick (decomposer `glm53` @ high; triage-specifier `glm53` @ medium) · stale-claim reclaim at 4 h without heartbeat (no failure-counter tick; re-queues `ready`) · `auto_promote_children` on · spawned workers get env-pinned boards and env-scrubbed context.
 
-**Root crons** (`~/.hermes/cron/jobs.json`, 18 jobs, 12 enabled):
+**Root crons** (`~/.hermes/cron/jobs.json` — live re-count 2026-10-26, t_3681a4fc: **22 root jobs, 21 enabled** (1 disabled: `plugin-pilot-soak-collector`, a completed one-shot kept for receipts); across ALL stores **30 registry jobs, 27 enabled** — root + `gaudi-benchrunner` 2 (disabled hle-lane leftovers, t_31abaf28) + `gaudi-watcher` 1 + `g02-watcher` 1 + `gaudi-liaison` 0 + `kanban-board-architect` 4):
 
 | Cron | Schedule | Guards/does |
 |---|---|---|
-| `session-gc` | 02:30 | Prunes old session DBs (`sessions.retention_days: 60`) |
+| `session-gc` | 02:30 | Cron-session reaper (rewritten 2026-10-23 for the gpu418-monitor leak): prunes never-active cron session rows >6 h and ended cron sessions >7 d via `hermes sessions prune --source cron`. **Not** the 60-day retention path: `sessions.auto_prune: false` since 2026-10-24 and `retention_days: 60` is inert — retention is governed by `HERMES-STATEDB-RETENTION-POLICY.md` (ARCHIVE-NOT-DELETE, R7). *(Row corrected 2026-10-26, t_3681a4fc — it previously described the disabled delete path.)* |
 | *(retired 2026-10-24)* `nightly-skill-evolution` | ~~03:00~~ | RETIRED by operator GO option 1 (card t_985fdc6c; SKILL-EVO-AUDIT: 97 batches / 0 promotions, upstream dormant) — script + repo kept dormant, see `docs/SKILL-EVO-RETIRE-NOTE.md` |
-| `nightly-board-audit` | 04:00 | Files one `NIGHTLY-BOARD-AUDIT <date>` card on default → `kanban-board-architect`: hygiene, graph integrity, dead-assignee routing coherence, board metadata (safe hygiene self-serve; structural = recommendations) |
+| `nightly-board-audit` | 04:00 | Files one `NIGHTLY-BOARD-AUDIT <date>` card on default → `kanban-board-architect`: hygiene, graph integrity, dead-assignee routing coherence, board metadata, husk check, **AGE-DRIFT check (added 2026-10-26, ER-10 t_3681a4fc: running no-hb >24 h, ready/blocked/scheduled idle >3 d — flagged per board with reopen/retire RECOMMENDATIONS; the audit never closes/retires them)** (safe hygiene self-serve; structural + age-drift = recommendations) |
 | `nightly-skill-curator` | 05:00 | Closes the self-improvement loop: safe library fixes with receipts, oversize + divergence reporting, writes the skills report. Its §1 evolution-candidate review is a no-op since the evo batch retired 2026-10-24 (kept as the re-arm interface) |
 | `OpenWiki Doc Update (Local)` | 08:00 | Refreshes OpenWiki docs for `/local/projects` repos with code changes |
 | `hindsight-stats-watchdog` | every 15 m | Hindsight stats canary: alerts on server unreachable or pending+processing ≥ 50 spike |
@@ -255,9 +255,9 @@ fail-safe intake: <butler> unavailable (<evidence>)
 | `watch-143206-kanban-archive-fr` / `watch-143372-kanban-archive-pr` | every 6 h | Upstream watcher for `kanban_archive` FR/PR (hot-apply confirmation) |
 | `watch-142456-chatq-upstream` | every 6 h | Watches upstream PR #142456 (obsoletes local hotfix `c69ae0d911`) |
 | `plugin-pilot-soak-collector` | once 2026-10-25 05:00 | Collects soak receipts for the plugin-pilot A/B card |
-| *(disabled, kept)* `g02-wake-driver-vigil` | — | Paused wake-driver for live cards t_89f5c277 / t_5055661f; sole survivor of the 2026-10-24 F17 sweep (§9 REMEDIATION-2) |
+| *(re-armed, live)* `g02-wake-driver-vigil` | every 20 m | Wake-driver for live parked cards (t_89f5c277 / t_5055661f lineage) — the "disabled, kept" state stamped 2026-10-24 (§9 REMEDIATION-2) is superseded: the job is **enabled in the live registry** (re-stamped 2026-10-26, t_3681a4fc) |
 
-**Profile crons:** `kanban-board-architect` — `kanban-dr-backup` daily 02:17 (DR backup of all 7 board DBs, after the 02:05 base backups) + `weekly-estate-maintenance` Sun 04:00; `g02-watcher` — `g02-azure-watch-vigil` every 20 m; `gaudi-watcher` — `1843-replyloop-monitor-v3` every 30 m (live). *(2026-10-24: retired one-shots `watch-1890-horizon` (gaudi-watcher) and `contrib5-1840-wake-1020` (gaudi-liaison) removed from their profile stores — §9 REMEDIATION-2, F17.)*
+**Profile crons** (live re-count 2026-10-26, t_3681a4fc): `kanban-board-architect` — `kanban-dr-backup` daily 02:17 (DR backup of all 7 board DBs, after the 02:05 base backups) + `weekly-estate-maintenance` Sun 04:00 + `cc-board-usage-alert` every 30 m (claude-code board usage alerting) + `r6c-1w-wake` (one-shot wake, 2026-10-31); `g02-watcher` — `g02-azure-watch-vigil` every 20 m; `gaudi-watcher` — `1843-replyloop-monitor-v3` every 30 m (live); `gaudi-benchrunner` — 2 disabled `hle-*` leftovers (t_31abaf28); `gaudi-liaison` — store empty. *(2026-10-24: retired one-shots `watch-1890-horizon` (gaudi-watcher) and `contrib5-1840-wake-1020` (gaudi-liaison) removed from their profile stores — §9 REMEDIATION-2, F17.)*
 
 **Cron governance:** unattended cron runs execute under `approvals.cron_mode: deny` for dangerous commands; long cron budgets are explicit (`cron.script_timeout_seconds: 10800`, sized for the now-retired skill-evolution batch; knob retained for future long jobs).
 
@@ -273,7 +273,7 @@ fail-safe intake: <butler> unavailable (<evidence>)
 | 4 | Explicit-board law (`board=` on every call) | Eradicate silent task-loss writes | g01-archive task-loss incident + v0.22.4 archived-slug reproduction ("`ok: true` … never persists on any board") | ✅ law in SOULs + skill checklist |
 | 5 | Dedup-Close Law (`KILLED-BY-DEDUP`) | Duplicates close fast, never park | Duplicate-card accretion drifting into blocked purgatory (operator ruling 2026-10-23) | ✅ live ruling in skill |
 | 6 | Collision doctrine (one live agent per profile) | No two agents on one profile's state/memory | (a) 2026-10-17 g02 block-loop/twin-fanout detonation (6 clone children, 3 workers redoing landed work); (b) **R7-W10 duplicate-dispatch boot corruption** (flashnext-gaudi, 2026-10-01: dispatcher retried duplicate executor onto same profile mid-window; corrupted live boot; arbitration voided duplicate's completion); (c) 2026-10-23/24: PROF-SWEEP-OPT + this card double-dispatched onto `kanban-board-architect`, and this card's follow-up t_0eec511d dispatched link-too-late | ⚠ doctrine live, enforcement still procedural (F10) |
-| 7 | Env-axis bank taxonomy (23 banks; one env = one env bank) | A worker recalls only its own hardware estate's texture | 2026-10-23 measured contamination of shared pools (38k facts across 3 mixed pools; g02 workers recalling gaudi HPU lore as if it applied to Azure H100s) | ✅ cutover complete + verified; deletion receipts in BANK-MAP §1.6 |
+| 7 | Env-axis bank taxonomy (22 banks since the 2026-10-24 hb-sampling-test deletion; 23 at cutover; one env = one env bank) | A worker recalls only its own hardware estate's texture | 2026-10-23 measured contamination of shared pools (38k facts across 3 mixed pools; g02 workers recalling gaudi HPU lore as if it applied to Azure H100s) | ✅ cutover complete + verified; deletion receipts in BANK-MAP §1.6 |
 | 8 | `.env` bank-pin abolition (config.json precedence) | Kill the silent env-wins override class | **2026-10-22 incident: 10–12 stray `HINDSIGHT_BANK_ID` `.env` pins** silently overriding config.json (plugin #5171: env wins) | ✅ clean — 44 comment-only refs, zero live pins (verified this run + PROF-SWEEP) |
 | 9 | Butler bank isolation (`<slug>-butler` banks) | Butler memory never mixes with fleet banks | Operator-approved policy t_fd8ca6f0 | ✅ live, 5 banks |
 | 10 | External Comms Law | Nothing internal leaks to external tickets | Operator directive 2026-10-21 (Azure ticket posts, full-scan) | ✅ binding text in g02-ops SOUL + runbook |
@@ -438,6 +438,17 @@ Operator GO 2026-10-24 19:34 EDT (verbatim "1" = "Go now"). Actor: kanban-board-
 5. **Estate mirror — estate-sync.sh force-prefix fix (estate/§9, hit 2026-10-24, fixed same day).** Across an update-rebase the tracker refs move **non-linearly**: the post-update running commit sits on the v0.22.5 release lineage, so `git push $RUNNING:refs/heads/code/running-commit` was rejected non-fast-forward forever (the script's "retry next sync" could never succeed — old tip `58bfd01cec` was no longer an ancestor). Fix: `+` force prefixes on the `code/running-commit` and `code/local/hotfixes/*` refspecs (same class as the existing `--force --tags` rule), in `~/.hermes/scripts/estate-sync.sh`. Verified: hourly sync ran post-bounce (02:33:30Z sync OK), manual re-run 22:54:51 sync OK, remote `code/running-commit` = **3a931a6383** confirmed via ls-remote. Future updates inherit the fix — the ref-spec class to remember: **any ref that tracks `local/hotfix-carried-*` HEADs moves non-linearly across updates.**
 6. **R10 gateway-start warning verification (owed by §9 R10 errata item 3) — discharged:** startup WARNING census 5→4 (langfuse GONE — plugin disable stands; redaction DISABLED = canon; api_server + telegram ×2 = documented/cosmetic); **actionable-undocumented: 0**.
 7. **R8c boot-timing data point recorded** (see PERF-PORT R8 + the bounce skill's measurement section): first_tg=+12s, last_tg=+78s, dispatcher_lock=+87s relative to the boot banner. The `--when-idle` / `--drain-sla` knob trial was **NOT exercised** on this bounce (cards were running + dispatch paused; orchestrator ordered a short window) — the trial still rides a future bounce. Update-procedure findings folded + receipted in the t_c0969a7f receipt §"Update-procedure findings".
+
+---
+
+### §9 ERRATA — LIVE RE-STAMP + ER-10/12 housekeeping (2026-10-26, kanban-board-architect, card t_3681a4fc)
+
+Operator picks ESTATE-REVIEW items #10 + #12 (skip #8). All amendments are surgical inline edits above, each tagged "(re-stamped 2026-10-26, t_3681a4fc)"; backups of all three docs of record at `~/.hermes/backups/er12-20261026-1710EDT/`.
+
+1. **Live-state re-stamp (BUG-5):** version/PID — running tree verified at `9f66ae8351` (v0.22.5+11, tag `local-hotfix-stack-20261025`), gateway **PID 2028136** up since 2026-10-25 11:19 EDT (§1 amended; the previously stamped PID 3929413/02:33 was two bounces old). Profile census — **60 entries / 59 config-bearing + root = 60 configs** (§3 amended; new 59th profile `kanban-worker-full`). Bank count — 23→**22** corrected in §1, §1 diagram, the core-decisions bullet and the §8 ledger row 7 (matches §4/BANK-MAP §1.6 which already said 22). Cron table — root **22 jobs/21 enabled**, all-store **30/27** (§7 re-count above; session-gc row corrected to the cron-session reaper + R7 policy pointer; g02-wake-driver-vigil row re-armed-live; profile-crons line extended with the architect lane's 2 newer jobs). Store sizes — live figures re-stamped in `HERMES-STATEDB-RETENTION-POLICY.md` §0 note (root state.db ≈799 MB; largest profile store: architect state.db 442.4 MB + its snapshots tier 367.5 MB; estate ≈2.22 GB logical).
+2. **ER-10 age-drift check:** nightly-board-audit cron `711bb65017ba` prompt amended (`hermes cron edit`, registry readback verified) — running no-heartbeat >24 h, ready/blocked/scheduled idle >3 d, per board, reopen/retire RECOMMENDATION ONLY. Effective from the 2026-10-27 04:00 run.
+3. **ER-12 housekeeping:** (a) docs re-stamped per item 1 + CONFIG-DIVERGENCES row-4 key name corrected to `protect_first_n` (live `config.yaml:130`); (b) config debris — `model_overrides.anthropic.claude-sonnet-5` unset (dead config in a custom:litellm-only tree), `claude-opus-5-5` gateway.log references EXPLAINED (operator's persisted `/model` override in their own DM session — CONFIG-DIVERGENCES row 20), committed `secrets/__pycache__/*.pyc` untracked from the estate repo (clone commit `7dd6ba2e`, ignore-rule verified); (c) **langfuse UNINSTALLED** fleet-wide (operator declined for fees; CONFIG-DIVERGENCES row 15 amended; plugin dir tar + config backup retained); (d) **disk-cleanup verified**: enabled at root/default since at least 2026-09-23 (live in the current gateway — no enable action was owed), code-read confirms kanban/, state DBs, plugin-data and all estate-mirror paths are protected (CONFIG-DIVERGENCES row 21).
+4. **Bounce-needed from this card: NONE.** All changes are prompt/config/doc-level; the cron registry reloads on mutation, plugin enable-predates-the-boot, and the langfuse uninstall completing at the next natural gateway start is cosmetic (it was disabled and credential-less — no startup warning regressions). The ER-BOUNCE card (t_4b0f48d6) carries only ER-1+2 items; nothing added from ER-10/12.
 
 ---
 

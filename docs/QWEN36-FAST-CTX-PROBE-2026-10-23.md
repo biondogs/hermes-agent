@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §8 — probe receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # QWEN36-FAST-TRUE-CTX — probe report (2026-10-23, card t_7cb89ed9)
 
 **Verdict: the effective context window of the `qwen36-fast` orb alias is 131,072 tokens. The operator's 262,144 suspicion is true of the underlying model weights but NOT of the served deployment. The current Hermes pin (`context_length: 131072`) is correct and must NOT change. No config was modified.**

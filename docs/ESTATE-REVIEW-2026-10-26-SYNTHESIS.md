@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/review-2026-10-26/ (ER2-Z improvements list, when it lands) — round-1 ranked proposals kept as provenance (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # ESTATE REVIEW — SYNTHESIS (2026-10-26)
 
 Card t_bf623554 · merges `ESTATE-REVIEW-2026-10-26.md` (t_d325c0e0) + `PLUGIN-SURVEY-2026-10-26.md` (t_f5855ec3) into ONE ranked proposal list for operator pick.

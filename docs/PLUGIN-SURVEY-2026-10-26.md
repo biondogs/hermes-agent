@@ -1,3 +1,5 @@
+> Status: current. Referenced from hermes-estate/docs/OPERATIONS.md (2026-10-26).
+
 # PLUGIN-SURVEY-2026-10-26 — Official + Community Hermes Plugins for Fleet Fit
 
 Task: ESTATE-REVIEW-B (t_f5855ec3) · Research only, nothing installed · Survey date: 2026-10-26

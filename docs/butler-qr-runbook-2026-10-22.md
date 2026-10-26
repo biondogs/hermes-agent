@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §7 runbooks (butler bot provisioning stays here as the detailed procedure) — receipt-grade (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Butler QR Runbook — 2026-10-22 (BUTLERS-STAGE-3, t_02de9dff)
 
 **Status: STAGED + VERIFIED — awaiting ONE operator action.**

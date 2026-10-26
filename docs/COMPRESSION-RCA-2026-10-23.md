@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §8 (compression posture) + ER2-C leg — RCA kept as record (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # COMPRESSION-RCA — the 2026-10-23 compression storm (PERF-PORT R3 b/c/d)
 
 - **Task:** kanban t_2cc1a7b3 (research), follow-on to the R3 measurement pass (t_99611d63) and plan `HERMES-PERF-PORTABILITY-STUDY.md` @ 757b729 (operator GO 2026-10-24).

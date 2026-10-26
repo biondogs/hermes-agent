@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/PROFILES.md (generated live census) — proposal executed (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Software Co profile proposal — UX / front-end specialization and gap review
 
 **Card:** SW-CO-SPAWN-COMPASS (t_54333b70) · **Author:** kanban-board-architect · **Date:** 2026-10-22

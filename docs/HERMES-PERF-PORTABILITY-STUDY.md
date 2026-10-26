@@ -1,3 +1,5 @@
+> Status: superseded by ER-* cards executed its picks; current state in hermes-estate/docs/OPERATIONS.md and GOVERNANCE.md — study kept as record (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # HERMES-PERF-PORTABILITY-STUDY — measured study + ranked plan for operator Go
 
 **Date:** 2026-10-24 · **Card:** t_cc6843d3 · **Author:** kanban-board-architect

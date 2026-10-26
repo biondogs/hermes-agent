@@ -1,3 +1,5 @@
+> Status: superseded by SKILL-EVO-RETIRE-NOTE.md + hermes-estate/docs/GOVERNANCE.md G-27 — audit led to retirement; receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # SKILL-EVO-AUDIT — the nightly GEPA skill-evolution system: keep / reshape / retire
 
 **Date:** 2026-10-24 · **Card:** t_ba7a5ab9 · **Author:** kanban-board-architect

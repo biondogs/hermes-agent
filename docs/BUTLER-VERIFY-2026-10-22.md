@@ -1,3 +1,5 @@
+> Status: superseded by butler-routing-doctrine-2026-10-22.md + hermes-estate/docs/GOVERNANCE.md G-02 — verification receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # BUTLER-VERIFY-2026-10-22 — Full wiring + isolation matrix, all five Topology-B butlers
 
 **Card:** t_866598e7 · **Run:** 2026-10-22 15:00–15:40 EDT · **Author:** kanban-board-architect

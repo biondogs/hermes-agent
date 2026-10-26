@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/PROFILES.md — candidate list superseded by the live census (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Claude Code Candidate Profiles — 2026-10-24 (t_104ef76d)
 
 **Question:** Operator stands up standalone `claude` CLI (OAuth'd, Pro-tier) on ga01. Which board profiles would see a *substantial* quality/capability improvement from delegating their card work to Claude Code vs their current model — and which would not?

@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §2.2 — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Claude Code Account Limits & Multi-Profile Sharing Mechanics — 2026-10-24
 
 Task: t_b83974bc (CLAUDE-CODE-2-LIMITS) · Assignee: kanban-board-architect · Host: ga01

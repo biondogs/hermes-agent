@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §2.2 (cc-board-usage-alert) — pilot receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Claude Code Pilot Results — 2026-10-24 (t_93b6f033)
 
 **Task:** CLAUDE-CODE-3-PILOT (budgeted trial of Claude Code print-mode on top candidate profiles)

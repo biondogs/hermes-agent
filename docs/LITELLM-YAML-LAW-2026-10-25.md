@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-01 (2026-10-26). Enforcement = the 60 SOUL copies + 60 deny rules + tripwire cron.
+
 # LITELLM-YAML LAW — implementation receipt (operator law 2026-10-25)
 
 Card: `t_2fa0d71d` (default board) · Lane: kanban-board-architect · Date: 2026-10-25

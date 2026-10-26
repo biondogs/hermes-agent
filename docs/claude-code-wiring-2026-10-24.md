@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md §2.2 — wiring receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Claude Code Wiring — 2026-10-24 (t_0f3b5c1e)
 
 **Task:** CLAUDE-CODE-4-WIRING (wire Claude Code into pilot-winning profiles with usage governance)

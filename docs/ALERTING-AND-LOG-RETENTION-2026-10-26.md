@@ -1,3 +1,5 @@
+> Status: current. Source for hermes-estate/docs/OPERATIONS.md §4 (2026-10-26).
+
 # Alerting (gateway dead-man + alt sinks) & Log Retention — 2026-10-26
 
 Card **t_6d5d076f** (ER-5+6; operator picks 2026-10-26 from

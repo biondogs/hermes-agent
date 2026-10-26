@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-27 (2026-10-26).
+
 # SKILL-EVO-RETIRE — nightly GEPA skill evolution retired (2026-10-24)
 
 **Why:** operator GO 2026-10-24, option 1 (Telegram DM, verbatim: *"Option 1 retire the

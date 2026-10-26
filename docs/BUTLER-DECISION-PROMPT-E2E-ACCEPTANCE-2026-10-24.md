@@ -1,3 +1,5 @@
+> Status: superseded by skill devops/butler-blocked-decision-prompt + hermes-estate/docs/GOVERNANCE.md G-06 — acceptance receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # BUTLER-DECISION-PROMPT-E2E ACCEPTANCE — t_cab52849
 Date: 2026-10-24, 02:23–02:45 EDT | Executor: kanban-board-architect | Oracle card: t_cab52849 (default board)
 Gates: BUTLER-CLARIFY-ENABLE (t_6feb021e, done) + SKILL-FALLBACK-TIGHTEN (t_39b67a87, done)

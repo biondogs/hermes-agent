@@ -1,3 +1,5 @@
+> Status: current. Indexed by hermes-estate/docs/GOVERNANCE.md G-13 (2026-10-26). Remains the bank law text of record; live bank→profile mapping is in hermes-estate/docs/PROFILES.md (Bank column).
+
 # BANK-MAP — Intended-state memory-bank map per profile family
 
 **Purpose.** This is the authoritative intended-state map for every Hermes profile's

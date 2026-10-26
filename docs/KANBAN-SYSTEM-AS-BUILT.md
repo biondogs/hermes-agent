@@ -1,3 +1,5 @@
+> Status: current. Indexed by hermes-estate/docs/ESTATE-OVERVIEW.md (2026-10-26). Still the detailed as-built + incident ledger; its profile census (§3) is superseded by the generated hermes-estate/docs/PROFILES.md.
+
 # KANBAN-SYSTEM-AS-BUILT — The Hermes Kanban Estate on ga01 (Doc of Record)
 
 **Date-stamp:** 2026-10-24 (UTC) — authored 2026-10-23 22:45 EDT · **Author:** `kanban-board-architect` lane (card **t_3eed159c**, operator directive 2026-10-24)

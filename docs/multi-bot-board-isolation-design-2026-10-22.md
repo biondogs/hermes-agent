@@ -1,3 +1,5 @@
+> Status: superseded by KANBAN-SYSTEM-AS-BUILT.md §5 and hermes-estate/docs/ESTATE-OVERVIEW.md — design implemented; kept for W-* incident receipts (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # MULTI-BOT-BOARD-ISOLATION — Design & Go/No-Go
 
 **Card:** t_2f367b34 · **Author:** kanban-board-architect · **Date:** 2026-10-22

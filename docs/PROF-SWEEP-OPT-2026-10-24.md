@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/PROFILES.md — sweep executed; receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # PROF-SWEEP-OPT — full-fleet profile optimization sweep receipts (2026-10-24)
 
 Operator directive 2026-10-23/24. Card: `t_a386103a` (board: software-co, assignee: kanban-board-architect).

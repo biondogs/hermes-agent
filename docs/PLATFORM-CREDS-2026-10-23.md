@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-05 (2026-10-26).
+
 # PLATFORM-CREDS-POLICE — 2026-10-23 (t_3ea14912)
 
 Operator ruling 2026-10-23 (DM): "On ga01 only the default profile should have access to my

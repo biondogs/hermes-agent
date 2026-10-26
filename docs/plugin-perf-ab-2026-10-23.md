@@ -1,3 +1,5 @@
+> Status: superseded by PLUGIN-SURVEY-2026-10-26.md — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # Plugin Perf A/B — tool-slimmer vs toolaria vs skill-retrieval (2026-10-23)
 
 **Task:** t_4ddfc8b8 (PLUGIN-PILOT, Scope B) · **Test profile:** `plugin-ab` (glm53, 20 tools, 54 skills, LiteLLM `orb.arch.jhu.edu`) · **Operator mandate:** measure vs baseline on an identical 3-task battery — tokens/turn (input side), TTFT, task success, tool-selection errors — with an explicit negative-result requirement.

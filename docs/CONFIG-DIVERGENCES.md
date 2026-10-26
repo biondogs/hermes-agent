@@ -1,3 +1,5 @@
+> Status: current. Baseline; the ER2-E leg (hermes-estate/docs/review-2026-10-26/50-security-config.md) re-measures (2026-10-26).
+
 # HERMES CONFIG-DIVERGENCES — the record-why file
 
 **Created:** 2026-10-24 · **Card:** PERF-PORT QW5 (t_36eda488) · **Basis:** HERMES-PERF-PORTABILITY-STUDY.md §B11 + full-fleet re-measurement 2026-10-24 (59 configs as of that date: root + 58 profiles, parsed with proper nested-yaml paths) · **Amended:** 2026-10-24 by the R10 config-hygiene sweep (t_fab224e9): §4 rewritten post-R3, §10 closed, rows 11–19 added · **Amended:** 2026-10-26 by ER-12 housekeeping (t_3681a4fc): row-4 key name corrected to the live `protect_first_n`, row 15 (langfuse) UNINSTALL, rows 20–21 added (claude refs explained; disk-cleanup protection verified). Fleet is now 60 configs (root + 59 profiles — `kanban-worker-full` added ~2026-10-25; counts stamped "58/59" in older rows are their measurement-date values, retained as provenance).

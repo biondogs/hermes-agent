@@ -1,3 +1,5 @@
+> Status: superseded by BANK-MAP.md + hermes-estate/docs/GOVERNANCE.md G-13 — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # BANK-ENV-CUTOVER — Operator Review Report (2026-10-23)
 
 **Card:** t_7d3062dc — BANK-ENV-AXIS-REVIEW · **Executor:** kanban-board-architect

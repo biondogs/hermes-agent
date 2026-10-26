@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-11/G-12 (2026-10-26).
+
 # Graveyard & Tombstone Conventions (fleet decommission parking)
 
 **Status:** doctrine (operator GO 2026-10-24, card t_f50fc845, finding F20 of

@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-02 (2026-10-26). This file remains the doctrine text of record.
+
 # BUTLER-ROUTING-DOCTRINE — butler-first task flow as fleet default
 
 **Card:** t_5a6b907a · **Author:** kanban-board-architect · **Date:** 2026-10-22

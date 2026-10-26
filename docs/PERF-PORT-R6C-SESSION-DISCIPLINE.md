@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/OPERATIONS.md — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # PERF-PORT R6c — Session-reset discipline + 1-week token measurement
 
 **Card:** t_f7c462b2 (PROMPT-DIET-ARCH) · **Date:** 2026-10-24 · **Lane:** kanban-board-architect

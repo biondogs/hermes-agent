@@ -1,3 +1,5 @@
+> Status: superseded by hermes-estate/docs/review-2026-10-26/ (ER2 legs) for the review; hermes-estate/docs/{ESTATE-OVERVIEW,OPERATIONS,GOVERNANCE}.md for current state — round-1 review kept as provenance (note: its "59 profiles" = 60 incl. root) (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # ESTATE REVIEW A — deep review of the hermes-estate assembly (2026-10-26)
 
 Card t_d325c0e0 · report-only (change NOTHING was executed; all findings read-only).

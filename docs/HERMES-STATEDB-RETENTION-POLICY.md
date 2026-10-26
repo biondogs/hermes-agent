@@ -1,3 +1,5 @@
+> Status: current. Canonical registry entry: hermes-estate/docs/GOVERNANCE.md G-23; as-built in hermes-estate/docs/OPERATIONS.md §2.3 (2026-10-26).
+
 # HERMES-STATEDB-RETENTION-POLICY — session-store retention & vacuum (R7) — ARCHIVE-NOT-DELETE
 
 - **Status:** ACTIVE (operator GO 2026-10-24 on HERMES-PERF-PORTABILITY-STUDY.md item R7, commit 757b729)

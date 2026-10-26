@@ -1,3 +1,5 @@
+> Status: superseded by BANK-MAP.md + hermes-estate/docs/PROFILES.md (Bank column) — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # BANK-BOOTSTRAP-swco — October decision record ingested (2026-10-23)
 
 **Card:** t_90d515dd (software-co board, sw-pm) · **Bank:** `software-co` (hindsight @ ga01:8888)

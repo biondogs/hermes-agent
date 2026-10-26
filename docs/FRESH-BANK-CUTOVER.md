@@ -1,3 +1,5 @@
+> Status: superseded by BANK-MAP.md — receipt (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # FRESH-BANK-CUTOVER — decision package for operator GO
 
 **Produced by:** t_0fbb3c61 (BANK-TRIAGE-MIRROR-2), 2026-10-22 ~21:00Z, per the

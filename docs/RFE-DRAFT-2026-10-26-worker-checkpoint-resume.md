@@ -1,3 +1,5 @@
+> Status: superseded by upstream filing chain (ER-1) — draft kept as record (2026-10-26, ER2-F t_b74a695d). Kept unchanged below as historical record.
+
 # RFE DRAFT — Kanban dispatcher worker checkpoint/resume on graceful drain/restart
 
 **Status: DRAFT ONLY — not filed. Upstream submission goes through the operator final gate

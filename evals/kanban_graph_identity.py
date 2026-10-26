@@ -56,6 +56,15 @@ def main():
         with kb.write_txn(conn):
             conn.execute("UPDATE tasks SET status='triage' WHERE id=?", (root,))
         out["retention_repeat_refused"] = decompose(conn, root, root_assignee="default", children=specs) is None
+        # LOCAL HOTFIX t_7bef7cf7 backstop: marker wiped entirely + re-triaged —
+        # the decompose:<root>:<idx> idempotency keys must return the SAME child.
+        with kb.write_txn(conn):
+            conn.execute("DELETE FROM task_events WHERE task_id=? AND kind='decomposed'", (root,))
+            conn.execute("UPDATE tasks SET status='triage' WHERE id=?", (root,))
+        reuse = decompose(conn, root, root_assignee="default", children=specs)
+        out["marker_deleted_backstop_reuse"] = (
+            "same-children" if (reuse is not None and reuse == first) else f"DIVERGED:{reuse}"
+        )
         ids = list(conn.execute("SELECT id FROM tasks ORDER BY id"))
         for _ in range(3):
             dispatch_once(conn, max_spawn=0)
@@ -78,6 +87,7 @@ def main():
     with kbc.connect_closing() as conn:
         out["integrity"] = conn.execute("PRAGMA integrity_check").fetchone()[0]
     assert out["three_dispatch_ticks_stable"] and out["concurrent_winners"] == 1 and out["integrity"] == "ok"
+    assert out["marker_deleted_backstop_reuse"] == "same-children"
     print(json.dumps(out, sort_keys=True))
     return 0
 

@@ -128,8 +128,11 @@ def decompose_triage_task(
         ).fetchone():
             return None
         child_ids = [
-            _insert_decomposed_child(conn, task_id, root_row, child, author, now)
-            for child in children
+            _insert_decomposed_child(
+                conn, task_id, root_row, child, author, now,
+                idempotency_key=f"decompose:{task_id}:{idx}",
+            )
+            for idx, child in enumerate(children)
         ]
         # Sibling edges within the decomposed graph.
         for idx, child in enumerate(children):
@@ -168,10 +171,18 @@ def decompose_triage_task(
 
 def _insert_decomposed_child(
     conn: sqlite3.Connection, root_id: str, root_row: sqlite3.Row, child: dict,
-    author: Optional[str], now: int,
+    author: Optional[str], now: int, idempotency_key: Optional[str] = None,
 ) -> str:
     """Insert one decomposed child as ``todo`` (linked under the root later so
     the dispatcher only ever sees a coherent graph); returns its id.
+
+    Idempotency backstop (LOCAL HOTFIX t_7bef7cf7): the durable ``decomposed``
+    event marker on the root is the PRIMARY duplicate gate (it survives
+    re-triage and event-retention GC). This key is the second line of defence:
+    every child carries ``decompose:<root_id>:<idx>``, and when a non-archived
+    task already holds that key — the marker was manually deleted or pruned —
+    the existing child id is REUSED instead of fanning out a duplicate set
+    (``create_task`` applies the same key semantics to plain creates).
 
     Workspace: per-child override wins, else inherit the root's kind. Path
     inherits only when kinds match (a 'dir' child must not point at the
@@ -183,6 +194,19 @@ def _insert_decomposed_child(
     from hermes_cli.kanban_db import (
         _new_task_id, _canonical_assignee, _append_event,
     )
+
+    if idempotency_key:
+        row = conn.execute(
+            "SELECT id FROM tasks WHERE idempotency_key = ? "
+            "AND status != 'archived' "
+            "ORDER BY created_at DESC LIMIT 1", (idempotency_key,),
+        ).fetchone()
+        if row is not None:
+            _append_event(
+                conn, row["id"], "decompose_child_reused",
+                {"from_decompose_of": root_id, "idempotency_key": idempotency_key},
+            )
+            return row["id"]
 
     root_ws_kind = root_row["workspace_kind"] or "scratch"
     child_ws_kind = child.get("workspace_kind") or root_ws_kind
@@ -199,12 +223,12 @@ def _insert_decomposed_child(
     conn.execute(
         "INSERT INTO tasks "
         "(id, title, body, assignee, status, workspace_kind, "
-        " workspace_path, tenant, created_at, created_by) "
-        "VALUES (?, ?, ?, ?, 'todo', ?, ?, ?, ?, ?)",
+        " workspace_path, tenant, created_at, created_by, idempotency_key) "
+        "VALUES (?, ?, ?, ?, 'todo', ?, ?, ?, ?, ?, ?)",
         (
             new_id, child["title"].strip(), body if isinstance(body, str) else None,
             _canonical_assignee(child.get("assignee")), child_ws_kind, child_ws_path,
-            root_row["tenant"], now, (author or "decomposer"),
+            root_row["tenant"], now, (author or "decomposer"), idempotency_key,
         ),
     )
     _append_event(

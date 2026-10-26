@@ -90,5 +90,87 @@ def test_decompose_records_audit_comment_and_event(kanban_home):
     assert any(ev.kind == "decomposed" for ev in events)
 
 
+def test_decompose_children_carry_idempotency_keys(kanban_home):
+    """Every spawned child is keyed ``decompose:<root>:<idx>`` so the fan-out
+    is traceable and dedupable even off the decompose tool path."""
+    with kbc.connect() as conn:
+        tid = _create_triage(conn, title="keyed fanout")
+    children = [
+        {"title": "first", "assignee": "researcher"},
+        {"title": "second", "assignee": "engineer", "parents": [0]},
+    ]
+    with kbc.connect() as conn:
+        child_ids = decompose_triage_task(
+            conn, tid, root_assignee="orch", children=children, author="decomposer",
+        )
+    assert child_ids is not None
+    with kbc.connect() as conn:
+        for idx, cid in enumerate(child_ids):
+            row = kb.get_task(conn, cid)
+            assert row is not None
+            assert row.idempotency_key == f"decompose:{tid}:{idx}"
+
+
+def test_decompose_marker_deleted_reuses_children_backstop(kanban_home):
+    """PRIMARY gate is the durable ``decomposed`` event marker; this backstop
+    proves the idempotency keys hold when that marker is removed: a fresh
+    decompose of the same root re-links the SAME children, never duplicates."""
+    with kbc.connect() as conn:
+        tid = _create_triage(conn, title="backstop")
+    children = [{"title": "solo work", "assignee": "researcher"}]
+    with kbc.connect() as conn:
+        first = decompose_triage_task(
+            conn, tid, root_assignee="orch", children=children, author="decomposer",
+        )
+    assert first is not None
+
+    with kbc.connect() as conn:
+        before_ids = [r["id"] for r in conn.execute("SELECT id FROM tasks ORDER BY id")]
+        # Simulate the worst case: wipe the marker AND re-open the root to triage.
+        with kb.write_txn(conn):
+            conn.execute(
+                "DELETE FROM task_events WHERE task_id = ? AND kind = 'decomposed'",
+                (tid,),
+            )
+            conn.execute("UPDATE tasks SET status = 'triage' WHERE id = ?", (tid,))
+
+    with kbc.connect() as conn:
+        second = decompose_triage_task(
+            conn, tid, root_assignee="orch", children=children, author="decomposer",
+        )
+    assert second is not None, "marker gone: fan-out proceeds, but must reuse"
+    assert second == first, "backstop must return the existing children"
+
+    with kbc.connect() as conn:
+        after_ids = [r["id"] for r in conn.execute("SELECT id FROM tasks ORDER BY id")]
+        assert after_ids == before_ids, "no duplicate tasks created"
+        root_after = kb.get_task(conn, tid)
+        assert root_after is not None and root_after.status == "todo"
+        # Reuse is auditable on the child.
+        evs = kb.list_events(conn, first[0])
+        assert any(ev.kind == "decompose_child_reused" for ev in evs)
+
+
+def test_decompose_repeat_still_refused_by_marker(kanban_home):
+    """The marker remains the primary gate: an ordinary re-triage (marker
+    intact) is refused outright, keys notwithstanding."""
+    with kbc.connect() as conn:
+        tid = _create_triage(conn, title="marker gate")
+    children = [{"title": "only", "assignee": "researcher"}]
+    with kbc.connect() as conn:
+        first = decompose_triage_task(
+            conn, tid, root_assignee="orch", children=children, author="decomposer",
+        )
+    assert first is not None
+    with kbc.connect() as conn:
+        with kb.write_txn(conn):
+            conn.execute("UPDATE tasks SET status = 'triage' WHERE id = ?", (tid,))
+    with kbc.connect() as conn:
+        assert decompose_triage_task(
+            conn, tid, root_assignee="orch", children=children, author="decomposer",
+        ) is None
+
+
+
 
 

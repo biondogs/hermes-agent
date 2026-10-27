@@ -668,6 +668,17 @@
     const wsRef = useRef(null);
     const wsBackoffRef = useRef(1000);
     const wsClosedRef = useRef(false);
+    // LOCAL HOTFIX (t_80c84a9): the currently-selected board, tracked outside the
+    // render closure so a late response from a *previously*-selected board can be
+    // detected and dropped. Without this, switching boards while a /board fetch is
+    // in flight (or a WS-event reload fires from the old board's still-open socket)
+    // lets the OLD board's response resolve last and unconditionally overwrite the
+    // view + poison cursorRef with the wrong board's latest_event_id — the operator
+    // saw default-board (architect) cards appearing on the gargantua02 board and
+    // vanishing again on hard refresh. Board identity is the guard (a mere request
+    // counter still loses when the stale request is *issued* after the fresh one).
+    const activeBoardRef = useRef(null);
+    activeBoardRef.current = board;
 
     // --- load config once ---------------------------------------------------
     useEffect(function () {
@@ -690,13 +701,18 @@
       if (tenantFilter) qs.set("tenant", tenantFilter);
       if (includeArchived) qs.set("include_archived", "true");
       const url = qs.toString() ? `${API}/board?${qs}` : `${API}/board`;
+      // LOCAL HOTFIX (t_80c84a9): snapshot the board this request is FOR; drop the
+      // response if the selection changed while it was in flight.
+      const reqBoard = board;
       return SDK.fetchJSON(withBoard(url, board))
         .then(function (data) {
+          if (reqBoard !== activeBoardRef.current) return; // stale board — never paint it
           setBoardData(data);
           cursorRef.current = data.latest_event_id || 0;
           setError(null);
         })
         .catch(function (err) {
+          if (reqBoard !== activeBoardRef.current) return; // stale failure — don't paint either
           setError(String(err && err.message ? err.message : err));
         })
         .finally(function () { setLoading(false); });

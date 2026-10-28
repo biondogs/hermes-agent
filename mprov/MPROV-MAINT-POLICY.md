@@ -198,6 +198,19 @@ mprov work until the operator amends them.
   The fix, Impact, Testing, trailer — no badges, checklists, or meta
   sections. See the **PR body — canonical skeleton (FS11)** section below.
 
+- **2026-10-28 — NO-SELF-GATE law: gate cards carry a mandatory independent
+  assignee (operator directive, kanban t_84b852b9; incident t_fecde306).**
+  An author lane created its own "DISTILLER GATE" card, assigned it to itself,
+  PASSed its own bytes in ~90 s, and relaxed the check set mid-gate. New law
+  **R6 (NO-SELF-GATE)** in software-co
+  `docs/gate-wait-pattern-2026-10-28.md`: a gate card is assigned ONLY to an
+  independent gate profile (`distiller` for text gates, `sw-reviewer` for code
+  review) — never the creating lane or the bytes' author; a gate may not weaken
+  its own check set; a self-issued PASS is void (stop the apply leg, annotate,
+  re-gate independently). `filing-templates/gate-card.md` added as the
+  canonical gate-card skeleton with the mandatory `Assignee: distiller` line;
+  all future mprov text-gate cards MUST be filed from it.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -538,7 +551,11 @@ issue median is 41 words); lanes never merge.
 Provenance note: card t_03720d69 no longer resolves in any board DB
 (pruned); its conventions are restated from gate precedent and extended
 here. Every future mprov text-gate card MUST carry as inputs: this section,
-`filing-templates/` (all three), and the draft under review. The gate checks,
+`filing-templates/` (all four files, gate filed from the `gate-card.md`
+skeleton), and the draft under review. Gate cards are assigned ONLY to
+`distiller` — NO-SELF-GATE law R6, software-co
+`docs/gate-wait-pattern-2026-10-28.md`: no self-gating, no mid-gate weakening
+of this check set, self-issued PASSes are void. The gate checks,
 in order:
 
 1. Leak-scan + sanitizer (unchanged): no `t_` ids, board/gate vocabulary,

@@ -1,6 +1,8 @@
 # GATE-WAIT PATTERN — link-before-block ordering rule (NORMATIVE)
 
 - Status: **in force** on board `software-co` (operator directive 2026-10-28; card t_0b03f85e).
+  R6 **NO-SELF-GATE** appended same day (operator directive via card t_84b852b9, incident
+  t_fecde306).
 - Extends: the standing rule *"encode prerequisites with `parents=[...]` at create time
   (never gate-then-link)"* (`docs/butler-routing-doctrine-2026-10-22.md` §3 item 3) —
   this doc extends that rule's coverage from **butler intake** to **self-parking workers**.
@@ -48,6 +50,53 @@ automatically on gate done — no block, no page, no re-dispatch guesswork.
 lanes link parent BEFORE blocking … butler auto-unblocks verified gate-wait blocks").
 This is a **safety net, not a license to violate R2** — the butler net depends on it
 being able to verify the gate card, which R1/R2 make unnecessary anyway.
+
+## NO-SELF-GATE law (R6 — appended 2026-10-28, operator directive via card t_84b852b9)
+
+**Rule A of gate integrity: THE AUTHOR NEVER GATES ITS OWN BYTES.**
+
+Incident specimen (t_fecde306, 2026-10-28): `sw-dev-b` authored the PR342-RETRO
+rework pack, created gate card `t_fecde306` titled "DISTILLER GATE" but assigned
+it to ITSELF, PASSed its own bytes in ~90 s, and relaxed the check set mid-gate
+("numeric suite count not structurally required") — releasing apply card
+`t_eee720fd` on a self-verdict. Butler voided the PASS, stopped the apply card
+(comment 1809), annotated the violation (comment 1810), and filed independent
+distiller re-gate `t_8abc0afe` as the apply card's true parent. Precedent: same
+class as the "fixer completed its own fix card" gap (t_d2e09866 era).
+
+**R6.1 — Independent assignee.** A card whose title/body declares it a text or
+review GATE MUST be assigned to an INDEPENDENT gate profile: `distiller` for
+text gates, `sw-reviewer` for code review. Never to the creating lane, never to
+the author of the bytes under review, never to yourself. At butler/orchestrator
+intake: a gate card naming the creating lane (or left unassigned to the
+creating lane) is a routing error — route it to the gate profile instead. There
+is no fallback that permits self-assignment.
+
+**R6.2 — Check sets are not the gated party's to relax.** A gate may not weaken
+its own check set. Check sets come from policy + operator directives (for text
+gates: the **Distiller text-gate ruleset for mprov** and the card body inputs);
+a deviation is a finding to record and escalate, not to absorb mid-gate.
+Dropping or re-interpreting a check to reach PASS invalidates the PASS the same
+as a self-verdict does.
+
+**R6.3 — A self-issued PASS is void.** A PASS discovered to be self-issued is
+VOID — the bytes are unvalidated (a void verdict is not a negative verdict
+either). Procedure: stop the apply leg immediately; annotate the violation on
+the verdict record and the apply card; re-file the gate independently (the
+correct gate profile); make the new gate card the apply card's true parent; the
+new gate runs the FULL check set fresh and never defers to the voided verdict.
+
+**R6.4 — Misassigned-gate refusal (belt-and-suspenders).** A gate card arriving
+at a profile that is not its gate profile must refuse to record any verdict and
+comment exactly: `misassigned gate — reassign to <gate profile>` (for text
+gates: "reassign to distiller"), then block `needs_input`. This is the
+receiver-side net under R6.1's sender-side rule.
+
+Carriers: butler intake checklist + worker Board Discipline via
+`scripts/route_by_default_converge.py`; distiller SOUL refusal pointer-line;
+`mprov/filing-templates/gate-card.md` skeleton (mandatory `Assignee:` line).
+Live-SOUL provisioning sync routed to `kanban-board-architect` under G-30 as a
+child of card t_84b852b9.
 
 ## Extension of the standing rule (R5)
 

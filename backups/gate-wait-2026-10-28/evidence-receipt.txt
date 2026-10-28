@@ -1,0 +1,13 @@
+GATE-WAIT SYNC t_0d825d76 — EVIDENCE RECEIPT (2026-10-28, fleet-change G-30)
+Carrier: scripts/route_by_default_converge.py @ software-co master 054b7a3 (receipts ed2db42)
+Registry: GOVERNANCE §1.a G-02 hash a149a296… -> 2036d5c2… (51->52), estate f1aa9e62 (+sync f27fcf31), pre-tag apply/20261028-t_0d825d76 @ e56b8a63
+Full whole-file diffs (57 files, +64/-5): /local/projects/software-co/backups/gate-wait-2026-10-28/{stage-diff.patch sha256 aea8367fde48679c66f6ea2c004aa0e5fad8f00cd28f608b606562b0b34fe4e1, live-diff.patch sha256 26d7e650e5fee0a5c3e33c157489ac4be77c76b2046fdbc5b2ed8efafebc0faf} (committed ed2db42)
+
+SPOT-CHECK 1 — swco-butler SOUL §Operator Intake Protocol item 3 (live):
+3. If the request names prerequisites on this board, encode them with `parents=[...]` at create time (never gate-then-link). A worker that must wait on a card it did not create at create time must `kanban_link(parent, self)` **before** blocking or parking on that dependency (GATE-WAIT PATTERN, `docs/gate-wait-pattern-2026-10-28.md` R1–R3).
+
+SPOT-CHECK 2 — sw-qa SOUL §Board Discipline, last bullet (live):
+- GATE-WAIT PATTERN — link-before-block (fleet law since 2026-10-28; doc: software-co `docs/gate-wait-pattern-2026-10-28.md` R1–R3): if you must wait on a card you did not create at create time, `kanban_link(parent, self)` BEFORE any block or park. You may `kanban_block(kind="dependency")` only after `kanban_show` of your own card shows the gate card in `parents` — never block-then-link (a dependency block with no open parent is downgraded to needs_input and the operator is falsely paged). If your card's work is finished and only a gate PASS is pending, do NOT block: `kanban_complete` with `metadata.pending_gate = <gate card id>` and put the follow-up legs in a new card created `parents=[<gate>]` — the dispatcher promotes it when the gate lands.
+
+CENSUS: live SOULs containing GATE-WAIT text: 57 (expect 57 = 5 butlers + 52 workers; worker G-02 block hash uniform 2036d5c2c3401f50446828a91d4b9754e5853f4c856adea84899c196eda643d2 on 52/52)
+Canary: seats sjproto-butler/sjp-ops/sw-docs/kanban-worker, proof card t_e59fc51d done 'canary alive'. Rollback exercised on kanban-worker (pre-snapshot sha 76e26817… restore + re-apply). canon-check C1 CLEAN post-bump (3 pre-existing unrelated NEW findings -> follow-up t_1932b2ec).

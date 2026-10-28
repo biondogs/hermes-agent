@@ -64,3 +64,15 @@ TEST-GUIDE additions land with their features: S23 (voice collection from the br
 ## 6. Open product decisions
 
 **None blocking.** Every genuinely-open call in the card brief was settled inside the recorded decision space or fenced with a falsifier (ADR-0011 §Revisit): corpus source (explicit-only, falsifier on chore), stale-profile behavior (skip-with-naming, falsifier on complaint), interview mode (deferred, falsifier), voice scoring (requires operator adjudication before any metric exists), post-hoc passes (new ADR required). No blocked-card handback to the operator is needed for v1 to proceed.
+
+---
+
+## 7. W7-VOICE-ELICIT extension (2026-10-28) — guided-conversation elicitation, ADR-0014
+
+**Card:** W7-VOICE-ELICIT (t_18f2eec9) · **Canonical decision:** `metatron-rewrite/docs/adr/0014-voice-elicitation-interview.md` @ `e2bb809` (origin/main). ADR-0011's *"No interview-based collection"* non-goal is amended (its falsifier fired on the operator's expansion request); every other ADR-0011 sentence stands.
+
+**Shape in one line:** the interview is a **second door into the same explicit corpus** — an LLM-run, fixed 12-slot curriculum (declared probes → prose prompts → rewrite-provocation drills → register probe + litmus) whose human prose turns enter `voice/corpus/` at **user-confirmed finish** (one file per session, interview provenance), whose declared answers enter a separate low-weight `declared` stream merged additively at `collect_voice` (`voice-profile/2` + `declared_directives`/`conflicts`, samples-win-on-conflict), and whose mechanics are 3 commands + 1 request on the one registry with durable resume, a 12-exchange provider-call budget, and typed refusals throughout. `collect_voice`, staleness, the single DraftStage conditioning point, and the no-post-hoc-mutation law are untouched. Ledger action enum grows 10 → 11 (`voice_interview`) + `voice_import` entries with `surface="voice:interview"`.
+
+**Landing order (extends §4.3's queue; elicit lands STRICTLY AFTER the substrate it extends):** ledger backend (t_fe756fb6, DONE) → voice backend (t_28aee972, running) → editor (t_71d35d27) → **E1 elicit backend (sw-dev-b; runtime.py serializes behind t_28aee972)** → **E2 elicit editor affordance (sw-dev-a; queues behind V3)** → E-REVIEW (sw-reviewer) ∥ E-VISUAL-QA (sw-qa) → E-INTEGRATE (sw-devops), sequencing against the substrate INTEGRATE (t_374a3847) at merge time. TEST-GUIDE additions: S26 (interview session arc, browser) + S27 (honest refusal/budget battery).
+
+**Open product decisions:** none blocked back — the two candidate calls settle inside ADR-0011's recorded decision space: interview length cap = 12 exchanges (cost-honesty constants precedent), elicited-prose corpus entry = confirm-at-finish (explicit-door law I1). Both carry one-line falsifier flips in ADR-0014 §Revisit.

@@ -186,6 +186,18 @@ mprov work until the operator amends them.
   replies) ONLY — internal board traffic unaffected. See the **JoeBot voice**
   section below.
 
+- **2026-10-28 — PR342-PATTERN: canonical five-part PR-body skeleton
+  (operator relay of Jason's ruling, kanban t_7a324945).** Operator relay
+  verbatim: *"Jason has asked that you make sure all of your initial PR
+  filings from now on are structured similarly to MPCC #342."* Exemplar
+  verified live this run: [`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342)
+  (open at `781ac6f`-era pin; body 165 words). New rule **FS11** below;
+  distiller gate check **5d**; `filing-templates/pr-body.md` replaced with
+  the canonical skeleton. All initial PR filings from this date forward MUST
+  match the five-part skeleton in order — Fixes line, problem paragraph,
+  The fix, Impact, Testing, trailer — no badges, checklists, or meta
+  sections. See the **PR body — canonical skeleton (FS11)** section below.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -405,17 +417,16 @@ issue median is 41 words); lanes never merge.
   coordination phrasing from his set: `Related:`, `Blocked by … That has to
   reach … before this merges.`, `Depends on #N. Merge that first.`,
   `Unblocks …`. No internal ids/vocabulary anywhere (leak-scan unchanged).
-- **FS5 — PR bodies.** `Fixes #N` as a plain standalone line at the TOP
-  (position adopted from his `Closes #N.` first line; our line carries no
-  period because the gate greps `^Fixes #N$` — the one visible deviation,
-  deliberate). Then narrative prose (what was true before / what changes /
-  why safe). Sections are content-named (`## Change`, `## Testing`,
-  `## Merge notes`, `## API clients`, `## The bug` / `## The fix`) or absent
-  entirely for small fixes — never `## Summary`/`## Description` filler,
-  never bold-label blocks. Test evidence in his sentence shape: "Full
-  suite: N passed, N xfailed, in the image built from this branch. Against
-  main's code, N of the new tests fail." A before/after table is his idiom
-  for behavior matrices. Last line `Assisted by JoeBot`.
+- **FS5 — PR bodies (superseded in form by FS11; invariants here still
+  bind).** `Fixes #N` as a plain standalone line at the TOP (position
+  adopted from his `Closes #N.` first line; our line carries no period
+  because the gate greps `^Fixes #N$` — the one visible deviation,
+  deliberate). The canonical skeleton is now **FS11** (PR342-PATTERN); this
+  rule's invariants — plain Fixes line, ≤175-word cap, Impact mandatory,
+  deployment-threat-model framing, `Assisted by JoeBot` last line, no
+  badges/checklists/meta sections — remain in force and are restated there
+  in skeleton order. Where this section and FS11 disagree on section
+  names or order, FS11 wins.
 - **FS6 — thread comments.** One paragraph, stance/verdict first, first
   person, mirror the counterpart's length; receipts inline (backticked
   sha/file/test names, `#N` refs, one or two numbers) instead of bulleted
@@ -495,6 +506,33 @@ issue median is 41 words); lanes never merge.
   both claims stated, consequence (what the fix covers), ≥3 sentences,
   plain English.
 
+- **FS11 — PR body — canonical five-part skeleton (CC#342 exemplar,
+  operator ruling 2026-10-28, kanban t_7a324945).** Every initial PR filing
+  MUST match [`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342) (verified live
+  2026-10-28: `Fixes #316`, 165 words, open) in order, with no badges,
+  checklists, or meta sections. Skeleton:
+
+  1. **Line 1:** `Fixes #NNN` standalone — plain `^Fixes #[0-9]+$`, own line.
+  2. **Problem paragraph:** what's broken, reproduction against a named sha,
+     why current code does it. Complete sentences, no boilerplate.
+  3. **`## The fix`** — mechanism of change + consumer-compatibility
+     analysis (who reads the changed surface, why they're unaffected /
+     affected; e.g. `setupBMC.py`'s `?system=ID&detail` query, jobserver
+     `dns.py` reads).
+  4. **`## Impact`** — FS9 block: `Touches X. Before: ... After: ... Files:
+     <repo-relative paths>.` Covers touched subsystem, prod before/after,
+     and at least one repo-relative path.
+  5. **`## Testing`** — named tests with RED-on-base / GREEN-on-fix
+     comparison + full-suite count (e.g. `test_bulk_detail_omits_password`
+     RED on `781ac6f`, GREEN on fix; full suite 164 OK).
+  6. **Last line:** `Assisted by JoeBot` standalone (Rule A).
+
+  Target **150–175 words** total (exemplar 165). FS5's former flexible
+  section names (`## Change`, `## Merge notes`, etc.) and optional-section
+  rule are retired for this skeleton — the three `##` headings above are
+  required, in that order, with exactly those names. Normative body text is
+  in `filing-templates/pr-body.md`.
+
 ### Distiller text-gate ruleset for mprov (amends the t_03720d69 conventions)
 
 Provenance note: card t_03720d69 no longer resolves in any board DB
@@ -538,6 +576,19 @@ in order:
    whose only harm is an attacker on the deployment L2 / untrusted network
    ("an unauthenticated network caller can …", "a host on the same L2 …"):
    under the premise that is working-as-intended, not a defect.
+5d. PR-body skeleton (FS11, CC#342 exemplar, operator ruling 2026-10-28):
+   every PR body MUST match the five-part skeleton in order — (1) `Fixes #N`
+   standalone first line (`^Fixes #[0-9]+$`), (2) problem paragraph (what's
+   broken + reproduction sha + why current code does it, complete sentences),
+   (3) `## The fix` with mechanism + consumer-compatibility analysis,
+   (4) `## Impact` FS9 block (`Touches … Before: … After: … Files: …` with
+   at least one repo-relative path), (5) `## Testing` with named RED-on-base
+   / GREEN-on-fix tests + full-suite count, (6) last line `Assisted by
+   JoeBot` standalone — REJECT a PR body missing any heading, with headings
+   out of order or misnamed, with no Fixes line first, no problem paragraph,
+   no compatibility note, no Impact files, no RED/GREEN + suite count, or
+   with badges / checklists / meta sections. Target 150–175 words; exemplar
+   is [`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342) (165 words).
 6. Evidence: defect-site `file:line`/permalink present; error output quoted
    verbatim where the claim is observational; test evidence has counts AND
    a base comparison.

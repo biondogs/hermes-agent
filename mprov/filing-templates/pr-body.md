@@ -1,67 +1,49 @@
 # PR body template — mprov-ng fix PRs
 
-Modeled on uberlinuxguy's merged PRs (mprov_jobserver #190, #188, #154;
-mprov_control_center #345). Sections are named for their content; the
-structural constants are the closing-keyword first line, the `## Impact`
-section (FS9, added 2026-10-24), and the trailer last line.
+Canonical five-part skeleton per MPROV-MAINT-POLICY.md FS11 (CC#342 exemplar:
+[`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342), 165 words, open at `781ac6f`). Every initial PR filing MUST match this skeleton in order. Target 150–175 words; no badges, checklists, or meta sections. Gate check 5d enforces order + headings.
 
 ````markdown
 Fixes #<N>
 
-<Paragraph — what was true before, what this does, why it is safe. 2–5
-sentences. Backtick every file, function, setting, sha. Reference related
-PRs as #N or mprov-ng/<repo>#N.>
+<Problem paragraph — what's broken, reproduction against a named sha, why
+current code does it. Complete sentences, no boilerplate. Name the endpoint/
+field/behavior and the reproduction sha, e.g. "GET /systembmcs/?detail
+returned every BMC password (reproduced on main @ 781ac6f). Serializer X
+serves fields='__all__'; commit Y left the detail path open because ...".>
 
-## Change
-- <one bullet per behavior change, file named first:> `views_noauth.py`
-  <what changed>.
-- ...
+## The fix
+<Mechanism of change + consumer-compatibility analysis: who reads the
+changed surface, why they're unaffected/affected. Name consumers explicitly,
+e.g. "Password is now served only when scoped to one system (/<pk>/ or
+?system=ID&detail — setupBMC.py's exact query). Unscoped ?detail uses a new
+NoPassword serializer. Jobserver dns.py's ?network=…&detail read never
+touches the password, and setupBMC.py needs no change.">
 
 ## Impact
-<2–4 lines max, three things only — what the fix touches (subsystem in
-plain words); before → after in production; repo-relative files touched.
-Example: "Touches the job-claim path in the API. Before: two workers can
-claim one job (non-atomic SELECT+UPDATE). After: one claimant. Files:
-`api/views.py`, `models/job.py`, `tests/test_claim.py`.">
+<Touches the API/page/subsystem in plain words. Before: one unscoped GET
+returned N passwords. After: passwords served only for one system; prior
+consumer unchanged. Files: `systems/serializers.py`, `systems/views.py`,
+`systems/test_*.py`, `systems/tests.py`. At least one repo-relative path;
+keep to 2–4 lines.>
 
 ## Testing
-Regression tests in `<tests/file.py>`: RED on base `<base-sha>` (<exact
-failure observed>), GREEN on this head. <New test names in one clause
-each.> Full suite: <N> passed, <N> xfailed, in the image built from this
-branch.
-
-## Merge notes
-<only if true:> Depends on <#N / repo#N>. Merge that first. /
-Unblocks <#N>. / <Operator-side step, e.g. rotate a key.>
+<Named tests with RED-on-base / GREEN-on-fix + full-suite count, e.g. "New
+test_bulk_detail_omits_password (two BMCs; neither password in body) is RED
+on base, GREEN on fix; test_detail_list updated to the scoped-password
+contract. Full suite: 164 tests OK locally.">
 
 Assisted by JoeBot
 ````
 
-Hard rules (unchanged rigor):
-- `Fixes #N` MUST stay a plain standalone line matching `^Fixes #N$` —
-  the PR-tracking gate greps it. His `Closes #N.` form reads alike but
-  carries the period our machine check rejects; keyword+line form wins,
-  position (line 1) adopted from him.
-- Body ≤175 words (cap; raised from 150 on 2026-10-24 for the mandatory
-  Impact section — his median is 157 — ours reading terser is fine).
-- `## Impact` is mandatory (FS9): touches / before-vs-after production
-  behavior / repo-relative files touched, ≤4 lines — gate check 5b rejects
-  a PR without it or one naming no file.
-- Security-framed PRs state their motivation under the Deployment threat
-  model (controlled deployments — see MPROV-MAINT-POLICY.md, 2026-10-25):
-  the fix stands on a defect/leak/hygiene harm that survives with no
-  untrusted network actor; gate check 5c rejects attacker-on-the-network
-  framing. Opt-in hardening PRs say so plainly ("adds the opt-in gate for
-  deployments that want one").
-- Last line exactly `Assisted by JoeBot` (Rule A). No `Agent-*` /
-  `Co-Authored-By` trailers (leak-scan).
-- Section names: pick from what the PR actually contains (`## Change`,
-  `## Changes`, `## Testing`, `## Tests`, `## Merge notes`, `## API
-  clients`, `## The bug`/`## The fix`) — never `## Summary`/`##
-  Description` filler, never `**Symptom.**`-style bold label blocks.
-  A 2-file fix may skip every section except `## Impact` entirely: closing
-  line, prose, Impact, trailer.
-- Test evidence keeps RED/GREEN facts but says them in his sentence shape
-  ("RED on base `781ac6f` (200, mutation applied); GREEN on this head");
-  a before/after markdown table is his idiom for behavior matrices — use
-  it when it beats prose.
+Hard rules (all gate-enforced):
+- Line 1 MUST be plain `Fixes #N` matching `^Fixes #[0-9]+$` — no period, no decoration. (PR-tracking five-gate read-back greps it; `Closes #N.` is rejected.)
+- Body 150–175 words (cap; exemplar 165). CC#342 measured this shape at 165 — stay inside it.
+- Required headings in order, exactly named: `## The fix`, `## Impact`, `## Testing`. No `## Summary`/`## Description` filler, no `## Change`/`## Merge notes` substitutes — FS11 retires the old flexible names. No bold-label blocks.
+- Problem paragraph (between Fixes line and `## The fix`) must name the defect, a reproduction sha, and why current code does it — complete sentences, no boilerplate.
+- `## The fix` must state mechanism AND consumer-compatibility (who reads the changed surface, why they're unaffected/affected) — gate check 5d rejects a fix section without it.
+- `## Impact` mandatory (FS9): touches / before-vs-after production behavior / repo-relative files touched, ≤4 lines — gate check 5b rejects a PR without it or one naming no file.
+- `## Testing` must name at least one test, state RED on base + GREEN on fix, and give full-suite count — gate check 5d/6 rejects a PR without it.
+- Security-framed PRs state their motivation under the Deployment threat model (controlled deployments — see MPROV-MAINT-POLICY.md, 2026-10-25): the fix stands on a defect/leak/hygiene harm that survives with no untrusted network actor; gate check 5c rejects attacker-on-the-network framing. Opt-in hardening PRs say so plainly ("adds the opt-in gate for deployments that want one").
+- Last line exactly `Assisted by JoeBot` (Rule A). No `Agent-*` / `Co-Authored-By` trailers (leak-scan).
+- No badges, no checklists, no meta sections.

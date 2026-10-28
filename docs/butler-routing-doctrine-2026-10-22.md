@@ -54,6 +54,10 @@ When the operator messages a butler a work request for its board, the butler:
 1. creates the card on its board — **explicit `board=` on every kanban call, always**;
 2. assigns the right specialist from its fleet vocabulary, never itself;
 3. encodes in-board prerequisites with `parents=[...]` at create time (never gate-then-link);
+   *(extended 2026-10-28, t_0b03f85e: a worker self-parking on a dependency must
+   `kanban_link(parent, self)` **before** blocking/parking — GATE-WAIT PATTERN,
+   `docs/gate-wait-pattern-2026-10-28.md` R1–R3; SOUL provisioning sync via
+   kanban-board-architect follow-up)*;
 4. reports the card id + assignee back in one short line.
 
 It does NOT implement the work. Butler SOULs also carry the escalation law:

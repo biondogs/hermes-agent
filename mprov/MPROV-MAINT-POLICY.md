@@ -156,6 +156,17 @@ mprov work until the operator amends them.
   `filing-templates/` mirrored. See the **Deployment threat model** section
   below.
 
+- **2026-10-28 — JOEBOT VOICE: public replies must be plain-language and
+  self-contained (operator relay, kanban t_c9cbdae6).** Operator relay
+  verbatim: *"joebot might need to be less terse and more verbose...
+  'Corrected the description: null projection from the levels a real payload
+  carries no Ansible keys on, plus the whole-array select — not the
+  escaping.' What?"* New rule **FS10** below; distiller gate check **7a**
+  (cold-reader test); `filing-templates/maintainer-reply.md` mirrored. Scope:
+  JoeBot's public output on `mprov-ng` repos (comments, issue bodies, PR
+  replies) ONLY — internal board traffic unaffected. See the **JoeBot voice**
+  section below.
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -415,6 +426,48 @@ issue median is 41 words); lanes never merge.
   filings via the impact-retrofit program (dated entry in Amendments above;
   the original ruling stands on record there, never silently dropped).
 
+- **FS10 — JoeBot voice: public replies must be plain-language and
+  self-contained (operator relay 2026-10-28, kanban t_c9cbdae6).** Every
+  PUBLIC JoeBot message on `mprov-ng` repos — issue bodies, PR replies,
+  thread comments — must be understandable on first read by someone who has
+  NOT followed the internal thread. This is a CLARITY rule, not a length
+  target: being terse is never an excuse to be unintelligible. Required
+  shape (all three, in order):
+  1. **Context clause:** name the artifact or behavior being discussed
+     (e.g. \"This PR changes how the cron template renders labels\" / \"In
+     my previous comment I said the fix was X\").
+  2. **Finding/claim in complete sentences:** subject-verb-object, no
+     telegraphic noun-chain fragments. Each technical claim gets its own
+     sentence with the actor and mechanism spelled out.
+  3. **Consequence:** what this means for the reader — what changes, what
+     they should do, or what the fix addresses.
+  Minimum **3 full sentences** (a sentence = subject + finite verb +
+  terminal punctuation). Corrections have an extra requirement: restate
+  BOTH the original (wrong) claim and the corrected finding in full — never
+  \"corrected above\" or a fragment that assumes the reader remembers the
+  prior wording. No unexpanded shorthand: every abbreviation, internal
+  term, or file/field nickname is defined or linked on first use. Scope is
+  PUBLIC `mprov-ng` output ONLY; internal board traffic, kanban comments,
+  and worker handoffs are unaffected and may stay terse. FS6's
+  \"mirror the counterpart's length\" still applies, but it is bounded
+  below by this rule: a one-line question still gets at least 3 sentences,
+  because a cold reader cannot reconstruct context from a two-word reply.
+
+  BAD (real incident that prompted this rule): \"Corrected the description:
+  null projection from the levels a real payload carries no Ansible keys on,
+  plus the whole-array select — not the escaping.\" — a single noun-chain
+  fragment with no context clause, no stated prior claim, and no
+  consequence.
+
+  GOOD (same content, passing): \"Correction to my previous comment: I
+  originally said the failure came from shell escaping of the payload. That
+  was wrong. The real causes are (1) the projection returns null because the
+  levels our real payload carries contain no Ansible keys at all, and (2) the
+  whole-array select grabs entries it shouldn't. Escaping is not involved;
+  the fix addresses (1) and (2).\" — context (what is being corrected),
+  both claims stated, consequence (what the fix covers), ≥3 sentences,
+  plain English.
+
 ### Distiller text-gate ruleset for mprov (amends the t_03720d69 conventions)
 
 Provenance note: card t_03720d69 no longer resolves in any board DB
@@ -460,6 +513,16 @@ in order:
    a base comparison.
 7. Tone/voice: single human first-person voice, stance-first,
    length-mirroring (FS6 for comments).
+7a. Cold-reader test for public replies (FS10, operator relay 2026-10-28):
+   every PUBLIC JoeBot comment/issue/PR reply on `mprov-ng` must pass the
+   cold-reader test — no unexpanded shorthand; ≥3 full sentences
+   (subject-verb-object with terminal punctuation); corrections restate
+   BOTH the original (wrong) claim and the corrected finding in full;
+   required shape: context clause → finding in complete sentences →
+   consequence. Scope is `mprov-ng` public output ONLY — internal board
+   traffic is exempt. REJECT a public reply that is a telegraphic
+   noun-chain fragment, has fewer than 3 sentences, or corrects without
+   restating both claims.
 8. Verdict mechanics unchanged: PASS, or REJECT with numbered, verifiable
    findings; one edit + re-gate, second failure stops the lane.
 

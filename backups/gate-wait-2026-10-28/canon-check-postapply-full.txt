@@ -1,0 +1,5 @@
+⚠️ CANON-CHECK: canon drift detected (3 new finding(s), 2026-10-28 16:18 — CHECKER-1 nightly, alert-only, no action taken):
+  • [C2:shrink:g02-ops] g02-ops: approvals.deny LOST 4 of 15 baseline entries: ['docker kill*qwen38-nothink*', 'docker restart*qwen38-nothink*', 'docker rm*qwen38-nothink*', 'docker stop*qwen38-nothink*'] — deny-wipe regression class (2026-10-25 sweep); restore before anything else
+  • [C5:gaudi-benchrunner:E-HLE hjob unit watcher (t_31abaf28):local] cron job «E-HLE hjob unit watcher (t_31abaf28)» [gaudi-benchrunner registry] delivers «local» — an alert-class job should deliver to telegram; output never reaches the operator otherwise
+  • [C6:g02-ops:approve] g02-ops: single_query_mode = 'approve' — G-32 keeps «approve» on ROOT only; widening it to any other profile is drift
+  (4 known/acknowledged finding(s) suppressed — run canon-check.py --full on ga01 to list)

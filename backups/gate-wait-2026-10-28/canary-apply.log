@@ -1,0 +1,22 @@
+LIMIT_PROFILES active — canary run restricted to: ['kanban-worker', 'sjp-ops', 'sjproto-butler', 'sw-docs']
+
+######################## 1. Butler SOULs: intake + escalation ########################
+  [edited] sjproto-butler: edited (backup-exists)
+
+######################## 2. Default profile SOUL (root HERMES_HOME) ########################
+  [SKIP] default: skip
+
+######################## 3. Worker SOULs: board discipline ########################
+  [edited] kanban-worker: edited (backup-exists)
+  [edited] sjp-ops: edited (backup-exists)
+  [edited] sw-docs: edited (backup-exists)
+  worker pool size: 3
+
+######################## 4. kanban-orchestrator skill (canonical + mirror) ########################
+  [SKIP] /home/arch/.hermes/skills/devops/kanban-orchestrator/SKILL.md: skip
+  [SKIP] /home/arch/.hermes/profiles/kanban-orchestrator/skills/devops/kanban-orchestrator/SKILL.md: mirror absent (skill-copy-consolidation 2026-10-26)
+
+=== SUMMARY ===
+  SKIP: 3
+  edited: 4
+converged cleanly

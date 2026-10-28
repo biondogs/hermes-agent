@@ -1,0 +1,74 @@
+
+######################## 1. Butler SOULs: intake + escalation ########################
+  [edited] g01-butler: edited (backup-exists)
+  [edited] g02-butler: edited (backup-exists)
+  [edited] gaudi-butler: edited (backup-exists)
+  [edited] swco-butler: edited (backup-exists)
+  [SKIP] sjproto-butler: skip
+
+######################## 2. Default profile SOUL (root HERMES_HOME) ########################
+  [SKIP] default: skip
+
+######################## 3. Worker SOULs: board discipline ########################
+  [edited] distiller: edited (backup-exists)
+  [edited] g01-auditor: edited (backup-exists)
+  [edited] g01-ops: edited (backup-exists)
+  [edited] g01-orchestrator: edited (backup-exists)
+  [edited] g01-planner: edited (backup-exists)
+  [edited] g01-scribe: edited (backup-exists)
+  [edited] g01-watcher: edited (backup-exists)
+  [edited] g02-auditor: edited (backup-exists)
+  [edited] g02-ops: edited (backup-exists)
+  [edited] g02-orchestrator: edited (backup-exists)
+  [edited] g02-planner: edited (backup-exists)
+  [edited] g02-scribe: edited (backup-exists)
+  [edited] g02-watcher: edited (backup-exists)
+  [edited] gaudi-analyst: edited (backup-exists)
+  [edited] gaudi-arch: edited (backup-exists)
+  [edited] gaudi-auditor: edited (backup-exists)
+  [edited] gaudi-benchrunner: edited (backup-exists)
+  [edited] gaudi-deployer: edited (backup-exists)
+  [edited] gaudi-dockerops: edited (backup-exists)
+  [edited] gaudi-liaison: edited (backup-exists)
+  [edited] gaudi-orchestrator: edited (backup-exists)
+  [edited] gaudi-perfeng: edited (backup-exists)
+  [edited] gaudi-planner: edited (backup-exists)
+  [edited] gaudi-scribe: edited (backup-exists)
+  [edited] gaudi-synapse: edited (backup-exists)
+  [edited] gaudi-sysadmin: edited (backup-exists)
+  [edited] gaudi-watcher: edited (backup-exists)
+  [SKIP] kanban-worker: skip
+  [edited] kanban-worker-full: edited (backed-up)
+  [edited] plugin-ab: edited (backed-up)
+  [edited] research: edited (backup-exists)
+  [edited] sj-auditor: edited (backup-exists)
+  [edited] sj-ops: edited (backup-exists)
+  [edited] sj-orchestrator: edited (backup-exists)
+  [edited] sj-planner: edited (backup-exists)
+  [edited] sj-scribe: edited (backup-exists)
+  [edited] sj-watcher: edited (backup-exists)
+  [edited] sjp-auditor: edited (backup-exists)
+  [SKIP] sjp-ops: skip
+  [edited] sjp-orchestrator: edited (backup-exists)
+  [edited] sjp-planner: edited (backup-exists)
+  [edited] sjp-scribe: edited (backup-exists)
+  [edited] sjp-watcher: edited (backup-exists)
+  [edited] sw-architect: edited (backup-exists)
+  [edited] sw-dev-a: edited (backup-exists)
+  [edited] sw-dev-b: edited (backup-exists)
+  [edited] sw-devops: edited (backup-exists)
+  [SKIP] sw-docs: skip
+  [edited] sw-pm: edited (backup-exists)
+  [edited] sw-qa: edited (backup-exists)
+  [edited] sw-reviewer: edited (backup-exists)
+  [edited] sw-ux: edited (backup-exists)
+  worker pool size: 52
+
+######################## 4. kanban-orchestrator skill (canonical + mirror) ########################
+  [SKIP] /home/arch/.hermes/skills/devops/kanban-orchestrator/SKILL.md: skip
+  [SKIP] /home/arch/.hermes/profiles/kanban-orchestrator/skills/devops/kanban-orchestrator/SKILL.md: mirror absent (skill-copy-consolidation 2026-10-26)
+
+=== SUMMARY ===
+  SKIP: 7
+  edited: 53
+converged cleanly

@@ -174,6 +174,37 @@ def kanban_command(args: argparse.Namespace) -> int:
         if normed != kb.DEFAULT_BOARD and not kb.board_exists(normed):
             return _err(f"kanban: board {normed!r} does not exist. "
                         f"Create it with `hermes kanban boards create {normed}`.")
+        # Fence-divergence guard (t_bedadfbe): in a fenced context (dispatched
+        # worker / delegate lineage) kanban_db._board_path deliberately resolves
+        # an explicit slug through the HERMES_KANBAN_DB pin (5ec6baa: "workers
+        # physically cannot see other boards") — but that made `hermes kanban
+        # --board <other> <read cmd>` silently answer from the SESSION's board
+        # (nightly audit 2026-10-28: all 7 slugs returned the default board's
+        # rows, byte-identical). Refuse loudly instead, mirroring the tool
+        # layer's board= rejection (t_5651fc5b): same contract, same remedy.
+        # Unfenced callers (operator shell, env-scrubbed subprocess) are
+        # untouched — for them nothing is pinned and the slug wins.
+        db_pin = (os.environ.get("HERMES_KANBAN_DB", "") or "").strip()
+        if db_pin:
+            from agent.delegation_context import explicit_board_intent_is_pinned
+            if explicit_board_intent_is_pinned():
+                requested = (kb.kanban_home() / "kanban.db" if normed == kb.DEFAULT_BOARD
+                             else kb.board_dir(normed) / "kanban.db")
+                try:
+                    diverged = requested.resolve() != Path(db_pin).expanduser().resolve()
+                except OSError:
+                    diverged = True
+                if diverged:
+                    return _err(
+                        f"kanban: the dispatcher fence pins this session to its own kanban "
+                        f"board, so --board {normed!r} is REFUSED rather than silently "
+                        f"redirected (the command would have run against this session's "
+                        f"board). Cross-board --board calls require an unfenced caller: "
+                        f"the operator shell, the env-stripped hermes CLI subprocess "
+                        f"(env -u HERMES_KANBAN_DB -u HERMES_KANBAN_TASK "
+                        f"-u HERMES_DELEGATED_CHILD_CONTEXT ...), or the owning board's "
+                        f"butler profile."
+                    )
         board_scope = kb.scoped_current_board(normed)
 
     with board_scope:

@@ -12,6 +12,17 @@ the original markers are present. GOVERNANCE.md §1.a row G-02
 (Board Discipline block) is hash-registered — the registered hash must
 be bumped in the same card that runs this (fleet-change step 9b).
 
+NO-SELF-GATE extension 2026-10-28 (t_1a66c496): doc §R6 (commit 31d5b4b,
+operator directive via t_84b852b9) — a gate card must be assigned to an
+INDEPENDENT gate profile (`distiller` text gates / `sw-reviewer` code
+review), never the creating lane or the bytes' author; check sets are not
+the gated party's to relax; a self-issued PASS is void. Butler intake
+item 3 gains the NO-SELF-GATE sentence; the worker Board Discipline
+section gains a NO-SELF-GATE bullet after the GATE-WAIT bullet. Same
+idempotent in-place patching; same G-02 hash-bump duty. The distiller
+SOUL "## Process" R6.4 refusal pointer is deliberately NOT carried here —
+it is a single-profile live edit (t_1a66c496 carrier 3).
+
 Makes butler-first task flow the fleet default:
   1. Five butler SOULs   -> Operator Intake Protocol + Escalation sections.
   2. Default SOUL        -> Butler-First Routing Doctrine section.
@@ -92,6 +103,30 @@ GATEWAIT_WORKER_BULLET = ("- GATE-WAIT PATTERN — link-before-block (fleet law 
                           "a new card created `parents=[<gate>]` — the dispatcher promotes it when "
                           "the gate lands.")
 
+# ---- NO-SELF-GATE extension (operator directive 2026-10-28, t_1a66c496)
+# Doc of record: docs/gate-wait-pattern-2026-10-28.md § "NO-SELF-GATE law (R6)"
+# (sha256 573f88ad…, commit 31d5b4b). R6.1 independent gate assignee /
+# R6.2 check-set immutability / R6.3 void self-PASS / R6.4 receiver-side
+# refusal (carried in the distiller SOUL, not here).
+NSG_BUTLER_GUARD = "(NO-SELF-GATE, same doc R6)"
+NSG_WORKER_GUARD = "NO-SELF-GATE (fleet law since 2026-10-28"
+ITEM3_NSGLAW = (NEW_ITEM3
+                + " Gate cards are never assigned to the creating lane or "
+                "the bytes' author — assign text gates to `distiller`, "
+                "code-review gates to `sw-reviewer` (NO-SELF-GATE, same doc R6).")
+NSG_WORKER_BULLET = ("- NO-SELF-GATE (fleet law since 2026-10-28; "
+                     "doc: software-co `docs/gate-wait-pattern-2026-10-28.md` R6): "
+                     "a card whose title/body declares it a text/review GATE must "
+                     "be assigned to an INDEPENDENT gate profile — `distiller` "
+                     "for text gates, `sw-reviewer` for code review — never to the "
+                     "creating lane or the author of the bytes under review. "
+                     "A gate may not weaken its own check set: check sets come "
+                     "from policy + operator directives; a deviation is a finding "
+                     "to escalate, not to absorb. A PASS discovered to be "
+                     "self-issued is void — stop the apply leg, annotate the "
+                     "record, re-gate independently and make the new gate card "
+                     "the apply card's true parent.")
+
 
 def intake_section(board: str, bot: str) -> str:
     return f"""## Operator Intake Protocol (butler-first — fleet default since 2026-10-22)
@@ -99,7 +134,7 @@ def intake_section(board: str, bot: str) -> str:
 You are the DEFAULT intake channel for `{board}` work. When the operator messages you a work request for this board:
 1. Create the card on {board} — `kanban_create(board="{board}", ...)`; the explicit board argument on every call, as always.
 2. Assign it to the right specialist profile from the fleet vocabulary above — never to yourself.
-3. If the request names prerequisites on this board, encode them with `parents=[...]` at create time (never gate-then-link). A worker that must wait on a card it did not create at create time must `kanban_link(parent, self)` **before** blocking or parking on that dependency (GATE-WAIT PATTERN, `docs/gate-wait-pattern-2026-10-28.md` R1–R3).
+3. If the request names prerequisites on this board, encode them with `parents=[...]` at create time (never gate-then-link). A worker that must wait on a card it did not create at create time must `kanban_link(parent, self)` **before** blocking or parking on that dependency (GATE-WAIT PATTERN, `docs/gate-wait-pattern-2026-10-28.md` R1–R3). Gate cards are never assigned to the creating lane or the bytes' author — assign text gates to `distiller`, code-review gates to `sw-reviewer` (NO-SELF-GATE, same doc R6).
 4. Report the new card id and assignee back to the operator in one short line.
 
 You do NOT implement, execute, or stage any of the requested work yourself — intake, routing, and reporting only. You never answer work requests by doing the work.
@@ -133,6 +168,7 @@ def worker_discipline_section() -> str:
 - You do NOT intake new operator requests via Telegram/chat — board intake belongs to the board's butler bot. If the operator hands you ad-hoc work mid-run, finish your current card and note the request in your handoff; new intake is the butler's job, not yours.
 - Cross-board references (other boards' card ids) are reference text only: put them in card bodies/comments as plain text, never as link edges.
 - GATE-WAIT PATTERN — link-before-block (fleet law since 2026-10-28; doc: software-co `docs/gate-wait-pattern-2026-10-28.md` R1–R3): if you must wait on a card you did not create at create time, `kanban_link(parent, self)` BEFORE any block or park. You may `kanban_block(kind="dependency")` only after `kanban_show` of your own card shows the gate card in `parents` — never block-then-link (a dependency block with no open parent is downgraded to needs_input and the operator is falsely paged). If your card's work is finished and only a gate PASS is pending, do NOT block: `kanban_complete` with `metadata.pending_gate = <gate card id>` and put the follow-up legs in a new card created `parents=[<gate>]` — the dispatcher promotes it when the gate lands.
+- NO-SELF-GATE (fleet law since 2026-10-28; doc: software-co `docs/gate-wait-pattern-2026-10-28.md` R6): a card whose title/body declares it a text/review GATE must be assigned to an INDEPENDENT gate profile — `distiller` for text gates, `sw-reviewer` for code review — never to the creating lane or the author of the bytes under review. A gate may not weaken its own check set: check sets come from policy + operator directives; a deviation is a finding to escalate, not to absorb. A PASS discovered to be self-issued is void — stop the apply leg, annotate the record, re-gate independently and make the new gate card the apply card's true parent.
 """
 
 
@@ -198,14 +234,19 @@ def butler_transform(board: str):
             if anchor not in text:
                 return text, "skip"
             # fresh install: the section as built already carries the
-            # GATE-WAIT extension in item 3 (intake_section is the extended form)
+            # GATE-WAIT + NO-SELF-GATE extensions in item 3
             text = text.replace(anchor, intake_section(board, "") + anchor, 1)
             changed = True
-        elif GATEWAIT_BUTLER_GUARD not in text:
-            # already-converged SOUL (pre-2026-10-28 shape): patch item 3 in place
-            if OLD_ITEM3 not in text:
-                return text, "skip"  # unexpected shape: do not guess, report
-            text = text.replace(OLD_ITEM3, NEW_ITEM3, 1)
+        elif NSG_BUTLER_GUARD in text:
+            pass  # already NO-SELF-GATE converged
+        elif GATEWAIT_BUTLER_GUARD in text:
+            # GATE-WAIT-converged SOUL (2026-10-28 t_0d825d76 shape): extend
+            # item 3 with the NO-SELF-GATE sentence (single-line replace)
+            text = text.replace(NEW_ITEM3, ITEM3_NSGLAW, 1)
+            changed = True
+        elif OLD_ITEM3 in text:
+            # pre-GATE-WAIT shape (robustness): jump straight to NSG form
+            text = text.replace(OLD_ITEM3, ITEM3_NSGLAW, 1)
             changed = True
         return text, ("edit" if changed else "skip")
     return t
@@ -220,33 +261,46 @@ def default_transform(text: str):
     return text.replace(anchor, default_doctrine_section() + anchor, 1), "edit"
 
 
+def _insert_at_block_end(text: str, bullet: str) -> str:
+    """Insert `bullet` at the END of the existing Board Discipline BLOCK,
+    using the exact canon block-hash convention (GOVERNANCE.md §1.a: from
+    the anchor line to the last non-empty line before the next line that
+    starts with '#' or equals '---') so all carriers stay byte-identical.
+    A naive "next \\n# heading" scan overshoots across '---' separators
+    (e.g. the HOST-OVERLAY note in 39 SOULs) and lands outside the block."""
+    lines = text.split("\n")
+    si = next(i for i, ln in enumerate(lines) if WORKER_MARKER in ln)
+    end = len(lines)
+    for j in range(si + 1, len(lines)):
+        if lines[j].startswith("#") or lines[j].strip() == "---":
+            end = j
+            break
+    last = end - 1
+    while last > si and lines[last].strip() == "":
+        last -= 1
+    lines.insert(last + 1, bullet)
+    return "\n".join(lines)
+
+
 def worker_transform(text: str):
     if WORKER_MARKER not in text:
         if not text.endswith("\n"):
             text += "\n"
-        # fresh install: appended section already carries the GATE-WAIT bullet
+        # fresh install: appended section already carries both bullets
         return text + worker_discipline_section(), "edit"
+    changed = False
     if GATEWAIT_WORKER_GUARD not in text:
         # already-converged SOUL (pre-2026-10-28 shape): insert the GATE-WAIT
-        # bullet at the END of the existing Board Discipline BLOCK, using the
-        # exact canon block-hash convention (GOVERNANCE.md §1.a: from the
-        # anchor line to the last non-empty line before the next line that
-        # starts with '#' or equals '---') so all carriers stay byte-identical.
-        # A naive "next \n# heading" scan overshoots across '---' separators
-        # (e.g. the HOST-OVERLAY note in 39 SOULs) and lands outside the block.
-        lines = text.split("\n")
-        si = next(i for i, ln in enumerate(lines) if WORKER_MARKER in ln)
-        end = len(lines)
-        for j in range(si + 1, len(lines)):
-            if lines[j].startswith("#") or lines[j].strip() == "---":
-                end = j
-                break
-        last = end - 1
-        while last > si and lines[last].strip() == "":
-            last -= 1
-        lines.insert(last + 1, GATEWAIT_WORKER_BULLET)
-        return "\n".join(lines), "edit"
-    return text, "skip"
+        # bullet at the canon block end.
+        text = _insert_at_block_end(text, GATEWAIT_WORKER_BULLET)
+        changed = True
+    if NSG_WORKER_GUARD not in text:
+        # GATE-WAIT-converged SOUL (t_0d825d76 shape): insert the NO-SELF-GATE
+        # bullet after the (now-final) GATE-WAIT bullet, same block-end
+        # semantics — the bullets stay in GATE-WAIT, NO-SELF-GATE order.
+        text = _insert_at_block_end(text, NSG_WORKER_BULLET)
+        changed = True
+    return text, ("edit" if changed else "skip")
 
 
 def skill_transform(text: str):
@@ -289,8 +343,8 @@ def main():
         body = soul.read_text()
         if act == "skip" and INTAKE_MARKER not in body:
             record(total, "ERROR", prof, "anchor '## Your Role' not found — NOT edited")
-        elif act == "skip" and GATEWAIT_BUTLER_GUARD not in body:
-            record(total, "ERROR", prof, "intake marker present but item 3 / GATE-WAIT guard not found — NOT edited")
+        elif act == "skip" and NSG_BUTLER_GUARD not in body:
+            record(total, "ERROR", prof, "intake marker present but item 3 / NO-SELF-GATE guard not found — NOT edited")
         else:
             record(total, act.split(" ")[0] if act != "skip" else "SKIP", prof, act)
 

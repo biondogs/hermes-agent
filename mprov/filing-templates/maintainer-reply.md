@@ -49,6 +49,14 @@ projection returns null because the levels our real payload carries contain no
 Ansible keys at all, and (2) the whole-array select grabs entries it shouldn't.
 Escaping is not involved; the fix addresses (1) and (2).`
 
+Every comment ends with the Rule-A signature line as its own trailing paragraph:
+
+```markdown
+Assisted by JoeBot
+```
+
+Exact standalone line, blank line before it, nothing else on the line. The distiller gate (check 2) REJECTs any queued public comment lacking it.
+
 Keep (content rigor, unchanged): run it before you say it; per-claim
 verdicts with receipts; mark un-runs honestly; verify your own comment
 landed (read back id/author/length via API). Public replies add FS10's

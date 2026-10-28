@@ -156,6 +156,25 @@ mprov work until the operator amends them.
   `filing-templates/` mirrored. See the **Deployment threat model** section
   below.
 
+- **2026-10-28 — JOEBOT SIG COMMENTS: signature law extended to ALL
+  public output including comments (operator ruling, kanban t_f208c170).**
+  Operator ruling verbatim (butler channel): *\"It seems you've been
+  missing your signatures for the mprov repos, you should be signing off
+  on all of your comment's, prs, issues, filings with your 'Assisted by
+  JoeBot' signature.\"* **Scope expansion:** the Rule-A standing line
+  `Assisted by JoeBot` (exact standalone line) now covers **ALL** public
+  JoeBot output on `mprov-ng` repos: commits, PR title/body per existing
+  rules, **issue bodies**, AND **thread comments** — comments were
+  previously ungated and are now gated. Every queued public comment MUST
+  carry the exact standalone line `Assisted by JoeBot` as its own
+  trailing paragraph (blank line before it, nothing else on the line);
+  the distiller gate (check 2) REJECTs any comment lacking it. Policy
+  Rule A, the distiller gate, and `filing-templates/maintainer-reply.md`
+  are amended accordingly; a 30-day retro sweep of `biondogs`-authored
+  comments was performed on-card (receipt: counts + amended ids). Out of
+  scope: `metatron-rewrite` (mprov-only rule), upstream `hermes-agent`
+  (different venue convention).
+
 - **2026-10-28 — JOEBOT VOICE: public replies must be plain-language and
   self-contained (operator relay, kanban t_c9cbdae6).** Operator relay
   verbatim: *"joebot might need to be less terse and more verbose...
@@ -221,16 +240,24 @@ still live there.
 
 ## Rule A — "Assisted by JoeBot" attribution line
 
-EVERY commit message AND every PR description touching an mprov repo (fork
-or upstream side) MUST include the exact line:
+EVERY commit message, every PR/issue description, AND every thread
+comment touching an mprov repo (fork or upstream side) MUST include the
+exact standalone line:
 
 ```
 Assisted by JoeBot
 ```
 
+For commits and PR/issue bodies: the line is the exact last line (or
+standalone final paragraph) per existing rules. For **comments**: the
+line is a standalone trailing paragraph — blank line before it, nothing
+else on the line, no decoration/bold/prefix. The distiller gate
+(check 2) REJECTs any queued public comment lacking it.
+
 Scope is bidirectional and absolute:
-- **mprov repos ONLY.** The line is mandatory on these four repos.
-- **NEVER on any other repo, anywhere.** Do not add the line to commits or
+- **mprov repos ONLY.** The line is mandatory on these four repos —
+  commits, PR bodies, issue bodies, AND comments.
+- **NEVER on any other repo, anywhere.** Do not add the line to commits,
   PRs in hermes-agent, software-co, metatron, or any other repository under
   any circumstance. Copying it "for consistency" is a policy violation.
 
@@ -478,8 +505,11 @@ in order:
 
 1. Leak-scan + sanitizer (unchanged): no `t_` ids, board/gate vocabulary,
    agent/persona tells, internal hostnames, cross-board detail.
-2. Rule A: exact `Assisted by JoeBot` line present and LAST in PR bodies
-   (and in commits); Rule B reviewer requested.
+2. Rule A: exact `Assisted by JoeBot` line present and LAST in PR
+   bodies (and in commits); **thread comments MUST also carry the exact
+   standalone line `Assisted by JoeBot` as their trailing paragraph
+   (blank line before it, nothing else on that line) — REJECT any
+   queued public comment lacking it**; Rule B reviewer requested.
 3. `Fixes #N` present as first-line plain standalone match `^Fixes #N$`.
 4. Rule C contents: all five (symptom / evidence / root cause / proposed
    fix / severity) semantically present — as prose under FS2, NOT as labels.

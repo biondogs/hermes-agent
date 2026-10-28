@@ -1,0 +1,3 @@
+⚠️ CANON-CHECK: canon drift detected (1 new finding(s), 2026-10-28 16:36 — CHECKER-1 nightly, alert-only, no action taken):
+  • [C6:g02-ops:approve] g02-ops: single_query_mode = 'approve' — G-32 keeps «approve» on ROOT only; widening it to any other profile is drift
+  (4 known/acknowledged finding(s) suppressed — run canon-check.py --full on ga01 to list)

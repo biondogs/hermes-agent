@@ -1,0 +1,74 @@
+
+######################## 1. Butler SOULs: intake + escalation ########################
+  [SKIP] g01-butler: skip
+  [SKIP] g02-butler: skip
+  [SKIP] gaudi-butler: skip
+  [SKIP] swco-butler: skip
+  [SKIP] sjproto-butler: skip
+
+######################## 2. Default profile SOUL (root HERMES_HOME) ########################
+  [SKIP] default: skip
+
+######################## 3. Worker SOULs: board discipline ########################
+  [SKIP] distiller: skip
+  [SKIP] g01-auditor: skip
+  [SKIP] g01-ops: skip
+  [SKIP] g01-orchestrator: skip
+  [SKIP] g01-planner: skip
+  [SKIP] g01-scribe: skip
+  [SKIP] g01-watcher: skip
+  [SKIP] g02-auditor: skip
+  [SKIP] g02-ops: skip
+  [SKIP] g02-orchestrator: skip
+  [SKIP] g02-planner: skip
+  [SKIP] g02-scribe: skip
+  [SKIP] g02-watcher: skip
+  [SKIP] gaudi-analyst: skip
+  [SKIP] gaudi-arch: skip
+  [SKIP] gaudi-auditor: skip
+  [SKIP] gaudi-benchrunner: skip
+  [SKIP] gaudi-deployer: skip
+  [SKIP] gaudi-dockerops: skip
+  [SKIP] gaudi-liaison: skip
+  [SKIP] gaudi-orchestrator: skip
+  [SKIP] gaudi-perfeng: skip
+  [SKIP] gaudi-planner: skip
+  [SKIP] gaudi-scribe: skip
+  [SKIP] gaudi-synapse: skip
+  [SKIP] gaudi-sysadmin: skip
+  [SKIP] gaudi-watcher: skip
+  [SKIP] kanban-worker: skip
+  [SKIP] kanban-worker-full: skip
+  [SKIP] plugin-ab: skip
+  [SKIP] research: skip
+  [SKIP] sj-auditor: skip
+  [SKIP] sj-ops: skip
+  [SKIP] sj-orchestrator: skip
+  [SKIP] sj-planner: skip
+  [SKIP] sj-scribe: skip
+  [SKIP] sj-watcher: skip
+  [SKIP] sjp-auditor: skip
+  [SKIP] sjp-ops: skip
+  [SKIP] sjp-orchestrator: skip
+  [SKIP] sjp-planner: skip
+  [SKIP] sjp-scribe: skip
+  [SKIP] sjp-watcher: skip
+  [SKIP] sw-architect: skip
+  [SKIP] sw-dev-a: skip
+  [SKIP] sw-dev-b: skip
+  [SKIP] sw-devops: skip
+  [SKIP] sw-docs: skip
+  [SKIP] sw-pm: skip
+  [SKIP] sw-qa: skip
+  [SKIP] sw-reviewer: skip
+  [SKIP] sw-ux: skip
+  worker pool size: 52
+
+######################## 4. kanban-orchestrator skill (canonical + mirror) ########################
+  [SKIP] /home/arch/.hermes/skills/devops/kanban-orchestrator/SKILL.md: skip
+  [SKIP] /home/arch/.hermes/profiles/kanban-orchestrator/skills/devops/kanban-orchestrator/SKILL.md: mirror absent (skill-copy-consolidation 2026-10-26)
+
+=== SUMMARY ===
+  SKIP: 60
+converged cleanly
+/home/arch/.hermes/profiles/distiller/SOUL.md: skip

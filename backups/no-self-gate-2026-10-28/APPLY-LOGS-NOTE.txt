@@ -1,0 +1,19 @@
+Apply log note (t_1a66c496):
+
+flock-apply.log records the SUCCESSFUL full-fleet apply (rc 0, 52 edited +
+5 canary skips, converged cleanly). A first flock attempt immediately before
+it aborted pre-write with exit 14: its invariant expected 5 files matching
+"NO-SELF-GATE (fleet law since 2026-10-28", but only the 4 canary WORKER
+seats match that string — sjproto-butler carries the butler-sentence form
+"(NO-SELF-GATE, same doc R6)" — so the pre-apply census was 4+1, not 5.
+The guard worked as designed: NO file was written by the aborted attempt;
+the invariant was corrected and the apply re-run. Live state verified
+unchanged between attempts (worker-guard=4, butler-sentence=1, R6.4=1).
+
+idempotency-run2.log: live re-run after full apply — 60 SKIP, 0 edits,
+distiller patch skip. Converge is idempotent on the converged fleet.
+
+canon-check-postapply.txt: post-bump canon-check — only pre-existing
+[CO-serialized] finding [C6:g02-ops:approve] (blocked on t_1932b2ec for
+operator ruling); --full run shows C1 all-ok including "G-02 (Board
+Discipline block:ok (52/52)" at registered hash c07b6d6bd535….

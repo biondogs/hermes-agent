@@ -1954,6 +1954,13 @@ DEFAULT_CONFIG = {
         # Max triage tasks decomposed per tick, bounding the aux-LLM burst from a bulk load. Excess
         # defers to the next tick.
         "auto_decompose_per_tick": 3,
+        # Case-insensitive substrings marking a block reason as an OPERATOR HOLD. Cards whose
+        # CURRENT block episode matches are suppressed from ALL triage automation — auto-decomposer
+        # and specifier sweeps skip them; specify/decompose promote raises TaskHeldError — until an
+        # explicit unblock (operator -> butler) writes the `unblocked` event that clears the hold.
+        # The block-loop breaker escalates repeat holds INTO triage; that escalation is not a
+        # release. Incident: gaudi t_9375396a, 2026-10-29 (3 decomposer misfires overrode the hold).
+        "hold_markers": ["OPERATOR HOLD"],
         # Running tasks with no heartbeat (last_heartbeat_at) for this many seconds are reclaimed to
         # ready on the next tick; a still-running local worker is terminated first. 0 = off.
         "dispatch_stale_timeout_seconds": 14400,

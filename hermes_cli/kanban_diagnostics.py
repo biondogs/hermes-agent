@@ -15,6 +15,8 @@ from typing import Any, Callable, Iterable, Optional
 import json
 import time
 
+from hermes_cli.kanban_db import DEFAULT_HOLD_MARKERS
+
 
 # Least → most urgent; sorted outputs put critical first.
 SEVERITY_ORDER = ("warning", "error", "critical")
@@ -236,12 +238,24 @@ def triage_aux_status(config: Optional[dict]) -> Optional[dict]:
     if not isinstance(aux, dict) and not kanban_cfg and "model" not in config:
         return None
     aux = aux if isinstance(aux, dict) else {}
+    raw_markers = kanban_cfg.get("hold_markers") if kanban_cfg else None
+    if isinstance(raw_markers, str):
+        raw_markers = [raw_markers]
+    markers = (
+        [str(m).strip() for m in raw_markers if str(m).strip()]
+        if isinstance(raw_markers, (list, tuple)) and raw_markers
+        else list(DEFAULT_HOLD_MARKERS)
+    )
     return {
         # ``auto_decompose`` defaults to True per kanban DEFAULT_CONFIG.
         "auto_decompose": bool(kanban_cfg["auto_decompose"]) if "auto_decompose" in kanban_cfg else True,
         "decomposer_explicit": _aux_slot_explicit(aux.get("kanban_decomposer")),
         "specifier_explicit": _aux_slot_explicit(aux.get("triage_specifier")),
         "main_model_visible": _main_model_visible(config),
+        # LOCAL HOTFIX t_7fd1c800: operator-hold suppression in the triage
+        # automation (specify/decompose refuse held cards; sweeps skip them).
+        "hold_guard": True,
+        "hold_markers": markers,
     }
 
 

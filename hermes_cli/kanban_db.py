@@ -3324,6 +3324,76 @@ def _route_block(
     return "blocked", "blocked", set_sql, (kind, recurrences), payload
 
 
+# --- Operator holds vs. the triage automation (LOCAL HOTFIX t_7fd1c800) --------
+#
+# An operator hold is expressed as a kanban_block whose reason carries a hold
+# marker (default "OPERATOR HOLD"). The block-loop breaker escalates repeat
+# blocks into TRIAGE -- the very column the auto-decomposer and triage
+# specifier feed on -- so on 2026-10-29 a held card (gaudi t_9375396a) was
+# spec'd+promoted out from under the operator 3 times in ~50 minutes. The
+# hold state therefore lives in the block EVENTS, and every triage mutation
+# (specify, decompose fan-out, single-task promote) plus the triage sweeps
+# refuse/skip a card whose CURRENT block episode is a hold. Machine actions
+# never clear a hold; only an explicit ``unblocked`` event (operator ->
+# butler -> unblock_task) does.
+
+DEFAULT_HOLD_MARKERS = ("OPERATOR HOLD",)
+
+
+class TaskHeldError(ValueError):
+    """A triage mutation (specify/decompose promote) was refused because the
+    card's current block episode is an operator hold (:func:`task_hold_reason`).
+    Release is ``unblock_task``, which writes the ``unblocked`` event that
+    clears the hold."""
+
+
+def _resolve_hold_markers() -> tuple:
+    """Marker substrings marking a block reason as an operator hold; matched
+    case-insensitively. Env ``HERMES_KANBAN_HOLD_MARKERS`` (comma-separated)
+    wins, then ``kanban.hold_markers`` config, then the default."""
+    env_raw = os.environ.get("HERMES_KANBAN_HOLD_MARKERS")
+    if env_raw and env_raw.strip():
+        return tuple(m.strip() for m in env_raw.split(",") if m.strip())
+    try:
+        from hermes_cli.config import load_config_readonly
+        cfg = load_config_readonly() or {}
+        raw = (cfg.get("kanban", {}) or {}).get("hold_markers") if isinstance(cfg, dict) else None
+        if isinstance(raw, str):
+            raw = [raw]
+        if isinstance(raw, (list, tuple)):
+            markers = tuple(str(m).strip() for m in raw if str(m).strip())
+            if markers:
+                return markers
+    except Exception:
+        pass
+    return DEFAULT_HOLD_MARKERS
+
+
+def task_hold_reason(conn: sqlite3.Connection, task_id: str) -> Optional[str]:
+    """The latest block reason when the card's CURRENT block episode is an
+    operator hold, else None.
+
+    Episode state = newest event among ``blocked`` / ``block_loop_detected``
+    / ``unblocked``: an ``unblocked`` (deliberate release) closes any hold; a
+    newer non-hold block replaces it. Events outside that set (a decomposer
+    misfire's ``specified``/``promoted``, run bookkeeping) never clear a hold.
+    """
+    row = conn.execute(
+        "SELECT kind, payload FROM task_events "
+        "WHERE task_id = ? AND kind IN ('blocked', 'block_loop_detected', 'unblocked') "
+        "ORDER BY id DESC LIMIT 1",
+        (task_id,),
+    ).fetchone()
+    if row is None or row["kind"] == "unblocked":
+        return None
+    reason = _nonblank_str(_json_dict(_row_get(row, "payload")).get("reason")) or ""
+    lowered = reason.lower()
+    for marker in _resolve_hold_markers():
+        if marker and marker.lower() in lowered:
+            return reason
+    return None
+
+
 def redact_review_value(value: Any) -> Any:
     """Redact secrets at the domain boundary for durable review handoffs."""
     if isinstance(value, str):
@@ -3639,16 +3709,25 @@ def _landing_status_after_parents(conn: sqlite3.Connection, task_id: str) -> str
 
 def unblock_task(conn: sqlite3.Connection, task_id: str) -> bool:
     """``blocked``/``scheduled`` -> its resumable phase (parent re-gated; ``review``
-    when that is where it left off), closing any leaked run first."""
+    when that is where it left off), closing any leaked run first.
+
+    A ``triage`` card is releasable ONLY when it sits there because the
+    block-loop breaker escalated an operator hold (LOCAL HOTFIX t_7fd1c800):
+    that is the operator's release lever for held cards the triage automation
+    must refuse to touch. Plain idea-triage (no hold episode) still refuses --
+    it needs specify, not unblock."""
     now = int(time.time())
     with write_txn(conn):
+        cur_status = _task_status(conn, task_id)
+        if cur_status == "triage" and task_hold_reason(conn, task_id) is None:
+            return False
         resume_status = (
             _resume_status_from_events(conn, task_id)
-            if _task_status(conn, task_id) == "blocked"
+            if cur_status in ("blocked", "triage")
             else "ready"
         )
         _reclaim_dangling_run(
-            conn, task_id, statuses=("blocked", "scheduled"), now=now,
+            conn, task_id, statuses=("blocked", "scheduled", "triage"), now=now,
             note="invariant recovery on unblock",
         )
         # Re-gate on parent completion before restoring the source phase.
@@ -3666,7 +3745,7 @@ def unblock_task(conn: sqlite3.Connection, task_id: str) -> bool:
         cur = conn.execute(
             "UPDATE tasks SET status = ?, current_run_id = NULL, "
             "consecutive_failures = 0, last_failure_error = NULL "
-            "WHERE id = ? AND status IN ('blocked', 'scheduled')", (new_status, task_id),
+            "WHERE id = ? AND status IN ('blocked', 'scheduled', 'triage')", (new_status, task_id),
         )
         if cur.rowcount != 1:
             return False
@@ -3830,6 +3909,15 @@ def specify_triage_task(
         ).fetchone()
         if existing is None:
             return False
+        held_reason = task_hold_reason(conn, task_id)
+        if held_reason is not None:
+            # LOCAL HOTFIX t_7fd1c800: never spec/promote a card under an
+            # operator hold -- the block-loop breaker may have escalated it INTO
+            # triage, and that escalation is not a release (gaudi t_9375396a).
+            raise TaskHeldError(
+                f"refusing to specify/promote {task_id}: operator hold in force "
+                f"(block reason: {held_reason[:180]}). Release via unblock first."
+            )
         sets: list[str] = ["status = 'todo'"]
         params: list[Any] = []
         changed_fields: list[str] = []

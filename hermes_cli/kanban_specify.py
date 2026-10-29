@@ -200,6 +200,18 @@ def specify_task(
     if task is None:
         return SpecifyOutcome(task_id, False, reason)
 
+    # LOCAL HOTFIX t_7fd1c800: a card escalated to triage by the block-loop
+    # breaker while under an operator hold must never be spec'd/promoted --
+    # check BEFORE burning an aux call.
+    with kbc.connect_closing() as conn:
+        held_reason = kb.task_hold_reason(conn, task_id)
+    if held_reason:
+        return SpecifyOutcome(
+            task_id, False,
+            "task under operator hold — specify/promotion suppressed "
+            f"(block reason: {held_reason[:180]}); release via unblock first",
+        )
+
     raw, reason = _call_aux(
         "specify", task_id, aux_task="triage_specifier", system=_SYSTEM_PROMPT,
         user=_USER_TEMPLATE.format(**_task_prompt_fields(task)),
@@ -220,14 +232,18 @@ def specify_task(
         if new_body is None and new_title is None:
             return SpecifyOutcome(task_id, False, "LLM response missing title and body")
 
-    with kbc.connect_closing() as conn:
-        ok = kb.specify_triage_task(
-            conn,
-            task_id,
-            title=new_title,
-            body=new_body,
-            author=author or _profile_author(),
-        )
+    try:
+        with kbc.connect_closing() as conn:
+            ok = kb.specify_triage_task(
+                conn,
+                task_id,
+                title=new_title,
+                body=new_body,
+                author=author or _profile_author(),
+            )
+    except kb.TaskHeldError as exc:
+        # Hold landed between the early check and this write (or the sweep raced).
+        return SpecifyOutcome(task_id, False, str(exc))
     if not ok:
         # Race: promoted/archived between our read and the write.
         return SpecifyOutcome(task_id, False, "task moved out of triage before promotion")
@@ -235,7 +251,20 @@ def specify_task(
 
 
 def list_triage_ids(*, tenant: Optional[str] = None) -> list[str]:
-    """Task ids in the triage column; ``tenant`` narrows the sweep."""
+    """Task ids in the triage column; ``tenant`` narrows the sweep. Cards whose
+    current block episode is an operator hold are excluded (LOCAL HOTFIX
+    t_7fd1c800) — a sweep must never spec/promote a held card."""
+    held: list[str] = []
+    ids: list[str] = []
     with kbc.connect_closing() as conn:
-        tasks = kb.list_tasks(conn, status="triage", tenant=tenant, include_archived=False)
-    return [t.id for t in tasks]
+        for t in kb.list_tasks(conn, status="triage", tenant=tenant, include_archived=False):
+            if kb.task_hold_reason(conn, t.id):
+                held.append(t.id)
+            else:
+                ids.append(t.id)
+    if held:
+        logger.info(
+            "specify sweep: suppressed %d operator-held triage task(s): %s",
+            len(held), ", ".join(held),
+        )
+    return ids

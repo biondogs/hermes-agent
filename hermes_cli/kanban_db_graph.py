@@ -101,7 +101,7 @@ def decompose_triage_task(
     """
     from hermes_cli.kanban_db import (
         _canonical_assignee, _link, _append_event, _insert_comment,
-        write_txn, recompute_ready,
+        write_txn, recompute_ready, task_hold_reason, TaskHeldError,
     )
 
     if not children:
@@ -120,6 +120,15 @@ def decompose_triage_task(
         ).fetchone()
         if root_row is None or root_row["status"] != "triage":
             return None
+        # LOCAL HOTFIX t_7fd1c800: the fan-out promotes the root out of triage;
+        # never do that to a card under an operator hold (the block-loop breaker
+        # can escalate a held card INTO triage — that is not a release).
+        held_reason = task_hold_reason(conn, task_id)
+        if held_reason is not None:
+            raise TaskHeldError(
+                f"refusing to decompose/promote {task_id}: operator hold in force "
+                f"(block reason: {held_reason[:180]}). Release via unblock first."
+            )
         # Dependency links alone do not imply lineage. The completion event is
         # committed with the graph, and survives re-triage or unlinking.
         if conn.execute(

@@ -228,10 +228,14 @@ def _apply_single(task: kb.Task, parsed: dict, routing: _Routing, author: str) -
         )
     if title_val is None and body_val is None:
         return DecomposeOutcome(task.id, False, "decomposer returned fanout=false with no title/body")
-    with kbc.connect_closing() as conn:
-        ok = kb.specify_triage_task(
-            conn, task.id, title=title_val, body=body_val, assignee=assignee_val, author=author,
-        )
+    try:
+        with kbc.connect_closing() as conn:
+            ok = kb.specify_triage_task(
+                conn, task.id, title=title_val, body=body_val, assignee=assignee_val, author=author,
+            )
+    except kb.TaskHeldError as exc:
+        # LOCAL HOTFIX t_7fd1c800: an operator hold landed after the early check.
+        return DecomposeOutcome(task.id, False, str(exc))
     if not ok:
         return DecomposeOutcome(task.id, False, "task moved out of triage before promotion")
     return DecomposeOutcome(task.id, True, "single task (no fanout)", fanout=False, new_title=title_val)
@@ -288,6 +292,9 @@ def _apply_fanout(task_id: str, parsed: dict, routing: _Routing, author: str) ->
                 author=author,
                 auto_promote=routing.auto_promote,
             )
+    except kb.TaskHeldError as exc:
+        # LOCAL HOTFIX t_7fd1c800: an operator hold landed after the early check.
+        return DecomposeOutcome(task_id, False, str(exc))
     except ValueError as exc:
         return DecomposeOutcome(task_id, False, f"DB rejected graph: {exc}")
     except Exception as exc:
@@ -313,6 +320,19 @@ def decompose_task(
     if task is None:
         return DecomposeOutcome(task_id, False, reason)
 
+    # LOCAL HOTFIX t_7fd1c800: a card escalated to triage by the block-loop
+    # breaker while under an operator hold must never be decomposed, spec'd or
+    # promoted — check BEFORE burning an aux call. (Incident: gaudi
+    # t_9375396a, 3 misfires on 2026-10-29.)
+    with kbc.connect_closing() as conn:
+        held_reason = kb.task_hold_reason(conn, task_id)
+    if held_reason:
+        return DecomposeOutcome(
+            task_id, False,
+            "task under operator hold — decompose/specify/promotion suppressed "
+            f"(block reason: {held_reason[:180]}); release via unblock first",
+        )
+
     routing = _load_routing(root_assignee=task.assignee)
     raw, reason = _call_aux(
         "decompose", task_id, aux_task="kanban_decomposer", system=_SYSTEM_PROMPT,
@@ -337,7 +357,21 @@ def decompose_task(
 
 
 def list_triage_ids(*, tenant: Optional[str] = None) -> list[str]:
-    """Return task ids currently in the triage column."""
+    """Return task ids currently in the triage column. Cards whose current
+    block episode is an operator hold are excluded (LOCAL HOTFIX t_7fd1c800)
+    — this is the auto-decompose tick's feed, so a held card is never even
+    attempted."""
+    held: list[str] = []
+    ids: list[str] = []
     with kbc.connect_closing() as conn:
-        rows = kb.list_tasks(conn, status="triage", tenant=tenant, limit=1000)
-    return [row.id for row in rows]
+        for row in kb.list_tasks(conn, status="triage", tenant=tenant, limit=1000):
+            if kb.task_hold_reason(conn, row.id):
+                held.append(row.id)
+            else:
+                ids.append(row.id)
+    if held:
+        logger.info(
+            "decompose triage feed: suppressed %d operator-held task(s): %s",
+            len(held), ", ".join(held),
+        )
+    return ids

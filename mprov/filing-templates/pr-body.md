@@ -1,7 +1,7 @@
 # PR body template — mprov-ng fix PRs
 
 Canonical five-part skeleton per MPROV-MAINT-POLICY.md FS11 (CC#342 exemplar:
-[`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342), 165 words, open at `781ac6f`). Every initial PR filing MUST match this skeleton in order. Target 150–175 words; no badges, checklists, or meta sections. Gate check 5d enforces order + headings.
+[`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342), 165 words; merged 2026-10-29 with ref line `Refs #316` — see the ref rule below). Every initial PR filing MUST match this skeleton in order. Target 150–175 words; no badges, checklists, or meta sections. Gate check 5d enforces order + headings.
 
 ````markdown
 Fixes #<N>
@@ -37,7 +37,8 @@ Assisted by JoeBot
 ````
 
 Hard rules (all gate-enforced):
-- Line 1 MUST be plain `Fixes #N` matching `^Fixes #[0-9]+$` — no period, no decoration. (PR-tracking five-gate read-back greps it; `Closes #N.` is rejected.)
+- Line 1 MUST be a plain ref line matching `^(Fixes|Refs) #[0-9]+$` — no period, no decoration. (`Closes #N.` is rejected; the PR-tracking five-gate read-back greps this pattern.)
+- `Fixes #N` is the default and is REQUIRED whenever the PR is the full remaining scope of the issue. `Refs #N` is allowed ONLY when the PR fixes part of the issue and the issue must stay open (2026-10-29 REFS-vs-FIXES amendment, maintainer directive on cc#342, comment 6497897223) — and then the first-line text must state the remaining open scope naming its issue number, cc#342 form: `Refs #316. This closes the single-request harvest; #316 stays open because … (to be addressed by #381).` A `Refs` line on a full-remaining-scope fix is rejected (use `Fixes`).
 - Body 150–175 words (cap; exemplar 165). CC#342 measured this shape at 165 — stay inside it.
 - Required headings in order, exactly named: `## The fix`, `## Impact`, `## Testing`. No `## Summary`/`## Description` filler, no `## Change`/`## Merge notes` substitutes — FS11 retires the old flexible names. No bold-label blocks.
 - Problem paragraph (between Fixes line and `## The fix`) must name the defect, a reproduction sha, and why current code does it — complete sentences, no boilerplate.

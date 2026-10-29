@@ -211,6 +211,31 @@ mprov work until the operator amends them.
   canonical gate-card skeleton with the mandatory `Assignee: distiller` line;
   all future mprov text-gate cards MUST be filed from it.
 
+- **2026-10-29 — REFS-vs-FIXES: scope-narrowed fix PRs open with `Refs #N`
+  (maintainer directive on cc#342, kanban t_01587b0f).** Maintainer
+  directive verbatim (mprov_control_center comment 6497897223,
+  `uberlinuxguy`, 2026-10-29T13:24:18Z): *"The PR text should say this
+  narrows #316 rather than closing it: any key holder can still loop over
+  system ids. Either keep #316 open for a node-scoped read or change
+  `Fixes` to `Refs`."* Precedent (cc#342) MERGED 2026-10-29T14:14:03Z with
+  first line `Refs #316. This closes the single-request harvest; #316 stays
+  open because any key holder can still read passwords one system at a time
+  (to be addressed by #381).` — and cc#316 verified still OPEN at read-back
+  2026-10-29 (receipt: distiller gate run t_e3066838). New convention:
+  a fix PR covering only PART of an issue that must stay open opens with
+  plain `Refs #N` (GitHub does not auto-close on `Refs`) plus a
+  same-first-line statement of the remaining open scope named by issue
+  number. Gate check 3, gate 5d, the PR-tracking read-back grep (widened to
+  `^(Fixes|Refs) #[0-9]+$`), FS11 element 1 and FS5's invariants are
+  amended accordingly; `filing-templates/pr-body.md` mirrored. The earlier
+  FS11 exemplar snapshot recorded cc#342 as `Fixes #316` (accurate at
+  2026-10-28); the maintainer re-titled the ref at review — this entry is
+  the correction of record. **No relaxation:** `Fixes #N` stays the default
+  and is REQUIRED whenever the PR is the full remaining scope of the issue
+  (the reopened js#169 case — the maintainer's reopen directive names the
+  image_update fix as the only remaining part — keeps `Fixes #169` and its
+  merge should auto-close #169).
+
 ## Contributor allowlist (2026-10-23, operator ruling)
 
 The **only** contributors accepted on the main `mprov-ng` repos are:
@@ -303,11 +328,21 @@ superseded).
 
 Every sprint fix PR must satisfy, **at publication time**:
 
-1. **Exact Fixes line.** The PR body carries a plain, machine-checkable
-   line `Fixes #N` on its own line (N = the `mprov-ng` issue being fixed).
-   Plain text only — no bold/decoration wrapping the keyword. Check:
+1. **Exact ref line.** The PR body carries a plain, machine-checkable ref
+   line on its own line first (N = the `mprov-ng` issue being fixed), per
+   the 2026-10-29 REFS-vs-FIXES amendment:
+   - `Fixes #N` — the default, REQUIRED when the PR is the full remaining
+     scope of the issue (merge auto-closes it); or
+   - `Refs #N` — ONLY when the PR fixes part of the issue and the issue
+     must stay open; the first-line text must state the remaining open
+     scope naming its issue number (cc#342 form:
+     `Refs #316. … #316 stays open … (to be addressed by #381).`).
+   Plain text only — no bold/decoration wrapping the keyword; no other
+   keyword (`Closes` is rejected at the gate). Check:
    `gh pr view <PR> --repo mprov-ng/<repo> --json body -q .body |
-   grep -qm1 -E '^Fixes #[0-9]+$'`.
+   grep -qm1 -E '^(Fixes|Refs) #[0-9]+'` — and when the hit is a `Refs`
+   line, the gate additionally verifies the same-line remaining-scope
+   statement.
    If a body edit is needed after creation, use a REST
    `PATCH /repos/<owner>/<repo>/pulls/<n>` — `gh pr edit --body-file`
    silently no-ops on the gh version installed on this host (2.45.0).
@@ -319,7 +354,10 @@ Every sprint fix PR must satisfy, **at publication time**:
    never assume the board moves on its own. When the merge is confirmed,
    the lane moves the item to **Done** and re-reads it — do not rely on
    issue auto-close to move the board item (no board automation has ever
-   been observed firing unattended).
+   been observed firing unattended). **Refs PRs (partial fixes,
+   2026-10-29):** a `Refs #N` merge does NOT close the issue and does NOT
+   finish it — the issue-item stays **In Progress** after the merge and
+   moves to **Done** only when the issue itself closes.
 3. **PR row.** The lane adds the PR itself as a **type PullRequest**
    project-9 item set to **In Progress** at publication (GraphQL
    `addProjectV2ItemById` + `updateProjectV2ItemFieldValue` — or
@@ -335,8 +373,9 @@ Every sprint fix PR must satisfy, **at publication time**:
    so re-adding an already-indexed PR cannot create a duplicate).
 4. **Publication read-back (all five gates, by live re-fetch after the PR
    is opened):** (i) PR state is open, (ii) `uberlinuxguy` reviewer is
-   attached, (iii) the live body still carries the exact `Fixes #N` line,
-   (iv) the issue's project-9 item reads **In Progress** (e.g.
+   attached, (iii) the live body still carries the exact gate-approved ref
+   line (`Fixes #N`, or a valid `Refs #N` with its remaining-scope
+   statement — see gate 1), (iv) the issue's project-9 item reads **In Progress** (e.g.
    `gh project item-list 9 --owner mprov-ng --limit 500 --format json`,
    match the issue URL and re-read its Status), and (v) the PR's own
    project-9 row (type PullRequest) is present and reads **In Progress**.
@@ -393,7 +432,10 @@ and FORMAT; it never licenses dropping content.
 Rule A trailer (`Assisted by JoeBot`, exact, last line of PR bodies and in
 every commit); Rule B reviewer; contributor allowlist + pre-publication
 identity check; PR tracking with the five-gate publication read-back; the
-`Fixes #N` machine check (`^Fixes #N$`, plain, own line); distiller
+`Fixes #N` machine check (first line plain `^Fixes #N$`, own line; the
+2026-10-29 REFS-vs-FIXES amendment adds the narrow `Refs #N` variant for
+scope-narrowed partial fixes whose issue stays open — see PR tracking and
+FS11); distiller
 pre-publication text gate + leak-scan law; evidence quality (defect-site
 `file:line` at the verified sha; test counts + base comparison); ≤175-word
 cap on our filing bodies (raised from 150 on 2026-10-24 solely to make room
@@ -431,9 +473,11 @@ issue median is 41 words); lanes never merge.
   reach … before this merges.`, `Depends on #N. Merge that first.`,
   `Unblocks …`. No internal ids/vocabulary anywhere (leak-scan unchanged).
 - **FS5 — PR bodies (superseded in form by FS11; invariants here still
-  bind).** `Fixes #N` as a plain standalone line at the TOP (position
+  bind).** `Fixes #N` (or, for a scope-narrowed partial fix whose issue
+  stays open, `Refs #N` — 2026-10-29 amendment) as a plain standalone line
+  at the TOP (position
   adopted from his `Closes #N.` first line; our line carries no period
-  because the gate greps `^Fixes #N$` — the one visible deviation,
+  because the gate greps `^(Fixes|Refs) #[0-9]+$` — the one visible deviation,
   deliberate). The canonical skeleton is now **FS11** (PR342-PATTERN); this
   rule's invariants — plain Fixes line, ≤175-word cap, Impact mandatory,
   deployment-threat-model framing, `Assisted by JoeBot` last line, no
@@ -522,10 +566,19 @@ issue median is 41 words); lanes never merge.
 - **FS11 — PR body — canonical five-part skeleton (CC#342 exemplar,
   operator ruling 2026-10-28, kanban t_7a324945).** Every initial PR filing
   MUST match [`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342) (verified live
-  2026-10-28: `Fixes #316`, 165 words, open) in order, with no badges,
+  2026-10-28: `Fixes #316`, 165 words, open; **snapshot corrected** — the
+  maintainer changed its ref to `Refs #316` at review and it merged
+  2026-10-29 with that line, see the REFS-vs-FIXES amendment) in order,
+  with no badges,
   checklists, or meta sections. Skeleton:
 
-  1. **Line 1:** `Fixes #NNN` standalone — plain `^Fixes #[0-9]+$`, own line.
+  1. **Line 1:** `Fixes #NNN` standalone — plain `^Fixes #[0-9]+$`, own
+     line. **Scope-narrowed variant (2026-10-29):** `Refs #NNN` is
+     accepted ONLY when the PR fixes part of the issue and the issue must
+     stay open, and the first-line text states the remaining open scope by
+     issue number (cc#342 form). A `Refs` line on a PR that is the full
+     remaining scope is REJECTED (it should be `Fixes`); so is any other
+     keyword.
   2. **Problem paragraph:** what's broken, reproduction against a named sha,
      why current code does it. Complete sentences, no boilerplate.
   3. **`## The fix`** — mechanism of change + consumer-compatibility
@@ -565,7 +618,13 @@ in order:
    standalone line `Assisted by JoeBot` as their trailing paragraph
    (blank line before it, nothing else on that line) — REJECT any
    queued public comment lacking it**; Rule B reviewer requested.
-3. `Fixes #N` present as first-line plain standalone match `^Fixes #N$`.
+3. Ref line present as first-line plain standalone match
+   `^(Fixes|Refs) #[0-9]+$` (2026-10-29 REFS-vs-FIXES amendment): `Fixes #N`
+   is the default and required for full-remaining-scope fixes; `Refs #N`
+   valid ONLY for a scope-narrowed partial fix whose issue stays open AND
+   whose first-line text states the remaining open scope by issue number
+   (cc#342 form) — REJECT a `Refs` line where the PR is the full remaining
+   scope, and REJECT any other keyword.
 4. Rule C contents: all five (symptom / evidence / root cause / proposed
    fix / severity) semantically present — as prose under FS2, NOT as labels.
 5. Style (FS rules): no `[Sx]`/tag title prefix (sole exception `[SEC]` per
@@ -593,16 +652,21 @@ in order:
    whose only harm is an attacker on the deployment L2 / untrusted network
    ("an unauthenticated network caller can …", "a host on the same L2 …"):
    under the premise that is working-as-intended, not a defect.
-5d. PR-body skeleton (FS11, CC#342 exemplar, operator ruling 2026-10-28):
+5d. PR-body skeleton (FS11, CC#342 exemplar, operator ruling 2026-10-28,
+   ref-line variant per the 2026-10-29 REFS-vs-FIXES amendment — see check
+   3):
    every PR body MUST match the five-part skeleton in order — (1) `Fixes #N`
-   standalone first line (`^Fixes #[0-9]+$`), (2) problem paragraph (what's
+   (or valid scope-narrowed `Refs #N`) standalone first line
+   (`^(Fixes|Refs) #[0-9]+$`), (2) problem paragraph (what's
    broken + reproduction sha + why current code does it, complete sentences),
    (3) `## The fix` with mechanism + consumer-compatibility analysis,
    (4) `## Impact` FS9 block (`Touches … Before: … After: … Files: …` with
    at least one repo-relative path), (5) `## Testing` with named RED-on-base
    / GREEN-on-fix tests + full-suite count, (6) last line `Assisted by
    JoeBot` standalone — REJECT a PR body missing any heading, with headings
-   out of order or misnamed, with no Fixes line first, no problem paragraph,
+   out of order or misnamed, with no Fixes/valid-Refs line first (a `Refs`
+   line without a stated remaining-scope issue, or on a full-remaining-scope
+   fix, counts as no valid line), no problem paragraph,
    no compatibility note, no Impact files, no RED/GREEN + suite count, or
    with badges / checklists / meta sections. Target 150–175 words; exemplar
    is [`mprov-ng/mprov_control_center#342`](https://github.com/mprov-ng/mprov_control_center/pull/342) (165 words).

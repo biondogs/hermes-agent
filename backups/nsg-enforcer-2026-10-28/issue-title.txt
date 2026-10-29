@@ -1,0 +1,1 @@
+Feature request: kanban gate-task integrity — refuse a review/gate PASS issued by the author of the gated work

@@ -1,0 +1,39 @@
+--- nsg-enforcer.log (through 02:08Z) ---
+2026-10-29T02:05:02Z [software-co] INTAKE-ARM t_b6c002de (self-assigned): DISTILLER GATE: NSG-CANARY-INTAKE t_ad14438a — trivial ack (misassigned on purpo
+2026-10-29T02:05:09Z enforced 1 violation(s); state saved
+2026-10-29T02:06:01Z heartbeat: clean scan, 0 violations (activation_ts=1793239288)
+
+--- state file ---
+{
+ "activation_ts": 1793239288,
+ "handled": {
+  "software-co": {
+   "t_b6c002de": {
+    "action": "intake-refusal",
+    "authors": [
+     "kanban-board-architect"
+    ],
+    "kind": "self-assigned",
+    "reassigned_to": "distiller",
+    "regate": null
+   }
+  }
+ },
+ "last_beat_day": "2026-10-29"
+}
+--- alert receipts (nsg lines) ---
+[2026-10-28 22:03:28] alert-sink[nsg-enforcer]: TG sent (chat 8158007517)
+[2026-10-28 22:03:30] alert-sink[nsg-enforcer]: GH issue #10 created
+[2026-10-28 22:04:08] alert-sink[nsg-enforcer]: TG sent (chat 8158007517)
+[2026-10-28 22:04:10] alert-sink[nsg-enforcer]: GH comment on issue #10
+[2026-10-28 22:05:07] alert-sink[nsg-enforcer]: TG sent (chat 8158007517)
+[2026-10-28 22:05:09] alert-sink[nsg-enforcer]: GH comment on issue #10
+
+--- deployed sha256 ---
+1a9f830f0929b844076ec71362e2da9b5b0cc8ac7409270034bc0f3133ef5ddf  /home/arch/.hermes/scripts/no-self-gate-enforcer.py
+1a9f830f0929b844076ec71362e2da9b5b0cc8ac7409270034bc0f3133ef5ddf  /local/projects/software-co/scripts/no-self-gate-enforcer.py
+
+--- leakscan (FR kit) ---
+leaks: 0
+issue-body.md 615a404d6a00ac0246281a1f04ece96c7f39de2bb21ac2ee75b9aa1800120de9
+issue-title.txt 42aaac1c840161005d148bf92d4d9e916cbd73f459b60f2dda1c7983ba86d90f

@@ -15,7 +15,7 @@ metadata:
 Executable enforcement copy. The rules, rationale, and citations live in the doctrine
 doc of record — **do not restate or edit rules here**; only edit when a *check* changes:
 
-- Doctrine (rules R1–R35, D1–D10, citations): `/local/projects/software-co/docs/UPSTREAM-HERMES-FILING-2026-10-30.md`
+- Doctrine (rules R1–R35 + R27b–f, D1–D10, citations): `/local/projects/software-co/docs/UPSTREAM-HERMES-FILING-2026-10-30.md`
 - Ruling of record: **G-34** in `~/hermes-estate/docs/GOVERNANCE.md`
 - Estate law that still gates every submission: **G-06** (distiller PASS + operator GO, byte-exact agent submit) and **G-07** (com persona, no internal specifics).
 
@@ -63,14 +63,18 @@ missing. Never file past an uncheckable box. "N/A" is legal only where this chec
 - [ ] **C8** Commit author/email maps to `contributors/emails/` or a `+login@users.noreply.github.com` form, else the mapping fix commit is in the PR (`scripts/audit_pr_attribution.py --fix`) (R19).
 - [ ] **C9** No `Signed-off-by` (no DCO upstream), no AI-disclosure trailer, no `Agent-Profile`/`Agent-Run` trailers: `git log --format=%B origin/main..HEAD | grep -Ei 'signed-off|agent-profile|agent-run'` → empty (R19/D6; skill `strip-agent-trailers-public-commits` env-gate: commit with `env -u HERMES_KANBAN_TASK -u HERMES_SESSION_SOURCE -u HERMES_KANBAN_WORKSPACE`).
 
-## Section D — CI/quality claims (R22–R27)
+## Section D — CI/quality claims (R22–R27f)
 
-- [ ] **D1x** `scripts/run_tests.sh` green locally (relevant subset ok, full-suite baseline noted).
+- [ ] **D1x** `scripts/run_tests.sh` green locally (relevant subset ok, full-suite baseline noted) — never bare `pytest` (R27c); host-specific tests use `@pytest.mark.platforms(...)`, never faked `sys.platform`
+- [ ] **D1y** Red-first invariant tests: 1–2 tests per fix that are proven red on the base and green with the fix; PR rebased onto `main` before filing (R27b)
 - [ ] **D2x** `python scripts/check` green (blocking lint + code-health ratchet; new-code caps: cc≤20, fn≤300, nest≤6, file≤2000 & never grows).
 - [ ] **D3x** `scripts/check-windows-footguns.py` clean on the diff; platform tested named in body (R32).
 - [ ] **D4x** New PyPI deps carry `<next_major` (pre-1.0: `<0.minor+2`); git deps SHA-pinned; actions SHA-pinned+commented; no raw pip/uv into PM envs (D3).
 - [ ] **D5x** Generated artifacts regenerated (icons, lockfiles) in-PR (R27).
 - [ ] **D6x** Diff touches no CODEOWNERS path (`.github/`, `scripts/ci/`, `scripts/check`, `scripts/code_health/`, prompt-surface fixtures, eslint/prettier, `optional-mcps/`, `setup.py`/`*.pth`, manifests/lockfiles, Dockerfiles, `.npmrc`, installers, `SECURITY.md`) — or the review tax is pre-flagged in the body (R25).
+- [ ] **D7x** Contribution not in rejected-even-when-well-built set (hooks w/o consumer, new `HERMES_*` env var for non-secret config, new core tool where terminal+file/skill suffices, change-detector tests, plugin touching core) (R27d)
+- [ ] **D8x** Area `AGENTS.md` read for every area the diff touches (routing table [AGT]); `AGENTS.md` chain ≤30k chars respected (R27e)
+- [ ] **D9x** Security-sensitive PR: `shlex.quote`/`realpath`/no-secret-logs/broad-exception-guard applied (R27f) AND PR description notes security impact explicitly (*\"If your PR affects security, note it explicitly in the description\"* — [C] 909–917) — or N/A with one-line reason (not security-sensitive)
 
 ## Section E — disclosure & hygiene (G-06/G-07 + D6–D9)
 

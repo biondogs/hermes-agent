@@ -39,7 +39,7 @@ case "$PHASE" in
     echo "=== description readback ==="
     hermes profile describe "$BUTLER"
     echo "=== .env shape (secrets redacted) ==="
-    sed -E 's/(TELEGRAM_BOT_TOKEN=).*/\1<redacted>/; s/(LITELLM_API_KEY=).*/\1<redacted>/' \
+    sed -E 's/(TELEGRAM_BOT_TOKEN=).*/\1<redacted>/; s/(ORB_API_KEY=).*/\1<redacted>/' \
       "$HERMES_HOME/profiles/$BUTLER/.env"
     echo "=== hindsight config (bank pin) ==="
     cat "$HERMES_HOME/profiles/$BUTLER/hindsight/config.json"

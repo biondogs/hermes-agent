@@ -102,7 +102,7 @@ ENV_SHAPE = f"""# gaudi-butler — per-profile secrets (Topology B, design 2026-
 # Behavioral settings belong in config.yaml, not here.
 
 # LLM endpoint (LiteLLM at orb) — same key every gaudi profile uses.
-LITELLM_API_KEY=LITELLM_KEY_FROM_ENV
+ORB_API_KEY=ORB_KEY_FROM_ENV
 
 # Hindsight memory bank — deliberately NOT set as an env var: bank is pinned in
 # hindsight/config.json (bank_id gaudi-butler).
@@ -125,21 +125,67 @@ def section(title):
 
 
 def main():
-    litellm = os.environ.get("LITELLM_API_KEY")
-    if not litellm:
+    orb_key = os.environ.get("ORB_API_KEY")
+    if not orb_key:
         # Same fleet secret the other gaudi profiles carry in their profile .env.
         try:
             for line in open(f"{PROFILES}/gaudi-watcher/.env"):
-                if line.startswith("LITELLM_API_KEY="):
-                    litellm = line.split("=", 1)[1].strip()
+                if line.startswith("ORB_API_KEY="):
+                    orb_key = line.split("=", 1)[1].strip()
                     break
         except OSError:
             pass
 
     section("precheck: profile dir state")
     already = os.path.exists(HOMEDIR)
+    if already and not os.environ.get("PROVISION_FORCE_OVERWRITE"):
+        # CLOBBER GUARD (card t_8d962e02, 2026-10-31): an existing profile dir is
+        # LIVE, evolved state. The templates below are provisioning-day material:
+        # re-running this script over the live gaudi-butler on 2026-10-30 16:22 EDT
+        # wiped the SOUL law blocks (G-01/G-29/G-33), approvals.deny, the
+        # kanban.board pin, providers, skills.disabled and the .env secrets
+        # (tokens -> placeholders). Convergence is therefore VERIFY-ONLY:
+        # existence + resilience markers, ZERO writes (including the hindsight
+        # bank config below). To intentionally reprovision from templates you
+        # must export PROVISION_FORCE_OVERWRITE=1, which asserts the profile
+        # SHOULD be reset to provision-day state (secrets included) — repair
+        # live drift via the G-30 fleet-change checklist instead, never here.
+        print(f"note: {HOMEDIR} exists — VERIFY-ONLY convergence (clobber guard t_8d962e02; "
+              "export PROVISION_FORCE_OVERWRITE=1 to force a template rewrite)")
+        missing = [f for f in (CONFIG, SOUL, ENVF) if not os.path.exists(f)]
+        if missing:
+            print(f"FAIL: existing profile missing {missing} — rolling hill stopped.")
+            return 1
+        problems = []
+        try:
+            ccfg = yaml.safe_load(open(CONFIG))
+            deny = (ccfg.get("approvals") or {}).get("deny") or []
+            if not any("aistack/litellm/config.yaml" in str(d) for d in deny):
+                problems.append("config.yaml: approvals.deny lacks the G-01 litellm entry")
+            if not (ccfg.get("kanban") or {}).get("board"):
+                problems.append("config.yaml: kanban.board pin missing")
+        except Exception as e:
+            problems.append(f"config.yaml unreadable: {e}")
+        stext = open(SOUL).read()
+        for marker in ("LITELLM-YAML LAW", "PUSH-DEFER", "LONG-JOB DETACH"):
+            if marker not in stext:
+                problems.append(f"SOUL.md: law-block marker missing: {marker}")
+        if "PASTE-" in open(ENVF).read():
+            problems.append(".env: placeholder token present (never pasted, or a regression)")
+        if problems:
+            print("VERIFY-ONLY findings (NO WRITES PERFORMED):")
+            for p in problems:
+                print(f"  - {p}")
+            print("FAIL: live profile fails resilience verification — repair via the "
+                  "G-30 fleet-change checklist, NOT via this script.")
+            return 1
+        print("ok: live profile carries provision files + law-block/deny/board-pin "
+              "resiliences — nothing written.")
+        return 0
     if already:
-        print(f"note: {HOMEDIR} exists — convergence pass (verify files, re-apply description)")
+        print(f"WARNING: {HOMEDIR} exists and PROVISION_FORCE_OVERWRITE=1 — REWRITING "
+              "live profile from provisioning-day templates (clobber by design; "
+              "guard t_8d962e02).")
     else:
         print(f"ok: {HOMEDIR} absent (fresh provisioning)")
 
@@ -198,7 +244,7 @@ def main():
             "litellm": {
                 "api": "https://orb.arch.jhu.edu/v1",
                 "name": "LiteLLM",
-                "api_key": "${LITELLM_API_KEY}",
+                "api_key": "${ORB_API_KEY}",
                 "models": {
                     "qwen38-flash-fp8": {"context_length": 262144},
                     "glm53": {"context_length": 1000000},
@@ -223,11 +269,11 @@ def main():
     # ----------------------------------------------------------------- env
     section("write .env shape (placeholder token only)")
     env_body = ENV_SHAPE
-    if litellm:
-        env_body = env_body.replace("LITELLM_KEY_FROM_ENV", litellm)
+    if orb_key:
+        env_body = env_body.replace("ORB_KEY_FROM_ENV", orb_key)
     else:
-        print("WARN: no LITELLM_API_KEY found (env or gaudi-watcher .env) — placeholder left in .env")
-        env_body = env_body.replace("LITELLM_KEY_FROM_ENV", "PASTE-LITELLM-KEY-HERE")
+        print("WARN: no ORB_API_KEY found (env or gaudi-watcher .env) — placeholder left in .env")
+        env_body = env_body.replace("ORB_KEY_FROM_ENV", "PASTE-ORB-KEY-HERE")
     with open(ENVF, "w") as fh:
         fh.write(env_body)
     os.chmod(ENVF, 0o600)

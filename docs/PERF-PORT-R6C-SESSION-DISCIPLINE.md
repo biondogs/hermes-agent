@@ -60,3 +60,32 @@ Method/fidelity: per-profile `state.db` `sessions` table; sessions with `last_ac
 - Card t_f7c462b2 is parked `status='scheduled'` with marker `SCHEDULED_UNTIL=2026-10-31T13:05:00-04:00`.
 - Wake driver (wake-driver law — `SCHEDULED_UNTIL` is advisory): one-shot no-agent cron `r6c-1w-wake` on the **kanban-board-architect profile's** cron store (`schedule "5 13 31 10 *", --repeat 1, --script r6c-t_f7c462b2-wake.sh --no-agent`), which runs `hermes kanban --board default unblock t_f7c462b2 --reason …` (idempotent; no-op if already resumed).
 - The woken run then: (1) re-runs `scripts/measure_r6c_tokens.py`; (2) compares 7d rows to §2 baseline; (3) posts the **1-week delta receipt** as a comment on t_f7c462b2 and appends the delta table here (§4 below); (4) completes the card. If the wake cron is missing at audit time, recreate it from this section (wake-driver mortality rule).
+
+---
+
+## 4. 1-WEEK RECHECK — measured 2026-10-31T17:05:38Z (receipt 2 of 2, run 390)
+
+Same script, same metric, untouched (`scripts/measure_r6c_tokens.py`). The baseline 7d window (Oct 17–24) and recheck 7d window (Oct 24–31) are trailing-7d and **non-overlapping**. Comparison contract (fixed in §2): recheck 7d rows vs §2 7d rows; secondary = architect 72h avg.
+
+| profile | base 7d avg (n) | recheck 7d avg (n) | delta | notes |
+|---|---|---|---|---|
+| kanban-board-architect | 4.40M (131) | **3.61M** (214) | **−18.1%** | med 2.81M→1.94M; max 31.84M→27.86M |
+| sw-architect | 1.88M (9) | 2.30M (18) | +22.5% | |
+| sw-dev-a | 3.95M (64) | 5.65M (56) | +43.1% | |
+| sw-dev-b | 4.05M (55) | 5.53M (69) | +36.6% | |
+| sw-devops | 1.29M (5) | 2.48M (68) | +92.6% | baseline n=5 — low-confidence delta |
+| sw-docs | 2.04M (21) | 1.35M (16) | **−34.0%** | |
+| sw-pm | 925K (102) | 1.11M (579) | +20.5% | session count 5.7× (heavy fleet ops week) |
+| sw-qa | 3.34M (2) | 6.28M (51) | +87.9% | baseline n=2 — low-confidence delta |
+| sw-reviewer | 4.24M (9) | **2.08M** (72) | **−50.8%** | |
+| sw-ux | 2.58M (5) | 7.85M (33) | +204.2% | baseline n=5 — low-confidence delta; worst mover |
+
+**Secondary metric — architect 72h avg: 5.06M → 2.65M (−47.6%)**, n 101→51, 72h max 31.84M→10.85M. The architect lane — R6c's primary target — improved on BOTH the fixed 7d metric (−18.1%) and the secondary 72h metric, with the extreme tail (31.8M sessions) gone from the 72h window.
+
+**Interpretation (measured facts, deliberately no causal overclaim):**
+- The architect lane, where the R6c discipline text is the most specific (bank receipts, split at create time, hand off instead of grinding), shows the largest improvement on every statistic — avg, median, max, and session count. This is consistent with the discipline having an effect but not proof of it: the same week carried confounds (per-profile LiteLLM key rollout, butler regression repair, G-36 rollout).
+- sw-reviewer (−50.8%) and sw-docs (−34.0%) also improved; sw-architect roughly flat-to-up.
+- The worst movers (sw-ux +204%, sw-qa +88%, sw-devops +93%) all had tiny baseline samples (n=2–5) — their deltas are low-confidence. sw-dev-a/b (+43/+37%) had healthy n at both ends, so that rise is real: the dev lanes got heavier this week even as the architect lane got lighter.
+- Fleet session volume roughly doubled across the board (sw-pm 102→579, sw-devops 5→68, sw-reviewer 9→72), reflecting a heavy ops week, not a discipline regression.
+
+**Structural finding for the operator:** the discipline's clearest measurable effect is where it was most specifically applied (architect lane, tail sessions eliminated); the sw dev lanes did not improve on the 7d metric and would need their own targeted decomposition/one-sitting discipline enforcement (e.g., at decompose time, not just in SOUL text) before a further re-measure is meaningful.

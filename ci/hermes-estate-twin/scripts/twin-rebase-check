@@ -1,0 +1,61 @@
+#!/bin/bash
+# twin-rebase-check — dry-run rebase of local hotfixes onto a given upstream ref.
+# Usage: twin-rebase-check <upstream-ref>
+# Runs inside the twin container so the live checkout is never touched.
+# Reports: clean rebase vs conflicts (with conflicted files).
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TWIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+if [ $# -lt 1 ]; then
+  echo "Usage: twin-rebase-check <upstream-ref>  (e.g. origin/main)" >&2
+  exit 1
+fi
+UPSTREAM_REF="$1"
+
+if [ -f "$TWIN_DIR/twin-root/.quarantined" ]; then
+  echo "ERROR: twin is quarantined" >&2
+  exit 2
+fi
+if ! docker ps --format '{{.Names}}' | grep -qx "hermes-estate-twin"; then
+  echo "Starting twin container..." >&2
+  docker compose -f "$TWIN_DIR/docker-compose.yml" up -d
+  sleep 3
+fi
+
+docker exec hermes-estate-twin bash -c "
+  set -euo pipefail
+  cd /opt/twin/hermes-agent
+  echo '=== twin-rebase-check: live HEAD vs $UPSTREAM_REF ==='
+  echo \"live HEAD: \$(git rev-parse HEAD) (\$(git rev-parse --abbrev-ref HEAD))\"
+  echo \"upstream: $UPSTREAM_REF -> \$(git rev-parse $UPSTREAM_REF 2>&1 || echo 'not found')\"
+  echo ''
+
+  # Find merge-base and local-only commits
+  MB=\$(git merge-base HEAD $UPSTREAM_REF 2>&1) || { echo \"No merge-base with $UPSTREAM_REF\"; exit 1; }
+  echo \"merge-base: \$MB\"
+  echo 'local commits atop merge-base:'
+  git log --oneline \"\$MB..HEAD\" || echo '(none — already on upstream)'
+  echo ''
+
+  # Dry-run rebase in a temp worktree so we never dirty the twin's HEAD
+  WT=/tmp/rebase-check-\$\$
+  git worktree add --detach \"\$WT\" HEAD 2>&1 | tail -2
+  echo \"worktree: \$WT\"
+  set +e
+  git -C \"\$WT\" rebase \"$UPSTREAM_REF\" 2>&1
+  RC=\$?
+  set -e
+  if [ \$RC -eq 0 ]; then
+    echo ''
+    echo 'RESULT: clean rebase — no conflicts'
+  else
+    echo ''
+    echo 'RESULT: conflicts — files:'
+    git -C \"\$WT\" diff --name-only --diff-filter=U 2>&1 || true
+    git -C \"\$WT\" status --short 2>&1 | head -30
+    git -C \"\$WT\" rebase --abort 2>&1 || true
+  fi
+  git worktree remove --force \"\$WT\" 2>&1 | tail -1 || true
+  rm -rf \"\$WT\"
+"

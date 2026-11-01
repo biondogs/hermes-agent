@@ -1,0 +1,6 @@
+#!/bin/bash
+# sync-now — manual sync trigger (wraps sync/sync.sh)
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TWIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+exec bash "$TWIN_DIR/sync/sync.sh" "$@"

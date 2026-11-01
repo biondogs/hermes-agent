@@ -1,0 +1,37 @@
+services:
+  twin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hermes-estate-twin:latest
+    container_name: hermes-estate-twin
+    hostname: hermes-estate-twin
+    # Isolated network — no route to host/LiteLLM/Hindsight/Telegram/gateway.
+    networks:
+      twin-internal:
+        aliases: [twin]
+    volumes:
+      # Bind-mount the synced twin root (NEVER baked into image layers).
+      - ./twin-root/hermes-agent:/opt/twin/hermes-agent:rw
+      - ./twin-root/hermes-home:/opt/twin/hermes-home:rw
+      - ./twin-root/hermes-estate:/opt/twin/hermes-estate:ro
+      - ./twin-root/snapshots:/opt/twin/snapshots:ro
+      # Entrypoint needs to see the source for pip install
+      - ./sync:/opt/twin-sync:ro
+    environment:
+      HERMES_HOME: /opt/twin/hermes-home
+      HERMES_AGENT_SRC: /opt/twin/hermes-agent
+      TWIN_ROOT: /opt/twin
+      PYTHONUNBUFFERED: "1"
+    # No ports published — avoids collision with live estate 9090/4000/3002/8888/9999.
+    # Gateway must never start with real tokens; placeholders only.
+    restart: "no"
+    # Resource limits — don't starve the host.
+    mem_limit: 2g
+    cpus: 2.0
+
+networks:
+  twin-internal:
+    name: hermes-estate-twin-internal
+    driver: bridge
+    internal: true

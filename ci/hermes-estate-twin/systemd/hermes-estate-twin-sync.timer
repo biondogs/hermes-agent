@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly sync timer for Hermes Estate Twin
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

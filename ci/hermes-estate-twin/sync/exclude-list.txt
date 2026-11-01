@@ -1,0 +1,98 @@
+# Rsync exclude list — authoritative for twin sync.
+# Lines are rsync --exclude patterns (relative to ~/.hermes).
+# Secret-adjacent excludes are marked [SECRET]; bulk excludes [BULK].
+
+# --- Secret material: NEVER enters twin [SECRET] ---
+.env
+.env.*
+*.env
+auth.json
+hosts.yml
+*_token
+*_secret
+*_key
+secrets/
+.env.bak*
+config-backup-*
+config-backups/
+env-backups/
+ga01-cert.pem
+# SSH / TLS / kube
+.ssh/
+*.pem
+*.key
+*.p12
+*.pfx
+kubeconfig
+.kube/
+# Bot tokens / API keys that may appear as files
+bot_token
+telegram_token
+slack_token
+discord_token
+
+# --- Regenerable bulk [BULK] ---
+installs/
+tools/
+bin/
+cache/
+checkpoints/
+backups/
+kanban-backups/
+skill-backups/
+state-snapshots/
+.curator_backups/
+hook_outputs/
+telemetry/
+lintlang/
+lsp/
+logs/
+audio_cache/
+image_cache/
+venv/
+.venv/
+node_modules/
+__pycache__/
+sandboxes/
+disk-cleanup/
+.hub/
+.cache/
+.local/
+uploads/
+# Code repo carried as git, not rsync
+hermes-agent/
+# Ephemeral workspaces
+workspaces/
+hjobs/
+# Live DBs — only consistent snapshots enter twin
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+# Runtime churn
+*.lock
+*.sock
+*.pid
+processes.json
+spawn-ledger.json
+.restart_pending.json
+.restart_last_processed.json
+.skills_prompt_snapshot.json
+curator-watermark
+telegram_update_receipts_*.json
+.npm_lock_hash_*
+*.pyc
+*.log
+gateway_state.json
+models_dev_cache.json
+models_dev_cache.etag
+provider_models_cache.json
+ollama_cloud_models_cache.json
+.git
+config-backups
+# Additional excludes found during sync validation
+*.bak-t_*
+*.bak-t38050354
+hermes-agent-self-evolution/

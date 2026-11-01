@@ -1,0 +1,11 @@
+[Unit]
+Description=Hermes Estate Twin — hourly sync from live estate
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/local/projects/software-co/ci/hermes-estate-twin/sync/sync.sh
+StandardOutput=journal
+StandardError=journal
+# No secrets in logs — sync.sh logs key names only, never values

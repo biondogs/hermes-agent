@@ -1,0 +1,10 @@
+rich==14.3.4
+ruamel.yaml==0.18.16
+python-dotenv==1.2.4
+httpx==0.28.1
+pydantic==2.14.1
+cryptography==50.0.2
+psutil==7.2.2
+websockets==15.0.1
+jinja2==3.1.6
+packaging==26.3

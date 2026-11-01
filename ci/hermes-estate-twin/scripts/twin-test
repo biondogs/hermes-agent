@@ -1,0 +1,31 @@
+#!/bin/bash
+# twin-test — run estate test suite inside the twin container
+# Usage: twin-test [pytest args...]
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TWIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+if [ -f "$TWIN_DIR/twin-root/.quarantined" ]; then
+  echo "ERROR: twin is quarantined — fix scrub/scan before testing" >&2
+  exit 2
+fi
+if ! docker ps --format '{{.Names}}' | grep -qx "hermes-estate-twin"; then
+  echo "Starting twin container..." >&2
+  docker compose -f "$TWIN_DIR/docker-compose.yml" up -d
+  sleep 3
+fi
+
+# Default: run hermes-agent test suite; pass custom args through
+if [ $# -eq 0 ]; then
+  docker exec hermes-estate-twin bash -c '
+    set -e
+    cd /opt/twin/hermes-agent
+    if [ -f scripts/run_tests.sh ]; then
+      bash scripts/run_tests.sh 2>&1 | tail -40
+    else
+      python -m pytest tests/ -x -q 2>&1 | tail -40
+    fi
+  '
+else
+  docker exec hermes-estate-twin bash -c "cd /opt/twin/hermes-agent && $*"
+fi

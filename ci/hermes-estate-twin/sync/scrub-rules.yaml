@@ -1,0 +1,41 @@
+# Scrub rules — per-file key replacements (applied after rsync).
+# Each rule: file glob + key regex + placeholder value.
+# Any matched secret value is replaced with the placeholder so configs still parse.
+rules:
+  - file: "config.yaml"
+    keys: ["api_key", "api_keys", "token", "secret", "password", "ANTHROPIC_API_KEY", "OPENAI_API_KEY", "LITELLM_MASTER_KEY", "TELEGRAM_BOT_TOKEN", "SLACK_BOT_TOKEN", "DISCORD_TOKEN", "GITHUB_TOKEN", "HF_TOKEN"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+  - file: "profiles/*/config.yaml"
+    keys: ["api_key", "api_keys", "token", "secret", "password", "ANTHROPIC_API_KEY", "OPENAI_API_KEY", "LITELLM_MASTER_KEY", "TELEGRAM_BOT_TOKEN", "SLACK_BOT_TOKEN", "DISCORD_TOKEN", "GITHUB_TOKEN"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+  - file: ".env"
+    # every non-empty value in .env is treated as secret
+    keys: ["*"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+  - file: "profiles/*/.env"
+    keys: ["*"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+  - file: "kanban/boards/*/config.yaml"
+    keys: ["token", "secret", "api_key"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+  - file: "cron/*.json"
+    keys: ["token", "secret", "api_key", "password"]
+    placeholder: "__TWIN_PLACEHOLDER__"
+
+# Generic fallback: any YAML/JSON key matching these names anywhere
+generic_secret_keys:
+  - "LITELLM_MASTER_KEY"
+  - "TELEGRAM_BOT_TOKEN"
+  - "ANTHROPIC_API_KEY"
+  - "OPENAI_API_KEY"
+  - "GITHUB_TOKEN"
+  - "HF_TOKEN"
+  - "api_key"
+  - "bot_token"
+  - "bearer_token"
+  - "kubeconfig"

@@ -1,0 +1,24 @@
+# Scan patterns — regexes that indicate a live-looking secret in twin-root.
+# One pattern per line; comments start with #.
+# The scanner FAILS the sync if any match is found (and quarantines twin).
+# These are intentionally tight to avoid false positives on placeholders
+# and test fixtures (fake tokens like sk-proj-ABCD123... are not real secrets).
+
+# Anthropic keys — project-scoped form is distinctive
+sk-ant-[a-zA-Z0-9_-]{20,}
+
+# Telegram bot tokens (numeric prefix + colon + 35-char token)
+[0-9]{7,12}:[A-Za-z0-9_-]{33,}
+
+# GitHub tokens (real ones are 36+ chars after prefix)
+ghp_[A-Za-z0-9]{30,}
+github_pat_[A-Za-z0-9_]{20,}
+
+# AWS keys
+AKIA[0-9A-Z]{16}
+
+# Private keys (real key material)
+-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----
+
+# Canary marker (used by test_scrub_canary.sh)
+CANARY_SECRET_DO_NOT_COMMIT

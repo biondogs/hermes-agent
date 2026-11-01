@@ -1,0 +1,18 @@
+[Unit]
+Description=Hermes upstream nightly rebuild (pull → build → test → gate fresh)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/projects/software-co
+ExecStart=%h/projects/software-co/ci/hermes-upstream/rebuild.sh
+StandardOutput=append:%h/.hermes/hjobs/hermes-upstream-rebuild/rebuild.log
+StandardError=append:%h/.hermes/hjobs/hermes-upstream-rebuild/rebuild.log
+# No secrets in env; stub LLM only via rebuild.sh
+Environment=TZ=UTC
+# Keep journal too
+SyslogIdentifier=hermes-upstream-rebuild
+
+[Install]
+WantedBy=default.target

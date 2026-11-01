@@ -1,0 +1,26 @@
+services:
+  # Used by rebuild.sh for test stage; not long-lived.
+  harness:
+    build:
+      context: ../../hermes-board-layers
+      dockerfile: ../ci/hermes-upstream/Dockerfile
+    image: hermes-upstream:candidate
+    volumes:
+      - ../../hermes-board-layers:/opt/hermes:rw
+      - harness-home:/tmp/hermes-home
+      - harness-runtime:/tmp/hermes-runtime
+    environment:
+      HERMES_HOME: /tmp/hermes-home
+      HERMES_RUNTIME_DIR: /tmp/hermes-runtime
+      TZ: UTC
+      LANG: C.UTF-8
+      PYTHONHASHSEED: 0
+      OPENAI_API_KEY: sk-harness-stub-not-a-secret
+      OPENAI_BASE_URL: http://127.0.0.1:1/v1
+    network_mode: bridge
+    tty: true
+    stdin_open: true
+
+volumes:
+  harness-home:
+  harness-runtime:

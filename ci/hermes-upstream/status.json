@@ -1,0 +1,17 @@
+{
+  "timestamp": "20261101-161000",
+  "upstream_sha": "c627ec84664d43e0b18b95d9d86d8963747d56c7",
+  "upstream_short": "c627ec8",
+  "upstream_subject": "c627ec8466 perf(desktop): ignore root geometry in theme observation",
+  "dated_tag": "hermes-upstream:20261101-c627ec8",
+  "result": "green",
+  "fresh_result": "pass",
+  "tests_passed": 114,
+  "tests_failed": 0,
+  "tests_total": 114,
+  "fresh_age": "0h (created 2026-11-01T16:04:51.105883844Z)",
+  "fresh_sha": "",
+  "drift": "fresh sha unknown; upstream is c627ec8",
+  "build_rc": 0,
+  "keep": 7
+}

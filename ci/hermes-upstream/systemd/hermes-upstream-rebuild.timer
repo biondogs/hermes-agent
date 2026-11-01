@@ -1,0 +1,11 @@
+[Unit]
+Description=Nightly rebuild of hermes-upstream:fresh
+
+[Timer]
+OnCalendar=03:30
+Persistent=true
+RandomizedDelaySec=15m
+Unit=hermes-upstream-rebuild.service
+
+[Install]
+WantedBy=timers.target

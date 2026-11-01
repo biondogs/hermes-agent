@@ -14,6 +14,7 @@
 **This directory** keeps the **detailed as-built, law texts of record and receipts**. Every file opens with a `> Status:` line (`current` = still a text of record; `superseded by …` = historical, kept, never deleted). Key current texts:
 
 - `KANBAN-SYSTEM-AS-BUILT.md` — detailed as-built + incident ledger (re-stamped live 2026-10-27).
+- `CI-CONTAINERS-GUIDANCE.md` — which standing container software-co builds/tests Hermes work in, per work class (decision rule, card-body boilerplate, in-container test ladder, sha-pinning). `STANDING-CONTAINERS-PATTERN.md` — the generalized "standing containers for ongoing work" pattern + the cross-board routing rule (operator ruling 2026-11-01: the other boards are operations boards and file Hermes dev/test work here instead of building their own twins).
 - `AGENT-HARNESS-LANDSCAPE-COMPARISON-2026-10-27.md` — estate vs the agent-harness ecosystem (t_ff138c00): P1–P10 pattern, per-tool scoring, verdict **STAY** + 5 borrowable patterns.
 - `BANK-MAP.md` — memory-bank law and 22-bank roster (note: Hindsight `/v1` API now requires the API key since the 2026-10-27 auth cutover).
 - `butler-routing-doctrine-2026-10-22.md` — butler-first routing doctrine (registry G-02).

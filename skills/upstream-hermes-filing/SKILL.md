@@ -65,7 +65,7 @@ missing. Never file past an uncheckable box. "N/A" is legal only where this chec
 
 ## Section D — CI/quality claims (R22–R27f)
 
-- [ ] **D1x** `scripts/run_tests.sh` green locally (relevant subset ok, full-suite baseline noted) — never bare `pytest` (R27c); host-specific tests use `@pytest.mark.platforms(...)`, never faked `sys.platform`
+- [ ] **D1x** `scripts/run_tests.sh` green — by default **in the standing fresh-upstream container** (software-co `ci/hermes-upstream/run-branch.sh <worktree>`, per `software-co/docs/CI-CONTAINERS-GUIDANCE.md`; pin the image tag + upstream sha as the receipt); host-local runs only as a labeled fallback (relevant subset ok, full-suite baseline noted) — never bare `pytest` (R27c); host-specific tests use `@pytest.mark.platforms(...)`, never faked `sys.platform`
 - [ ] **D1y** Red-first invariant tests: 1–2 tests per fix that are proven red on the base and green with the fix; PR rebased onto `main` before filing (R27b)
 - [ ] **D2x** `python scripts/check` green (blocking lint + code-health ratchet; new-code caps: cc≤20, fn≤300, nest≤6, file≤2000 & never grows).
 - [ ] **D3x** `scripts/check-windows-footguns.py` clean on the diff; platform tested named in body (R32).

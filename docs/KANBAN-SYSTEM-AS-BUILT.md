@@ -454,5 +454,13 @@ Operator picks ESTATE-REVIEW items #10 + #12 (skip #8). All amendments are surgi
 
 ---
 
+### §9 ERRATA — CI STANDING CONTAINERS live (2026-11-01, sw-architect, card t_6d1b4e61; built by t_e26d9c1f + t_9953d256)
+
+1. **The estate now has two standing CI containers, owned by the software-co board** (repo `/local/projects/software-co`, `ci/` tree): `hermes-upstream:fresh` — nightly green-gated image of upstream `origin/main` (timer `hermes-upstream-rebuild.timer`; at delivery: green @ upstream `c627ec8`, 114/114) — and the **hermes-estate-twin** — hourly-synced, secret-scrubbed (exclude+scrub+scan-with-quarantine), network-isolated (`internal: true`) replica of the live estate: hotfix branch checkout + scrubbed `~/.hermes` mirror + `hermes-estate` + snapshot DBs, bind-mounted from gitignored `twin-root/` (timer `hermes-estate-twin-sync.timer`; at delivery: sync verified, live HEAD `a0107dcf`, isolation probe + scrub canary pass). Both are committed repo artifacts, not host pets.
+2. **Doctrine:** all Hermes build/test work runs in one of these two containers — **never on the live estate**. Decision rule, card-body boilerplate, in-container test ladder, and sha-pinning/reproducibility requirements: software-co `docs/CI-CONTAINERS-GUIDANCE.md`. Generalized "standing containers for ongoing work" pattern: software-co `docs/STANDING-CONTAINERS-PATTERN.md`. Per operator ruling 2026-11-01, **no other board builds its own twins** (software-co is the only dev board); Hermes dev/test work arising on operations boards routes to a software-co card via swco-butler (default orchestrator for cross-board) and the result flows back as a handoff.
+3. **HERMES-UPDATE-PREP §6 Phase-4 verification is containerized** (doc amended in the same commit): the clean-clone carry-net receipt now runs in `hermes-upstream:fresh` and the estate-shaped post-update probes in the twin, with the image tag + sha / twin STATUS stamp as the receipt.
+
+---
+
 *End of document. Canon until superseded by newer operator rulings. Next known amendments owed: degeneracy-guard adopt/drop verdict after the 2026-10-25 soak collection (see §9 errata item 5 of the KANBAN-GUARD section); first live drain under the F27 drain-gate code at the next bounce (§9 HERMES-UPDATE-EXEC errata item 3); R8 `--when-idle`/`--drain-sla` knob trial at a future bounce (§9 HERMES-UPDATE-EXEC errata item 7). F14/F21/F22 post-bounce obligations are fully discharged (§9 F22 items 1–5); F23 landed + accepted with the delivered-line log split documented per operator Option B (§9 F23 errata, t_1220fa98); F18 resolved by the t_c0969a7f update (§9 HERMES-UPDATE-EXEC errata); R10 gateway-start warning verification discharged at the update bounce: WARNINGs 5→4, langfuse GONE, actionable-undocumented 0.*
 

@@ -122,8 +122,7 @@ def test_switch_model_clears_previous_config_context_length(mock_ctx_len):
 
 
 def test_switch_model_reapplies_checked_auxiliary_compression_limit():
-    """A model switch re-probes the auxiliary summariser eagerly: the trigger is clamped to its window
-    before the first compaction on the new model, and un-clamped again when a later switch fits (#114707)."""
+    """A model switch re-probes aux but no longer clamps threshold: bounded input fits (#126767)."""
     agent = _make_agent_with_compressor(config_context_length=200_000)
     agent.compression_enabled = True
     agent._compression_feasibility_checked = False
@@ -161,23 +160,15 @@ def test_switch_model_reapplies_checked_auxiliary_compression_limit():
         )
 
     assert agent.context_compressor.context_length == 400_000
-    assert agent.context_compressor.threshold_tokens == 80_000
+    assert agent.context_compressor.threshold_tokens == 300_000  # 400K * 0.75 floor (below 512K)
+    assert agent.context_compressor._aux_context_ceiling is None
     assert agent._compression_feasibility_checked is True
-    # A same-runtime window correction (overflow-reported limit) keeps the aux ceiling.
+    # A same-runtime window correction keeps threshold from main window.
     agent.context_compressor.update_model(
         model="larger-main-model", context_length=1_000_000, base_url="https://openrouter.ai/api/v1",
         api_key="sk-new", provider="openrouter", api_mode="chat_completions",
     )
-    assert agent.context_compressor.threshold_tokens == 80_000
-    # Switching to a runtime whose aux fits restores the main-model trigger (no one-way ratchet).
-    with (
-        patch("agent.model_metadata.get_model_context_length", side_effect=[400_000, 400_000]),
-        patch("agent.auxiliary_client.get_text_auxiliary_client", return_value=(aux_client, "auxiliary-model")),
-    ):
-        agent.switch_model(
-            "other-main-model", "openrouter", api_key="sk-new", base_url="https://openrouter.ai/api/v1",
-        )
-    assert agent.context_compressor.threshold_tokens == 300_000
+    assert agent.context_compressor.threshold_tokens == 500_000  # 1M * 0.50, no floor >= 512K
 
 
 def test_switch_model_omitted_base_url_preserves_direct_openai_capability():

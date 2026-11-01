@@ -68,43 +68,47 @@ def _make_agent(
 
 @pytest.mark.parametrize("main_context,aux_context", [(1_000_000, 512_000), (400_000, 80_000)])
 def test_aux_sync_keeps_lean_tail_policy(main_context, aux_context):
-    """Lowering only the trigger must not change window-relative retention."""
+    """Feasibility probe must not lower trigger: summariser input is bounded independent of main threshold."""
     agent = _make_agent(main_context=main_context)
     compressor = agent.context_compressor = ContextCompressor(
         "test-main-model", config_context_length=main_context,
         threshold_percent=0.85, quiet_mode=True,
     )
+    before_threshold = compressor.threshold_tokens
     before = compressor.tail_token_budget
     agent._emit_status = lambda message: None
     client = MagicMock(base_url="http://localhost/v1", api_key="test-key")
     with patch("agent.auxiliary_client.get_text_auxiliary_client", return_value=(client, "aux")), \
          patch("agent.model_metadata.get_model_context_length", return_value=aux_context):
         agent._check_compression_model_feasibility()
-        assert compressor.threshold_tokens == aux_context
+        assert compressor.threshold_tokens == before_threshold
+        assert compressor._aux_context_ceiling is None
         assert compressor.tail_token_budget == before
         # Repeated feasibility and subsequent model recalibration retain policy.
         agent._check_compression_model_feasibility()
+        assert compressor.threshold_tokens == before_threshold
         assert compressor.tail_token_budget == before
         compressor.update_model("test-main-model", context_length=main_context)
+        assert compressor.threshold_tokens == before_threshold
         assert compressor.tail_token_budget == before
 
 
 def test_aux_sync_legacy_tail_follows_lowered_threshold():
-    """Explicit legacy retention follows the current trigger, not its old cache."""
+    """Legacy tail mode also no longer has its trigger lowered by the probe — input is bounded in all modes."""
     agent = _make_agent(main_context=1_000_000)
     compressor = agent.context_compressor = ContextCompressor(
         "test-main-model", config_context_length=1_000_000,
         threshold_percent=0.85, tail_mode="legacy", quiet_mode=True,
     )
+    before_threshold = compressor.threshold_tokens
     before = compressor.tail_token_budget
     agent._emit_status = lambda message: None
     client = MagicMock(base_url="http://localhost/v1", api_key="test-key")
     with patch("agent.auxiliary_client.get_text_auxiliary_client", return_value=(client, "aux")), \
          patch("agent.model_metadata.get_model_context_length", return_value=512_000):
         agent._check_compression_model_feasibility()
-    assert compressor.threshold_tokens == 512_000
-    assert compressor.tail_token_budget < before
-    assert compressor.tail_token_budget == int(compressor.threshold_tokens * compressor.summary_target_ratio)
+    assert compressor.threshold_tokens == before_threshold
+    assert compressor.tail_token_budget == before
 
 
 def test_fallback_activation_on_never_probed_session_stays_lazy():
@@ -126,8 +130,7 @@ def test_fallback_activation_on_never_probed_session_stays_lazy():
 
 
 def test_fallback_activation_reprobes_aux_ceiling_and_keeps_it_durable():
-    """Every main-runtime change re-probes the summariser and the clamp survives later window
-    corrections; a failed probe leaves the latch unset for the lazy compaction-time probe (#114707)."""
+    """Re-probe on fallback no longer installs a ceiling: input is bounded independent of threshold (#126767)."""
     from agent.chat_completion_helpers import _update_fallback_context_compressor
 
     agent = _make_agent(main_context=200_000)
@@ -149,26 +152,22 @@ def test_fallback_activation_reprobes_aux_ceiling_and_keeps_it_durable():
          patch("agent.model_metadata.get_model_context_length", side_effect=[1_000_000, 80_000]):
         _update_fallback_context_compressor(agent)
     assert compressor.context_length == 1_000_000
-    assert compressor.threshold_tokens == 80_000
+    # No longer clamped to aux window: bounded input fits any aux >= MINIMUM_CONTEXT_LENGTH
+    assert compressor._aux_context_ceiling is None
+    assert compressor.threshold_tokens == 500_000  # 1M * 0.50, no floor since >= 512K
     assert agent._compression_feasibility_checked is True
-    # Same-runtime window correction (provider-reported limit) keeps the ceiling.
+    # Same-runtime window correction keeps threshold from main window
     compressor.update_model(
         "fallback-model", context_length=800_000, base_url=agent.base_url, api_key=agent.api_key,
         provider=agent.provider, api_mode=agent.api_mode,
     )
-    assert compressor.threshold_tokens == 80_000
-    # An unchanged verdict is not re-announced on the next runtime change (fallback/restore cycles).
-    with patch("agent.auxiliary_client.get_text_auxiliary_client", return_value=(client, "aux")), \
-         patch("agent.model_metadata.get_model_context_length", side_effect=[1_000_000, 80_000]):
-        agent.base_url = "https://other-route.example/v1"  # runtime change, identical verdict text
-        _update_fallback_context_compressor(agent)
-    assert compressor.threshold_tokens == 80_000
-    assert notices == 1
+    assert compressor.threshold_tokens == 400_000  # 800K * 0.50
+    # No clamp installed, so no notice was emitted
+    assert notices == 0
 
 
 def test_unclamp_clears_stale_clamp_warning():
-    """When a re-probe finds the summariser fits again, the stale 'auto-lowered' text must not survive
-    for ``replay_compression_warning`` to resend on a session that is no longer clamped (#114707)."""
+    """Re-probe no longer installs a clamp; stale ceiling from a prior manual clamp is not reinstalled."""
     from agent.chat_completion_helpers import _update_fallback_context_compressor
 
     agent = _make_agent(main_context=200_000)
@@ -185,15 +184,13 @@ def test_unclamp_clears_stale_clamp_warning():
              patch("agent.model_metadata.get_model_context_length", side_effect=[main_ctx, aux_ctx]):
             _update_fallback_context_compressor(agent)
     assert compressor._aux_context_ceiling is None
-    assert compressor.threshold_tokens == 75_000
     assert agent._compression_warning is None
-    assert agent._last_feasibility_notice is None
+    assert getattr(agent, "_last_feasibility_notice", None) is None
 
 
 def test_near_threshold_probe_clamps_before_first_compaction():
-    """A fresh instance probes once its request first reaches the smallest window any summariser may
-    have, so the aux clamp lands before the first compaction fires on the main-window threshold (#114707);
-    requests below that stay probe-free (#28957)."""
+    """A fresh instance probes at MINIMUM_CONTEXT_LENGTH to check aux minimum gate;
+    below that stays probe-free (#28957). No threshold clamping occurs (bounded input)."""
     from agent.conversation_compression import ensure_compression_feasibility_checked
     from agent.model_metadata import MINIMUM_CONTEXT_LENGTH
 
@@ -201,6 +198,7 @@ def test_near_threshold_probe_clamps_before_first_compaction():
     compressor = agent.context_compressor = ContextCompressor(
         "test-main-model", config_context_length=1_000_000, threshold_percent=0.75, quiet_mode=True,
     )
+    before = compressor.threshold_tokens
     agent._emit_status = lambda message: None
     agent._compression_feasibility_checked = False
     client = MagicMock(base_url="http://localhost/v1", api_key="test-key")
@@ -213,8 +211,9 @@ def test_near_threshold_probe_clamps_before_first_compaction():
         ensure_compression_feasibility_checked(agent, 200_000)
     assert aux_client.call_count == 1
     assert agent._compression_feasibility_checked is True
-    assert compressor.threshold_tokens == 80_000
-    assert compressor.should_compress(200_000) is True
+    assert compressor.threshold_tokens == before
+    assert compressor._aux_context_ceiling is None
+    assert compressor.should_compress(200_000) is False  # 200K < threshold (750K)
 
 
 # ── Core warning logic ──────────────────────────────────────────────
@@ -223,44 +222,22 @@ def test_near_threshold_probe_clamps_before_first_compaction():
 @patch("agent.model_metadata.get_model_context_length", return_value=80_000)
 @patch("agent.auxiliary_client.get_text_auxiliary_client")
 def test_auto_corrects_threshold_when_aux_context_below_threshold(mock_get_client, mock_ctx_len):
-    """Auto-correction: aux >= 64K floor but < threshold → lower threshold
-    to aux_context so compression still works this session."""
+    """Aux above MINIMUM but below old threshold no longer triggers auto-lower: bounded input fits (#126767)."""
     agent = _make_agent(main_context=200_000, threshold_percent=0.50)
-    # threshold = 100,000 — aux has 80,000 (above 64K floor, below threshold)
     mock_client = MagicMock()
     mock_client.base_url = "https://openrouter.ai/api/v1"
     mock_client.api_key = "sk-aux"
     mock_get_client.return_value = (mock_client, "google/gemini-3-flash-preview")
 
+    before = agent.context_compressor.threshold_tokens
     messages = []
     agent._emit_status = lambda msg: messages.append(msg)
 
     agent._check_compression_model_feasibility()
 
-    assert len(messages) == 1
-    assert "Compression model" in messages[0]
-    assert "80,000" in messages[0]        # aux context
-    assert "100,000" in messages[0]       # old threshold
-    assert "Auto-lowered" in messages[0]
-    # Actionable persistence guidance included
-    assert "config.yaml" in messages[0]
-    assert "auxiliary:" in messages[0]
-    assert "compression:" in messages[0]
-    # 200K main is under the 512K small-context limit and 80K/200K = 40% sits
-    # below the 75% floor — a `threshold:` suggestion would be raised back to
-    # 75% and ignored (#67422), so the message must not offer one and must
-    # explain the recomputed trigger instead (0.75 * 200K = 150K).
-    assert "threshold:" not in messages[0]
-    assert "150,000" in messages[0]
-    # Warning stored for gateway replay
-    assert agent._compression_warning is not None
-    # Threshold on the live compressor was actually lowered to aux_context.
-    assert agent.context_compressor.threshold_tokens == 80_000
-    # Every threshold-derived budget must move with it. Keeping the original
-    # 20K tail here would protect 25% of the lowered threshold instead of the
-    # configured 20%, and larger real-world mismatches can make the tail's 1.5x
-    # soft ceiling wider than the entire compression trigger.
-    assert agent.context_compressor.tail_token_budget == 16_000
+    assert len(messages) == 0  # no warning: 80K aux fits bounded prompt
+    assert agent._compression_warning is None
+    assert agent.context_compressor.threshold_tokens == before
 
 
 @patch("agent.model_metadata.get_model_context_length", return_value=32_768)
@@ -408,30 +385,25 @@ def test_no_unavailable_warning_when_configured_fallback_chain_resolves():
 @patch("agent.model_metadata.get_model_context_length", return_value=80_000)
 @patch("agent.auxiliary_client.get_text_auxiliary_client")
 def test_warning_stored_for_gateway_replay(mock_get_client, mock_ctx_len):
-    """__init__ stores the warning; _replay sends it through status_callback."""
+    """No auto-lower warning is emitted: bounded input fits any aux >= MINIMUM (#126767)."""
     agent = _make_agent(main_context=200_000, threshold_percent=0.50)
     mock_client = MagicMock()
     mock_client.base_url = "https://openrouter.ai/api/v1"
     mock_client.api_key = "sk-aux"
     mock_get_client.return_value = (mock_client, "google/gemini-3-flash-preview")
 
-    # Phase 1: __init__ — _emit_status prints (CLI) but callback is None
     vprint_messages = []
     agent._emit_status = lambda msg: vprint_messages.append(msg)
     agent._check_compression_model_feasibility()
 
-    assert len(vprint_messages) == 1  # CLI got it
-    assert agent._compression_warning is not None  # stored for replay
+    assert len(vprint_messages) == 0
+    assert agent._compression_warning is None
 
-    # Phase 2: gateway wires callback post-init, then run_conversation replays
     callback_events = []
     agent.status_callback = lambda ev, msg: callback_events.append((ev, msg))
     agent._replay_compression_warning()
 
-    assert any(
-        ev == "lifecycle" and str(msg) == str(agent._compression_warning)
-        for ev, msg in callback_events
-    )
+    assert len(callback_events) == 0
 
 
 @patch("agent.model_metadata.get_model_context_length", return_value=200_000)
@@ -468,22 +440,21 @@ def test_no_replay_when_no_warning(mock_get_client, mock_ctx_len):
 @patch("agent.model_metadata.get_model_context_length", return_value=300_000)
 @patch("agent.auxiliary_client.get_text_auxiliary_client")
 def test_threshold_suggestion_kept_for_large_context_main(mock_get_client, mock_ctx_len):
-    """Main window >= 512K has no floor — any suggestion is honored, so the
-    `threshold:` option stays even below 75%."""
+    """No auto-lower occurs even for large main windows: bounded input fits (#126767)."""
     agent = _make_agent(main_context=1_000_000, threshold_percent=0.50)
-    # threshold = 500,000 — aux has 300,000
     mock_client = MagicMock()
     mock_client.base_url = "https://openrouter.ai/api/v1"
     mock_client.api_key = "sk-aux"
     mock_get_client.return_value = (mock_client, "google/gemini-3-flash-preview")
 
+    before = agent.context_compressor.threshold_tokens
     messages = []
     agent._emit_status = lambda msg: messages.append(msg)
 
     agent._check_compression_model_feasibility()
 
-    assert len(messages) == 1
-    assert "threshold: 0.30" in messages[0]
+    assert len(messages) == 0
+    assert agent.context_compressor.threshold_tokens == before
 
 
 

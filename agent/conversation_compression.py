@@ -1908,6 +1908,14 @@ def _lower_threshold_to_aux_context(
     agent: Any, *, aux_model: str, aux_context: int, aux_provider: str, aux_base_url: str
 ) -> None:
     """Lower the live threshold to the aux model's window and tell the user how to fix config.
+
+    .. deprecated::
+        Auto-invocation removed: the summariser input is bounded to
+        ``_SUMMARY_INPUT_MAX_CHARS`` independent of the main threshold, so
+        lowering the threshold to the aux window is no longer needed
+        (#126767, #136170). Kept for external callers and rollback compat;
+        ``check_compression_model_feasibility`` no longer calls this.
+
     The summariser sends one user prompt (no system/tools), so threshold == aux_context is safe.
     Retention is recalibrated through its selected policy: lean is window-relative;
     only legacy follows the lowered threshold."""
@@ -2066,12 +2074,17 @@ def check_compression_model_feasibility(agent: Any) -> None:
                 f"auxiliary.compression.context_length to override the "
                 f"detected value if it is wrong."
             )
-        if aux_context < agent.context_compressor.threshold_tokens:
-            _lower_threshold_to_aux_context(
-                agent, aux_model=aux_model, aux_context=aux_context, aux_provider=_aux_cfg_provider,
-                aux_base_url=aux_base_url,
-            )
-        elif getattr(agent, "_last_feasibility_notice", None) is not None:
+        # The summariser input is bounded to _SUMMARY_INPUT_MAX_CHARS (160K chars ≈ 40K
+        # tokens) per side, independent of the main threshold (see
+        # ContextCompressor._bound_summary_input / _sample_summary_records).
+        # A ~92K-token aux window always fits the bounded request, so there is
+        # no need to lower the main threshold to the aux window — that clamp
+        # discarded up to 3/4 of a 1M-window session's usable context
+        # (e.g. 800K → 262K with qwen36-fast, #126767, #136170).  The
+        # MINIMUM_CONTEXT_LENGTH gate above is the only aux size check; an aux
+        # that truly cannot fit the bounded prompt fails at call time and
+        # falls back to the main model.
+        if getattr(agent, "_last_feasibility_notice", None) is not None:
             # Symmetric un-clamp: the summariser fits again, so the stale "auto-lowered" notice must not be
             # replayed (``replay_compression_warning``) for a session that is no longer clamped (#114707).
             agent._last_feasibility_notice = None

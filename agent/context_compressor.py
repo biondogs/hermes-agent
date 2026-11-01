@@ -2750,8 +2750,11 @@ class ContextCompressor(
     _coerce_threshold_tokens_cap = _coerce_max_tokens
 
     def _apply_threshold_tokens_cap(self) -> None:
-        """Clamp threshold_tokens to the configured cap (itself clamped to the context length) and to the
-        auxiliary summariser's window when the feasibility probe installed one."""
+        """Clamp threshold_tokens to the configured cap (itself clamped to the context length).
+
+        The auxiliary-window ceiling (``_aux_context_ceiling``) is retained for
+        rollback compat but is no longer installed by the feasibility probe
+        (#126767, #136170); existing ceilings still clamp until cleared."""
         cap = self._effective_threshold_cap(self.context_length)
         if cap is not None and cap < self.threshold_tokens:
             self.threshold_tokens = cap

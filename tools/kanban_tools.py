@@ -1334,9 +1334,16 @@ def _handle_unblock(args: dict, **kw) -> str:
     _check(tid, "task_id is required")
     tid = str(tid)
     _enforce_worker_task_ownership(tid)
+    # LOCAL HOTFIX t_0ba77c1e: optional relay text, written atomically with the
+    # release (same write_txn) so relay and unblock can never drift apart.
+    # Author follows kanban_comment's rule: runtime identity, never caller args.
+    raw_comment = args.get("comment")
+    comment = _redact(raw_comment) if raw_comment and str(raw_comment).strip() else None
+    author = _persisted_identity() if comment else None
     with _board(args.get("board")) as (kb, conn):
-        _check(kb.unblock_task(conn, tid), f"could not unblock {tid} (not blocked or unknown)")
-        return _ok(task_id=tid, **_fields(kb.get_task(conn, tid), ("status",)))
+        _check(kb.unblock_task(conn, tid, comment=comment, author=author),
+               f"could not unblock {tid} (not blocked or unknown)")
+        return _ok(task_id=tid, commented=bool(comment), **_fields(kb.get_task(conn, tid), ("status",)))
 
 
 @_kanban_handler("kanban_archive")

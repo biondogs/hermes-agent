@@ -15,6 +15,7 @@ locks). Schema: tasks, task_links, task_comments, task_events, task_runs, attach
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
 import os
 import re
@@ -112,6 +113,9 @@ VALID_BLOCK_KINDS = {"dependency", "needs_input", "capability", "transient"}
 
 # Same-reason block -> unblock -> re-block cycles before routing to ``triage``.
 # Counts unblock recurrences, NOT dispatcher failures (``DEFAULT_FAILURE_LIMIT``).
+# LOCAL HOTFIX t_0ba77c1e: "same reason" is enforced for ``needs_input`` (a
+# re-block asking a DIFFERENT question is a new decision stage, see
+# ``_route_block``); other kinds still compare kind only.
 BLOCK_RECURRENCE_LIMIT = 2
 VALID_WORKSPACE_KINDS = {"scratch", "worktree", "dir"}
 
@@ -3251,6 +3255,7 @@ def block_task(
                 return False
             _append_event(conn, task_id, "blocked", {
                 "kind": kind, "reason": reason, "classified_in_place": True,
+                "reason_hash": block_reason_hash(reason),
             })
             return True
         source_status = _retry_status_for_run(conn, task_id) if cur_row["status"] == "running" else "ready"
@@ -3266,6 +3271,8 @@ def block_task(
         new_status, event_kind, set_sql, params, payload = _route_block(
             kind, reason, source_status, prev_kind=_row_get(cur_row, "block_kind"),
             prev_recurrences=int(_row_get(cur_row, "block_recurrences") or 0),
+            prev_reason_hash=_prev_block_reason_hash(conn, task_id),
+            rekinded=rekind_reason is not None,
         )
         if rekind_reason:
             payload["requested_kind"] = requested_kind
@@ -3295,9 +3302,40 @@ def block_task(
     return True
 
 
+def block_reason_hash(reason: Optional[str]) -> Optional[str]:
+    """Short stable fingerprint of a block reason (LOCAL HOTFIX t_0ba77c1e).
+
+    Normalized = stripped, case-folded, whitespace runs collapsed, so trivial
+    re-wording noise (trailing spaces, line wraps, capitalisation) still counts
+    as the SAME reason. ``None`` for an empty/absent reason. Stored in the
+    block event payload (``reason_hash``) — no schema column."""
+    text = " ".join(str(reason or "").split()).casefold()
+    if not text:
+        return None
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+
+
+def _prev_block_reason_hash(conn: sqlite3.Connection, task_id: str) -> Optional[str]:
+    """``reason_hash`` of the task's latest ``blocked``/``block_loop_detected``
+    event; recomputed from the stored reason for events written before the
+    hash existed (so pre-hotfix history compares correctly)."""
+    row = conn.execute(
+        "SELECT payload FROM task_events "
+        "WHERE task_id = ? AND kind IN ('blocked', 'block_loop_detected') "
+        "ORDER BY id DESC LIMIT 1",
+        (task_id,),
+    ).fetchone()
+    if row is None:
+        return None
+    payload = _json_dict(_row_get(row, "payload"))
+    stored = _nonblank_str(payload.get("reason_hash"))
+    return stored or block_reason_hash(payload.get("reason"))
+
+
 def _route_block(
     kind: Optional[str], reason: Optional[str], source_status: str, *,
     prev_kind: Optional[str], prev_recurrences: int,
+    prev_reason_hash: Optional[str] = None, rekinded: bool = False,
 ) -> tuple[str, str, str, tuple, dict]:
     """``(new_status, event_kind, set_sql, params, payload)`` for :func:`block_task`.
 
@@ -3311,13 +3349,35 @@ def _route_block(
     incoming one means blocked -> unblocked -> re-block for the same cause
     (un-typed None compares equal to a prior un-typed block). At
     ``BLOCK_RECURRENCE_LIMIT`` the task routes to ``triage`` for a human.
+
+    LOCAL HOTFIX t_0ba77c1e: a ``needs_input`` re-block whose normalized
+    reason differs from the previous block's (``reason_hash``) is a NEW
+    operator decision (multi-stage GO-1 -> unblock -> work -> GO-2 flows), not
+    a loop: recurrences reset to 1 and the card stays ``blocked``. All 49
+    historical ``block_loop_detected`` events fleet-wide were such flows, and
+    triage then fed them to the auto-decomposer. Same-reason ``needs_input``
+    re-blocks, a missing reason on either side, ``dependency`` waits
+    re-kinded to ``needs_input`` (no open parent — a worker loop, not a
+    question), and every other kind still escalate exactly as before.
     """
     payload = {"reason": reason, "kind": kind, "source_status": source_status}
     if kind == "dependency":
         return "todo", "dependency_wait", "block_kind    = ?", (kind,), payload
-    recurrences = prev_recurrences + 1 if prev_kind == kind else 1
+    reason_hash = block_reason_hash(reason)
+    new_decision = (
+        kind == "needs_input" and prev_kind == kind and not rekinded
+        and reason_hash is not None and prev_reason_hash is not None
+        and reason_hash != prev_reason_hash
+    )
+    recurrences = prev_recurrences + 1 if prev_kind == kind and not new_decision else 1
     set_sql = "block_kind    = ?,\n                       block_recurrences = ?"
-    payload = {"reason": reason, "kind": kind, "recurrences": recurrences, "source_status": source_status}
+    payload = {
+        "reason": reason, "kind": kind, "recurrences": recurrences,
+        "source_status": source_status, "reason_hash": reason_hash,
+    }
+    if new_decision:
+        payload["new_decision"] = True
+        payload["prev_reason_hash"] = prev_reason_hash
     if recurrences >= BLOCK_RECURRENCE_LIMIT:
         payload["limit"] = BLOCK_RECURRENCE_LIMIT
         return "triage", "block_loop_detected", set_sql, (kind, recurrences), payload
@@ -3377,6 +3437,8 @@ def task_hold_reason(conn: sqlite3.Connection, task_id: str) -> Optional[str]:
     / ``unblocked``: an ``unblocked`` (deliberate release) closes any hold; a
     newer non-hold block replaces it. Events outside that set (a decomposer
     misfire's ``specified``/``promoted``, run bookkeeping) never clear a hold.
+    A ``block_loop_detected`` episode of kind ``needs_input`` is ALWAYS a hold
+    (kernel-level, marker-independent — LOCAL HOTFIX t_0ba77c1e).
     """
     row = conn.execute(
         "SELECT kind, payload FROM task_events "
@@ -3386,7 +3448,15 @@ def task_hold_reason(conn: sqlite3.Connection, task_id: str) -> Optional[str]:
     ).fetchone()
     if row is None or row["kind"] == "unblocked":
         return None
-    reason = _nonblank_str(_json_dict(_row_get(row, "payload")).get("reason")) or ""
+    payload = _json_dict(_row_get(row, "payload"))
+    reason = _nonblank_str(payload.get("reason")) or ""
+    # LOCAL HOTFIX t_0ba77c1e: an ESCALATED operator decision is a hold at
+    # kernel level, independent of the configured markers. A needs_input
+    # block loop sits in triage because a human owes an answer; letting the
+    # auto-decomposer/specifier re-plan it is how gaudi t_8d898b44 (awaiting
+    # GO-2) was fanned into 6 cards and t_35f2ab06 into 5 on 2026-11-02.
+    if row["kind"] == "block_loop_detected" and payload.get("kind") == "needs_input":
+        return f"ESCALATED OPERATOR DECISION (needs_input block loop): {reason or '(no reason recorded)'}"
     lowered = reason.lower()
     for marker in _resolve_hold_markers():
         if marker and marker.lower() in lowered:
@@ -3707,7 +3777,10 @@ def _landing_status_after_parents(conn: sqlite3.Connection, task_id: str) -> str
     return "ready" if _parents_satisfied(conn, task_id) else "todo"
 
 
-def unblock_task(conn: sqlite3.Connection, task_id: str) -> bool:
+def unblock_task(
+    conn: sqlite3.Connection, task_id: str, *,
+    comment: Optional[str] = None, author: Optional[str] = None,
+) -> bool:
     """``blocked``/``scheduled`` -> its resumable phase (parent re-gated; ``review``
     when that is where it left off), closing any leaked run first.
 
@@ -3715,7 +3788,17 @@ def unblock_task(conn: sqlite3.Connection, task_id: str) -> bool:
     block-loop breaker escalated an operator hold (LOCAL HOTFIX t_7fd1c800):
     that is the operator's release lever for held cards the triage automation
     must refuse to touch. Plain idea-triage (no hold episode) still refuses --
-    it needs specify, not unblock."""
+    it needs specify, not unblock.
+
+    ``comment`` (LOCAL HOTFIX t_0ba77c1e) is the relay text that resolves the
+    block. It is written in the SAME transaction as the release — after the
+    status CAS succeeds, before the ``unblocked`` event — so the next worker
+    always sees the relay, and a refused unblock writes no comment at all.
+    Relay-then-unblock as two calls let a proof sit relayed-but-blocked for
+    3h41m (Specimen A, 2026-11-02)."""
+    comment = comment.strip() if isinstance(comment, str) else None
+    if comment and not (author and str(author).strip()):
+        raise ValueError("unblock comment requires an author")
     now = int(time.time())
     with write_txn(conn):
         cur_status = _task_status(conn, task_id)
@@ -3749,6 +3832,8 @@ def unblock_task(conn: sqlite3.Connection, task_id: str) -> bool:
         )
         if cur.rowcount != 1:
             return False
+        if comment:
+            add_comment(conn, task_id, str(author), comment)
         _append_event(
             conn, task_id, "unblocked",
             (

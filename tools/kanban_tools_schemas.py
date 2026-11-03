@@ -529,10 +529,17 @@ KANBAN_UNBLOCK_SCHEMA = _schema(
         "Unblock a Kanban task. It moves to ready when all parents are done, "
         "or todo while any parent remains open. Orchestrator-only — only "
         "profiles with the kanban toolset can unblock routed work; "
-        "dispatcher-spawned task workers never see this tool."
+        "dispatcher-spawned task workers never see this tool. "
+        "When relaying evidence that resolves a block, pass it as `comment` — "
+        "never post the relay and the unblock as separate calls."
     ),
     {
         "task_id": _prop("string", "Blocked task id to move to ready or parent-gated todo."),
+        "comment": _prop("string", (
+            "Optional relay text (the answer/evidence that resolves the block). "
+            "Posted as a comment in the same transaction as the unblock; "
+            "nothing is posted if the unblock is refused."
+        )),
     },
     ["task_id"],
 )

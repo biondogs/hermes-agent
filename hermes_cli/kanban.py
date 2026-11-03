@@ -1058,7 +1058,12 @@ def _cmd_unblock(args: argparse.Namespace) -> int:
     author = _profile_author() if reason else None
     suffix = f": {reason}" if reason else ""
     with kbc.connect_closing() as conn:
-        op = _commented(conn, reason, author, "UNBLOCK", lambda tid: kb.unblock_task(conn, tid))
+        # LOCAL HOTFIX t_0ba77c1e: relay + release in ONE transaction (was a
+        # separate comment write, so a refused unblock still left an
+        # "UNBLOCK:" comment on a card that stayed blocked).
+        def op(tid):
+            return kb.unblock_task(
+                conn, tid, comment=f"UNBLOCK: {reason}" if reason else None, author=author)
         return _bulk_apply(ids, op, lambda tid: f"Unblocked {tid}{suffix}",
                            lambda tid: f"cannot unblock {tid} (not blocked/scheduled?)")
 

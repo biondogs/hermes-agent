@@ -83,12 +83,22 @@ def test_non_hold_block_episode_is_not_held(kanban_home):
     with kbc.connect() as conn:
         tid = _ready_card(conn)
         # A hold block, released, then a NEW non-hold block episode: the newest
-        # episode wins — this is not a hold. (block_kind/recurrences survive the
-        # unblock by design, so this second block already escalates to triage.)
+        # episode wins — this is not a hold. Since LOCAL HOTFIX t_0ba77c1e a
+        # needs_input re-block with a DIFFERENT reason is a new decision, so it
+        # stays ``blocked`` instead of escalating to triage.
         assert kb.block_task(conn, tid, reason=HOLD_REASON, kind="needs_input")
         assert kb.unblock_task(conn, tid)
         assert kb.block_task(conn, tid, reason=PLAIN_REASON, kind="needs_input")
-        assert _t(conn, tid).status == "triage"
+        assert _t(conn, tid).status == "blocked"
+        assert kb.task_hold_reason(conn, tid) is None
+
+
+def test_non_hold_capability_loop_in_triage_is_not_held(kanban_home):
+    """A non-needs_input block loop in triage, without a marker, is plain
+    orchestration triage: the decomposer may still act on it."""
+    with kbc.connect() as conn:
+        tid = _ready_card(conn)
+        _hold_into_triage(conn, tid, reason=PLAIN_REASON, kind="capability")
         assert kb.task_hold_reason(conn, tid) is None
 
 
@@ -202,13 +212,16 @@ def test_unblock_still_refuses_plain_triage(kanban_home):
 
 
 def test_custom_marker_config_is_honored(kanban_home, monkeypatch):
+    # kind="capability": a needs_input block loop is held at kernel level
+    # regardless of markers (LOCAL HOTFIX t_0ba77c1e), so the marker override
+    # is exercised on a kind the markers alone decide.
     monkeypatch.setenv("HERMES_KANBAN_HOLD_MARKERS", "FREEZE-IT")
     with kbc.connect() as conn:
         tid = _ready_card(conn)
-        _hold_into_triage(conn, tid, reason="FREEZE-IT: operator wants this parked")
+        _hold_into_triage(conn, tid, reason="FREEZE-IT: operator wants this parked", kind="capability")
         assert "FREEZE-IT" in (kb.task_hold_reason(conn, tid) or "")
     # And the default marker no longer matches under this override.
     with kbc.connect() as conn:
         tid2 = _ready_card(conn, title="other work")
-        _hold_into_triage(conn, tid2, reason="OPERATOR HOLD: parked")
+        _hold_into_triage(conn, tid2, reason="OPERATOR HOLD: parked", kind="capability")
         assert kb.task_hold_reason(conn, tid2) is None

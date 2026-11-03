@@ -3231,6 +3231,10 @@ class TelegramAdapter(TelegramHeldInboundMixin, TelegramTopicRoutingMixin, BaseP
             # WARNING, not INFO: "Connecting…" above is WARNING and reaches the terminal; an INFO success
             # line made healthy startups look stalled at "attempt 1/8".
             logger.warning("[%s] Connected to Telegram (%s mode)", self.name, "webhook" if self._webhook_mode else "polling")
+            # LOCAL HOTFIX (t_1b6e0ed1): announce the opt-in clarify delivery receipt so a post-restart
+            # check can prove the receipt path is live in this process (path only, never the token).
+            if self._clarify_receipt_path():
+                logger.warning("[%s] clarify delivery receipt enabled -> %s", self.name, self._clarify_receipt_path())
             # Heartbeat only in polling mode: webhook mode has no long-poll socket to wedge in CLOSE-WAIT.
             # WARNING, not INFO: the "Connecting to Telegram (attempt N/8)…" line above is emitted at
             # WARNING and reaches the terminal (the gateway's default stderr handler is WARNING-only), but
@@ -4302,9 +4306,41 @@ class TelegramAdapter(TelegramHeldInboundMixin, TelegramTopicRoutingMixin, BaseP
                 rows = [[InlineKeyboardButton(str(idx + 1), callback_data=f"cl:{clarify_id}:{idx}")] for idx in range(len(choices))]
                 rows.append([InlineKeyboardButton(t("platform.telegram.prompt.other"), callback_data=f"cl:{clarify_id}:other")])
                 keyboard = InlineKeyboardMarkup(rows)
-            return text, keyboard, lambda msg: self._clarify_state.__setitem__(clarify_id, session_key)
+            def on_sent(msg):
+                self._clarify_state[clarify_id] = session_key
+                self._write_clarify_receipt(clarify_id, chat_id, msg)
+            return text, keyboard, on_sent
         return await self._send_prompt(
             "send_clarify", chat_id, metadata, build, parse_mode=ParseMode.HTML, thread_id=self._metadata_thread_id(metadata))
+
+    # LOCAL HOTFIX (t_1b6e0ed1): opt-in clarify delivery receipt. When this adapter instance's
+    # ``extra.clarify_receipt_path`` is set, every successful send_clarify appends ONE JSON line with
+    # the Message object Telegram RETURNED from sendMessage (server-authoritative text/entities/markup),
+    # so a verifier can read back exactly what Telegram stored. Default off; never breaks the send.
+    def _clarify_receipt_path(self) -> str:
+        extra = getattr(self.config, "extra", None) or {}
+        raw = extra.get("clarify_receipt_path") if isinstance(extra, dict) else None
+        return os.path.expanduser(str(raw).strip()) if raw and str(raw).strip() else ""
+
+    def _write_clarify_receipt(self, clarify_id: str, chat_id: Any, msg: Any) -> None:
+        path = self._clarify_receipt_path()
+        if not path:
+            return
+        try:
+            message = msg.to_dict() if hasattr(msg, "to_dict") else {"message_id": getattr(msg, "message_id", None)}
+            record = {"ts": datetime.now(UTC).isoformat(), "clarify_id": clarify_id,
+                      "chat_id": str(chat_id), "message": message}
+            line = json.dumps(record, ensure_ascii=False, default=str) + "\n"
+            os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+            fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+            try:
+                os.fchmod(fd, 0o600)
+                os.write(fd, line.encode("utf-8"))
+            finally:
+                os.close(fd)
+        except Exception as e:  # receipt is best-effort: log, never fail the delivered prompt
+            logger.warning("[%s] clarify receipt write failed (id=%s): %s", self.name, clarify_id,
+                           _redact_telegram_error_text(e))
 
     @staticmethod
     def _provider_get_label():

@@ -67,6 +67,60 @@ _RESPAWN_BLOCKER_RE = re.compile(
     re.IGNORECASE,
 )
 
+# LOCAL HOTFIX (t_b274ffbe): the non-counting requeue paths in
+# ``_classify_dead_worker`` stamp ``last_failure_error`` with these exact
+# producer phrases. That stamp is only meaningful while the run that produced
+# it is the card's LATEST ended run (step 1 of ``check_respawn_guard`` owns it
+# then). Once any later run has ended (the worker ran normally and blocked /
+# scheduled / handed off to review …), the stamp is stale history — nothing
+# clears it except ``complete_task`` / ``unblock_task`` — and the quota words
+# in it must never be read as an auth blocker (specimen: t_ed6f85c9 spun on
+# ``blocker_auth`` for ~3.5 days off a quota wall that had cleared long before).
+_NONCOUNTING_REQUEUE_STAMP_RE = re.compile(
+    r"\bexited (?:rate-limited \(quota wall\)|drain-refused \(owner draining)",
+)
+_NONCOUNTING_REQUEUE_OUTCOMES = frozenset({"rate_limited", "drain_refused"})
+
+# Quota-family tokens in a ``blocker_auth`` match: a provider quota / rate-limit
+# wall, NOT a credential problem. Used only to describe the guard's cause.
+_RESPAWN_QUOTA_RE = re.compile(
+    r"\b(quota|insufficient_quota|rate[\s_\-]?limit(?:ed)?|429|too[\s_]many[\s_]requests|"
+    r"billing|subscription)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_stale_requeue_stamp(err: Optional[str], latest_outcome: Optional[str]) -> bool:
+    """True when ``err`` is a non-counting requeue stamp (rate-limited / drain-refused)
+    whose producing run is no longer the latest ended run — i.e. superseded history."""
+    if not err or latest_outcome in _NONCOUNTING_REQUEUE_OUTCOMES:
+        return False
+    return bool(_NONCOUNTING_REQUEUE_STAMP_RE.search(err))
+
+
+def respawn_blocker_cause(err: Optional[str]) -> dict:
+    """Plain-language cause for a ``blocker_auth`` guard (LOCAL HOTFIX t_b274ffbe).
+
+    ``blocker_auth`` covers two different families. A quota / rate-limit / billing
+    wall at the model provider is NOT a credential fault, and downstream lanes
+    (decision prompts, notifiers) must not describe it as one; only the auth family
+    (401/403/forbidden/invalid key) points at a credential/permission problem.
+    """
+    text = _kb._lossy_text(err) if err else ""
+    if text and _RESPAWN_QUOTA_RE.search(text):
+        return {
+            "cause": "provider_quota",
+            "detail": ("model-provider quota / rate-limit wall (quota or 429 text in the last "
+                       "failure) — not a credential problem; retries resume once the provider "
+                       "quota clears"),
+        }
+    return {
+        "cause": "auth",
+        "detail": ("authentication / permission error in the last failure (401/403, forbidden, "
+                   "invalid key) — check the assignee profile's credential or access, then unblock"),
+    }
+
+
 # Within this window a completed run counts as "recent proof"; don't re-spawn.
 _RESPAWN_GUARD_SUCCESS_WINDOW = 3600  # 1 hour
 
@@ -1606,7 +1660,9 @@ def check_respawn_guard(
     checked BEFORE ``blocker_auth`` because the requeue stamps a quota-flavored
     ``last_failure_error`` that would otherwise park the task forever — that
     path never increments ``consecutive_failures``), ``"blocker_auth"``
-    (quota/auth pattern; the breaker still trips eventually), then for the
+    (quota/auth pattern; the breaker still trips eventually — a rate-limited /
+    drain-refused requeue stamp superseded by a later run is stale and never
+    counts, LOCAL HOTFIX t_b274ffbe), then for the
     ready lane only ``"recent_success"`` (completed run within the window, unless
     a re-queue event arrived after it — a deliberate re-run) and ``"active_pr"``
     (PR URL in a recent comment; re-spawning risks a duplicate PR — unless a
@@ -1634,7 +1690,7 @@ def check_respawn_guard(
     latest_run = conn.execute(
         "SELECT outcome, ended_at, metadata FROM task_runs "
         "WHERE task_id = ? AND ended_at IS NOT NULL "
-        "ORDER BY ended_at DESC LIMIT 1",
+        "ORDER BY ended_at DESC, id DESC LIMIT 1",
         (task_id,),
     ).fetchone()
     if latest_run is not None and latest_run["outcome"] == "spawn_failed":
@@ -1661,7 +1717,10 @@ def check_respawn_guard(
     # benign commands such as ``claude auth status`` (#117097).
     err = _kb._lossy_text(row["last_failure_error"])
     latest_outcome = latest_run["outcome"] if latest_run is not None else None
-    if err and latest_outcome != "crashed" and _RESPAWN_BLOCKER_RE.search(err):
+    # LOCAL HOTFIX (t_b274ffbe): a rate-limited / drain-refused requeue stamp whose
+    # producing run has been superseded by a later run is stale history — skip it.
+    if (err and latest_outcome != "crashed" and not _is_stale_requeue_stamp(err, latest_outcome)
+            and _RESPAWN_BLOCKER_RE.search(err)):
         return "blocker_auth"
 
     # Review-lane spawns stop here: a recent completed run and a fresh PR URL
@@ -2150,8 +2209,16 @@ def _dispatch_lane_task(
         # in-memory view) keeps diagnostics and the board state consistent: the task is now legitimately
         # owned by ``kanban.default_assignee``, not "unassigned but secretly routed".
         if not dry_run:
+            payload = {"reason": guard_reason}
+            if guard_reason == "blocker_auth":
+                # LOCAL HOTFIX (t_b274ffbe): name the cause plainly — a provider quota
+                # wall is not a credential fault, and lanes lift this text verbatim.
+                _err_row = conn.execute(
+                    "SELECT last_failure_error FROM tasks WHERE id = ?", (task_id,),
+                ).fetchone()
+                payload.update(respawn_blocker_cause(_err_row[0] if _err_row else None))
             with _kb.write_txn(conn):
-                _kb._append_event(conn, task_id, "respawn_guarded", {"reason": guard_reason})
+                _kb._append_event(conn, task_id, "respawn_guarded", payload)
         return False
 
     def _count_spawn(name: str) -> None:

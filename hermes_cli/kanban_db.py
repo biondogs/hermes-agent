@@ -500,16 +500,84 @@ def board_exists(board: Optional[str] = None) -> bool:
 
 
 
+
+def _pinned_board_slug():
+    # Only a real dispatcher/delegation pin counts (RFC §10.1); a bare
+    # HERMES_KANBAN_BOARD set in a normal shell is the legacy soft-default
+    # and must not hard-fence — otherwise explicit board= regresses (zero-change
+    # violation). Check provenance before treating the env as a pin.
+    from agent.delegation_context import explicit_board_intent_is_pinned
+    if not explicit_board_intent_is_pinned():
+        return None
+    env_pin = os.environ.get("HERMES_KANBAN_BOARD", "").strip()
+    if env_pin:
+        try:
+            return _normalize_board_slug(env_pin)
+        except ValueError:
+            return None
+    ctx = (_CURRENT_BOARD_OVERRIDE.get() or "").strip()
+    if ctx:
+        try:
+            return _normalize_board_slug(ctx)
+        except ValueError:
+            return None
+    return None
+
+def _is_boards_all_exempt():
+    # Capability is role-side, operator-granted via config.yaml
+    # (hermes board grant-all); env self-grant is not trusted (RFC D9).
+    try:
+        from hermes_constants import get_hermes_home
+        from pathlib import Path as _P
+        import hermes_yaml as _yaml
+        home = _P(get_hermes_home())
+        # Check root config and the current profile's config (D9 grant-all
+        # writes to profiles/<role>/config.yaml for non-default roles).
+        candidates = [home / "config.yaml"]
+        # Also check if HERMES_HOME points at a profile dir (after _apply_profile_override)
+        # or try the active profile's config via HERMES_HOME/profile inference.
+        # Simpler: scan all profile configs for a boards:all grant.
+        try:
+            for prof_cfg in (home / "profiles").glob("*/config.yaml"):
+                candidates.append(prof_cfg)
+        except Exception:
+            pass
+        for cfg_path in candidates:
+            if cfg_path.is_file():
+                doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+                boards_cfg = doc.get("boards")
+                if isinstance(boards_cfg, dict):
+                    if boards_cfg.get("capability") == "all":
+                        return True
+                elif boards_cfg == "all":
+                    return True
+                break
+    except Exception:
+        pass
+    return False
+
+def _enforce_board_fence(requested):
+    if requested is None:
+        return
+    pinned = _pinned_board_slug()
+    if not pinned:
+        return
+    if _is_boards_all_exempt():
+        return
+    if requested != pinned:
+        raise PermissionError(f"board-pinned agent (board={pinned!r}): refusing cross-board operation board={requested!r}; grant boards:all to this profile for multi-board access")
+
 def _explicit_board_slug(board: Optional[str]) -> Optional[str]:
     """Explicit caller intent: a direct ``board=`` argument, else the scoped
     ``--board`` context (CLI ``hermes kanban --board``, dashboard plugin_api);
     ``None`` when the caller expressed neither."""
     if board is not None:
-        return _normalize_board_slug(board)
+        normed = _normalize_board_slug(board)
+        _enforce_board_fence(normed)
+        return normed
     # A caller-scoped board (CLI `hermes kanban --board B ...`, dashboard
     # plugin_api) is explicit intent just like a direct board= argument —
-    # without this a worker-pinned HERMES_KANBAN_DB silently outranks --board
-    # (os-reviewer P1 on PR#107195 / t_11c4afd8).
+    # without this a worker-pinned HERMES_KANBAN_DB silently outranks --board.
     ctx = (_CURRENT_BOARD_OVERRIDE.get() or "").strip()
     if ctx:
         try:

@@ -1751,7 +1751,24 @@ def _normalize_catch_up(value: Any) -> Optional[bool]:
     raise ValueError("catch_up must be true, false, or null (use the default).")
 
 
+def _normalize_board(value):
+    if value is None:
+        return None
+    text = str(value).strip().lower()
+    if not text:
+        return None
+    from hermes_cli.kanban_db import _normalize_board_slug, board_exists
+    from hermes_cli.board_layer import is_layered_board
+    normed = _normalize_board_slug(text)
+    # Validate board existence/layering, not just grammar
+    if normed and not board_exists(normed):
+        raise ValueError(f"board {normed!r} does not exist")
+    if normed and not is_layered_board(normed):
+        raise ValueError(f"board {normed!r} is not layered (no board.yaml)")
+    return normed
+
 _CREATE_FIELD_NORMALIZERS: dict[str, Callable[[Any], Any]] = {
+    "board": _normalize_board,
     "model": _normalize_job_optional_text,
     "provider": _normalize_job_optional_text,
     "base_url": _normalize_base_url,
@@ -1770,6 +1787,7 @@ _CREATE_FIELD_NORMALIZERS: dict[str, Callable[[Any], Any]] = {
 }
 _UPDATE_FIELD_NORMALIZERS: dict[str, Callable[[Any], Any]] = {
     # [] is an explicit zero-tool allowlist and must survive the update path as [] too (#82010).
+    "board": _normalize_board,
     "enabled_toolsets": _normalize_enabled_toolsets,
     "workdir": lambda v: None if v in {None, "", False} else _normalize_workdir(v),
     "monitor_script": _normalize_job_optional_text,

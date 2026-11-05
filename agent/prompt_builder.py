@@ -1524,6 +1524,41 @@ def load_soul_md(context_length: Optional[int] = None, home_override: Path | Non
 
     if safe_worker_enabled():
         return None
+    # Board-layered SOUL: when HERMES_KANBAN_BOARD points at a layered board,
+    # return the composed EffectiveProfile soul chain (role + fragment + slots)
+    # instead of raw HERMES_HOME/SOUL.md. Only when home_override is None
+    # (ambient read); pinned-home callers already resolved their own home.
+    if home_override is None:
+        try:
+            from hermes_cli.board_layer import compose as _board_compose, is_layered_board as _is_layered
+            from hermes_cli.kanban_db import get_current_board as _get_board
+            from hermes_cli.profiles import get_active_profile_name as _get_role
+            _board = _get_board()
+            if _board and _is_layered(_board):
+                try:
+                    _role = _get_role()
+                except Exception:
+                    _role = "default"
+                try:
+                    _ep = _board_compose(_role, _board)
+                    if _ep.soul_text is not None:
+                        soul_path = (Path(home_override) if home_override is not None else get_hermes_home()) / "SOUL.md"
+                        # Reuse truncation/scan path below for the composed text
+                        _content = _ep.soul_text.strip()
+                        if _content:
+                            # Same scan/truncation as the file path
+                            try:
+                                from hermes_cli.profile_distribution import read_manifest
+                                manifest = read_manifest(get_hermes_home())
+                                user_authored = manifest is None or (bool(manifest.distribution_owned) and "SOUL.md" not in manifest.distribution_owned)
+                            except Exception:
+                                user_authored = True
+                            return _truncate_content(_scan_context_content(_content, "SOUL.md", user_authored=user_authored), "SOUL.md", context_length=context_length, read_path=str(soul_path))
+                        return None
+                except Exception as _be:
+                    logger.debug("Board SOUL compose failed for %s/%s: %s", _role, _board, _be)
+        except Exception:
+            pass
     try:
         from hermes_cli.config import ensure_hermes_home
         ensure_hermes_home()

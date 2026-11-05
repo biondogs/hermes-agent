@@ -345,6 +345,7 @@ from typing import Optional
 
 
 from hermes_cli.subcommands.cron import build_cron_parser
+from hermes_cli.subcommands.board import build_board_parser, cmd_board
 from hermes_cli.subcommands.gateway import build_gateway_parser
 from hermes_cli.subcommands.profile import build_profile_parser
 from hermes_cli.subcommands.model import build_model_parser
@@ -514,6 +515,167 @@ def _scan_profile_flag(argv: list) -> tuple:
     return None, 0, None
 
 
+def _scan_board_flag(argv: list) -> tuple:
+    """Find --board/--board= in argv -> (slug, tokens_consumed, index)."""
+    from hermes_cli._parser import top_level_value_flag_sets as _tvf
+
+    try:
+        value_flags, optional_value_flags = _tvf()
+    except Exception:
+        value_flags, optional_value_flags = frozenset(), frozenset()
+    i = 0
+    saw_subcommand = False
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--":
+            break
+        if arg == "--board" and i + 1 < len(argv):
+            raw = argv[i + 1].strip()
+            if raw and not raw.startswith("-"):
+                return raw, 2, i
+            break
+        if arg.startswith("--board="):
+            return arg.split("=", 1)[1].strip(), 1, i
+        takes_value = "=" not in arg and i + 1 < len(argv) and (
+            arg in value_flags
+            or (arg in optional_value_flags and not argv[i + 1].startswith("-"))
+        )
+        if not takes_value and not arg.startswith("-"):
+            saw_subcommand = True
+        i += 2 if takes_value else 1
+    return None, 0, None
+
+
+def _is_profile_effective_invocation(argv: list) -> bool:
+    """True only for `hermes profile effective` (consecutive tokens)."""
+    for a, b in itertools.pairwise(argv):
+        if a == "profile" and b == "effective":
+            return True
+    return False
+
+
+def _apply_board_override() -> None:
+    """Pre-parse --board and pin HERMES_KANBAN_BOARD before imports.
+
+    Precedence: explicit --board > boards.default in profile config > existing env/HERMES_KANBAN_BOARD.
+    An explicit env pin (dispatcher worker) is never overwritten by profile default.
+    """
+    # Don't interfere with `hermes profile effective --board` — that flag belongs
+    # to the subcommand, not the global board pin.
+    if _is_profile_effective_invocation(sys.argv):
+        return
+    # Don't overwrite a dispatcher/worker pin — but an explicit --board that
+    # conflicts with the pin must REFUSE (RFC 10.1), not silently redirect.
+    # Gate on pin provenance: ambient HERMES_KANBAN_BOARD in a plain shell
+    # is a soft default (RFC §10.1); only a real dispatcher pin fences.
+    if os.environ.get("HERMES_KANBAN_BOARD", "").strip():
+        try:
+            from agent.delegation_context import explicit_board_intent_is_pinned as _is_pinned
+
+            _is_real_pin = _is_pinned()
+        except Exception:
+            _is_real_pin = False
+        if not _is_real_pin:
+            # Ambient env + explicit --board → explicit wins (strip/apply)
+            slug2, consume2, idx2 = _scan_board_flag(sys.argv[1:])
+            if slug2:
+                try:
+                    from hermes_cli.kanban_db import _normalize_board_slug as _nbs2
+
+                    normed2 = _nbs2(slug2)
+                    if normed2:
+                        os.environ["HERMES_KANBAN_BOARD"] = normed2
+                except ValueError as exc2:
+                    print(f"Error: {exc2}", file=sys.stderr)
+                    sys.exit(2)
+                if idx2 is not None:
+                    start = idx2 + 1
+                    sys.argv = sys.argv[:start] + sys.argv[start + consume2 :]
+                return
+            # No explicit flag: keep ambient as soft default
+            return
+        slug, consume, idx = _scan_board_flag(sys.argv[1:])
+        if consume and idx is not None and slug:
+            pinned = os.environ["HERMES_KANBAN_BOARD"].strip()
+            try:
+                from hermes_cli.kanban_db import _normalize_board_slug as _nbs
+
+                norm_req = _nbs(slug)
+                norm_pin = _nbs(pinned)
+            except ValueError:
+                norm_req = slug
+                norm_pin = pinned
+            if norm_req != norm_pin:
+                # Respect boards:all exemption like _enforce_board_fence
+                try:
+                    from hermes_cli.kanban_db import _is_boards_all_exempt as _exempt
+
+                    if _exempt():
+                        os.environ["HERMES_KANBAN_BOARD"] = str(norm_req)
+                        start = idx + 1
+                        sys.argv = sys.argv[:start] + sys.argv[start + consume :]
+                        return
+                except Exception:
+                    pass
+                print(
+                    f"Error: board-pinned agent (board={norm_pin!r}): refusing cross-board operation board={norm_req!r}; grant boards:all to this profile for multi-board access",
+                    file=sys.stderr,
+                )
+                sys.exit(2)
+            # Same board: strip flag and keep pin
+            start = idx + 1
+            sys.argv = sys.argv[:start] + sys.argv[start + consume :]
+        elif consume and idx is not None:
+            start = idx + 1
+            sys.argv = sys.argv[:start] + sys.argv[start + consume :]
+        return
+    slug, consume, idx = _scan_board_flag(sys.argv[1:])
+    if slug:
+        try:
+            from hermes_cli.kanban_db import _normalize_board_slug
+
+            normed = _normalize_board_slug(slug)
+            if normed:
+                os.environ["HERMES_KANBAN_BOARD"] = normed
+        except ValueError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            sys.exit(2)
+        if idx is not None:
+            start = idx + 1
+            sys.argv = sys.argv[:start] + sys.argv[start + consume :]
+        return
+    # No explicit --board: check profile boards.default
+    try:
+        from hermes_constants import get_hermes_home
+        from pathlib import Path as _P
+        import hermes_yaml as _yaml
+
+        # After _apply_profile_override, HERMES_HOME may point at profile dir
+        home = _P(get_hermes_home())
+        # Try profile config then root config
+        for cfg_path in (home / "config.yaml", home / "profiles" / "default" / "config.yaml"):
+            if cfg_path.is_file():
+                try:
+                    doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+                    boards_cfg = doc.get("boards")
+                    if isinstance(boards_cfg, dict):
+                        default_board = boards_cfg.get("default")
+                        if isinstance(default_board, str) and default_board.strip():
+                            from hermes_cli.kanban_db import _normalize_board_slug as _nbs
+
+                            try:
+                                normed = _nbs(default_board.strip())
+                                if normed:
+                                    os.environ["HERMES_KANBAN_BOARD"] = normed
+                            except ValueError:
+                                pass
+                    break
+                except Exception:
+                    break
+    except Exception:
+        pass
+
+
 def _resolve_sudo_user_profile_env(name: str) -> str | None:
     """Resolve `sudo hermes -p <name>` against the invoking user's home.
 
@@ -591,6 +753,8 @@ def explicit_cli_profile() -> str | None:
 
 def _apply_profile_override() -> None:
     """Pre-parse --profile/-p and set HERMES_HOME before imports."""
+    if _is_profile_effective_invocation(sys.argv):
+        return
     global _explicit_cli_profile
     _explicit_cli_profile = None
     argv = sys.argv[1:]
@@ -666,6 +830,7 @@ if __name__ == "__main__" and getattr(sys.modules.get("__main__"), "__file__", N
     # override on the stripped argv, and `--profile default` would fall to the sticky profile.
     sys.modules.setdefault("hermes_cli.main", sys.modules["__main__"])
 _apply_profile_override()
+_apply_board_override()
 # ``-p``/active_profile re-homed the process after hermes_bootstrap ran: re-point the temp vars
 # at THIS home's scratch dir (a user-set TMPDIR is still left alone).
 try:
@@ -3326,6 +3491,7 @@ def _build_cli_parser():
     build_logout_parser(subparsers, cmd_logout=cmd_logout)
     build_auth_parser(subparsers, cmd_auth=cmd_auth)
     build_status_parser(subparsers, cmd_status=cmd_status)
+    build_board_parser(subparsers, cmd_board=cmd_board)
     build_pause_parser(subparsers)
     build_cron_parser(subparsers, cmd_cron=cmd_cron)
     build_webhook_parser(subparsers, cmd_webhook=cmd_webhook)

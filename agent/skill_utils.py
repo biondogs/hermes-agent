@@ -412,6 +412,23 @@ def get_skill_search_roots(local: Optional[Path] = None, *, include_project: boo
     skills dir (skills_tool passes its live root); that entry is kept even when missing."""
     roots = [(TIER_PROJECT, d) for d in get_project_skills_dirs()] if include_project else []
     roots.append((TIER_LOCAL, Path(local) if local is not None else get_skills_dir()))
+    # Board-layered skills: union board skills dir via effective_skills_dirs
+    try:
+        from hermes_cli.board_layer import is_layered_board as _is_layered
+        from hermes_cli.board_state import effective_skills_dirs as _board_skills
+        from hermes_cli.kanban_db import get_current_board as _get_board
+        from hermes_cli.profiles import get_active_profile_name as _get_role
+        _board = _get_board()
+        if _board and _is_layered(_board):
+            try:
+                _role = _get_role()
+            except Exception:
+                _role = "default"
+            for _bd in _board_skills(_role, _board):
+                if _bd not in [r[1] for r in roots]:
+                    roots.append((TIER_EXTERNAL, _bd))
+    except Exception:
+        pass
     create_dir = get_skill_create_dir()
     if create_dir is not None and create_dir.is_dir():
         roots.append((TIER_CREATE_DIR, create_dir))

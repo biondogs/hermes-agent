@@ -1100,7 +1100,9 @@ def _init_session_state(agent, session_id, session_db, parent_session_id, reason
     _publish_session_id(agent.session_id)
 
     # ~/.hermes/sessions/ — kept unconditionally for request_dump_*.json debug breadcrumbs.
-    agent.logs_dir = get_hermes_home() / "sessions"
+    # Board-scoped sessions dir when layered; else default profile path.
+    _sr = _board_state_root()
+    agent.logs_dir = (_sr / "sessions") if _sr else get_hermes_home() / "sessions"
     agent.logs_dir.mkdir(parents=True, exist_ok=True)
     _set_defaults(agent, _SESSION_STATE)
 
@@ -1169,13 +1171,32 @@ def _apply_display_config(agent, _agent_cfg, platform):
         _ra().logger.warning("Tool loop guardrail config ignored: %s", _tlg_err)
 
 
+def _board_state_root():
+    """Board-scoped state root when HERMES_KANBAN_BOARD is layered, else None."""
+    try:
+        from hermes_cli.board_layer import is_layered_board as _is_layered
+        from hermes_cli.board_state import state_root as _sr
+        from hermes_cli.kanban_db import get_current_board as _get_board
+        from hermes_cli.profiles import get_active_profile_name as _get_role
+        _board = _get_board()
+        if _board and _is_layered(_board):
+            try:
+                _role = _get_role()
+            except Exception:
+                _role = "default"
+            return _sr(_role, _board)
+    except Exception:
+        pass
+    return None
+
+
 def _memory_provider_init_kwargs(agent, platform) -> dict[str, Any]:
     """Scoping kwargs for ``MemoryManager.initialize_all`` (status_callback is CLI-only:
     gateway status travels a different path and the indicator no-ops without it)."""
     kwargs = {
         "session_id": agent.session_id,
         "platform": platform or "cli",
-        "hermes_home": str(get_hermes_home()),
+        "hermes_home": str(_board_state_root() or get_hermes_home()),
         # platform="cron" (scheduler) / "subagent" (delegate_task) → providers skip writes (MemoryProvider.initialize).
         "agent_context": platform if platform in ("cron", "subagent") else "primary",
     }

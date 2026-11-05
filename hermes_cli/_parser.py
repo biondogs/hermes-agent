@@ -177,6 +177,9 @@ def _add_top_level_flags(parser: argparse.ArgumentParser) -> None:
         "the most recent session (workspace-scoped, like -c with no name)"))
     add("--no-restore-cwd", action="store_true", default=False,
         help="Don't cd into a resumed session's recorded working directory.")
+    add("--board", metavar="BOARD", default=None, help=(
+        "Kanban board slug for this invocation (e.g. --board my-project). "
+        "Pins HERMES_KANBAN_BOARD for the session/worker and enables board-layer composition."))
     add("--in", dest="in_dir", metavar="DIR", default=None, help=(
         "Change into DIR before starting or resuming. Combined with "
         "'--resume latest' or -c, the most recent session for DIR's "

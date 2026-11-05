@@ -3294,7 +3294,18 @@ def _run_one_job_body(
     _fire_scope_tokens = None
     _terminal_scope_token = None
     _identity_token = None
+    _board_env_token = None
     try:
+        # Board-scoped cron: job's declared board must be visible to in-process fire, not just external worker
+        _job_board = job.get("board")
+        if isinstance(_job_board, str) and _job_board.strip():
+            try:
+                from hermes_cli.kanban_db import _CURRENT_BOARD_OVERRIDE, _normalize_board_slug
+                _norm_board = _normalize_board_slug(_job_board.strip())
+                _board_env_token = _CURRENT_BOARD_OVERRIDE.set(_norm_board)
+                os.environ["HERMES_KANBAN_BOARD"] = _norm_board
+            except Exception:
+                pass
         # get_secret() fails closed outside a scope; the ticker thread has none. Delivery adapters
         # resolve credentials, so the scope must span delivery too (reset in the outer finally) —
         # including the crash notice in the except below when claim_dispatch or
@@ -3491,6 +3502,10 @@ def _run_one_job_body(
             from tools.terminal_scope import reset_terminal_scope
 
             reset_terminal_scope(_terminal_scope_token)
+        if _board_env_token is not None:
+            from hermes_cli.kanban_db import _CURRENT_BOARD_OVERRIDE
+            _CURRENT_BOARD_OVERRIDE.reset(_board_env_token)
+            os.environ.pop("HERMES_KANBAN_BOARD", None)
 
 
 def _wait_for_external_cron_worker_body(
@@ -3687,6 +3702,11 @@ def _launch_external_cron_worker(job: dict) -> bool:
         raise
 
     profile_home = _get_hermes_home().resolve()
+    job_board = job.get("board")
+    if isinstance(job_board, str) and job_board.strip():
+        worker_env_extra = {"HERMES_KANBAN_BOARD": job_board.strip()}
+    else:
+        worker_env_extra = {}
     # Same hydrate -> scope -> (routed) multiplex-context install the in-process fire uses, for exactly
     # the env build; the helper's reset order keeps the context from outliving its scope.
     with _fire_secret_scope():
@@ -3695,7 +3715,7 @@ def _launch_external_cron_worker(job: dict) -> bool:
         worker_env = strip_launch_profile_env(build_subprocess_env(
             scrub_secrets=multiplex_active,
             inherit_profile_home=True,
-            extra={"HERMES_HOME": str(profile_home)},
+            extra={"HERMES_HOME": str(profile_home), **worker_env_extra},
         ))
     worker_env = systemd_user_bus_env(worker_env)
     # Unattended worker: the gateway sets HERMES_EXEC_ASK at startup (interactive launches set

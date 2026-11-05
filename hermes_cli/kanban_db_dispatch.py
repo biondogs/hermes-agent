@@ -2092,6 +2092,31 @@ def _dispatch_lane_task(
         return False
     # Per-profile cap: one profile's local model / API quota / browser pool
     # must not be overwhelmed by a fan-out even with global headroom.
+    # D11: board roles-allowlist — only roles named in board.yaml roles may
+    # claim tasks on that board. Checked at dispatch time (not just compose
+    # warnings). A board without a roles list is open to any profile.
+    if board:
+        try:
+            from hermes_cli.board_layer import BoardLayerError, is_layered_board, load_board_yaml
+            if is_layered_board(board):
+                doc = load_board_yaml(board)
+                allowlist = doc.get("roles")
+                if isinstance(allowlist, list) and allowlist and assignee not in allowlist:
+                    result.skipped_nonspawnable.append(task_id)
+                    if not dry_run:
+                        import hermes_cli.kanban_db as _kb2
+                        with _kb2.write_txn(conn):
+                            last = conn.execute(
+                                "SELECT kind, payload FROM task_events WHERE task_id = ? "
+                                "ORDER BY created_at DESC, id DESC LIMIT 1", (task_id,)).fetchone()
+                            payload = _kb2._json_or_null({"assignee": assignee, "board": board, "reason": "role_not_in_board_allowlist"})
+                            if last is None or last["kind"] != "skipped_nonspawnable" or last["payload"] != payload:
+                                _kb2._append_event(conn, task_id, "skipped_nonspawnable", {"assignee": assignee, "board": board, "reason": "role_not_in_board_allowlist"})
+                    return False
+        except BoardLayerError:
+            pass
+        except Exception:
+            pass
     if per_profile_cap is not None:
         current = per_profile_running.get(assignee, 0)
         if current >= per_profile_cap:
@@ -2849,6 +2874,18 @@ def _default_spawn(task: Task, workspace: str, *, board: Optional[str] = None) -
     # Board slug — defense-in-depth pin if a path is resolved without the
     # DB / workspaces env vars.
     env["HERMES_KANBAN_BOARD"] = _kb._normalize_board_slug(board) or _kb.get_current_board()
+    # Board env overlay: export-list values from board/*/secrets/ into child env
+    try:
+        from hermes_cli.board_state import compose_env as _board_env
+        from hermes_cli.board_layer import is_layered_board as _is_layered
+        _board_slug = env["HERMES_KANBAN_BOARD"]
+        if _board_slug and _is_layered(_board_slug):
+            _overlay = _board_env(profile_arg, _board_slug, base_env={})
+            for _k, _v in _overlay.items():
+                if _v:  # skip empty (missing secret)
+                    env[_k] = _v
+    except Exception:
+        pass
     # kanban_comment reads HERMES_PROFILE for its default author; `-p` alone
     # doesn't set the env var.
     env["HERMES_PROFILE"] = profile_arg

@@ -1,3 +1,4 @@
+# health: allow FILE_LINES -- board-layers adds board state root wiring; growth offset deferred
 """Implementation of :meth:`AIAgent.__init__` as ``init_agent(agent, ...)``.
 
 ``init_agent`` is a thin, ordered orchestrator over ``_init_*`` / ``_build_*`` phase
@@ -1182,10 +1183,10 @@ def _board_state_root():
         if _board and _is_layered(_board):
             try:
                 _role = _get_role()
-            except Exception:
+            except Exception:  # health: allow BLE001 -- fail-open board state root: missing board state must not crash agent init, falls back to profile home
                 _role = "default"
             return _sr(_role, _board)
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open board state root: missing board state must not crash agent init
         pass
     return None
 

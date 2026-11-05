@@ -422,12 +422,12 @@ def get_skill_search_roots(local: Optional[Path] = None, *, include_project: boo
         if _board and _is_layered(_board):
             try:
                 _role = _get_role()
-            except Exception:
+            except Exception:  # health: allow BLE001 -- fail-open skill roots: board skills dir may be absent
                 _role = "default"
             for _bd in _board_skills(_role, _board):
                 if _bd not in [r[1] for r in roots]:
                     roots.append((TIER_EXTERNAL, _bd))
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open skill roots: board skills dir may be absent
         pass
     create_dir = get_skill_create_dir()
     if create_dir is not None and create_dir.is_dir():

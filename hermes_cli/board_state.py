@@ -115,10 +115,10 @@ def board_env_names(board: str | None, role: str | None = None) -> list[str]:
         mp = bd / manifest_rel
     if mp.is_file():
         try:
-            doc = yaml.safe_load(mp.read_text(encoding="utf-8")) or {}
+            doc = yaml.safe_load(mp.read_text(encoding="utf-8-sig")) or {}
             ex = doc.get("export") or []
             return [str(n) for n in ex if isinstance(n, str)]
-        except Exception:
+        except Exception:  # health: allow BLE001 -- fail-open manifest read: board env manifest may be absent or malformed, return empty
             return []
     return []
 
@@ -147,8 +147,8 @@ def compose_env(role: str, board: str | None, base_env: dict[str, str] | None = 
     if not mp.is_file():
         return env
     try:
-        doc = yaml.safe_load(mp.read_text(encoding="utf-8")) or {}
-    except Exception:
+        doc = yaml.safe_load(mp.read_text(encoding="utf-8-sig")) or {}
+    except Exception:  # health: allow BLE001 -- fail-open manifest read: board env manifest may be absent or malformed, return empty
         return env
     exports = doc.get("export") or []
     vars_cfg = doc.get("vars") or {}
@@ -179,7 +179,7 @@ def _read_secret(board_home: Path, name: str, spec: dict | None = None) -> str:
     if not secrets_path.is_file():
         return ""
     try:
-        for line in secrets_path.read_text(encoding="utf-8").splitlines():
+        for line in secrets_path.read_text(encoding="utf-8-sig").splitlines():
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
@@ -187,6 +187,6 @@ def _read_secret(board_home: Path, name: str, spec: dict | None = None) -> str:
                 k, v = line.split("=", 1)
                 if k.strip() == name:
                     return v.strip().strip('"').strip("'")
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open secret read: secrets file may be absent, return empty
         pass
     return ""

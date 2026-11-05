@@ -129,7 +129,7 @@ def test_env_pin_board_conflict_refuses(tmp_path):
     env["PYTHONPATH"] = str(Path(__file__).resolve().parents[1])
     env["HERMES_KANBAN_BOARD"] = "alpha"
     env["HERMES_KANBAN_TASK"] = "t_fake123"
-    r = subprocess.run([sys.executable, str(code)], capture_output=True, text=True, env=env)
+    r = subprocess.run([sys.executable, str(code)], capture_output=True, text=True, env=env, check=False)
     assert r.returncode != 0, f"expected refusal, got rc=0 stdout={r.stdout}"
     assert "board-pinned agent" in r.stderr
     assert "refusing cross-board operation" in r.stderr
@@ -152,10 +152,10 @@ def test_ambient_env_explicit_board_wins(tmp_path):
     env["HERMES_KANBAN_BOARD"] = "alpha"
     env.pop("HERMES_KANBAN_TASK", None)
     env.pop("HERMES_DELEGATED_CHILD_CONTEXT", None)
-    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env)
+    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env, check=False)
     assert r.returncode == 0, f"expected explicit wins, got rc={r.returncode} stderr={r.stderr}"
     assert "beta" in r.stdout, f"expected HERMES_KANBAN_BOARD=beta, got {r.stdout!r} {r.stderr!r}"
-    assert "SHOULD_NOT_REACH" not in r.stdout or True
+    assert True  # was SHOULD_NOT_REACH guard, always true
 
 
 def test_env_pin_board_same_ok():
@@ -214,7 +214,7 @@ def test_explicit_profile_honored_with_bare_effective_token(monkeypatch, tmp_pat
     env = dict(os.environ)
     env["PYTHONPATH"] = str(Path(__file__).resolve().parents[1])
     env.pop("HERMES_KANBAN_BOARD", None)
-    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env)
+    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env, check=False)
     assert r.returncode == 0, f"probe failed: {r.stderr}"
     assert "assistant" in r.stdout, f"expected assistant profile honored, got {r.stdout!r} {r.stderr!r}"
 
@@ -284,7 +284,7 @@ def test_d11_roles_allowlist(monkeypatch):
             result3 = FakeResult()
             result3.skipped_nonspawnable = []
             fake_row3 = {"id": "t_d11_brick"}
-            ok3 = disp._dispatch_lane_task(
+            _ok3 = disp._dispatch_lane_task(
                 mock_conn, fake_row3, assignee="anyone", result=result3,
                 lane="implement", dry_run=True, ttl_seconds=900, board="alpha",
                 failure_limit=3, spawn_fn=lambda *a, **kw: None,
@@ -379,7 +379,7 @@ def test_real_spawn_child_pinned_isolation(tmp_path):
     env["HERMES_KANBAN_TASK"] = "t_child123"
     env.pop("HERMES_DELEGATED_CHILD_CONTEXT", None)
     env.pop("HERMES_BOARDS_CAPABILITY", None)
-    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env)
+    r = subprocess.run([sys.executable, str(probe)], capture_output=True, text=True, env=env, check=False)
     assert r.returncode == 0, f"child probe failed rc={r.returncode} stdout={r.stdout!r} stderr={r.stderr!r}"
     assert "SOUL_OK" in r.stdout
     assert "SKILL_OK" in r.stdout

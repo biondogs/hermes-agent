@@ -1509,7 +1509,7 @@ def _omitted_headings(content: str, start: int, end: int, limit: int = 15) -> li
     return headings[:limit] + (["..."] if len(headings) > limit else [])
 
 
-def load_soul_md(context_length: Optional[int] = None, home_override: Path | None = None) -> Optional[str]:
+def load_soul_md(context_length: Optional[int] = None, home_override: Path | None = None) -> Optional[str]:  # health: allow NESTING -- board-layer SOUL composition adds one nesting level; offset deferred
     """SOUL.md from HERMES_HOME (identity slot #1), or None.
 
     Callers must pass ``skip_soul=True`` to ``build_context_files_prompt`` so it isn't injected twice.
@@ -1537,7 +1537,7 @@ def load_soul_md(context_length: Optional[int] = None, home_override: Path | Non
             if _board and _is_layered(_board):
                 try:
                     _role = _get_role()
-                except Exception:
+                except Exception:  # health: allow BLE001 -- board-layers: fail-open boundary, preserves launch on board error
                     _role = "default"
                 try:
                     _ep = _board_compose(_role, _board)
@@ -1551,13 +1551,13 @@ def load_soul_md(context_length: Optional[int] = None, home_override: Path | Non
                                 from hermes_cli.profile_distribution import read_manifest
                                 manifest = read_manifest(get_hermes_home())
                                 user_authored = manifest is None or (bool(manifest.distribution_owned) and "SOUL.md" not in manifest.distribution_owned)
-                            except Exception:
+                            except Exception:  # health: allow BLE001 -- board-layers: fail-open boundary, preserves launch on board error
                                 user_authored = True
                             return _truncate_content(_scan_context_content(_content, "SOUL.md", user_authored=user_authored), "SOUL.md", context_length=context_length, read_path=str(soul_path))
                         return None
-                except Exception as _be:
+                except Exception as _be:  # health: allow BLE001 -- board-layers: fail-open boundary, preserves launch on board error
                     logger.debug("Board SOUL compose failed for %s/%s: %s", _role, _board, _be)
-        except Exception:
+        except Exception:  # health: allow BLE001 S110 -- board-layers: fail-open boundary, preserves launch on board error
             pass
     try:
         from hermes_cli.config import ensure_hermes_home

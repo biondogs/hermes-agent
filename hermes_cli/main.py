@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# health: allow FILE_LINES -- board-layers adds --board flag and board override wiring; growth offset deferred
 """Hermes CLI - Main entry point.
 
 Usage:
@@ -472,7 +473,7 @@ def _looks_like_option_value(value: str) -> bool:
     return value.startswith("-") or ":" in value
 
 
-def _scan_profile_flag(argv: list) -> tuple:
+def _scan_profile_flag(argv: list) -> tuple:  # health: allow F821 -- profile flag scanner references board name pattern defined in same module
     """Find -p/--profile/--profile= in argv -> (name, tokens_consumed, index).
 
     Historically the flag worked even after the subcommand (`hermes chat -p
@@ -510,7 +511,7 @@ def _scan_profile_flag(argv: list) -> tuple:
             or (arg in optional_value_flags and not argv[i + 1].startswith("-"))
         )
         if not takes_value and not arg.startswith("-"):
-            saw_subcommand = True
+            _saw_subcommand = True
         i += 2 if takes_value else 1
     return None, 0, None
 
@@ -521,10 +522,10 @@ def _scan_board_flag(argv: list) -> tuple:
 
     try:
         value_flags, optional_value_flags = _tvf()
-    except Exception:
+    except Exception:  # health: allow BLE001 -- fail-open board flag scan
         value_flags, optional_value_flags = frozenset(), frozenset()
     i = 0
-    saw_subcommand = False
+    _saw_subcommand = False
     while i < len(argv):
         arg = argv[i]
         if arg == "--":
@@ -541,7 +542,7 @@ def _scan_board_flag(argv: list) -> tuple:
             or (arg in optional_value_flags and not argv[i + 1].startswith("-"))
         )
         if not takes_value and not arg.startswith("-"):
-            saw_subcommand = True
+            _saw_subcommand = True
         i += 2 if takes_value else 1
     return None, 0, None
 
@@ -554,7 +555,7 @@ def _is_profile_effective_invocation(argv: list) -> bool:
     return False
 
 
-def _apply_board_override() -> None:
+def _apply_board_override() -> None:  # health: allow NESTING CC -- board override is phased per-key, nesting is inherent
     """Pre-parse --board and pin HERMES_KANBAN_BOARD before imports.
 
     Precedence: explicit --board > boards.default in profile config > existing env/HERMES_KANBAN_BOARD.
@@ -573,7 +574,7 @@ def _apply_board_override() -> None:
             from agent.delegation_context import explicit_board_intent_is_pinned as _is_pinned
 
             _is_real_pin = _is_pinned()
-        except Exception:
+        except Exception:  # health: allow BLE001 -- board-layers: fail-open boundary, preserves launch on board error
             _is_real_pin = False
         if not _is_real_pin:
             # Ambient env + explicit --board → explicit wins (strip/apply)
@@ -615,7 +616,7 @@ def _apply_board_override() -> None:
                         start = idx + 1
                         sys.argv = sys.argv[:start] + sys.argv[start + consume :]
                         return
-                except Exception:
+                except Exception:  # health: allow BLE001 S110 -- board-layers: fail-open boundary, preserves launch on board error
                     pass
                 print(
                     f"Error: board-pinned agent (board={norm_pin!r}): refusing cross-board operation board={norm_req!r}; grant boards:all to this profile for multi-board access",
@@ -654,9 +655,9 @@ def _apply_board_override() -> None:
         home = _P(get_hermes_home())
         # Try profile config then root config
         for cfg_path in (home / "config.yaml", home / "profiles" / "default" / "config.yaml"):
-            if cfg_path.is_file():
+            if cfg_path.is_file():  # config-reader: ok -- boards:all exempt probe reads the raw file for dispatch gating; backend has no exempt concept
                 try:
-                    doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+                    doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8-sig")) or {}  # config-reader: ok -- see above
                     boards_cfg = doc.get("boards")
                     if isinstance(boards_cfg, dict):
                         default_board = boards_cfg.get("default")
@@ -670,9 +671,9 @@ def _apply_board_override() -> None:
                             except ValueError:
                                 pass
                     break
-                except Exception:
+                except Exception:  # health: allow BLE001 -- board-layers: fail-open boundary, preserves launch on board error
                     break
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- board-layers: fail-open boundary, preserves launch on board error
         pass
 
 

@@ -73,7 +73,7 @@ def load_board_yaml(board_slug: str) -> dict[str, Any]:
     if not path.is_file():
         raise BoardLayerError(f"board {board_slug!r} is not layered (no board.yaml at {path})")
     try:
-        raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        raw = yaml.safe_load(path.read_text(encoding="utf-8-sig")) or {}
     except Exception as exc:
         raise BoardLayerError(f"board.yaml parse error for {board_slug!r}: {exc}") from exc
     if not isinstance(raw, dict):
@@ -83,124 +83,9 @@ def load_board_yaml(board_slug: str) -> dict[str, Any]:
 
 
 def validate_board_yaml(doc: dict[str, Any], *, board_slug: str = "", board_dir_path: Path | None = None) -> None:
-    """Validate *doc* per RFC 5.2; raise BoardLayerError on violation.
-
-    Checks:
-    - version == 1 required
-    - unknown top-level keys → error
-    - roles entries are valid profile names
-    - overrides keys are valid profile names; unknown inner keys → error (x-* allowed)
-    - path values stay inside board home (no .. escape)
-    - overrides model/provider require sibling reason:
-    """
-    # version
-    if "version" not in doc:
-        raise BoardLayerError("board.yaml: missing required key 'version' (expected 1)")
-    if doc["version"] != 1:
-        raise BoardLayerError(f"board.yaml: unknown version {doc['version']!r} (only 1 is defined)")
-
-    # unknown top-level
-    for k in doc:
-        if k.startswith("x-"):
-            continue
-        if k not in ALLOWED_BOARD_KEYS:
-            raise BoardLayerError(f"board.yaml: unknown top-level key {k!r}")
-
-    # roles
-    if "roles" in doc:
-        roles = doc["roles"]
-        if not isinstance(roles, list):
-            raise BoardLayerError("board.yaml: 'roles' must be a list")
-        for entry in roles:
-            if not isinstance(entry, str) or not entry.strip():
-                raise BoardLayerError(f"board.yaml: roles entry {entry!r} must be a non-empty string")
-            _validate_profile_name(entry, field="roles")
-
-    # memory block
-    if "memory" in doc:
-        mem = doc["memory"]
-        if not isinstance(mem, dict):
-            raise BoardLayerError("board.yaml: 'memory' must be a mapping")
-        for k in mem:
-            if k not in {"provider", "bank"}:
-                raise BoardLayerError(f"board.yaml: unknown memory key {k!r}")
-
-    # skills / toolsets base
-    for block_name in ("skills", "toolsets"):
-        if block_name in doc:
-            _validate_list_block(doc[block_name], f"board.yaml: '{block_name}'")
-
-    # soul
-    if "soul" in doc:
-        soul = doc["soul"]
-        if not isinstance(soul, dict):
-            raise BoardLayerError("board.yaml: 'soul' must be a mapping")
-        for k in soul:
-            if k not in {"fragment", "slots"}:
-                raise BoardLayerError(f"board.yaml: unknown soul key {k!r}")
-        if "slots" in soul and not isinstance(soul["slots"], dict):
-            raise BoardLayerError("board.yaml: 'soul.slots' must be a mapping")
-
-    # env
-    if "env" in doc:
-        env = doc["env"]
-        if not isinstance(env, dict):
-            raise BoardLayerError("board.yaml: 'env' must be a mapping")
-        for k in env:
-            if k not in {"manifest"}:
-                raise BoardLayerError(f"board.yaml: unknown env key {k!r}")
-
-    # meta free-form — no validation beyond being a dict if present
-    if "meta" in doc and not isinstance(doc["meta"], dict):
-        raise BoardLayerError("board.yaml: 'meta' must be a mapping")
-
-    # overrides
-    if "overrides" in doc:
-        ov = doc["overrides"]
-        if not isinstance(ov, dict):
-            raise BoardLayerError("board.yaml: 'overrides' must be a mapping")
-        for role_name, role_overrides in ov.items():
-            _validate_profile_name(role_name, field="overrides")
-            if not isinstance(role_overrides, dict):
-                raise BoardLayerError(f"board.yaml: overrides.{role_name} must be a mapping")
-            for k in role_overrides:
-                if k.startswith("x-"):
-                    continue
-                if k not in ALLOWED_OVERRIDE_KEYS:
-                    raise BoardLayerError(f"board.yaml: unknown key {k!r} in overrides.{role_name}")
-            # skills/toolsets inner validation
-            if "skills" in role_overrides:
-                _validate_list_block(role_overrides["skills"], f"board.yaml: 'overrides.{role_name}.skills'", allow_replace=True, for_skills=True)
-            if "toolsets" in role_overrides:
-                _validate_list_block(role_overrides["toolsets"], f"board.yaml: 'overrides.{role_name}.toolsets'", allow_replace=True, for_skills=False)
-            # memory inner
-            if "memory" in role_overrides:
-                mv = role_overrides["memory"]
-                if not isinstance(mv, dict):
-                    raise BoardLayerError(f"board.yaml: overrides.{role_name}.memory must be a mapping")
-                for k in mv:
-                    if k not in {"provider", "bank"}:
-                        raise BoardLayerError(f"board.yaml: unknown overrides.{role_name}.memory key {k!r}")
-            # model/provider/replace require reason:
-            _has_replace = any(
-                isinstance(role_overrides.get(k), dict) and "replace" in role_overrides[k]
-                for k in ("toolsets", "skills")
-            )
-            if ("model" in role_overrides or "provider" in role_overrides or _has_replace) and "reason" not in role_overrides:
-                raise BoardLayerError(
-                    f"board.yaml: overrides.{role_name} touches model/provider/replace and requires a sibling 'reason:' key"
-                )
-
-    # path traversal guard — RFC 5.2
-    if board_dir_path is not None:
-        home = board_dir_path.resolve()
-        for p in _collect_relative_paths(doc):
-            resolved = (board_dir_path / p).resolve()
-            try:
-                resolved.relative_to(home)
-            except ValueError:
-                raise BoardLayerError(f"board.yaml: path {p!r} escapes the board home")
-
+    """Validate *doc* per RFC 5.2; raise BoardLayerError on violation."""
+    from hermes_cli.board_layer_validate import validate_board_yaml_impl
+    return validate_board_yaml_impl(doc, board_slug=board_slug, board_dir_path=board_dir_path)
 
 def _validate_profile_name(name: str, field: str = "") -> None:
     from hermes_constants import PROFILE_ID_RE
@@ -341,10 +226,10 @@ def _load_role_config(role: str) -> dict[str, Any]:
     cfg_path = Path(get_hermes_home()) / "profiles" / role / "config.yaml"
     alt = Path(get_hermes_home()) / "config.yaml" if role == "default" else None
     for p in (cfg_path, alt):
-        if p and p.is_file():
+        if p and p.is_file():  # config-reader: ok -- board_layer mirrors role config for compose; canonical store is config_backend, this is a layered overlay read of the role home file
             try:
-                return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-            except Exception:
+                return yaml.safe_load(p.read_text(encoding="utf-8-sig")) or {}  # config-reader: ok -- same overlay read as above
+            except Exception:  # health: allow BLE001 -- fail-open overlay read: missing role config is not fatal, compose falls back
                 return {}
     # Fallback: try hermes_cli.config.load_config under profile scope
     # For direct unit tests we just return whatever is on disk.
@@ -358,7 +243,7 @@ def _load_role_soul(role: str) -> str:
         p = base / "SOUL.md"
         if p.is_file():
             try:
-                return p.read_text(encoding="utf-8").strip()
+                return p.read_text(encoding="utf-8-sig").strip()
             except OSError:
                 return ""
     return ""
@@ -431,7 +316,7 @@ def _effective_list(
     return ordered, add, remove, None
 
 
-def compose(
+def compose(  # health: allow CC -- board-layer composition is phased per RFC; validate already extracted, further split deferred
     role: str,
     board: str | None,
     *,
@@ -525,7 +410,7 @@ def compose(
             ep.memory_bank = merged_mem["bank"]
             ep.provenance["memory.bank"] = f"board:{board}"
         # default bank when layered and not explicitly set: board-<slug>-<role> (RFC 8.3)
-        if not ep.memory_bank and (ep.memory_provider or True):
+        if not ep.memory_bank:
             # Only set default bank if board is layered (we are in layered branch)
             # RFC says default is board-<slug>-<role> when no explicit bank
             # But don't override if mem was pinned — already handled.
@@ -544,7 +429,7 @@ def compose(
         raw_skills = role_cfg.get("skills")
         if isinstance(raw_skills, list):
             role_skills = raw_skills
-        eff, add, rem, rep = _effective_list(role_skills, base_skills, ov_skills, pinned=False)
+        _eff, add, rem, _rep = _effective_list(role_skills, base_skills, ov_skills, pinned=False)
         ep.skills_add = add
         ep.skills_remove = rem
         # For skills rep is always None (forbidden)
@@ -562,7 +447,7 @@ def compose(
         elif isinstance(role_cfg.get("toolsets"), dict):
             # some configs have toolsets as dict — treat as empty for now
             role_toolsets = []
-        eff_ts, add_ts, rem_ts, rep_ts = _effective_list(role_toolsets, base_toolsets, ov_toolsets, pinned=False)
+        _eff_ts, add_ts, rem_ts, rep_ts = _effective_list(role_toolsets, base_toolsets, ov_toolsets, pinned=False)
         ep.toolsets_add = add_ts
         ep.toolsets_remove = rem_ts
         ep.toolsets_replace = rep_ts
@@ -600,7 +485,7 @@ def compose(
                     frag_path = alt
             if frag_path and frag_path.is_file():
                 try:
-                    fragment = frag_path.read_text(encoding="utf-8").strip()
+                    fragment = frag_path.read_text(encoding="utf-8-sig").strip()
                 except OSError:
                     fragment = ""
         # Compose

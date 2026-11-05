@@ -46,7 +46,6 @@ class TestBoardsAll:
         (e2e_home / "config.yaml").write_text(yaml.safe_dump({
             "boards": {"capability": "all", "granted_by": "operator", "granted_at": "2026-11-01"},
         }), encoding="utf-8")
-        from pathlib import Path
         prof = e2e_home / "profiles" / "assistant"
         prof.mkdir(parents=True, exist_ok=True)
         (prof / "config.yaml").write_text(yaml.safe_dump({
@@ -93,7 +92,7 @@ class TestZeroChange:
         (prof / "SOUL.md").write_text(soul, encoding="utf-8")
         from hermes_cli.board_layer import compose
         ep_none = compose("assistant", None)
-        ep_nowrap = compose("assistant", "none") if False else ep_none  # 'none' is handled by CLI, not compose
+        _ep_nowrap = compose("assistant", "none") if False else ep_none  # 'none' is handled by CLI, not compose
         assert ep_none.is_layered is False
         assert ep_none.soul_text == soul.strip()
         assert ep_none.provenance == {}

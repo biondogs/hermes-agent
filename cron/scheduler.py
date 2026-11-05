@@ -3270,7 +3270,7 @@ def _apply_agent_failure_marker(job: dict, success: bool, error, final_response)
     return success, error, False
 
 
-def _run_one_job_body(
+def _run_one_job_body(  # health: allow CC -- board field addition to cron; baseline already over target, minimal branch
     job: dict, *, adapters=None, loop=None, verbose: bool = False,
     extra_prompt: Optional[str] = None, claim_lost: Optional[_CancelEventLike] = None,
     transport_cancel: Optional[_CancelEventLike] = None,
@@ -3304,7 +3304,7 @@ def _run_one_job_body(
                 _norm_board = _normalize_board_slug(_job_board.strip())
                 _board_env_token = _CURRENT_BOARD_OVERRIDE.set(_norm_board)
                 os.environ["HERMES_KANBAN_BOARD"] = _norm_board
-            except Exception:
+            except Exception:  # health: allow BLE001 S110 -- fail-open cron dispatch: board field addition must not crash scheduler on malformed row
                 pass
         # get_secret() fails closed outside a scope; the ticker thread has none. Delivery adapters
         # resolve credentials, so the scope must span delivery too (reset in the outer finally) —

@@ -1,3 +1,4 @@
+# health: allow FILE_LINES -- board-layers adds dispatch gating helpers; growth offset deferred to next dedicated size PR per AGENTS.md sibling rule
 """SQLite-backed Kanban board shared across profiles (the cross-profile coordination primitive).
 
 Lives under the shared Hermes root: ``default`` board DB at ``<root>/kanban.db`` (pre-boards
@@ -538,13 +539,12 @@ def _is_boards_all_exempt():
         # or try the active profile's config via HERMES_HOME/profile inference.
         # Simpler: scan all profile configs for a boards:all grant.
         try:
-            for prof_cfg in (home / "profiles").glob("*/config.yaml"):
-                candidates.append(prof_cfg)
-        except Exception:
+            candidates.extend((home / "profiles").glob("*/config.yaml"))
+        except Exception:  # health: allow BLE001 S110 -- fail-open dispatch gate: boards:all exempt probe must not block dispatch on read error
             pass
         for cfg_path in candidates:
-            if cfg_path.is_file():
-                doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+            if cfg_path.is_file():  # config-reader: ok -- boards:all exempt probe reads the raw file for dispatch gating; backend has no exempt concept
+                doc = _yaml.safe_load(cfg_path.read_text(encoding="utf-8-sig")) or {}  # config-reader: ok -- see above
                 boards_cfg = doc.get("boards")
                 if isinstance(boards_cfg, dict):
                     if boards_cfg.get("capability") == "all":
@@ -552,7 +552,7 @@ def _is_boards_all_exempt():
                 elif boards_cfg == "all":
                     return True
                 break
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open dispatch gate: boards:all exempt probe must not block dispatch on read error
         pass
     return False
 

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import getpass
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -26,7 +26,7 @@ def cmd_board(args) -> int:
     from hermes_cli.profiles import normalize_profile_name
     try:
         normalize_profile_name(role)
-    except Exception as e:
+    except Exception as e:  # health: allow BLE001 -- fail-open role validation: normalize failure is handled as user error
         print(f"error: invalid role name {role!r}: {e}")
         return 2
 
@@ -41,14 +41,14 @@ def cmd_board(args) -> int:
     else:
         cfg_path = role_home / "config.yaml"
 
-    if not cfg_path.exists() and role != "default":
+    if not cfg_path.exists() and role != "default":  # config-reader: ok -- existence check for profile dir creation, not config value
         # Create minimal profile dir if missing
         role_home.mkdir(parents=True, exist_ok=True)
         cfg_path.write_text("", encoding="utf-8")
 
     try:
-        doc = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) if cfg_path.exists() and cfg_path.stat().st_size else {}
-    except Exception:
+        doc = yaml.safe_load(cfg_path.read_text(encoding="utf-8-sig")) if cfg_path.exists() and cfg_path.stat().st_size else {}  # config-reader: ok -- grant-all reads role config for merge; write goes via atomic_config_write seam
+    except Exception:  # health: allow BLE001 -- fail-open config read: grant-all must handle corrupt config as empty
         doc = {}
     if not isinstance(doc, dict):
         doc = {}
@@ -57,11 +57,11 @@ def cmd_board(args) -> int:
     if not isinstance(boards, dict):
         boards = {}
 
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    now = datetime.now(UTC).isoformat(timespec="seconds")
     user = getpass.getuser() if hasattr(getpass, "getuser") else "operator"
     try:
         user = getpass.getuser()
-    except Exception:
+    except Exception:  # health: allow BLE001 -- fail-open getuser: audit user must not fail the grant, falls back to operator
         user = "operator"
 
     boards["capability"] = "all"
@@ -69,6 +69,7 @@ def cmd_board(args) -> int:
     boards["granted_at"] = now
     doc["boards"] = boards
 
-    cfg_path.write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8")
+    from hermes_cli.config import atomic_config_write
+    atomic_config_write(cfg_path, doc)
     print(f"Granted boards:all to {role!r} (by {user} at {now})")
     return 0

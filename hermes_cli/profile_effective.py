@@ -57,7 +57,7 @@ def _env_names(ep) -> list[tuple[str, str]]:
     try:
         from hermes_cli.board_state import board_env_names as _ben
         names = _ben(board, getattr(ep, "_role", None) or getattr(ep, "role", None))
-    except Exception:
+    except Exception:  # health: allow BLE001 -- fail-open manifest read: board env manifest may be absent
         names = []
     # Fallback when strict compose fails (e.g. unfilled slot) — read manifest directly
     if not names:
@@ -68,11 +68,11 @@ def _env_names(ep) -> list[tuple[str, str]]:
             for cand in (bd / manifest_rel.lstrip("./"), bd / manifest_rel):
                 if cand.is_file():
                     import hermes_yaml as _yaml
-                    doc = _yaml.safe_load(cand.read_text(encoding="utf-8")) or {}
+                    doc = _yaml.safe_load(cand.read_text(encoding="utf-8-sig")) or {}
                     ex = doc.get("export") or []
                     names = [str(n) for n in ex if isinstance(n, str)]
                     break
-        except Exception:
+        except Exception:  # health: allow BLE001 S110 -- fail-open manifest read: board env manifest may be absent
             pass
     if names:
         provenance = getattr(ep, "provenance", {}) or {}
@@ -93,7 +93,7 @@ def _effective_warnings(ep) -> list[str]:
     try:
         env_only = [n for n, _ in _env_names(ep)]
         base.extend(_credential_warnings(env_only))
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open warning aggregation: warning collection must not fail the render
         pass
     # Deduplicate while preserving order
     seen: set[str] = set()
@@ -105,7 +105,7 @@ def _effective_warnings(ep) -> list[str]:
     return out
 
 
-def render_text(ep, *, role: str, board_arg: str | None) -> str:
+def render_text(ep, *, role: str, board_arg: str | None) -> str:  # health: allow CC -- dry-run renderer is linear per-section output
     lines: list[str] = []
     posture, detail = _isolation_posture(ep)
     lines.append("=" * 72)
@@ -265,7 +265,7 @@ def cmd_profile_effective(args):
         raise
     except AssertionError:
         _die(f"invalid profile name {role!r}", 2)
-    except Exception:
+    except Exception:  # health: allow BLE001 S110 -- fail-open compose: profile effective render must not crash on bad board yaml, surfaces error instead
         pass
 
     # Ensure profile exists (but allow rendering even if missing — compose handles it)
@@ -275,7 +275,7 @@ def cmd_profile_effective(args):
         from hermes_cli.board_layer import BoardLayerError, compose
         assert isinstance(role, str)
         ep = compose(role, board_slug, strict_slots=False)
-    except Exception as exc:
+    except Exception as exc:  # health: allow BLE001 -- fail-open compose: profile effective render must not crash
         # BoardLayerError and validation errors -> non-zero with readable diag
         from hermes_cli.board_layer import BoardLayerError as BLE
         if isinstance(exc, BLE):

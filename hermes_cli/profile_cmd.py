@@ -626,6 +626,7 @@ PROFILE_ACTIONS = {
     'install': _profile_install,
     'update': _profile_update,
     'info': _profile_info,
+    'effective': lambda args: __import__('hermes_cli.profile_effective', fromlist=['cmd_profile_effective']).cmd_profile_effective(args),
 }
 
 

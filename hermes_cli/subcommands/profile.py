@@ -161,4 +161,13 @@ def build_profile_parser(subparsers, *, cmd_profile: Callable) -> None:
         "info", help="Show a profile's distribution manifest (version, requirements, source)")
     profile_info.add_argument("profile_name", help="Profile to inspect")
 
+    # --- Board-layers: effective dry-run renderer (BOARD-LAYERS-2-EFFECTIVE) ---
+    # Docs recipe: subcommands/profile.py build_profile_parser (same file all other
+    # profile subcommands use) + hermes_cli/profile_cmd.py PROFILE_ACTIONS dispatch.
+    profile_effective = profile_subparsers.add_parser(
+        "effective", help="Show effective composed profile for a board (dry-run)")
+    profile_effective.add_argument("--profile", dest="effective_profile", required=True, help="Role profile name")
+    profile_effective.add_argument("--board", dest="effective_board", required=True, help="Board slug or 'none' for role alone")
+    profile_effective.add_argument("--json", dest="json", action="store_true", help="JSON output")
+
     profile_parser.set_defaults(func=cmd_profile)

@@ -434,23 +434,15 @@ def current_board_path() -> Path:
 _PROFILE_BOARD_PIN_CACHE: dict[str, tuple[int, Optional[str]]] = {}
 
 
-def profile_board_pin() -> Optional[str]:
-    """Active profile's board pin from its config.yaml ``kanban.board`` key.
+def _board_pin_for_profile_home(home: Path) -> Optional[str]:
+    """Shared pin extraction: ``kanban.board`` from one profile home's raw YAML.
 
-    ``None`` whenever the active profile has no pin, the value is malformed,
-    or the pinned board is missing/archived — callers fall through to the
-    shared resolution chain. Deliberately reads the raw YAML (not the merged
-    config) so a profile-scoped ``kanban:`` key can never interact with the
-    root dispatcher config's ``kanban:`` section, and never raises: pin
-    resolution must not crash unpinned callers. Never resolves through
-    ``HERMES_KANBAN_HOME`` — the profile home and the board root are
+    Never raises: pin resolution must not crash unpinned callers. Cache is keyed
+    by the resolved home path (mtime-invalidated), so the active-home and
+    named-profile variants share entries for the same directory. Never resolves
+    through ``HERMES_KANBAN_HOME`` — the profile home and the board root are
     independent by design (see :func:`kanban_home`).
     """
-    try:
-        from hermes_constants import get_hermes_home
-        home = Path(get_hermes_home())
-    except Exception:
-        return None
     key = str(home)
     cfg = home / "config.yaml"
     try:
@@ -483,6 +475,51 @@ def profile_board_pin() -> Optional[str]:
         slug = None
     _PROFILE_BOARD_PIN_CACHE[key] = (mtime, slug)
     return slug
+
+
+def profile_board_pin() -> Optional[str]:
+    """Active profile's board pin from its config.yaml ``kanban.board`` key.
+
+    ``None`` whenever the active profile has no pin, the value is malformed,
+    or the pinned board is missing/archived — callers fall through to the
+    shared resolution chain. Deliberately reads the raw YAML (not the merged
+    config) so a profile-scoped ``kanban:`` key can never interact with the
+    root dispatcher config's ``kanban:`` section. Never resolves through
+    ``HERMES_KANBAN_HOME`` — the profile home and the board root are
+    independent by design (see :func:`kanban_home`).
+    """
+    try:
+        from hermes_constants import get_hermes_home
+        home = Path(get_hermes_home())
+    except Exception:
+        return None
+    return _board_pin_for_profile_home(home)
+
+
+def named_profile_board_pin(profile: Optional[str]) -> Optional[str]:
+    """A NAMED profile's board pin — resolved by profile NAME, not the active home.
+
+    Notification subscriptions are stamped with the profile name of the session
+    that created them; deciding whether that profile may own a row on a given
+    board must therefore resolve by name, independent of whichever home the
+    caller's thread is currently scoped to (F22 cross-board butler wakes,
+    2026-10-24: a default-board row stamped ``swco-butler`` woke that butler
+    because wake-profile selection ignored board pins). Mirrors
+    :func:`profile_board_pin`'s fail-open contract: ``None`` for an empty,
+    unknown or invalid profile name, a missing config, a malformed value, or a
+    missing/archived pinned board. ``"default"`` resolves through the default
+    root home like every other :func:`hermes_cli.profiles.get_profile_dir`
+    consumer.
+    """
+    stamp = (profile or "").strip()
+    if not stamp:
+        return None
+    try:
+        from hermes_cli.profiles import get_profile_dir
+        home = Path(get_profile_dir(stamp))
+    except Exception:
+        return None
+    return _board_pin_for_profile_home(home)
 
 
 def get_current_board() -> str:

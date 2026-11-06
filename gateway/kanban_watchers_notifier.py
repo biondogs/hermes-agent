@@ -159,6 +159,67 @@ def _platform_names(mapping: Any) -> set[str]:
     return {getattr(platform, "value", str(platform)).lower() for platform in mapping}
 
 
+# A cross-board row that could not be healed (no owning profile, or a failed
+# re-stamp) is a permanent dead-end until someone re-subscribes: like the
+# anchorless/unroutable gates, say so ONCE per row at WARNING, not every tick.
+_CROSS_BOARD_WARNED: set[tuple] = set()
+
+# Platforms whose chat ids are keys in the STAMPED profile's own session store
+# (TUI threads, local REPL sessions, api_server sessions): deriving those rows
+# to a board owner would point them at a session the owner profile never sees.
+_SESSION_BOUND_PLATFORMS = frozenset({"tui", "local", "api_server"})
+
+
+def _sub_pinned_off_board(slug: str, sub: dict) -> tuple[Optional[str], str]:
+    """``(pin, stamp)`` when a sub's stamped profile is board-pinned to ANOTHER board.
+
+    Notification rows are stamped with the profile name of the session that
+    created them. A profile carrying a ``kanban.board`` pin is fenced to that
+    board at the tool layer (602ea0a874): its unpinned kanban ops resolve to
+    the pin and explicit other-board calls are refused, so post-fence it can
+    never legitimately own a row anywhere else. A row stamped with such a
+    profile on any OTHER board is residue of the pre-fence misfiling path (F21:
+    creates that fell through the shared ``current`` pointer) and must never be
+    claimed or woken through that profile — the notifier's board-unaware
+    profile selection is exactly how a default-board card woke a software-co
+    butler (F22, 2026-10-24). Unstamped legacy rows and UNPINNED profiles pass:
+    the dispatcher/orchestrator profiles legitimately operate across boards.
+    """
+    stamp = str(sub.get("notifier_profile") or "").strip()
+    if not stamp:
+        return None, stamp
+    try:
+        from hermes_cli.kanban_db import named_profile_board_pin
+        pin = named_profile_board_pin(stamp)
+    except Exception as exc:
+        logger.debug("kanban notifier: board-pin lookup failed for profile %s: %s", stamp, exc)
+        return None, stamp
+    if pin and pin != slug:
+        return pin, stamp
+    return None, stamp
+
+
+def _board_owner_profile(kb: Any, slug: str) -> Optional[str]:
+    """The profile subscribed for board ``slug``: its pinned butler, else ``default``.
+
+    Resolution: the first (sorted) live profile whose ``kanban.board`` pin names
+    this board — the butler every task on that board routes through. The
+    DEFAULT board additionally falls back to ``default``, the orchestrator
+    profile that owns unpinned board operations there. ``None`` when no profile
+    owns the board: the fence then skips the row without healing it.
+    """
+    try:
+        from hermes_cli.kanban_db import named_profile_board_pin
+        from hermes_cli.profiles import list_profile_names
+        for name in sorted(set(list_profile_names())):
+            if name != "default" and named_profile_board_pin(name) == slug:
+                return name
+    except Exception as exc:
+        logger.debug("kanban notifier: board-owner scan failed for %s: %s", slug, exc)
+        return None
+    return "default" if slug == kb.DEFAULT_BOARD else None
+
+
 def _adapter_for_subscription(runner: Any, platform: Any, sub: dict, owner_profile: Optional[str]) -> Any:
     """Resolve a durable route without turning a missing secondary bot into primary authority."""
     adapter = runner._authorization_adapter(platform, owner_profile)
@@ -299,8 +360,131 @@ class _Collector:
         except Exception as _gc_exc:
             logger.debug("kanban notifier: stale-sub GC failed for board %s: %s", slug, _gc_exc)
 
+    def _fence_cross_board_sub(self, conn: Any, slug: str, sub: dict) -> bool:
+        """Fence a board-pinned profile's subscription rows off this board (F22).
+
+        The notifier's profile selection was board-unaware: a row whose stamped
+        profile is pinned to another board (pre-fence F21 residue) was claimed
+        and woken anyway, rendering foreign-board events through a butler whose
+        own tool fence then refuses the card ops. Never claims here: the row is
+        either self-healed by re-stamping it to this board's owning profile
+        (whichever gateway serves that profile claims it next tick, so events
+        on board B render via the profile subscribed for B) or, when no owning
+        profile exists, skipped with a once-per-row WARNING. Returns True when
+        fenced (caller must skip the claim).
+        """
+        pin, stamp = _sub_pinned_off_board(slug, sub)
+        if pin is None:
+            return False
+        key = (slug, sub.get("task_id"), sub.get("platform"), sub.get("chat_id"),
+               sub.get("thread_id") or "", stamp)
+        owner = _board_owner_profile(self.kb, slug)
+        if not owner or owner == stamp:
+            if key not in _CROSS_BOARD_WARNED:
+                _CROSS_BOARD_WARNED.add(key)
+                logger.warning(
+                    "kanban notifier: subscription for %s on %s/%s board %s is stamped with board-pinned "
+                    "profile %s (pinned to %s) and board %s has no owning profile to heal it to; it will "
+                    "not be delivered. Re-subscribe with `hermes kanban notify-subscribe ... "
+                    "--notifier-profile <owner of %s>`.",
+                    sub.get("task_id"), sub.get("platform"), sub.get("chat_id"), slug, stamp, pin, slug, slug)
+            return True
+        # Self-heal: re-stamp to the board's owner so the notifier's routing
+        # authority mirrors the tool-layer fence. Guard on the current stamp so
+        # a concurrent gateway's heal converges idempotently; the cursor is
+        # untouched, so no claimed event can be lost by the handoff.
+        self._restamp_to(conn, slug, sub, owner, "fence: pinned off-board residue")
+        return True
+
+    def _derive_board_render_profile(self, conn: Any, slug: str, sub: dict) -> None:
+        """Delivery-time board-owner derivation (F22 scope-2, operator 2026-10-24).
+
+        ``notifier_profile`` is stamped at SUBSCRIBE time from the chat context
+        of whichever session created the subscription and never re-derived — so
+        a card created from the default profile's chat on a butler-owned board
+        pinged the operator through the wrong bot forever, scattering each
+        board's stream (gargantua02: 201 of 207 rows). The render profile is a
+        function of the row's BOARD and destination, not of who happened to
+        subscribe: an UNPINNED stamp that differs from the board's owning
+        profile is re-derived to that owner at claim/delivery time, with the
+        same stamp-guarded idempotent re-stamp as the fence. Bounded so it can
+        only ever BE the board→butler topology, never a blanket re-route:
+
+        - session-bound platforms (tui/local/api_server) never derive — their
+          chat ids are keys in the stamped profile's own session store;
+        - the owner must serve this platform under its own adapter identity
+          here (a board butler hosts its chat adapter; `default` owns no
+          secondary adapters, so derivation is inert on single-profile hosts
+          and upstream `profile_routes` authority is untouched);
+        - pinned stamps never reach here (the fence handled them) and legacy
+          unowned rows are left to the dispatcher's existing claim semantics.
+        """
+        stamp = str(sub.get("notifier_profile") or "").strip()
+        if not stamp:
+            return
+        platform_name = str(sub.get("platform") or "").lower()
+        if platform_name in _SESSION_BOUND_PLATFORMS or platform_name not in self.active_platforms:
+            return
+        owner = _board_owner_profile(self.kb, slug)
+        if not owner or owner == stamp:
+            return
+        try:
+            from hermes_cli.kanban_db import named_profile_board_pin
+            if named_profile_board_pin(stamp):
+                return  # pinned stamps either own this board or were fenced
+        except Exception:
+            return
+        served = _platform_names((self.profile_adapters or {}).get(owner) or {})
+        if platform_name not in served:
+            return
+        self._restamp_to(conn, slug, sub, owner, "derived to board owner at delivery")
+
+    def _restamp_to(self, conn: Any, slug: str, sub: dict, target: str, reason: str) -> bool:
+        """Stamp-guarded re-stamp of one subscription row to ``target``.
+
+        Idempotent under concurrent gateways (guard re-matches the prepared
+        stamp), and the notify cursor is never touched — events claimed by the
+        handoff stay claimable by the owning profile's gateway next tick.
+        Mutates ``sub['notifier_profile']`` on success so THIS tick's claim
+        already renders under the corrected profile.
+        """
+        stamp = str(sub.get("notifier_profile") or "").strip()
+        if not stamp or stamp == target:
+            return False
+        key = (slug, sub.get("task_id"), sub.get("platform"), sub.get("chat_id"),
+               sub.get("thread_id") or "", stamp)
+        try:
+            from hermes_cli import kanban_db as _kb
+            with _kb.write_txn(conn):
+                cur = conn.execute(
+                    "UPDATE kanban_notify_subs SET notifier_profile = ?"
+                    " WHERE task_id = ? AND platform = ? AND chat_id = ? AND thread_id = ?"
+                    " AND (notifier_profile IS NULL OR notifier_profile = ?)",
+                    (target, sub.get("task_id"), sub.get("platform"), sub.get("chat_id"),
+                     sub.get("thread_id") or "", stamp))
+        except Exception as exc:
+            if key not in _CROSS_BOARD_WARNED:
+                _CROSS_BOARD_WARNED.add(key)
+                logger.warning(
+                    "kanban notifier: failed to re-stamp subscription for %s on board %s from "
+                    "profile %s to %s: %s",
+                    sub.get("task_id"), slug, stamp, target, exc)
+            return False
+        if cur.rowcount:
+            logger.info(
+                "kanban notifier: %s: subscription for %s on %s/%s board %s re-stamped from %s to %s "
+                "(events on this board render via the board's owning profile).",
+                reason, sub.get("task_id"), sub.get("platform"), sub.get("chat_id"), slug,
+                stamp, target)
+            sub["notifier_profile"] = target
+            return True
+        return False  # a concurrent gateway's heal won; this batch falls back
+
     def _claim_for_sub(self, conn: Any, slug: str, sub: dict) -> Optional[dict]:
         """Claim one subscription's unseen events; None when skipped or nothing new."""
+        if self._fence_cross_board_sub(conn, slug, sub):
+            return None
+        self._derive_board_render_profile(conn, slug, sub)
         owner_profile = sub.get("notifier_profile") or None
         platform = (sub.get("platform") or "").lower()
         if platform not in self.active_platforms:

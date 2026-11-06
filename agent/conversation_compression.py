@@ -1975,11 +1975,16 @@ def _lower_threshold_to_aux_context(
             f"Hermes's small-context floor and output reservation would recompute the trigger to "
             f"{recomputed_threshold:,} tokens, still above the compression model's {aux_context:,}.)"
         )
-    _emit_feasibility_notice(agent, msg)
+    # LOCAL HOTFIX (operator 2026-11-06): the auto-lower is applied silently. The summariser's
+    # window only bounds the input it receives, so the chat notice was noise; it stays in the log only.
+    agent._compression_warning = None
+    if getattr(agent, "_last_feasibility_notice", None) == msg:
+        return
+    agent._last_feasibility_notice = msg
     logger.warning(
         "Auxiliary compression model %s has %d token context, below the main model's compression threshold of %d "
-        "tokens — auto-lowered session threshold to %d to keep compression working.", aux_model, aux_context,
-        old_threshold, new_threshold,
+        "tokens — auto-lowered session threshold to %d to keep compression working. %s", aux_model, aux_context,
+        old_threshold, new_threshold, msg.replace("\n", " "),
     )
 
 

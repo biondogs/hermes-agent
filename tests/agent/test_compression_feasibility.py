@@ -163,7 +163,8 @@ def test_fallback_activation_reprobes_aux_ceiling_and_keeps_it_durable():
         agent.base_url = "https://other-route.example/v1"  # runtime change, identical verdict text
         _update_fallback_context_compressor(agent)
     assert compressor.threshold_tokens == 80_000
-    assert notices == 1
+    # LOCAL HOTFIX: the auto-lower is silent in chat (log only).
+    assert notices == 0
 
 
 def test_unclamp_clears_stale_clamp_warning():
@@ -403,7 +404,7 @@ def test_a_bypass_session_measures_with_the_entries_from_agent_start(monkeypatch
 
 @patch("agent.model_metadata.get_model_context_length", return_value=80_000)
 @patch("agent.auxiliary_client.get_text_auxiliary_client")
-def test_auto_corrects_threshold_when_aux_context_below_threshold(mock_get_client, mock_ctx_len):
+def test_auto_corrects_threshold_when_aux_context_below_threshold(mock_get_client, mock_ctx_len, caplog):
     """Auto-correction: aux >= 64K floor but < threshold → lower threshold
     to aux_context so compression still works this session."""
     agent = _make_agent(main_context=200_000, threshold_percent=0.50)
@@ -416,9 +417,12 @@ def test_auto_corrects_threshold_when_aux_context_below_threshold(mock_get_clien
     messages = []
     agent._emit_status = lambda msg: messages.append(msg)
 
-    agent._check_compression_model_feasibility()
+    with caplog.at_level("WARNING", logger="agent.conversation_compression"):
+        agent._check_compression_model_feasibility()
 
-    assert len(messages) == 1
+    # LOCAL HOTFIX: no chat notice; the full guidance goes to the log instead.
+    assert messages == []
+    messages = [caplog.text]
     assert "Compression model" in messages[0]
     assert "80,000" in messages[0]        # aux context
     assert "100,000" in messages[0]       # old threshold
@@ -433,8 +437,8 @@ def test_auto_corrects_threshold_when_aux_context_below_threshold(mock_get_clien
     # explain the recomputed trigger instead (0.75 * 200K = 150K).
     assert "threshold:" not in messages[0]
     assert "150,000" in messages[0]
-    # Warning stored for gateway replay
-    assert agent._compression_warning is not None
+    # Nothing stored for gateway replay
+    assert agent._compression_warning is None
     # Threshold on the live compressor was actually lowered to aux_context.
     assert agent.context_compressor.threshold_tokens == 80_000
     # Every threshold-derived budget must move with it. Keeping the original
@@ -602,18 +606,14 @@ def test_warning_stored_for_gateway_replay(mock_get_client, mock_ctx_len):
     agent._emit_status = lambda msg: vprint_messages.append(msg)
     agent._check_compression_model_feasibility()
 
-    assert len(vprint_messages) == 1  # CLI got it
-    assert agent._compression_warning is not None  # stored for replay
+    # LOCAL HOTFIX: auto-lower is silent — nothing printed, nothing stored, nothing replayed.
+    assert vprint_messages == []
+    assert agent._compression_warning is None
 
-    # Phase 2: gateway wires callback post-init, then run_conversation replays
     callback_events = []
     agent.status_callback = lambda ev, msg: callback_events.append((ev, msg))
     agent._replay_compression_warning()
-
-    assert any(
-        ev == "lifecycle" and str(msg) == str(agent._compression_warning)
-        for ev, msg in callback_events
-    )
+    assert callback_events == []
 
 
 @patch("agent.model_metadata.get_model_context_length", return_value=200_000)
@@ -649,7 +649,7 @@ def test_no_replay_when_no_warning(mock_get_client, mock_ctx_len):
 
 @patch("agent.model_metadata.get_model_context_length", return_value=300_000)
 @patch("agent.auxiliary_client.get_text_auxiliary_client")
-def test_threshold_suggestion_kept_for_large_context_main(mock_get_client, mock_ctx_len):
+def test_threshold_suggestion_kept_for_large_context_main(mock_get_client, mock_ctx_len, caplog):
     """Main window >= 512K has no floor — any suggestion is honored, so the
     `threshold:` option stays even below 75%."""
     agent = _make_agent(main_context=1_000_000, threshold_percent=0.50)
@@ -662,10 +662,11 @@ def test_threshold_suggestion_kept_for_large_context_main(mock_get_client, mock_
     messages = []
     agent._emit_status = lambda msg: messages.append(msg)
 
-    agent._check_compression_model_feasibility()
+    with caplog.at_level("WARNING", logger="agent.conversation_compression"):
+        agent._check_compression_model_feasibility()
 
-    assert len(messages) == 1
-    assert "threshold: 0.30" in messages[0]
+    assert messages == []
+    assert "threshold: 0.30" in caplog.text
 
 
 

@@ -414,6 +414,6 @@ def register(ctx: Any) -> None:
         schema=MESSAGE_PEER_SCHEMA,
         handler=_handler,
         check_fn=_check_fn,
-        description="Send a message to a peer on your board (board-fenced). Roster = board.yaml roles ∩ live profiles.",
+        description="Send a message to a teammate on this board (board-fenced). Use it to ask a teammate a question you cannot answer from the card — a spec detail, a constraint, a blocker — instead of guessing or blocking on the operator.",
     )
     logger.info("board-rooms plugin: registered tool %r in toolset %r", TOOL_NAME, TOOLSET)

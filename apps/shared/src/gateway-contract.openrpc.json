@@ -9880,6 +9880,18 @@
             },
             "title": "Members",
             "type": "array"
+          },
+          "board": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Board"
           }
         },
         "required": [
@@ -19530,6 +19542,18 @@
             ],
             "default": null,
             "title": "Authority Gateway Id"
+          },
+          "board": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Board"
           }
         },
         "required": [

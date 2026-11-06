@@ -1637,6 +1637,7 @@ export interface GroupsCreateParams {
   name: string
   members: RoomMemberInput[]
   authority_gateway_id?: string | null
+  board?: string | null
 }
 /** A roster row as the client proposes it; ``validate_roster`` owns the exact rules. */
 export interface RoomMemberInput {
@@ -5404,6 +5405,7 @@ export interface CanonicalRoomCreateParams {
   room_id: string
   name: string
   members: RoomMemberInput[]
+  board?: string | null
 }
 export interface CanonicalRoomApproveParams {
   profile?: string | null

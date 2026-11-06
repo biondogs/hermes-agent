@@ -53,6 +53,8 @@ class CanonicalProfilesParams(ProfileParams):
 class CanonicalRoomCreateParams(RoomParams):
     name: str
     members: list[RoomMemberInput]
+    # Board-rooms fence (BR-D4): optional pin; handler validates actor ∈ board roles.
+    board: str | None = None
 
 
 class CanonicalRoomAttemptParams(RoomParams):

@@ -34,7 +34,7 @@ _FIELDS = {
     'groups.list': {'limit', 'offset', 'include_disbanded'},
     'groups.state': {'room_id', 'include_disbanded'},
     'groups.log': {'room_id', 'since_seq', 'limit', 'include_disbanded'},
-    'groups.create': {'room_id', 'name', 'members'},
+    'groups.create': {'room_id', 'name', 'members', 'board'},
     'groups.rename': {'room_id', 'event_id', 'name'},
     'groups.context': {'room_id', 'event_id', 'purpose', 'notes', 'routing', 'lead_member_id'},
     'groups.disband': {'room_id', 'cancel_id'},
@@ -89,6 +89,207 @@ async def dispatch_group_control(connection, method, params):
             except (ValueError, TypeError) as exc:
                 raise _refusal('invalid_params', admitted=getattr(exc, 'admitted', None)) from exc
     return await asyncio.to_thread(invoke)
+
+
+def _resolve_creator_board(authority: object, actor: object, params: dict) -> str | None:
+    """Derive creator's board for the seating fence; scoped engagement.
+
+    Scope rule (per reviewer item 1 — preserve upstream vanilla behavior):
+      - Explicit ``board`` param present → validate actor ∈ that board's roles;
+        if actor name underivable → refuse (no anonymous pin to arbitrary board).
+      - Else scan board.yaml roles for boards containing actor's profile name:
+        0 boards → vanilla non-board-rooms user → return None (no fence).
+        1 board  → fence to it.
+        >1 boards → require explicit board or refuse.
+
+    Returns board slug or None (vanilla, no fence). Raises board_fence only
+    for engaged-but-invalid cases (fail-closed within scope).
+    """
+    # Helper to get actor profile name
+    def _actor_profile_name() -> str | None:
+        # actor.profile_id may be a home path or a profile name; handle both
+        pid = getattr(actor, "profile_id", None)
+        if isinstance(pid, str) and pid:
+            # If it looks like a path, extract profile name
+            try:
+                from hermes_constants import profile_name_for_home
+
+                name = profile_name_for_home(pid)
+                if name:
+                    return name
+            except Exception:
+                pass
+            # Fallback: authority home path check
+            # Also handle authority.profile_id as home path
+            # Try served_profile_name path
+            try:
+                from gateway.session_authorities import served_profile_name
+
+                home = getattr(authority, "profile_id", None)
+                if isinstance(home, str) and home:
+                    return served_profile_name(Path(home))
+            except Exception:
+                pass
+            # If pid itself is already a profile name (no slash), use it
+            if "/" not in pid and "\\" not in pid:
+                return pid
+            # Last resort: basename
+            return Path(pid).name or None
+        return None
+
+    # 1. Explicit board param
+    explicit = params.get("board") if isinstance(params, dict) else None
+    if isinstance(explicit, str) and explicit.strip():
+        board_slug = explicit.strip()
+        actor_name = _actor_profile_name()
+        if actor_name:
+            try:
+                from hermes_cli.board_layer import load_board_yaml
+
+                doc = load_board_yaml(board_slug)
+                roles = doc.get("roles") or []
+                allowed = {str(r) for r in roles if isinstance(r, str)}
+                if actor_name not in allowed:
+                    raise RuntimeStoreError(
+                        "board_fence",
+                        detail=(
+                            f"board-rooms seating fence: creator {actor_name!r} is not in board "
+                            f"{board_slug!r} roles — cannot create room on that board (BR-D4)."
+                        ),
+                    )
+                return board_slug
+            except RuntimeStoreError:
+                raise
+            except Exception as exc:
+                raise RuntimeStoreError(
+                    "board_fence",
+                    detail=f"board-rooms seating fence: cannot resolve explicit board {board_slug!r}: {exc} (BR-D4).",
+                ) from exc
+        # Actor name unknown but explicit board given — refuse (no anonymous pin)
+        raise RuntimeStoreError(
+            "board_fence",
+            detail=(
+                f"board-rooms seating fence: cannot determine creator identity for explicit board "
+                f"{board_slug!r} — actor board is not derivable (BR-D4 fail-closed)."
+            ),
+        )
+
+    # 2. Derive from actor profile membership scan
+    actor_name = _actor_profile_name()
+    if actor_name:
+        candidates: list[str] = []
+        scan_errors: list[tuple[str, Exception]] = []
+        try:
+            from hermes_cli.kanban_db_boards import list_boards
+
+            board_entries = list_boards()
+        except Exception as exc:
+            raise RuntimeStoreError(
+                "board_fence",
+                detail=f"board-rooms seating fence: cannot list boards for creator {actor_name!r}: {exc} (BR-D4 fail-closed).",
+            ) from exc
+        for entry in board_entries:
+            slug = entry.get("slug") or entry.get("name") or ""
+            if not slug:
+                continue
+            try:
+                from hermes_cli.board_layer import load_board_yaml
+
+                doc = load_board_yaml(slug)
+                roles = doc.get("roles") or []
+                allowed = {str(r) for r in roles if isinstance(r, str)}
+                if actor_name in allowed:
+                    candidates.append(slug)
+            except Exception as exc:
+                # Non-layered boards (no board.yaml) are not board-rooms boards -- skip silently
+                if 'is not layered' in str(exc):
+                    continue
+                scan_errors.append((slug, exc))
+                continue
+        if len(candidates) == 1:
+            return candidates[0]
+        if len(candidates) > 1:
+            raise RuntimeStoreError(
+                "board_fence",
+                detail=(
+                    f"board-rooms seating fence: creator {actor_name!r} belongs to multiple boards "
+                    f"{candidates!r} — specify explicit 'board' param (BR-D4)."
+                ),
+            )
+        # 0 candidates: need to distinguish clean vanilla scan vs scan errors
+        if scan_errors:
+            raise RuntimeStoreError(
+                "board_fence",
+                detail=(
+                    f"board-rooms seating fence: cannot determine creator {actor_name!r} board — "
+                    f"scan had {len(scan_errors)} unreadable board(s), cannot prove vanilla (BR-D4 fail-closed)."
+                ),
+            )
+        # Clean 0 → vanilla
+        return None
+    # 0 boards → vanilla user, no fence
+    if actor_name is not None:
+        # We scanned and found 0 boards — checked via empty candidates path
+        # Actually need to detect 0 vs scan-error: if we reached here without returning
+        # and actor_name was set, we either had 0 candidates or scan errored.
+        # 0 candidates → vanilla,  scan error → vanilla (can't fence).
+        # But multi-board already raised. So here is 0-board vanilla → no fence.
+        return None
+    # Actor name completely underivable and no explicit board → vanilla → no fence
+    return None
+
+
+def _board_rooms_seating_fence(members_raw: object, authority: object, actor: object, params: dict) -> None:
+    """Board-rooms seating fence: members ⊆ creator board's roles (BR-D4).
+
+    Scoped: only engages when creator board is derivable (≥1 board membership or
+    explicit board param). Vanilla actors (0 boards, no explicit param) keep
+    upstream behavior — their seating is still bounded by member_roster/validate_roster.
+    Within scope, fail-closed: ambiguous or invalid board → refuse.
+    """
+    if not isinstance(members_raw, list) or not members_raw:
+        board_pin = _resolve_creator_board(authority, actor, params)
+        if board_pin is None:
+            return  # vanilla actor, no fence
+        return
+    board_pin = _resolve_creator_board(authority, actor, params)
+    if board_pin is None:
+        return  # vanilla actor, no fence
+    # Resolve board roles allowlist
+    try:
+        from hermes_cli.board_layer import load_board_yaml
+
+        doc = load_board_yaml(board_pin)
+        roles = doc.get("roles") or []
+        if not isinstance(roles, list):
+            raise RuntimeStoreError(
+                "board_fence",
+                detail=f"board-rooms seating fence: board {board_pin!r} has invalid roles (BR-D4).",
+            )
+        allowed = {str(r) for r in roles if isinstance(r, str)}
+    except RuntimeStoreError:
+        raise
+    except Exception as exc:
+        raise RuntimeStoreError(
+            "board_fence",
+            detail=f"board-rooms seating fence: cannot load board {board_pin!r}: {exc} (BR-D4).",
+        ) from exc
+    for idx, raw in enumerate(members_raw):
+        if not isinstance(raw, dict):
+            continue
+        target = raw.get("target") if isinstance(raw, dict) else None
+        if isinstance(target, dict) and target.get("kind", "local") != "local":
+            continue
+        profile = raw.get("profile") if isinstance(raw, dict) else None
+        if isinstance(profile, str) and profile not in allowed:
+            raise RuntimeStoreError(
+                "board_fence",
+                detail=(
+                    f"board-rooms seating fence: member {idx} profile {profile!r} is REFUSED — "
+                    f"not in board {board_pin!r} roles {sorted(allowed)!r}. "
+                    f"Room members must be a subset of board.yaml roles (BR-D4)."
+                ),
+            )
 
 
 def _refusal(reason, *, admitted=None):
@@ -196,12 +397,18 @@ def _group(authority, actor, method, params, *, host_scope=False):
         # (``AuthorityConnection._sibling_for``), seats served siblings with no entry; a
         # profile-bound one seats its own profile plus its hosted_rooms.profiles entries, as
         # before. Both create paths validate here, by the driver's rule.
+        # LOCAL HOTFIX (t_57a3008c): board-rooms seating fence — members ⊆ board.yaml roles.
+        # When the creator is board-pinned (HERMES_KANBAN_BOARD or authority's board context),
+        # validate each local member's profile against that board's roles allowlist. Cross-board
+        # or out-of-roster profiles are refused with a fence message mirroring the kanban fence.
+        _board_rooms_seating_fence(params.get('members'), authority, actor, params)
         homes, refused = member_roster(authority, siblings=host_scope)
         refuse_unseatable(params.get('members'), refused)
         try:
             members = validate_roster(params.get('members'), local_profiles=homes)
             if service is not None:
-                return {'room': service.create_room(**params, admit=admit)}
+                create_params = {k: v for k, v in params.items() if k != 'board'}
+                return {'room': service.create_room(**create_params, admit=admit)}
         except DiscussionValidationError as exc:
             # Name the refused member; the bare code left Desktop and gateway.log silent (#139002).
             raise RuntimeStoreError('invalid_params', field='members', detail=str(exc)) from exc

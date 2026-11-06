@@ -196,6 +196,8 @@ class GroupsCreateParams(ProfileParams):
     members: list[RoomMemberInput]
     # Ignored: authority is always this gateway's install identity (a client cannot spoof it).
     authority_gateway_id: str | None = None
+    # Board-rooms fence (BR-D4): optional board pin validated by gateway fence.
+    board: str | None = None
 
 
 class GroupsCreateResult(Result):

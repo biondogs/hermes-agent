@@ -1,0 +1,5 @@
+name: board-rooms
+version: 1.0.0
+description: "Board-scoped peer messaging (message_peer) — board-fenced, reuses local delivery primitives. BR-D1/D2."
+author: "software-co"
+provides_hooks: []

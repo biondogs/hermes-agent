@@ -453,7 +453,9 @@ def _board_pin_for_profile_home(home: Path) -> Optional[str]:
     key = str(home)
     cfg = home / "config.yaml"
     try:
-        mtime = cfg.stat().st_mtime_ns
+        # profile-pin resolver reads the profile's OWN raw config.yaml by design (t_30e77179):
+        # the pin must not interact with the merged/root config; the stat mtime is this cache's invalidation key.
+        mtime = cfg.stat().st_mtime_ns  # config-reader: ok — raw profile config stat by design (t_30e77179), cache invalidation key
     except OSError:
         _PROFILE_BOARD_PIN_CACHE.pop(key, None)
         return None
@@ -465,7 +467,9 @@ def _board_pin_for_profile_home(home: Path) -> Optional[str]:
         # hermes_yaml (ruamel) is the declared YAML policy module; bare PyYAML was
         # never a dependency and vanishes from fresh `uv sync` venvs (found in rebase).
         from hermes_yaml import safe_load
-        raw = safe_load(cfg.read_text(encoding="utf-8-sig")) or {}
+        # raw profile config read by design (t_30e77179): a profile-scoped kanban.board
+        # key must be resolved without the merged config layer.
+        raw = safe_load(cfg.read_text(encoding="utf-8-sig")) or {}  # config-reader: ok — raw profile config read by design (t_30e77179)
         if isinstance(raw, dict):
             section = raw.get("kanban")
             val = section.get("board") if isinstance(section, dict) else None

@@ -42,7 +42,7 @@ def _ok_response(text="summary body"):
 
 def _no_config(monkeypatch):
     """No fallback pin, no degraded list: the pre-hotfix default route."""
-    monkeypatch.setattr("hermes_cli.config.load_config_readonly", lambda: {})
+    monkeypatch.setattr("hermes_cli.config.load_config_readonly", dict)
     monkeypatch.setattr("agent.auxiliary_task_config._get_auxiliary_task_config", lambda task, _seen=frozenset(): {})
 
 
@@ -170,7 +170,7 @@ def test_config_helpers_parse_the_documented_keys(monkeypatch):
     )
     assert _compression_degraded_models() == ["qwen38-flash-fp8"]
 
-    monkeypatch.setattr("hermes_cli.config.load_config_readonly", lambda: {})
+    monkeypatch.setattr("hermes_cli.config.load_config_readonly", dict)
     assert _compression_degraded_models() == []
 
     monkeypatch.setattr(

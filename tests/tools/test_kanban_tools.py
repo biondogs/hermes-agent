@@ -1137,6 +1137,72 @@ def test_create_subscribes_gateway_session(monkeypatch, worker_env):
     assert s["delivery_mode"] == "notify+wake"
 
 
+def test_create_auto_sub_is_born_with_config_kinds(monkeypatch, worker_env, tmp_path):
+    """t_eea7a920: the auto-subscribe-on-create row is stamped with the
+    config's event-kind allowlist instead of arriving kinds=NULL. A NULL-kinds
+    notify+wake row was the post-retrofit wake leak (t_1962d623): every new
+    card's operator row woke the destination agent on every terminal event
+    until restamped by hand. Fallback chain: kanban.auto_subscribe_kinds,
+    then the single-knob kanban.stream_notify_kinds."""
+    from tools import kanban_tools as kt
+    from gateway.session_context import set_session_vars, clear_session_vars
+    home = tmp_path / "kinds-home" / ".hermes"
+    home.mkdir(parents=True)
+    (home / "config.yaml").write_text(
+        "kanban:\n"
+        "  stream_notify_kinds: blocked,gave_up,crashed,timed_out,\n"
+        "                       block_loop_detected,review_requested,changes_requested\n"
+    )
+    monkeypatch.setenv("HERMES_HOME", str(home))
+    # Bind the session through the ContextVars, not the env: a prior test's
+    # clear_session_vars() pins them to "" and get_session_env never falls
+    # back to os.environ afterwards (pre-existing in-process quirk).
+    tokens = set_session_vars(platform="telegram", chat_id="chat-42")
+    try:
+        out = kt._handle_create({
+            "title": "auto-sub kinds", "assignee": "peer",
+        })
+    finally:
+        clear_session_vars(tokens)
+    d = json.loads(out)
+    assert d["ok"] is True and d["subscribed"] is True, d
+    subs = _list_subs_for_task(d["task_id"])
+    assert len(subs) == 1
+    assert subs[0]["kinds"] == [
+        "blocked", "gave_up", "crashed", "timed_out",
+        "block_loop_detected", "review_requested", "changes_requested",
+    ], "auto-created notify+wake row arrived unfiltered — the wake leak is back"
+
+
+def test_create_auto_sub_kinds_all_opt_out(monkeypatch, worker_env, tmp_path):
+    """kanban.auto_subscribe_kinds: 'all' opts this path out of the stream
+    knob: the auto row stays unfiltered (legacy behaviour, deliberate)."""
+    from tools import kanban_tools as kt
+    from gateway.session_context import set_session_vars, clear_session_vars
+    home = tmp_path / "kinds-all-home" / ".hermes"
+    home.mkdir(parents=True)
+    (home / "config.yaml").write_text(
+        "kanban:\n"
+        "  auto_subscribe_kinds: all\n"
+        "  stream_notify_kinds: blocked,gave_up\n"
+    )
+    monkeypatch.setenv("HERMES_HOME", str(home))
+    # ContextVars, not env — see test_create_auto_sub_is_born_with_config_kinds.
+    tokens = set_session_vars(platform="telegram", chat_id="chat-42")
+    try:
+        out = kt._handle_create({
+            "title": "auto-sub kinds all", "assignee": "peer",
+        })
+    finally:
+        clear_session_vars(tokens)
+    d = json.loads(out)
+    assert d["ok"] is True and d["subscribed"] is True, d
+    subs = _list_subs_for_task(d["task_id"])
+    assert len(subs) == 1
+    # list_notify_subs decodes NULL kinds to [] — unfiltered, deliberately.
+    assert subs[0]["kinds"] == [], "'all' must keep the auto row unfiltered"
+
+
 def test_create_subscribes_tui_session_via_session_key(monkeypatch, worker_env):
     """TUI / desktop sessions don't have a platform/chat_id (single
     local channel), but the parent process exports HERMES_SESSION_KEY.

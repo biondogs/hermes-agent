@@ -1306,6 +1306,16 @@ def _maybe_auto_subscribe(conn: Any, task_id: str) -> bool:
                and (sub["thread_id"] or "") == (target["thread_id"] or "")
                for sub in _kbn.list_notify_subs(conn, task_id)):
             return True
+        # t_eea7a920: the row is born filtered. A NULL-kinds auto row was the
+        # post-retrofit wake leak — every new card's operator row woke the
+        # destination agent on every terminal event until restamped by hand.
+        # Config precedence: kanban.auto_subscribe_kinds, then the single-knob
+        # kanban.stream_notify_kinds; unset/garbage/'all' keeps legacy unfiltered.
+        try:
+            target["kinds"] = _kbn.resolve_auto_subscribe_kinds(
+                cfg_get(load_config(), "kanban", default={}) or {})
+        except Exception:  # health: allow BLE001 -- bookkeeping must never fail kanban_create (same contract as the surrounding boundary); unfiltered is the fallback
+            target["kinds"] = None
         _kbn.add_notify_sub(conn, task_id=task_id, **target)
         return True
     except Exception as _exc:

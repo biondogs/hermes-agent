@@ -412,6 +412,18 @@ class GatewaySlashCommandsMixin(
             from hermes_cli import kanban_db_notify as _kbn
             conn = _kbc.connect(board=requested_board)
             try:
+                # t_eea7a920: explicit chat subscriptions are born with the
+                # config's event-kind allowlist too (kanban.auto_subscribe_kinds,
+                # falling back to kanban.stream_notify_kinds; 'all'/unset keeps
+                # them unfiltered) — a NULL-kinds notify+wake row woke the
+                # destination agent on every terminal event.
+                kinds = None
+                try:
+                    from hermes_cli.config import cfg_get, load_config
+                    kinds = _kbn.resolve_auto_subscribe_kinds(
+                        cfg_get(load_config(), "kanban", default={}) or {})
+                except Exception:  # health: allow BLE001 -- a subscription must never fail on a config read; unfiltered is the fallback
+                    kinds = None
                 _kbn.add_notify_sub(
                     conn, task_id=task_id, platform=platform_str, chat_id=chat_id, chat_type=chat_type,
                     thread_id=_field("thread_id"), user_id=_field("user_id"),
@@ -421,7 +433,7 @@ class GatewaySlashCommandsMixin(
                     user_id_alt=_field("user_id_alt"),
                     notifier_profile=_field("profile") or getattr(self, "_kanban_notifier_profile", None) or self._active_profile_name(),
                     # Subscribing from chat: deliver the passive message and wake the destination agent.
-                    delivery_mode="notify+wake", delivery_metadata=delivery_metadata)
+                    delivery_mode="notify+wake", delivery_metadata=delivery_metadata, kinds=kinds)
             finally:
                 conn.close()
         await asyncio.to_thread(_sub)

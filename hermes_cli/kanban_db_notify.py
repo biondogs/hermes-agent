@@ -8,6 +8,7 @@ late-bound via ``_kb`` (import-cycle breaking) so monkeypatching
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 import time
 from pathlib import Path
@@ -24,6 +25,8 @@ if TYPE_CHECKING:
 # Notifier reaction to a terminal event: "notify" = passive adapter.send only
 # (default); "notify+wake" = send AND wake the destination agent; "wake" = wake only.
 _NOTIFY_DELIVERY_MODES = ("notify", "notify+wake", "wake")
+
+logger = logging.getLogger(__name__)
 
 _SCALAR_TYPES = (str, int, float, bool)
 
@@ -90,6 +93,41 @@ def _normalize_kinds(value: str | Iterable[str] | None) -> Optional[tuple]:
 def _decode_kinds(raw: Any) -> Optional[tuple]:
     """Decode a subscription row's stored ``kinds`` column (or passthrough)."""
     return _normalize_kinds(raw) if isinstance(raw, (str, list, tuple)) else None
+
+
+def resolve_auto_subscribe_kinds(kanban_cfg: Any) -> Optional[str]:
+    """Event-kind allowlist for auto-created ``notify+wake`` rows (t_eea7a920).
+
+    Auto-subscribe rows born with ``kinds`` NULL are unfiltered and woke the
+    destination agent on every terminal event — the post-retrofit leak behind
+    the 14 completed-wake spill traced in t_1962d623's verification. This
+    resolves the allowlist a row is *stamped* with at creation:
+
+    Precedence: ``kanban.auto_subscribe_kinds`` (this path's own knob) then
+    ``kanban.stream_notify_kinds`` (one knob governs both auto-subscribe
+    paths). Returns the normalized comma-joined allowlist, or ``None`` for
+    deliberately unfiltered: an unset config, blank, the literal ``all``, or
+    garbage (garbage warns once and does not filter — a typo must never
+    silently hide every event).
+    """
+    try:
+        raw = (kanban_cfg.get("auto_subscribe_kinds")
+               or kanban_cfg.get("stream_notify_kinds")
+               or None)
+    except AttributeError:
+        return None
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text or text.lower() == "all":
+        return None
+    norm = _normalize_kinds(text)
+    if norm is None:
+        logger.warning(
+            "kanban notify: auto-subscribe kinds %r normalizes to unfiltered; "
+            "leaving auto-created rows unfiltered", raw)
+        return None
+    return ",".join(norm)
 
 
 def add_notify_sub(
@@ -407,7 +445,7 @@ def auto_subscribe_stream(
     user_id: Optional[str] = None,
     chat_type: str = "dm",
     notifier_profile: Optional[str] = None,
-    kinds: Union[str, Iterable[str], None] = None,
+    kinds: str | Iterable[str] | None = None,
     exclude_statuses: tuple = ("archived", "done"),
 ) -> int:
     """INSERT OR IGNORE a stream subscription for every open task; returns rows inserted.

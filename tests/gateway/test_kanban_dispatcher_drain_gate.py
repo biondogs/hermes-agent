@@ -58,7 +58,7 @@ class _StubRunner(GatewayKanbanWatchersMixin):
         self._done = 0
 
     def _kanban_dispatcher_boot(self):
-        return (lambda: {}, object(), {})
+        return (dict, object(), {})
 
     async def _sleep_between_ticks(self, interval: float) -> None:
         self._done += 1
@@ -76,7 +76,7 @@ def _install_stubs(monkeypatch):
     monkeypatch.setattr(watchers, "_resolve_auto_decompose_settings", lambda _cfg: (False, 0))
     monkeypatch.setattr(watchers, "_log_spawn_results", lambda results: False)
     monkeypatch.setattr(watchers, "_kanban_dispatch_allowed", lambda: True)
-    monkeypatch.setattr(watchers, "reap_worker_zombies", lambda: [], raising=False)
+    monkeypatch.setattr(watchers, "reap_worker_zombies", list, raising=False)
 
 
 def _drive(runner: _StubRunner) -> None:

@@ -1058,6 +1058,40 @@ def test_inherited_sub_keeps_parent_kinds(kanban_home):
         "unfiltered and wake on every completion kind again"
     )
 
+
+class TestResolveAutoSubscribeKinds:
+    """t_eea7a920: the config allowlist that stamps auto-created notify+wake
+    rows. Precedence: ``auto_subscribe_kinds`` then ``stream_notify_kinds``;
+    unset / blank / ``all`` / garbage keep the row unfiltered (garbage warns,
+    never silently hides every event)."""
+
+    def test_unset_config_is_unfiltered(self):
+        assert kbn.resolve_auto_subscribe_kinds({}) is None
+        assert kbn.resolve_auto_subscribe_kinds(None) is None
+
+    def test_stream_kinds_is_the_single_knob_fallback(self):
+        assert kbn.resolve_auto_subscribe_kinds({
+            "stream_notify_kinds": "blocked,gave_up,completed,blocked",
+        }) == "blocked,gave_up,completed"
+
+    def test_auto_subscribe_kinds_wins_and_all_opts_out(self):
+        cfg = {
+            "auto_subscribe_kinds": "crashed,timed_out",
+            "stream_notify_kinds": "blocked,gave_up",
+        }
+        assert kbn.resolve_auto_subscribe_kinds(cfg) == "crashed,timed_out"
+        cfg["auto_subscribe_kinds"] = "all"
+        assert kbn.resolve_auto_subscribe_kinds(cfg) is None
+
+    def test_garbage_warns_and_stays_unfiltered(self, caplog):
+        import logging as _logging
+        with caplog.at_level(_logging.WARNING, logger="hermes_cli.kanban_db_notify"):
+            assert kbn.resolve_auto_subscribe_kinds({
+                "stream_notify_kinds": ",,,",
+            }) is None
+        assert "normalizes to unfiltered" in caplog.text
+
+
 def test_create_with_parents_inherits_delivery_metadata(kanban_home):
     import hermes_cli.kanban_db as kb
     from hermes_cli import kanban_db_connect as kbc

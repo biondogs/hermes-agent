@@ -284,16 +284,51 @@ def _adapter_for_subscription(runner: Any, platform: Any, sub: dict, owner_profi
 # --- Collection (runs in a worker thread) ---
 
 
+def _resolve_stream_subscription(kanban_cfg: Any) -> Optional[dict]:
+    """Resolve the operator stream destination (``kanban.stream_notify_*``).
+
+    Operator ruling 2026-10-24 (t_7bbbfe1c / F23): stream coverage becomes
+    auto-subscribe — every card on every board streams its TERMINAL
+    transitions to a configured destination instead of per-card opt-in. The
+    destination is a config pin (platform + chat id), never a hardcoded
+    route; unset or partial config disables the feature. Terminal-only needs
+    no extra knob: the notifier only ever claims ``TERMINAL_KINDS``
+    (created/dispatched/commented/heartbeat are never claimed), so a stream
+    row delivers terminal transitions by construction.
+    """
+    if not isinstance(kanban_cfg, dict) or not kanban_cfg.get("stream_notify_enabled"):
+        return None
+    platform = str(kanban_cfg.get("stream_notify_platform") or "").strip().lower()
+    chat_id = str(kanban_cfg.get("stream_notify_chat_id") or "").strip()
+    if not platform or not chat_id:
+        logger.warning(
+            "kanban notifier: stream_notify_enabled is set but platform/chat_id are missing; stream auto-subscribe disabled")
+        return None
+    mode = str(kanban_cfg.get("stream_notify_delivery_mode") or "notify").strip().lower()
+    if mode not in ("notify", "notify+wake", "wake"):
+        logger.warning("kanban notifier: unknown stream_notify_delivery_mode %r; falling back to 'notify'", mode)
+        mode = "notify"
+    kinds = str(kanban_cfg.get("stream_notify_kinds") or "").strip() or None
+    if kinds and _kbn()._normalize_kinds(kinds) is None:
+        logger.warning(
+            "kanban notifier: stream_notify_kinds %r normalizes to unfiltered (%r); "
+            "leaving stream rows unfiltered", kanban_cfg.get("stream_notify_kinds"), kinds)
+        kinds = None
+    return {"platform": platform, "chat_id": chat_id, "delivery_mode": mode, "kinds": kinds}
+
+
 class _Collector:
     """One tick's claim state: which profiles/platforms this gateway serves and the GC gate."""
 
-    def __init__(self, runner: Any, kb: Any, *, notifier_profile: Optional[str], gc_due: bool, gc_retention_days: int) -> None:
+    def __init__(self, runner: Any, kb: Any, *, notifier_profile: Optional[str], gc_due: bool,
+                 gc_retention_days: int, stream_sub: Optional[dict] = None) -> None:
         self.runner = runner
         self.kb = kb
         self.notifier_profile = notifier_profile
         self.gc_due = gc_due
         self.gc_retention_days = gc_retention_days
         self.deliveries: list[dict] = []
+        self.stream_sub = stream_sub
         self.include_unowned = runner._owns_kanban_dispatcher_lock()
         self.profile_adapters = getattr(runner, "_profile_adapters", {})
         self.notifier_profiles = {notifier_profile}
@@ -506,9 +541,47 @@ class _Collector:
                      len(events), sub["task_id"], slug, old_cursor, cursor)
         return {"sub": sub, "old_cursor": old_cursor, "cursor": cursor, "events": events, "task": task, "board": slug}
 
+    def _auto_subscribe_stream(self, conn: Any, slug: str) -> None:
+        """Insert a stream row for every card on this board lacking one (F23).
+
+        The ``notifier_profile`` stamp is the board's OWNING profile — F22
+        (t_c0bb9227) settled that the render profile is a function of board
+        ownership, derived at delivery time; stamping the owner at insert is
+        the same topology from birth, so the delivery-time derivation stays
+        inert instead of re-stamping every row later. An ownerless board
+        (skipjack-class) stamps the unpinned render profile (``default``) per
+        the F22 ownerless-board decision. Deterministic across gateways, so
+        concurrent notifiers converge on identical rows instead of racing
+        stamps.
+        """
+        stream = self.stream_sub
+        if not stream:
+            return
+        try:
+            profile = _board_owner_profile(self.kb, slug) or "default"
+        except Exception as exc:
+            logger.debug("kanban notifier: stream owner lookup failed for board %s (%s); stamping 'default'", slug, exc)
+            profile = "default"
+        try:
+            inserted = _kbn().auto_subscribe_stream(
+                conn, platform=stream["platform"], chat_id=stream["chat_id"],
+                delivery_mode=stream["delivery_mode"], notifier_profile=profile,
+                user_id=stream["chat_id"], chat_type="dm",
+                kinds=stream.get("kinds"),
+            )
+        except Exception as exc:
+            logger.warning("kanban notifier: stream auto-subscribe failed on board %s: %s", slug, exc)
+            return
+        if inserted:
+            logger.info(
+                "kanban notifier: stream auto-subscribed %d open card(s) on board %s to %s/%s (profile=%s, terminal events only)",
+                inserted, slug, stream["platform"], stream["chat_id"], profile)
+
     def collect_board(self, slug: str) -> None:
         """Claim events on one board, appending delivery dicts to ``deliveries``."""
-        if not self._board_has_subs(slug):
+        # With the stream on, a board with zero owned subs still gets rows
+        # inserted (and claimed here once the destination platform connects).
+        if not self.stream_sub and not self._board_has_subs(slug):
             return
         try:
             conn = _kbc().connect(board=slug)
@@ -518,6 +591,8 @@ class _Collector:
         try:
             if self.gc_due:
                 self._gc_stale_subs(conn, slug)
+            if self.stream_sub:
+                self._auto_subscribe_stream(conn, slug)
             # No explicit init_db(): connect() already runs the migration once per
             # process, and init_db() would re-run it on a second connection racing
             # the first.
@@ -537,15 +612,19 @@ class _Collector:
             conn.close()
 
 
-def _notifier_collect(runner: Any, kb: Any, *, notifier_profile: Optional[str], gc_due: bool, gc_retention_days: int) -> list[dict]:
+def _notifier_collect(runner: Any, kb: Any, *, notifier_profile: Optional[str], gc_due: bool, gc_retention_days: int,
+                      stream_sub: Optional[dict] = None) -> list[dict]:
     """Claim unseen terminal events for every owned subscription on every board.
 
     Each gateway polls only subscriptions owned by profiles whose adapters it
     hosts; legacy rows without a profile stamp are visible only to the process
-    holding the singleton dispatcher lock.
+    holding the singleton dispatcher lock. ``stream_sub`` (F23, t_7bbbfe1c):
+    when set, one board tick first inserts a stream row for every open card
+    lacking one — auto-subscribe replacing per-card opt-in.
     """
     return _Collector(
         runner, kb, notifier_profile=notifier_profile, gc_due=gc_due, gc_retention_days=gc_retention_days,
+        stream_sub=stream_sub,
     ).collect()
 
 
@@ -875,8 +954,12 @@ class _KanbanNotification:
         # "no exception == delivered" contract.
         if getattr(_send_res, "success", True) is False:
             raise RuntimeError(f"adapter send() reported failure: {getattr(_send_res, 'error', None) or 'unknown error'}")
-        logger.debug("kanban notifier: delivered %s event for %s to %s/%s on board %s",
-                     ev.kind, self.task_id, self.platform_str, sub["chat_id"], self.board_slug)
+        # INFO, not DEBUG (t_7bbbfe1c/F23): a notify-only stream row produces
+        # no wake line, and operators must be able to prove from gateway.log
+        # that exactly one ping per terminal transition reached the DM chat —
+        # evidence parity with the "woke agent" line the wake path emits.
+        logger.info("kanban notifier: delivered %s event for %s to %s/%s on board %s",
+                    ev.kind, self.task_id, self.platform_str, sub["chat_id"], self.board_slug)
         # Upload artifact paths from the handoff payload / legacy result as
         # native files. Both handoff kinds stage files for exactly this: a
         # review-bound card's files exist precisely so the human sees them at

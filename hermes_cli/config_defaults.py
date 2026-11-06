@@ -1883,6 +1883,23 @@ DEFAULT_CONFIG = {
         # kanban_create is called from a session with a persistent delivery channel. Disable for
         # profiles that prefer explicit kanban_notify-subscribe calls per task.
         "auto_subscribe_on_create": True,
+        # F23 stream WIDEN (t_7bbbfe1c, operator ruling 2026-10-24): auto-subscribe EVERY open
+        # card on EVERY board to one operator stream destination — terminal events only
+        # (done/blocked/crashed; the notifier never claims created/dispatched/commented/
+        # heartbeat). The notifier tick inserts the missing rows (new cards AND backfill of
+        # pre-existing open cards; done/archived cards are skipped so the stale-done GC is not
+        # fought). Enabled only when BOTH platform and chat_id are set; changes need a gateway
+        # restart. notifier_profile is stamped from board ownership (F22 topology), never from
+        # the session that happens to run the tick.
+        "stream_notify_enabled": False,
+        # Platform of the stream destination (e.g. "telegram"). Empty = feature disabled.
+        "stream_notify_platform": "",
+        # Chat id of the stream destination (the operator's DM).
+        "stream_notify_chat_id": "",
+        # "notify" = one passive ping per terminal transition (the stream default: exactly one
+        # message, no wake). "notify+wake"/"wake" also wake the owning profile like an opt-in
+        # creator subscription would.
+        "stream_notify_delivery_mode": "notify",
         # Poll and deliver Kanban subscriptions from this gateway. Disable on profiles that do
         # not own notification subscriptions to avoid an idle five-second board probe.
         "notify_in_gateway": True,

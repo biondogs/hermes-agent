@@ -398,6 +398,76 @@ def purge_stale_done_notify_subs(conn: sqlite3.Connection, *, max_age_days: int 
     return int(cur.rowcount or 0)
 
 
+def auto_subscribe_stream(
+    conn: sqlite3.Connection,
+    *,
+    platform: str,
+    chat_id: str,
+    delivery_mode: str = "notify",
+    user_id: Optional[str] = None,
+    chat_type: str = "dm",
+    notifier_profile: Optional[str] = None,
+    kinds: Union[str, Iterable[str], None] = None,
+    exclude_statuses: tuple = ("archived", "done"),
+) -> int:
+    """INSERT OR IGNORE a stream subscription for every open task; returns rows inserted.
+
+    Operator ruling 2026-10-24 (t_7bbbfe1c / F23): stream coverage is
+    auto-subscribe, not per-card opt-in. The notifier tick adds a row for any
+    card lacking one, which converges from EVERY creation path (worker/CLI/
+    dashboard/other profiles) because it lives in the poll, not in
+    ``create_task`` — and backfills pre-existing open cards on the first tick.
+
+    Semantics kept deliberately narrow:
+
+    - Rows start caught up (``last_event_id`` = ``MAX(task_events.id)`` per
+      task, same as :func:`add_notify_sub`): the stream never replays history,
+      a backfill never floods, and a card claimed between ticks streams from
+      the transition that happens next.
+    - ``exclude_statuses`` defaults to ``(archived, done)``: archived cards
+      never stream and DONE cards are skipped so the stale-done GC
+      (:func:`purge_stale_done_notify_subs`) is not fought — a purged long-done
+      row must not be re-inserted every tick. A reopened (non-done) task is
+      re-covered on a later tick.
+    - ``thread_id`` is pinned to ``""`` (the channel/DM surface), so an
+      existing richer subscription for the same destination — a creator's
+      per-card opt-in with its own cursor/mode — is never duplicated or
+      downgraded; ``NOT EXISTS`` keeps the insert list pure for rowcount
+      accounting while the PK makes the write idempotent under concurrent
+      gateways.
+    - ``kinds`` (t_1962d623): stamped on every inserted row so the GC
+      purge/re-add cycle cannot silently drop the stream's event-kind filter
+      (``kanban.stream_notify_kinds``). NULL = unfiltered, same as
+      :func:`add_notify_sub`.
+    """
+    insert_mode = delivery_mode if delivery_mode in _NOTIFY_DELIVERY_MODES else "notify"
+    kinds_norm = _normalize_kinds(kinds)
+    kinds_value = ",".join(kinds_norm) if kinds_norm else None
+    with _kb.write_txn(conn):
+        cur = conn.execute(
+            """
+            INSERT OR IGNORE INTO kanban_notify_subs
+                (task_id, platform, chat_id, thread_id, user_id, chat_type,
+                 notifier_profile, delivery_mode, kinds, created_at, last_event_id)
+            SELECT t.id, ?, ?, '', ?, ?, ?, ?, ?, ?,
+                   COALESCE((SELECT MAX(e.id) FROM task_events e WHERE e.task_id = t.id), 0)
+            FROM tasks t
+            WHERE t.status NOT IN (?, ?)
+              AND NOT EXISTS (
+                  SELECT 1 FROM kanban_notify_subs s
+                  WHERE s.task_id = t.id AND s.platform = ? AND s.chat_id = ?
+                    AND s.thread_id = ''
+              )
+            """,
+            (
+                platform, chat_id, user_id, chat_type, notifier_profile,
+                insert_mode, kinds_value, int(time.time()),
+                *exclude_statuses, platform, chat_id,
+            ),
+        )
+    return int(cur.rowcount or 0)
+
+
 def _notify_cursor(
     conn: sqlite3.Connection, task_id: str, platform: str, chat_id: str, thread_id: Optional[str],
 ) -> Optional[tuple[int, Optional[tuple]]]:

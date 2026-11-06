@@ -24,7 +24,11 @@ from gateway.kanban_watchers_common import (
     _to_thread_process_service,
     logger,
 )
-from gateway.kanban_watchers_notifier import _KanbanNotification, _notifier_collect
+from gateway.kanban_watchers_notifier import (
+    _KanbanNotification,
+    _notifier_collect,
+    _resolve_stream_subscription,
+)
 from gateway.kanban_watchers_dispatcher import (
     _KanbanDispatcher,
     _log_spawn_results,
@@ -79,6 +83,14 @@ class GatewayKanbanWatchersMixin:
         if not kanban_cfg.get("notify_in_gateway", True):
             logger.info("kanban notifier: disabled via config kanban.notify_in_gateway=false")
             return
+        # F23 (t_7bbbfe1c, operator ruling 2026-10-24): stream auto-subscribe —
+        # every open card on every board gets a terminal-events-only row to the
+        # configured destination. Read at boot like the rest of the watcher's
+        # config; restart to change the stream destination.
+        stream_sub = _resolve_stream_subscription(kanban_cfg)
+        if stream_sub:
+            logger.info("kanban notifier: stream auto-subscribe enabled → %s/%s (mode=%s, terminal events only)",
+                        stream_sub["platform"], stream_sub["chat_id"], stream_sub["delivery_mode"])
 
         from gateway.config import Platform as _Platform
         try:
@@ -111,6 +123,7 @@ class GatewayKanbanWatchersMixin:
                 deliveries = await asyncio.to_thread(
                     _notifier_collect, self, _kb,
                     notifier_profile=notifier_profile, gc_due=_gc_due, gc_retention_days=_retention,
+                    stream_sub=stream_sub,
                 )
                 for d in deliveries:
                     await _KanbanNotification(

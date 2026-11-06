@@ -106,8 +106,9 @@ class TestDispatchSuccess:
         parsed = json.loads(raw)
         assert parsed.get("status") == "delivered"
         assert captured["author"] is not None
-        # hops should be present (envelope)
+        # hops should be present (envelope) — seeded at 1, so next hop is 2
         assert isinstance(captured["author"], dict)
+        assert captured["author"].get("hops") == 2
         assert captured["agent"] is agent
         assert captured["wake"] == "notify"
         assert "sw-dev-b" in captured["argv"]
@@ -121,7 +122,9 @@ class TestDispatchSuccess:
 
         def fake_start(argv, content, label, stdin_file=False, task_id="", agent=None, author=None, wake="notify", **kw):
             assert wake == "none"
-            assert "[no reply needed]" in content or "NO_REPLY" in content or True  # marker may vary
+            # NO_REPLY_MARKER is "[no reply needed]" or similar — assert it is present
+            from tools.bot_mode_probe import NO_REPLY_MARKER
+            assert NO_REPLY_MARKER in content
             return json.dumps({"status": "queued", "to": label})
 
         with patch("tools.bot_mode_dm._start_delivery", fake_start):
@@ -245,3 +248,88 @@ class TestHopCapAndDuplicate:
         assert parsed2.get("status") == "delivered", parsed2
         with bc._LOCK:
             bc._CHAINS.pop(agent.session_id, None)
+
+
+class TestLiveDispatchPath:
+    """Finding 2: chain gate must be reachable via live dispatch shape (no explicit parent_agent)."""
+
+    def test_live_shape_hop_cap_refused(self, dispatch_env, monkeypatch):
+        """Live path (task_id/session_id/user_task) must still enforce hop cap via threaded parent_agent."""
+
+        br = dispatch_env
+
+        from agent import bot_chain as bc
+
+        from gateway.bot_loop_guard import BotLoopGuardSettings
+
+        import model_tools
+
+
+
+        # Build a minimal agent that will be threaded through handle_function_call
+
+        class FakeAgent:
+
+            session_id = "sess-live"
+
+            _turn_author = {"is_bot": True, "id": "bot:other"}
+
+            _bot_chain_session = None
+
+            valid_tool_names = ["message_peer"]
+
+            enabled_toolsets = None
+
+            disabled_toolsets = None
+
+            quiet_mode = True
+
+            _current_turn_id = "t1"
+
+            _current_api_request_id = "r1"
+
+        agent = FakeAgent()
+
+        orig = bc._settings
+
+        bc._settings = lambda: BotLoopGuardSettings(enabled=True, max_hops=1, max_events=100, window_seconds=300, cooldown_seconds=600)
+
+        try:
+
+            bc.on_turn_start(agent, {"is_bot": True, "id": "bot:other", "hops": 1}, None, "hi")
+
+            # Live shape: handle_function_call with parent_agent threaded (as agent executor does)
+
+            # Simulate what _resolve_sequential_dispatch now does: passes parent_agent=agent
+
+            from unittest.mock import patch
+
+            with patch("tools.bot_mode_dm._start_delivery", return_value=json.dumps({"status": "queued"})):
+
+                with patch("tools.bot_relay._hermes_cli", return_value="hermes"):
+
+                    raw = model_tools.handle_function_call(
+
+                        "message_peer", {"target": "sw-dev-b", "message": "live hop"},
+
+                        task_id="tid-live", session_id=agent.session_id, parent_agent=agent,
+
+                    )
+
+            parsed = json.loads(raw)
+
+            assert "error" in parsed, f"live dispatch should be refused at hop cap, got {parsed}"
+
+            assert "limit" in parsed["error"].lower() or "max_hops" in parsed["error"].lower() or "reached" in parsed["error"].lower()
+
+        finally:
+
+            bc._settings = orig
+
+            with bc._LOCK:
+
+                bc._CHAINS.pop(agent.session_id, None)
+
+                bc._CHAINS.pop(getattr(agent, "_bot_chain_session", ""), None)
+
+

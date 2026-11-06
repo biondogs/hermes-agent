@@ -384,25 +384,35 @@ def _deliver_to_peer(
 
 # ── plugin registration ──────────────────────────────────────────────────
 
+MESSAGE_PEER_DESCRIPTION = (
+    "Send a message to a teammate on this board (board-fenced). Use it to ask a teammate "
+    "a question you cannot answer from the card — a spec detail, a constraint, a blocker "
+    "— instead of guessing or blocking on the operator."
+)
+
 MESSAGE_PEER_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "target": {
-            "type": "string",
-            "description": "Target peer profile name on your board (board.yaml roles ∩ live profiles). Cross-board targets are refused.",
+    "name": TOOL_NAME,
+    "description": MESSAGE_PEER_DESCRIPTION,
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "target": {
+                "type": "string",
+                "description": "Target peer profile name on your board (board.yaml roles ∩ live profiles). Cross-board targets are refused.",
+            },
+            "message": {
+                "type": "string",
+                "description": "Message to deliver to the target peer. Attributed with sender board/name prefix on receipt.",
+            },
+            "expects_reply": {
+                "type": "boolean",
+                "description": "Whether you expect a reply (default true). False sends notify-only (no reply turn spawned).",
+                "default": True,
+            },
         },
-        "message": {
-            "type": "string",
-            "description": "Message to deliver to the target peer. Attributed with sender board/name prefix on receipt.",
-        },
-        "expects_reply": {
-            "type": "boolean",
-            "description": "Whether you expect a reply (default true). False sends notify-only (no reply turn spawned).",
-            "default": True,
-        },
+        "required": ["target", "message"],
+        "additionalProperties": False,
     },
-    "required": ["target", "message"],
-    "additionalProperties": False,
 }
 
 
@@ -414,6 +424,6 @@ def register(ctx: Any) -> None:
         schema=MESSAGE_PEER_SCHEMA,
         handler=_handler,
         check_fn=_check_fn,
-        description="Send a message to a teammate on this board (board-fenced). Use it to ask a teammate a question you cannot answer from the card — a spec detail, a constraint, a blocker — instead of guessing or blocking on the operator.",
+        description=MESSAGE_PEER_DESCRIPTION,
     )
     logger.info("board-rooms plugin: registered tool %r in toolset %r", TOOL_NAME, TOOLSET)

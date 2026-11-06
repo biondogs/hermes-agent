@@ -186,16 +186,28 @@ def _check_fn(**kwargs: Any) -> bool:
 # ── handler ──────────────────────────────────────────────────────────────
 
 def _handler(
-    target: str = "",
-    message: str = "",
-    expects_reply: bool = True,
+    args: dict | None = None,
+    parent_agent: Any | None = None,
+    task_id: str | None = None,
+    session_id: str | None = None,
     **kwargs: Any,
 ) -> str:
-    """Board-fenced peer delivery handler.
-
-    Validates target against board roster (belt and braces), then delivers
-    via a one-shot quiet CLI turn on the target's board-composed context.
-    """
+    """Board-fenced peer delivery handler (plugin contract: args dict + context kwargs)."""
+    if args is None:
+        args = {}
+    if isinstance(args, str):
+        args = {"target": args, **kwargs}
+        parent_agent = kwargs.get("parent_agent", parent_agent)
+        task_id = kwargs.get("task_id", task_id)
+    elif not isinstance(args, dict):
+        args = {}
+    target = args.get("target", kwargs.get("target", ""))
+    message = args.get("message", kwargs.get("message", ""))
+    expects_reply = args.get("expects_reply", kwargs.get("expects_reply", True))
+    if isinstance(expects_reply, str):
+        expects_reply = expects_reply.strip().lower() not in ("false", "0", "no")
+    else:
+        expects_reply = bool(expects_reply) if expects_reply is not None else True
     board = _current_board()
     if not board:
         return json.dumps({
@@ -261,12 +273,15 @@ def _handler(
     # We spawn: hermes --board <board> -p <target> --one-shot delivery
     # Use the board-rooms delivery path: board-composed one-shot turn
     try:
+        effective_task_id = task_id or kwargs.get("task_id") or os.environ.get("HERMES_KANBAN_TASK", "")
         result = _deliver_to_peer(
             board=board,
             target=resolved,
             message=msg,
             expects_reply=expects_reply,
             sender=me,
+            agent=parent_agent,
+            task_id=effective_task_id,
         )
         return result
     except Exception as exc:
@@ -280,20 +295,20 @@ def _deliver_to_peer(
     message: str,
     expects_reply: bool = True,
     sender: str | None = None,
+    agent: Any | None = None,
+    task_id: str | None = None,
 ) -> str:
     """Deliver message to target profile via board-composed one-shot turn.
 
     Reuses the hermes CLI delivery path with --board pin so the recipient
-    turn runs in the correct board context.
+    turn runs in the correct board context. Goes through bot_chain admit_send
+    for hop-cap and duplicate guard (AC3).
     """
     from tools.bot_relay import _hermes_cli
 
     sender_label = sender or "peer"
-    # Attribution prefix for the recipient
     attribution = f"[board-rooms DM from @{sender_label} on board {board!r}] "
     content = attribution + message
-
-    # For expects_reply=False, add the notify-only marker
     if not expects_reply:
         try:
             from tools.bot_mode_probe import NO_REPLY_MARKER
@@ -301,44 +316,51 @@ def _deliver_to_peer(
             content = f"{NO_REPLY_MARKER} {content}"
         except ImportError:
             pass
-
-    # Build delivery command: hermes --board <board> -p <target> with delivery
-    # Use HERMES_KANBAN_BOARD env pin + hermes CLI invocation
-    import subprocess
-    import tempfile
-
     hermes_bin = _hermes_cli()
-
-    # Use tools/bot_mode_dm delivery if available for chain accounting
     try:
-        # Try to use upstream's _start_delivery for chain/hop accounting
-        from agent.bot_chain import _LOCK as _chain_lock  # noqa: F401 — ensure chain module loaded
-
         from tools.bot_mode_dm import _start_delivery as _upstream_deliver
         from tools.bot_mode_probe import _handle as _probe_handle
 
-        # Build sender envelope for chain tracking
         sender_handle = sender or "unknown"
         try:
             roster_homes = {p: None for p in _board_roster(board)}
             handle = _probe_handle(target, list(roster_homes.keys())) if roster_homes else target
         except Exception:
             handle = target
+        recipient_key = f"board-rooms:{board.lower()}:{target.lower()}"
+        admission = None
+        try:
+            from agent.bot_chain import admit_send as _admit_send
 
-        # Use the upstream delivery with board pin via env
-        env = os.environ.copy()
-        env["HERMES_KANBAN_BOARD"] = board
-        # _start_delivery spawns hermes -p <target> with delivery content
+            if agent is not None:
+                admission = _admit_send(agent, [recipient_key], message)
+            if admission is not None and admission.refusal:
+                return json.dumps({"error": admission.refusal, "board": board})
+            if admission is not None and recipient_key in admission.refused:
+                return json.dumps({"error": admission.refused[recipient_key], "board": board})
+        except Exception:
+            admission = None
+        chain_envelope: dict[str, Any] = {}
+        if admission is not None:
+            chain_envelope = admission.envelope()
+        author: dict[str, Any] = {"id": f"bot:{sender_label}", "is_bot": True, "name": sender_label, **chain_envelope}
         result_str = _upstream_deliver(
             [hermes_bin, "-p", target],
             content,
             f"@{handle} on board {board!r}",
             stdin_file=False,
-            task_id=os.environ.get("HERMES_KANBAN_TASK", ""),
-            agent=None,  # no agent object in plugin context
+            task_id=task_id or os.environ.get("HERMES_KANBAN_TASK", ""),
+            agent=agent,
+            author=author,
             wake="notify" if expects_reply else "none",
         )
-        # _upstream_deliver returns a JSON string or status message
+        if admission is not None:
+            try:
+                parsed_deliv = json.loads(result_str) if isinstance(result_str, str) else {}
+                if isinstance(parsed_deliv, dict) and parsed_deliv.get("error") and parsed_deliv.get("status") in (None, "failed"):
+                    admission.release(recipient_key)
+            except Exception:
+                pass
         try:
             parsed = json.loads(result_str) if isinstance(result_str, str) else result_str
             if isinstance(parsed, dict) and "error" in parsed:

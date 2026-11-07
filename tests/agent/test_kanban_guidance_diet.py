@@ -23,7 +23,7 @@ all fail against the verbose 6.6KB text.
 """
 from agent.prompt_builder import KANBAN_GUIDANCE
 
-BUDGET_BYTES = 4700  # 4200 (R6 diet) + G-29 long-job detach rule (2026-10-26, operator-declared; t_4628c4aa)
+BUDGET_BYTES = 4800  # 4200 (R6 diet) + G-29 long-job detach rule (2026-10-26, operator-declared; t_4628c4aa) + G-29 10-second rule hjob run/wait (2026-11-06, operator-requested; t_05682ca8)
 
 # (marker, why it must survive)
 GUARANTEES = [
@@ -67,8 +67,12 @@ GUARANTEES = [
     # G-29 long-job detach rule (2026-10-26, operator ruling; t_4628c4aa)
     ("GOVERNANCE G-29", "long-job rule name"),
     ("hjob start", "long-job launcher command"),
-    ("NEVER a worker background process or bare tmux", "forbidden launch modes"),
+    ("NEVER a worker foreground/background process or bare tmux", "forbidden launch modes"),
     ("re-attach, don't relaunch", "respawn re-attach contract"),
+    # G-29 10-second rule (2026-11-06, operator request; t_05682ca8)
+    ("10-second rule", "10 s threshold"),
+    ("hjob run -- <cmd>", "same-turn detached run"),
+    ("hjob wait --name", "re-attach poll"),
     # orchestrator mode decision ownership
     ("Settle every design decision", "decisions before fan-out"),
     ("into BOTH card bodies", "decisions into both card bodies"),

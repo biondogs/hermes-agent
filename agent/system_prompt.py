@@ -319,11 +319,15 @@ def _auto_load_parts(agent: Any) -> list[str]:
     HERMES_IGNORE_RULES are read on the first build only) so the prompt stays byte-stable
     across model switches, compression and static-prefix restoration.
 
-    Same gate as ``_skills_prompt``: nothing without the skills toolset, and nothing for agents that skip
-    context files (delegate children, curator/review forks, gateway hygiene agents) — pinned skills are
-    operator guidance for the user's session, not payload for every internal fork."""
-    if getattr(agent, "skip_context_files", False) or not any(
-            name in agent.valid_tool_names for name in ("skills_list", "skill_view", "skill_manage")):
+    LOAD-ONLY (LOCAL HOTFIX t_f52d509d, operator ruling 2026-11-08): pinned-skill blocks are
+    prompt text, not tool capability — they inject on any seat whose config sets
+    ``skills.auto_load``, with or without the skills toolset, so a least-privilege seat can
+    carry operator guidance without being granted ``skills_list``/``skill_view``/``skill_manage``.
+    The skills INDEX (``_skills_prompt``) keeps its toolset gate: an auto-loaded seat still
+    lists no index and gains no tools. Nothing for agents that skip context files (delegate
+    children, curator/review forks, gateway hygiene agents) — pinned skills are operator
+    guidance for the user's session, not payload for every internal fork."""
+    if getattr(agent, "skip_context_files", False):
         return []
     if not getattr(agent, "_auto_load_skills_resolved", False):
         result: tuple[str, list[str], list[str]] = ("", [], [])

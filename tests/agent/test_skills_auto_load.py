@@ -85,8 +85,10 @@ class TestSharedPromptPath:
         assert "ORIGINAL SKILL BYTES" in rebuilt and "MUTATED BYTES" not in rebuilt
 
     def test_gates_suppress_auto_load(self, tmp_path, monkeypatch):
-        """HERMES_IGNORE_RULES, skip_context_files (delegate children / internal forks) and a session without
-        the skills toolset all keep pinned skills out of the prompt."""
+        """HERMES_IGNORE_RULES and skip_context_files (delegate children / internal forks) keep
+        pinned skills out of the prompt; a session WITHOUT the skills toolset still gets them
+        (LOAD-ONLY, LOCAL HOTFIX t_f52d509d: auto_load is prompt text, not tool capability —
+        the skills index keeps its toolset gate, but pinned blocks inject regardless)."""
         _write_skill(tmp_path, "stable-skill", "ORIGINAL SKILL BYTES")
         cfg = {"skills": {"auto_load": ["stable-skill"]}}
         with patch("tools.skills_tool.SKILLS_DIR", tmp_path), \
@@ -100,7 +102,10 @@ class TestSharedPromptPath:
             child = _bare_agent("child")
             child.skip_context_files = True
             assert "ORIGINAL SKILL BYTES" not in child._build_system_prompt()
+            # LOAD-ONLY: no skills toolset -> pinned blocks still inject; no index side effects.
             no_skills = _bare_agent("no-skills")
             no_skills.valid_tool_names = {"memory"}
-            assert "ORIGINAL SKILL BYTES" not in no_skills._build_system_prompt()
+            prompt = no_skills._build_system_prompt()
+            assert "ORIGINAL SKILL BYTES" in prompt and "auto-loaded via config" in prompt
+            assert "## Skills" not in prompt  # the index stays toolset-gated (prompt_builder._render_skills_index)
             assert "ORIGINAL SKILL BYTES" in _bare_agent("full")._build_system_prompt()

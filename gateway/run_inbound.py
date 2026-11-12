@@ -378,6 +378,21 @@ class GatewayInboundMixin(GatewayInboundHooksMixin, GatewayInboundTranscriptionM
         _clarify_has_audio = bool(self._pending_event_audio_paths(event))
         _raw_clarify_reply = await self._prepare_clarify_reply_text(event)
 
+        # Busy-path parity: log inbound with reply_to even when it resolves a clarify
+        if getattr(event, "reply_to_message_id", None) or getattr(event, "reply_to_text", None):
+            try:
+                self._log_busy_inbound(event)  # type: ignore[attr-defined]
+            except Exception:
+                logger.info(
+                    "inbound message: platform=%s user=%s chat=%s msg=%r reply_to_id=%s reply_to_text=%r",
+                    getattr(getattr(source, "platform", None), "value", "unknown"),
+                    getattr(source, "user_name", None) or getattr(source, "user_id", "unknown"),
+                    getattr(source, "chat_id", "unknown"),
+                    (event.text or "")[:80].replace("\n", " "),
+                    getattr(event, "reply_to_message_id", None),
+                    (getattr(event, "reply_to_text", None) or "")[:80].replace("\n", " "),
+                )
+
         def _retain(why: str) -> str:
             logger.info(
                 "Gateway retained pending clarify after %s (session=%s, id=%s)",

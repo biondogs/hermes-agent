@@ -550,6 +550,27 @@ class GatewayBusySessionMixin:
 
         self._enqueue_fifo(session_key, event, adapter)
 
+    @staticmethod
+    def _busy_reply_prefix(event: MessageEvent) -> str:
+        """Reply-to disambiguation prefix, same shape as idle path's [Replying to: ...]."""
+        if getattr(event, "reply_to_text", None) and getattr(event, "reply_to_message_id", None):
+            _who = " your previous message" if getattr(event, "reply_to_is_own_message", False) else ""
+            return f'[Replying to{_who}: "{event.reply_to_text}"]\n\n'
+        return ""
+
+    @staticmethod
+    def _log_busy_inbound(event: MessageEvent) -> None:
+        src = getattr(event, "source", None)
+        plat = getattr(getattr(src, "platform", None), "value", "unknown") if src else "unknown"
+        chat = getattr(src, "chat_id", "unknown") if src else "unknown"
+        user = getattr(src, "user_name", None) or getattr(src, "user_id", "unknown") if src else "unknown"
+        logger.info(
+            "inbound message: platform=%s user=%s chat=%s msg=%r reply_to_id=%s reply_to_text=%r",
+            plat, user, chat, (event.text or "")[:80].replace("\n", " "),
+            getattr(event, "reply_to_message_id", None),
+            (getattr(event, "reply_to_text", None) or "")[:80].replace("\n", " "),
+        )
+
     async def _prepare_busy_steer_text(self, event: MessageEvent) -> str:
         """Steerable text for a busy follow-up, transcribing voice-message media first.
 
@@ -559,11 +580,14 @@ class GatewayBusySessionMixin:
         """
         text = (event.text or "").strip()
         if not self._pending_event_audio_paths(event):
-            return text
-        enriched_text, successful_transcripts = await self._transcribe_and_echo_pending_voice(
-            event, self._delivery_adapter_for(event.source), event.source, text, log_context="Busy-steer"
-        )
-        return (enriched_text or text).strip() if successful_transcripts else text
+            base = text
+        else:
+            enriched_text, successful_transcripts = await self._transcribe_and_echo_pending_voice(
+                event, self._delivery_adapter_for(event.source), event.source, text, log_context="Busy-steer"
+            )
+            base = (enriched_text or text).strip() if successful_transcripts else text
+        prefix = self._busy_reply_prefix(event)
+        return f"{prefix}{base}" if prefix else base
 
     def _steer_text_with_origin(self, text: str, event: MessageEvent) -> str:
         """Keep event origin in this injection, never in the cached system prompt."""
@@ -755,7 +779,7 @@ class GatewayBusySessionMixin:
             and hasattr(running_agent, "redirect")
         ):
             redirected = self._redirect_active_turn(
-                running_agent, (event.text or "").strip(), session_key, event
+                running_agent, f"{self._busy_reply_prefix(event)}{(event.text or '').strip()}", session_key, event
             )
         return self._BusySteerOutcome(
             effective_mode=effective_mode, demoted_for_subagents=demoted_for_subagents,
@@ -828,6 +852,9 @@ class GatewayBusySessionMixin:
                 )
             elif not _interrupt_text and _media_urls:
                 _interrupt_text = _build_media_placeholder(event)
+            prefix = self._busy_reply_prefix(event)
+            if prefix:
+                _interrupt_text = f"{prefix}{_interrupt_text or ''}"
             running_agent.interrupt(_interrupt_text)
         except Exception:
             pass  # don't let interrupt failure block the ack
@@ -933,6 +960,7 @@ class GatewayBusySessionMixin:
             logger.debug("Failed to send busy-ack: %s", e)
 
     async def _handle_active_session_busy_message(self, event: MessageEvent, session_key: str) -> bool:
+        self._log_busy_inbound(event)
         # Gateway wakes have no external user identity. Admit them before auth/drain/approval
         # handling, without merging their text into an already queued human message.
         if event.internal and event.allow_gateway_control:

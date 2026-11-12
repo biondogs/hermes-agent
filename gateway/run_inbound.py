@@ -406,7 +406,26 @@ class GatewayInboundMixin(GatewayInboundHooksMixin, GatewayInboundTranscriptionM
         # they can retry; on timeout the agent unblocks with an empty response.
         if not _raw_clarify_reply or _raw_clarify_reply.startswith("/"):
             return None
-        _text_outcome = _clarify_mod.attempt_text_response_for_session(_quick_key, _raw_clarify_reply)
+        # Preserve reply context for the agent: attempt_text_response_for_session
+        # coerces then resolves with the coerced value, but the raw reply may carry
+        # a Telegram quote that must reach the agent as "[Replying to: ...]" prefix.
+        # Resolve manually so the stored response carries the prefix.
+        _clarify_prefix = ""
+        try:
+            _clarify_prefix = self._busy_reply_prefix(event)  # type: ignore[attr-defined]
+        except Exception:
+            if getattr(event, "reply_to_text", None) and getattr(event, "reply_to_message_id", None):
+                _clarify_prefix = f'[Replying to: "{event.reply_to_text}"]\n\n'
+        if _clarify_prefix:
+            _coerced, _coerce_reason = _clarify_mod._coerce_text_response_detailed(_pending_clarify, _raw_clarify_reply)
+            if _coerced is None:
+                _text_outcome = _clarify_mod.TEXT_REJECTED_SELECTION if _coerce_reason == "invalid_selection" else _clarify_mod.TEXT_REJECTED_PROSE
+            else:
+                _prefixed = f"{_clarify_prefix}{_coerced}"
+                _resolved = _clarify_mod.resolve_gateway_clarify(_pending_clarify.clarify_id, _prefixed)
+                _text_outcome = _clarify_mod.TEXT_RESOLVED if _resolved else _clarify_mod.TEXT_NO_PENDING
+        else:
+            _text_outcome = _clarify_mod.attempt_text_response_for_session(_quick_key, _raw_clarify_reply)
         if _text_outcome == _clarify_mod.TEXT_RESOLVED:
             logger.info(
                 "Gateway intercepted clarify text response (session=%s, id=%s)",

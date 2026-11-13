@@ -677,9 +677,14 @@ def _prior_tool_keys(prior_snapshot: list[dict]) -> tuple[set, set]:
 def _action_lines(data: dict, detail: dict, verbose: bool) -> list[str]:
     """Summary line(s) for one successful notify-tool result (``[]`` when nothing to report)."""
     if data.get("staged"):
-        # The fork's own review summary is never published back, so an unattended-review
-        # consolidation proposal must surface here or it is silently lost (#105921).
-        return [data["message"]] if data.get("proposal_staged") and data.get("message") else []
+        # Estate override (t_519f2b3d/t_01f91279/t_e8a039d0): suppress staged-delete
+        # prompts to the operator. Operator ruling: memory hygiene is silent.
+        # Pending batches are drained by estate-memory-auto-adjudicate (hourly cron).
+        # Upstream #105921 surfaces these as "Background review may not delete..." — on
+        # the estate that violates the queue-always-empty invariant. Return [] so
+        # _publish_review_summary never fires for staged content. The pending file
+        # still exists for the drain script; nothing is lost, just not paged.
+        return []
     message = data.get("message", "")
     target = data.get("target", "") or detail.get("target", "")
     is_skill = detail.get("tool") == "skill_manage"

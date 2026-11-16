@@ -593,9 +593,28 @@ async def _spawn_registered_worker(authority, ref, row):
         from gateway.session_worker_spawn import acquire_process
         from gateway.session_managed_worker_log import worker_log_path
         log_path = worker_log_path(authority.profile_id)
-        process = await acquire_process(subprocess.Popen, [sys.executable, '-m', 'agent.managed_worker'],
-            cwd=cwd, stdin=subprocess.PIPE, env=env, stdout=subprocess.PIPE,
+        # Kanban workers: try restart-safe scope (survives gateway restarts)
+        is_kanban = bool(getattr(policy, 'kanban_json', None))
+        popen_kwargs = dict(cwd=cwd, stdin=subprocess.PIPE, env=env, stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL if log_path is None else subprocess.PIPE, **WORKER_POPEN)
+        if is_kanban:
+            try:
+                from tools.process_registry import restart_safe_gateway_child_argv
+                disp = restart_safe_gateway_child_argv(
+                    [__import__('sys').executable, '-m', 'agent.managed_worker'],
+                    unit_suffix=f"kanban-{ref.session_id[:12]}", require_restart_safe_scope=False, outlives_parent=True)
+                if disp.mode == "scoped":
+                    popen_kwargs_scoped = dict(popen_kwargs)
+                    # The scoped argv is the systemd-run wrapper
+                    process = await acquire_process(subprocess.Popen, disp.argv,
+                        cwd=cwd, stdin=subprocess.PIPE, env=env, stdout=subprocess.PIPE,
+                        stderr=subprocess.DEVNULL if log_path is None else subprocess.PIPE, **WORKER_POPEN)
+                else:
+                    process = await acquire_process(subprocess.Popen, [__import__('sys').executable, '-m', 'agent.managed_worker'], **popen_kwargs)
+            except Exception:
+                process = await acquire_process(subprocess.Popen, [__import__('sys').executable, '-m', 'agent.managed_worker'], **popen_kwargs)
+        else:
+            process = await acquire_process(subprocess.Popen, [__import__('sys').executable, '-m', 'agent.managed_worker'], **popen_kwargs)
     except asyncio.CancelledError:
         # acquire_process owns late-child cleanup; no bootstrap or reservation was sent.
         spawning.pop(ref.session_id, None)

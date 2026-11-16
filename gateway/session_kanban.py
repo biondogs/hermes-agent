@@ -10,6 +10,24 @@ import sqlite3
 
 from hermes_state_runtime import RuntimeStoreError
 
+# Detached kanban scopes that survive gateway restarts — for drain exclusion
+# and re-admission. Keyed by execution_id.
+_kanban_detached_execution_ids: set[str] = set()
+
+
+def get_kanban_restart_wait_counts():
+    """Counts for the restart-wait drain: detached kanban executions."""
+    return {"detached": len(_kanban_detached_execution_ids), "total": len(_kanban_detached_execution_ids)}
+
+
+def register_detached_kanban_execution(execution_id: str):
+    _kanban_detached_execution_ids.add(execution_id)
+
+
+def unregister_detached_kanban_execution(execution_id: str):
+    _kanban_detached_execution_ids.discard(execution_id)
+
+
 
 def build_kanban_policy(connection, params, config):
     from hermes_cli import kanban_db as kb

@@ -338,6 +338,9 @@ def execute(frame, channel):
     if adopted['owner_epoch'] != scope['epoch']:
         raise RuntimeError('stale_epoch')
     store = RuntimeSessionStore(rpc, scope, outbox_dir(frame['home'], scope['execution_id']), adopted)
+    # Expose for SIGUSR1 checkpoint handler
+    import agent.runtime_session_store as _rss_mod
+    _rss_mod._checkpoint_store = store
     from gateway.session_kanban import bind_worker_context
     bind_worker_context(frame)
     # Background processes a previous admission of this session started outlive that worker
@@ -416,6 +419,23 @@ def execute(frame, channel):
                 raise ValueError('managed_finish_timeout')
             store.finish()
             channel.send('finished')
+    except SystemExit as exc:
+        # Prestart refusal (exit 78) and credential mapping pass through
+        raise
+    except BaseException as exc:
+        # Host-side loss after retry window → exit 75 (sibling classifies as host_restart/host_stall)
+        from agent.runtime_session_store import WorkerPersistenceError, KANBAN_HOST_STALL, KANBAN_HOST_RESTART
+        msg = str(exc)
+        if isinstance(exc, WorkerPersistenceError) and any(k in msg for k in ('worker_receipt_timeout', 'owner_unavailable', 'host_stall', 'host_restart')):
+            print(KANBAN_HOST_STALL if 'stall' in msg.lower() or 'worker_receipt_timeout' in msg else KANBAN_HOST_RESTART, file=sys.stderr)
+            print(f'KANBAN_WORKER_EXIT_TRAILER75', file=sys.stderr)
+            raise SystemExit(75) from exc
+        if isinstance(exc, ValueError) and 'kanban_skills_unavailable' in msg:
+            from agent.runtime_session_store import KANBAN_PRESTART_REFUSAL
+            print(KANBAN_PRESTART_REFUSAL, file=sys.stderr)
+            print(f'KANBAN_WORKER_EXIT_TRAILER78', file=sys.stderr)
+            raise SystemExit(78) from exc
+        raise
     finally:
         unregister_gateway_notify(frame['route'])
         if agent is not None:
@@ -449,7 +469,30 @@ def hello():
     return {'pid': me.pid, 'birth': worker_birth(me), 'ancestors': [p.pid for p in me.parents()[:3]]}
 
 
+def _handle_checkpoint_signal(signum, frame):
+    """Best-effort flush of pending journal on SIGUSR1 (restart checkpoint hint)."""
+    try:
+        # The store is thread-local if execute() has bound it; otherwise no-op.
+        import agent.runtime_session_store as _rss
+        store = getattr(_rss, '_checkpoint_store', None)
+        if store is not None:
+            with store.lock:
+                if store.journal.get('pending'):
+                    try:
+                        store.retry_pending()
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+
+
 def main():
+    # Checkpoint hint: gateway signals workers to flush pending saves before drain exit.
+    try:
+        import signal
+        signal.signal(signal.SIGUSR1, _handle_checkpoint_signal)
+    except Exception:
+        pass
     channel = WorkerChannel(os.fdopen(os.dup(sys.stdout.fileno()), 'wb', buffering=0))  # windows-footgun: ok — binary frames
     os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
     # This process's own stderr only, never the channel. The owner drains it into the profile's
@@ -462,6 +505,17 @@ def main():
         channel.send('hello', **hello())
         frame = validate_bootstrap(read_frame(sys.stdin.buffer))
         execute(frame, channel)
+    except SystemExit:
+        raise
+    except ValueError as exc:
+        if 'kanban_skills_unavailable' in str(exc):
+            from agent.runtime_session_store import KANBAN_PRESTART_REFUSAL
+            print(KANBAN_PRESTART_REFUSAL, file=sys.stderr)
+            print(f'KANBAN_WORKER_EXIT_TRAILER78', file=sys.stderr)
+            return 78
+        logger.exception('managed worker failed')
+        channel.send('error', reason='managed_worker_failed')
+        return 1
     except Exception:
         # Runtime exceptions can contain credentials; the owner gets no raw traceback.
         logger.exception('managed worker failed')

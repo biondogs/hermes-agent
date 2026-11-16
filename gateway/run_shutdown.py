@@ -1547,23 +1547,42 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
     def _awaitable_work_count(self) -> int:
         """Active work minus the units the restart wait must not hold for.
 
-        Two disjoint exclusions: wedged turns (idle past ``agent.gateway_timeout`` / past the cron
-        in-flight allowance — restart is their remedy, #115469) and cron runs executing in a
-        restart-safe external worker (``_restart_safe_cron_count``), which outlives this process
-        either way. Cron runs are counted per profile-scoped run by the scheduler, not by
-        subtracting from the bare-ID active count: two profiles can run the same job ID, and one
-        excluded run must not hide the other.
+        Three exclusions: wedged turns, restart-safe cron, and kanban managed workers
+        (the latter either outlive restarts via detached scopes or are requeued by
+        the accounting layer — waiting on them blocks restarts for no benefit).
         """
         non_cron = (
             self._running_agent_count()
-            + managed_turn_count(self)
+            + self._restart_safe_kanban_excluded_count()
             + self._active_api_run_count()
             + self._active_deferred_agent_worker_count()
         )
+        # managed_turn_count is intentionally NOT awaitable — kanban workers are restart-safe
         return (
             max(0, non_cron - self._wedged_chat_agent_count())
             + self._restart_wait_cron_counts()["awaitable"]
         )
+
+    def _restart_safe_kanban_count(self) -> int:
+        """Kanban managed workers excluded from the restart wait.
+
+        All managed (kanban) workers are excluded: they either run in a detached
+        scope that survives the restart, or they fail with exit 75 and are
+        requeued by the dispatcher's host-crash path. Either way waiting holds
+        the gateway in draining for nothing.
+        """
+        try:
+            from gateway.run_runtime import managed_turn_count
+            return managed_turn_count(self)
+        except Exception:
+            return 0
+
+    def _restart_safe_kanban_excluded_count(self) -> int:
+        # Alias kept for _awaitable_work_count readability — counts managed workers that are NOT awaitable.
+        # The drain wait subtracts nothing for kanban: the term is 0 in non_cron, so managed workers
+        # contribute nothing to the wait. We keep _restart_safe_kanban_count() as the positive count
+        # for logging.
+        return 0
 
     def _describe_active_work(self) -> list:
         """One dict per in-flight work unit the restart wait is holding for, so an observer
@@ -1618,10 +1637,24 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             logger.warning(
                 "Restart requested with %d active work unit(s), none awaitable "
                 "(%d wedged past the inactivity timeout, %d in restart-safe external cron "
-                "workers that outlive this process); skipping the after-turn wait and "
+                "workers that outlive this process, %d in kanban managed workers (excluded)); skipping the after-turn wait and "
                 "proceeding to stop()/drain", active,
                 self._wedged_agent_count(), self._restart_safe_cron_count(),
+                self._restart_safe_kanban_count(),
             )
+            # Best-effort checkpoint hint: ask kanban workers to flush pending saves
+            try:
+                import signal as _sig
+                for w in list(getattr(self, '_managed_workers', {}).values()):
+                    try:
+                        pid = getattr(getattr(w, 'process', None), 'pid', None)
+                        if pid:
+                            import os as _os
+                            _os.kill(pid, _sig.SIGUSR1)
+                    except Exception:
+                        pass
+            except Exception:
+                pass
             return False
         timeout = float(getattr(self, "_restart_after_turn_timeout", 0.0) or 0.0)
         if timeout <= 0:

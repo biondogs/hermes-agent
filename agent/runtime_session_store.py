@@ -21,6 +21,7 @@ from hermes_dir_acl import make_user_dir
 logger = logging.getLogger(__name__)
 
 _worker_process = False
+_checkpoint_store = None
 
 
 def is_worker_process():
@@ -42,6 +43,32 @@ def apply_row_annotations(messages, annotations):
                 message.pop(key, None)
             else:
                 message[key] = value
+
+# Exit markers for the accounting contract (cross-card: sibling classifies from these).
+KANBAN_HOST_RESTART = 'KANBAN_HOST_RESTART'
+KANBAN_HOST_STALL = 'KANBAN_HOST_STALL'
+KANBAN_PRESTART_REFUSAL = 'KANBAN_PRESTART_REFUSAL'
+# Bounded retry budget for transient owner loss (stall/restart gap).
+WORKER_PERSIST_RETRY_BUDGET_S = float(os.environ.get('HERMES_KANBAN_PERSIST_RETRY_S', '180'))
+_WORKER_RETRYABLE_ERRORS = frozenset({
+    'worker_receipt_timeout', 'owner_unavailable', 'ConnectionClosed',
+    'GatewayUnavailableError', 'draining', 'starting',
+})
+
+
+def _is_retryable_persistence_error(exc: BaseException) -> bool:
+    msg = str(exc)
+    if isinstance(exc, TimeoutError) and 'worker_receipt_timeout' in msg:
+        return True
+    if isinstance(exc, WorkerPersistenceError) and any(k in msg for k in _WORKER_RETRYABLE_ERRORS):
+        return True
+    # websockets ConnectionClosed
+    if type(exc).__name__ == 'ConnectionClosed':
+        return True
+    if 'owner_unavailable' in msg or 'draining' in msg or 'starting' in msg:
+        return True
+    return False
+
 
 class WorkerPersistenceError(RuntimeError):
     pass
@@ -330,13 +357,57 @@ class RuntimeSessionStore(RuntimeSessionCompressionMixin, RuntimeSessionLifecycl
             self.journal = candidate
             return self.retry_pending()[0]
 
+    def _retry_with_budget(self, fn):
+        """Call fn with bounded retry for transient owner loss (stall/restart gap).
+
+        On retryable errors (TimeoutError/worker_receipt_timeout, ConnectionClosed,
+        owner_unavailable/draining), redials with jittered backoff until
+        WORKER_PERSIST_RETRY_BUDGET_S expires, then re-raises.
+        Non-retryable errors propagate immediately.
+        """
+        import random as _rand
+        import time as _time
+        deadline = _time.monotonic() + WORKER_PERSIST_RETRY_BUDGET_S
+        attempt = 0
+        while True:
+            try:
+                return fn()
+            except BaseException as exc:
+                if not _is_retryable_persistence_error(exc):
+                    raise
+                remaining = deadline - _time.monotonic()
+                if remaining <= 0:
+                    raise
+                # jittered backoff: 0.5s base, max 8s, jitter 0.3
+                delay = min(0.5 * (1.5 ** attempt), 8.0) * (1 + _rand.uniform(-0.15, 0.15))
+                delay = min(delay, remaining)
+                if delay > 0:
+                    _time.sleep(delay)
+                attempt += 1
+                # redial: drop stale link so _connection() re-discovers
+                try:
+                    self.rpc._drop()
+                except Exception:
+                    pass
+
     def retry_pending(self):
         with self.lock:
             results = []
             try:
                 while self.journal['pending']:
                     entry = self.journal['pending'][0]
-                    result = self.rpc('worker.persist', **self.scope, **entry)
+
+                    def _call():
+                        return self.rpc('worker.persist', **self.scope, **entry)
+
+                    # Bounded retry for transient owner stalls/restarts
+                    try:
+                        result = _call()
+                    except BaseException as exc:
+                        if _is_retryable_persistence_error(exc):
+                            result = self._retry_with_budget(_call)
+                        else:
+                            raise
                     candidate = dict(self.journal, pending=self.journal['pending'][1:])
                     candidate = self._compression_receipt_journal(candidate, result)
                     self._save(candidate)

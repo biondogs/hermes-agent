@@ -318,12 +318,28 @@ KANBAN_RATE_LIMIT_EXIT_CODE = 75
 # the FIRST occurrence instead of spending ``failure_limit`` identical spawns. 78 == BSD EX_CONFIG.
 KANBAN_TERMINAL_PROVIDER_EXIT_CODE = 78
 
+# Worker exit "host lost the worker": the managed worker was killed by a
+# gateway/host restart (SIGTERM from hermes-gateway.service KillMode=mixed,
+# OOM, host reboot). Nothing about the card is at fault — the card is
+# requeued WITHOUT counting toward ``kanban.failure_limit`` (still 3) and
+# without tripping the breaker; the 24 h host-crash ceiling (6) still
+# applies. 74 == BSD EX_IOERR (repurposed for host loss).
+KANBAN_HOST_LOSS_EXIT_CODE = 74
+
 # Worker exit "owner refused the spawn because it is draining": the gateway/runtime is in a
 # graceful-restart deferred drain (SIGUSR1 / `hermes update` window) and answered
 # ``runtime_draining`` — a HOST condition, not a card failure. Nothing about the card ran
 # (no admission marker), so the requeue must never consume the retry budget or trip the
 # breaker; the respawn guard spaces the retries like a rate-limit cooldown. 76 == BSD EX_PROTOCOL.
 KANBAN_DRAIN_REFUSED_EXIT_CODE = 76
+
+# Worker exit "prestart refusal": the worker never started useful work because
+# a required skill/profile dependency was unavailable (e.g.
+# ``kanban_skills_unavailable``). Retrying cannot heal it — the dispatcher
+# parks the card ``blocked`` (sticky) on the FIRST occurrence with a plain
+# message naming the cause and the profile so the operator can fix config
+# then unblock. 77 == BSD EX_NOPERM (repurposed for prestart refusal).
+KANBAN_PRESTART_REFUSAL_EXIT_CODE = 77
 
 
 def _resolve_crash_grace_seconds() -> int:
@@ -2133,7 +2149,11 @@ def recompute_ready(conn: sqlite3.Connection, failure_limit: int | None = None) 
     explicit ``kanban_unblock`` (#28712).
     """
     if failure_limit is None:
-        failure_limit = DEFAULT_FAILURE_LIMIT
+        try:
+            from hermes_cli.kanban_db_dispatch import _resolve_config_failure_limit
+            failure_limit = _resolve_config_failure_limit()
+        except Exception:
+            failure_limit = DEFAULT_FAILURE_LIMIT
     promoted = 0
     with write_txn(conn):
         todo_rows = conn.execute(

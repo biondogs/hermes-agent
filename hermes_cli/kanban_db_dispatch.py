@@ -14,6 +14,7 @@ import signal
 import sqlite3
 import subprocess
 import sys
+import pathlib
 import time
 from dataclasses import dataclass
 from dataclasses import field
@@ -35,6 +36,130 @@ if TYPE_CHECKING:
 # After this many consecutive non-success attempts on a task/profile the
 # dispatcher parks the task in ``blocked`` with a reason — prevents retry storms.
 DEFAULT_FAILURE_LIMIT = 2
+
+# Host-crash accounting: 6 host crashes per card per rolling 24 h, then a
+# sticky block. Host crashes never count toward ``kanban.failure_limit`` (3).
+HOST_CRASH_CEILING = 6
+HOST_CRASH_WINDOW_S = 86400
+
+def _resolve_config_failure_limit() -> int:
+    """Resolve ``kanban.failure_limit`` from config.yaml, or the dispatcher default.
+
+    Single helper (D4): ``kanban_db.recompute_ready`` imports this instead of
+    duplicating the logic with different error handling.
+    """
+    try:
+        from hermes_cli.config import load_config
+        cfg = load_config() or {}
+        raw = (cfg.get("kanban") or {}).get("failure_limit")
+        if raw is not None:
+            v = int(raw)
+            if v >= 1:
+                return v
+    except Exception:
+        pass
+    return DEFAULT_FAILURE_LIMIT
+
+# Bounce-receipt window: START..SUCCESS|FAILURE markers in
+# ``~/.hermes/logs/gateway-bounce-receipts.log``. A death inside such a window
+# is a gateway restart, not a card bug.
+_BOUNCE_RECEIPTS_PATH = pathlib.Path.home() / ".hermes" / "logs" / "gateway-bounce-receipts.log"
+_BOUNCE_START_RE = re.compile(r"^(\S+)\s+START\b")
+_BOUNCE_END_RE = re.compile(r"^(\S+)\s+(?:SUCCESS|FAILURE)\b")
+
+def _bounce_windows() -> list[tuple[float, float]]:
+    """Parse bounce receipt log into ``(start_epoch, end_epoch)`` windows.
+
+    Best-effort: missing/unreadable log -> empty list; unclosed START is
+    ignored until its SUCCESS/FAILURE arrives.
+    """
+    try:
+        raw = _BOUNCE_RECEIPTS_PATH.read_text()
+    except Exception:
+        return []
+    # gateway-bounce-receipts.log timestamps are ISO8601 Zulu.
+    from datetime import datetime, timezone
+    windows: list[tuple[float, float]] = []
+    cur_start: float | None = None
+    for line in raw.splitlines():
+        m = _BOUNCE_START_RE.match(line)
+        if m:
+            try:
+                cur_start = datetime.fromisoformat(m.group(1).replace("Z","+00:00")).timestamp()
+            except Exception:
+                cur_start = None
+            continue
+        m = _BOUNCE_END_RE.match(line)
+        if m and cur_start is not None:
+            try:
+                end = datetime.fromisoformat(m.group(1).replace("Z","+00:00")).timestamp()
+                windows.append((cur_start, end))
+            except Exception:
+                pass
+            cur_start = None
+    return windows
+
+def _death_in_bounce_window(death_epoch: float | None = None) -> bool:
+    """True when the death timestamp falls inside a bounce START..END window."""
+    if death_epoch is None:
+        death_epoch = time.time()
+    for s, e in _bounce_windows():
+        if s <= death_epoch <= e:
+            return True
+    return False
+
+# Evidence regexes for fallback classification (workers that died with generic code 1).
+_HOST_RESTART_TEXT_RE = re.compile(r"restart_wait|Gateway draining", re.I)
+_HOST_EOF_RE = re.compile(r"worker_lost.*EOFError|managed worker lost:\s*EOFError", re.I)
+_HOST_STALL_RE = re.compile(r"worker_receipt_timeout", re.I)
+_PRESTART_RE = re.compile(r"kanban_skills_unavailable", re.I)
+
+def _classify_host_evidence(error_text: str, worker_output: str = "") -> str | None:
+    """Evidence -> ``host_restart`` / ``host_stall`` / ``prestart_refusal`` or None.
+
+    Order matters: prestart_refusal is not a host crash (different ceiling).
+    """
+    hay = f"{error_text or ''} {worker_output or ''}"
+    if _PRESTART_RE.search(hay):
+        return "prestart_refusal"
+    if _HOST_RESTART_TEXT_RE.search(hay):
+        return "host_restart"
+    if _HOST_EOF_RE.search(hay):
+        # EOFError alone is ambiguous; confirm it fell inside a bounce window.
+        # Contract: "`managed worker lost: EOFError` inside a bounce window -> host_restart".
+        # Without a bounce, treat as generic worker_error (don't inflate host count).
+        if _death_in_bounce_window():
+            return "host_restart"
+        return None
+    if _HOST_STALL_RE.search(hay):
+        return "host_stall"
+    return None
+
+def _host_crash_count_24h(conn, task_id: str) -> int:
+    """Count host_restart/host_stall failures for card in last 24 h.
+
+    Counts distinct ``failure_class``-bearing events (one per host crash).
+    D3 fix: ``_reclaim_dead_workers`` and ``_account_crashes`` must not each
+    emit a counted event — only the reclaim event is counted.
+    """
+    cutoff = int(time.time()) - HOST_CRASH_WINDOW_S
+    try:
+        rows = conn.execute(
+            "SELECT payload FROM task_events WHERE task_id=? AND created_at >= ? AND kind IN ('crashed','gave_up')",
+            (task_id, cutoff)).fetchall()
+        import json as _js
+        c = 0
+        for r in rows:
+            try:
+                d = _js.loads(r[0] or "{}")
+                if d.get("failure_class") in ("host_restart", "host_stall"):
+                    c += 1
+            except Exception:
+                pass
+        return c
+    except Exception:
+        return 0
+
 
 # Keep a little wall-clock budget for the worker to observe a terminal timeout
 # and make a terminal board call (kanban_block/kanban_complete/kanban_request_review)
@@ -315,6 +440,10 @@ def _exit_code_kind(code: int) -> tuple[str, int]:
         return ("drain_refused", code)
     if code == _kb.KANBAN_TERMINAL_PROVIDER_EXIT_CODE:
         return ("terminal_provider", code)
+    if code == getattr(_kb, "KANBAN_HOST_LOSS_EXIT_CODE", 74):
+        return ("host_loss", code)
+    if code == getattr(_kb, "KANBAN_PRESTART_REFUSAL_EXIT_CODE", 77):
+        return ("prestart_refusal", code)
     return ("nonzero_exit", code)
 
 
@@ -1117,6 +1246,12 @@ class _DeadWorker:
     terminal_provider: bool = False
     """``KANBAN_TERMINAL_PROVIDER_EXIT_CODE``: the provider rejected the worker's
     credential/model — trips the breaker on this first occurrence."""
+    host_crash: bool = False
+    """Host killed the worker (gateway restart, stall): requeued without counting."""
+    prestart_refusal: bool = False
+    """Prestart skill check failed: sticky block on first occurrence."""
+    failure_class: str | None = None
+    """Contract failure_class for bulletin: host_restart/host_stall/prestart_refusal/worker_error."""
 
     @property
     def run_outcome(self) -> str:
@@ -1124,7 +1259,11 @@ class _DeadWorker:
         # history doesn't show a phantom crash for a quota wall or a host drain window.
         if self.drain_refused:
             return "drain_refused"
-        return "rate_limited" if self.rate_limited else "crashed"
+        if self.rate_limited:
+            return "rate_limited"
+        # Host crashes and prestart refusals use "crashed" outcome but carry
+        # ``failure_class`` for class-aware accounting.
+        return "crashed"
 
 
 def _classify_dead_worker(
@@ -1136,13 +1275,50 @@ def _classify_dead_worker(
     A clean exit or a crash carries the worker's own last output (``worker_output``
     in the event payload, appended to the error text) so the board and the retry
     worker see WHY instead of a bare label; a rate-limited requeue does not need it.
+    Exit 74 (host loss) and 77 (prestart refusal) are mapped to their failure
+    classes; other exits may still be host/prestart via evidence fallback.
     """
     dead = _classify_dead_worker_exit(pid, claimer, exit_code, task_id=task_id, board=board)
+    # Attach worker output early so evidence classifier can see it.
+    worker_output = ""
     if task_id and not (dead.rate_limited or dead.drain_refused):
-        worker_output = _worker_final_output(task_id, board=board)
+        worker_output = _worker_final_output(task_id, board=board) or ""
         if worker_output:
             dead.error_text += f"{WORKER_OUTPUT_SEP}{worker_output!r}"
             dead.event_payload["worker_output"] = worker_output
+    # Contract: exit 74 -> host class, 77 -> prestart_refusal. Keep 75/78 unchanged.
+    if dead.kind == "host_loss":
+        # Distinguish host_restart vs host_stall: restart_wait/Gateway draining
+        # or death inside a bounce window -> host_restart, else host_stall.
+        if _HOST_RESTART_TEXT_RE.search(dead.error_text) or _death_in_bounce_window():
+            dead.host_crash = True
+            dead.failure_class = "host_restart"
+        else:
+            dead.host_crash = True
+            dead.failure_class = "host_stall"
+        dead.event_payload["failure_class"] = dead.failure_class
+        dead.event_payload["exit_code"] = dead.code
+    elif dead.kind == "prestart_refusal":
+        dead.prestart_refusal = True
+        dead.failure_class = "prestart_refusal"
+        dead.event_payload["failure_class"] = "prestart_refusal"
+        dead.event_payload["exit_code"] = dead.code
+        # Prestart refusal blocks immediately with a plain message naming profile.
+        # Preserve terminal_provider-style message shape but for prestart.
+        # The error_text will be rewritten in _account_crashes to name profile.
+    else:
+        # Evidence fallback for workers that died with generic codes.
+        ev = _classify_host_evidence(dead.error_text, worker_output)
+        if ev == "prestart_refusal":
+            dead.prestart_refusal = True
+            dead.failure_class = "prestart_refusal"
+            dead.event_payload["failure_class"] = "prestart_refusal"
+        elif ev in ("host_restart", "host_stall"):
+            dead.host_crash = True
+            dead.failure_class = ev
+            dead.event_payload["failure_class"] = ev
+    if dead.failure_class:
+        dead.event_payload["failure_class"] = dead.failure_class
     return dead
 
 
@@ -1309,7 +1485,7 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
                 "outcome": dead.run_outcome,
                 "retry_status": retry_status,
             })
-            if dead.rate_limited or dead.protocol_violation or dead.drain_refused:
+            if dead.rate_limited or dead.protocol_violation or dead.drain_refused or dead.host_crash or dead.prestart_refusal:
                 # Stamp last_failure_error WITHOUT touching ``consecutive_failures``:
                 # a rate-limited requeue must show ``check_respawn_guard`` a quota
                 # blocker; a below-budget protocol violation never reaches
@@ -1317,6 +1493,9 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
                 # board UI and retry worker need the corrective message; a
                 # drain-refused requeue shares the rate-limit cooldown so the
                 # stamped text must never re-trap it as a blocker.
+                # Host crashes also must not consume the retry budget (D3 ceiling
+                # is counted from the single reclaim event, not from a second
+                # _record_task_failure event).
                 conn.execute(
                     "UPDATE tasks SET last_failure_error = ? WHERE id = ?",
                     (dead.error_text[:500], row["id"]),
@@ -1325,6 +1504,9 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
                 sweep.rate_limited.append(row["id"])
             elif dead.drain_refused:
                 sweep.drain_refused.append(row["id"])
+            elif dead.host_crash or dead.prestart_refusal:
+                sweep.crashed.append(row["id"])
+                sweep.crash_details.append((row["id"], pid, row["claim_lock"], dead))
             else:
                 sweep.crashed.append(row["id"])
                 sweep.crash_details.append((row["id"], pid, row["claim_lock"], dead))
@@ -1339,15 +1521,66 @@ def _account_crashes(conn: sqlite3.Connection, crash_details: list) -> list[str]
     systemic same-error crashes (>= 3 identical fingerprints this tick) and
     terminal provider errors (credential revoked, model gone — a retry cannot
     heal them) trip immediately.
+    Host crashes (host_restart/host_stall) never count toward
+    ``consecutive_failures``; they trip only when the 24 h ceiling (6) is
+    reached. Prestart refusals trip on the FIRST occurrence with a sticky
+    block. Each host crash writes exactly ONE counted event (the reclaim
+    event); this function must not append a second.
     """
     auto_blocked: list[str] = []
     fp_counts: dict[str, int] = {}
     for _, _, _, dead in crash_details:
+        if dead.host_crash or dead.prestart_refusal:
+            continue
         fp = _error_fingerprint(dead.error_text)
         fp_counts[fp] = fp_counts.get(fp, 0) + 1
     for tid, pid, claimer, dead in crash_details:
         error_text = dead.error_text
-        if dead.protocol_violation:
+        if dead.host_crash:
+            # Host crash: never counts toward failure_limit. Ceiling is 6 per
+            # card per 24 h (D3: count the single reclaim event, not two).
+            # The reclaim txn already requeued to ready and stamped the error;
+            # here we only check the ceiling and maybe trip.
+            cnt = _host_crash_count_24h(conn, tid)
+            if cnt >= HOST_CRASH_CEILING:
+                # Sticky block with plain message.
+                msg = f"host crash ceiling reached ({cnt} host crashes in 24h) — {dead.failure_class}: {error_text[:300]}"
+                tripped = _record_task_failure(
+                    conn, tid,
+                    error=msg,
+                    outcome="crashed",
+                    force_trip=True,
+                    release_claim=False,
+                    end_run=False,
+                    event_payload_extra={"pid": pid, "claimer": claimer, "failure_class": dead.failure_class, "host_crash_count": cnt, "sticky": True},
+                )
+                if tripped:
+                    auto_blocked.append(tid)
+            # Below ceiling: stay at ready, no trip.
+            continue
+        elif dead.prestart_refusal:
+            # Prestart refusal: block immediately, sticky, message names profile.
+            assignee = None
+            try:
+                r = conn.execute("SELECT assignee FROM tasks WHERE id=?", (tid,)).fetchone()
+                assignee = r["assignee"] if r else None
+            except Exception:
+                pass
+            profile = assignee or claimer or "unknown"
+            msg = f"prestart refusal: {error_text[:400]} (profile {profile}) — fix the configuration, then unblock"
+            tripped = _record_task_failure(
+                conn, tid,
+                error=msg,
+                outcome="crashed",
+                force_trip=True,
+                release_claim=False,
+                end_run=False,
+                event_payload_extra={"pid": pid, "claimer": claimer, "failure_class": "prestart_refusal", "sticky": True},
+            )
+            if tripped:
+                auto_blocked.append(tid)
+            continue
+        elif dead.protocol_violation:
             streak = _protocol_violation_streak(conn, tid)
             trow = conn.execute("SELECT max_retries FROM tasks WHERE id = ?", (tid,)).fetchone()
             if trow is None:
@@ -1495,7 +1728,7 @@ def _record_task_failure(
     :func:`check_respawn_guard` spaces the retries.
     """
     if failure_limit is None:
-        failure_limit = DEFAULT_FAILURE_LIMIT
+        failure_limit = _resolve_config_failure_limit()
     error = error[:500]
     with _kb.write_txn(conn):
         row = conn.execute(

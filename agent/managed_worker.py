@@ -425,7 +425,29 @@ def execute(frame, channel):
     construct = {'ephemeral_system_prompt': policy.skills_prompt, **construct_kwargs(frame)}
     listener = _bind_control_socket(frame['home'], scope['execution_id'])
     listener_path = listener.getsockname() if listener is not None else None
+    # Persist scope for new-gateway adopt (spec \u00a74): outbox/scope.json is the ground truth
     if listener is not None:
+        try:
+            import json as _js, os as _os
+            from hermes_cli.process_identity import worker_birth as _wb
+            import psutil as _ps
+            _scope_path = outbox_dir(frame['home'], scope['execution_id']) / 'scope.json'
+            _kanban_ctx = None
+            try:
+                _kanban_ctx = _js.loads((frame.get('policy') or {}).get('kanban_json') or 'null')
+            except Exception:
+                pass
+            _scope_doc = dict(scope)
+            _scope_doc['pid'] = _os.getpid()
+            try:
+                _scope_doc['birth'] = _wb(_ps.Process())
+            except Exception:
+                _scope_doc['birth'] = None
+            if _kanban_ctx:
+                _scope_doc['kanban'] = _kanban_ctx
+            _scope_path.write_text(_js.dumps(_scope_doc))
+        except Exception:
+            pass
         channel.send('control_socket', path=listener_path)
         listener.settimeout(CONTROL_ACCEPT_SECONDS)
         try:

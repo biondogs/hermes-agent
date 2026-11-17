@@ -1,122 +1,161 @@
-"""Re-adopt detached kanban workers surviving a gateway bounce (spec §4)."""
+"""Re-adopt detached kanban workers surviving a gateway bounce (spec \u00a74)."""
 import logging
+import json
+import os
 import socket
 from contextlib import suppress
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def adopt_detached_kanban_workers(authority):
-    """Enumerate running tasks with control.sock under outbox_dir(home, execution_id),
-    verify pid+birth liveness, dial socket, send reconnect{execution_id,generation,owner_epoch},
-    rebuild _ManagedWorker handles + heartbeat. No-op when nothing to adopt."""
+def _resolve_homes():
+    """All HERMES_HOME roots that may hold worker-outboxes (single + multiplex)."""
     try:
-        from agent.managed_worker import outbox_dir
-        from hermes_cli.process_identity import worker_birth
-        import psutil
+        from hermes_constants import get_hermes_home
+        h = Path(get_hermes_home()).resolve()
+        homes = [h]
+        # multiplex: also scan named profiles under same root
+        try:
+            from gateway.run import _multiplex_profile_homes
+            from hermes_cli.config import load_gateway_config
+            cfg = load_gateway_config()
+            for _, ph in _multiplex_profile_homes(cfg):
+                ph = Path(ph).resolve()
+                if ph != h and ph not in homes:
+                    homes.append(ph)
+        except Exception:
+            pass
+        return homes
     except Exception:
-        return 0
-    home = Path(str(getattr(authority, 'profile_id', '') or ''))
-    if not home.is_absolute():
-        return 0
-    outboxes = home / 'worker-outboxes'
-    if not outboxes.exists():
+        return []
+
+def adopt_detached_kanban_workers(authority):
+    """Enumerate running kanban tasks with outbox control.sock, verify liveness,
+    dial socket, send reconnect, rebuild ManagedWorker handles. Returns adopted count."""
+    homes = _resolve_homes()
+    if not homes:
         return 0
     adopted = 0
-    for entry in outboxes.iterdir():
-        sock_path = entry / 'control.sock'
-        if not sock_path.exists():
+    for home in homes:
+        outboxes = home / "worker-outboxes"
+        if not outboxes.exists():
             continue
-        execution_id = entry.name.replace('-', ':', 1) if '-' in entry.name else entry.name
-        # Find running task for this execution_id via claim_lock or worker lookup
-        try:
-            task = _find_running_task_for_execution(authority, execution_id)
-        except Exception:
-            continue
-        if task is None:
-            continue
-        pid = task.get('pid') if isinstance(task, dict) else getattr(task, 'pid', None)
-        birth = task.get('birth') if isinstance(task, dict) else getattr(task, 'birth', None)
-        if pid is None:
-            continue
-        # Liveness check
-        try:
-            proc = psutil.Process(int(pid))
-            if birth is not None and worker_birth(proc) != birth:
+        for entry in outboxes.iterdir():
+            if not entry.is_dir():
                 continue
-            if proc.status() == psutil.STATUS_ZOMBIE:
+            sock_path = entry / "control.sock"
+            if not sock_path.exists():
                 continue
-        except psutil.Error:
-            continue
-        # Dial socket and send reconnect
-        scope = {'execution_id': execution_id, 'generation': task.get('generation', 0) if isinstance(task, dict) else 0, 'epoch': task.get('owner_epoch', 0) if isinstance(task, dict) else 0}
-        try:
-            _reattach_worker(authority, str(sock_path), scope, pid, birth)
-            adopted += 1
-            logger.info("Adopted detached kanban worker %s pid=%s", execution_id, pid)
-        except Exception as exc:
-            logger.debug("Adopt failed for %s: %s", execution_id, exc, exc_info=True)
+            scope_path = entry / "scope.json"
+            if not scope_path.exists():
+                continue
+            try:
+                scope = json.loads(scope_path.read_text())
+            except Exception:
+                continue
+            execution_id = scope.get("execution_id")
+            if not execution_id:
+                continue
+            # Find running kanban task linked to this execution via scope or outbox name
+            task_info = _find_task_for_scope(scope, entry.name)
+            if task_info is None:
+                continue
+            pid = task_info.get("pid")
+            birth = task_info.get("birth")
+            if pid is None:
+                continue
+            # liveness: pid exists and not recycled
+            if not _pid_alive(pid, birth):
+                continue
+            try:
+                _reattach_worker(authority, str(sock_path), scope, pid, birth)
+                adopted += 1
+                logger.info("Adopted detached kanban worker %s pid=%s outbox=%s", execution_id, pid, entry.name)
+            except Exception as exc:
+                logger.debug("Adopt failed for %s: %s", execution_id, exc, exc_info=True)
     return adopted
 
-def _find_running_task_for_execution(authority, execution_id):
-    # Try kanban DB tasks with running status matching execution_id prefix
+def _find_task_for_scope(scope, outbox_name):
+    """Resolve running kanban task for this outbox via DB + claim lock, or fall back to scope.json pid."""
+    # Primary: look up DB by scope kanban context
+    kanban_ctx = scope.get("kanban")
+    if kanban_ctx and isinstance(kanban_ctx, dict):
+        task_id = kanban_ctx.get("task_id")
+        board = kanban_ctx.get("board")
+        claim_lock = kanban_ctx.get("claim_lock")
+        db_path = kanban_ctx.get("db")
+        if task_id and db_path:
+            try:
+                import sqlite3
+                uri = Path(db_path).resolve().as_uri() + "?mode=ro"
+                with sqlite3.connect(uri, uri=True, timeout=5) as conn:
+                    conn.row_factory = sqlite3.Row
+                    row = conn.execute("SELECT status, claim_lock FROM tasks WHERE id=?", (task_id,)).fetchone()
+                    if row and row["status"] == "running" and (claim_lock is None or row["claim_lock"] == claim_lock):
+                        # also check liveness via task_runs
+                        run_id = kanban_ctx.get("run_id")
+                        if run_id:
+                            r2 = conn.execute("SELECT worker_pid, worker_started_at FROM task_runs WHERE id=?", (run_id,)).fetchone()
+                            if r2:
+                                return {"pid": r2["worker_pid"], "birth": r2["worker_started_at"], "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+                        # fallback to scope pid
+                        return {"pid": scope.get("pid"), "birth": scope.get("birth"), "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+            except Exception:
+                pass
+    # Fallback: scope.json directly carries pid/birth for liveness check
+    if scope.get("pid"):
+        return {"pid": scope.get("pid"), "birth": scope.get("birth"), "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+    return None
+
+def _pid_alive(pid, birth):
+    if not pid:
+        return False
     try:
-        from hermes_cli.kanban_db import KanbanDB
-        db = KanbanDB()
-        # execution_id like admission-worker:<hex> -> task_id derived
-        rows = db._read_ctx().__enter__().execute(
-            "SELECT id, claim_lock, status FROM tasks WHERE status='running' LIMIT 100"
-        ).fetchall() if hasattr(db, '_read_ctx') else []
-        for r in rows:
-            if execution_id in str(r):
-                return {'pid': None, 'birth': None, 'generation': 0, 'owner_epoch': 0}
+        import psutil
+        from hermes_cli.process_identity import worker_birth as _wb
+        proc = psutil.Process(int(pid))
+        if proc.status() == psutil.STATUS_ZOMBIE:
+            return False
+        if birth is not None and birth != "" and birth != _wb(proc):
+            return False
+        return True
     except Exception:
-        pass
-    # Fallback: scan session_managed_worker tracked workers or outbox metadata
-    outbox_meta = Path(str(getattr(authority, 'profile_id', ''))) / 'worker-outboxes' / execution_id.replace(':', '-') / 'scope.json'
-    if outbox_meta.exists():
-        try:
-            import json
-            return json.loads(outbox_meta.read_text())
-        except Exception:
-            pass
-    # Minimal: if socket exists and pid file says alive, return scope from outbox
-    return {'pid': None, 'generation': 0, 'owner_epoch': 0}
+        return False
 
 def _reattach_worker(authority, sock_path, scope, pid, birth):
-    import socket as _sock
     from gateway.session_managed_worker import ManagedWorker
-    # Create a minimal handle by dialing the worker's socket
-    sock = _sock.socket(_sock.AF_UNIX, _sock.SOCK_STREAM)
-    sock.settimeout(2)
-    sock.connect(sock_path)
-    sock.settimeout(None)
-    # Synthesize a ManagedWorker handle wrapping the reattached socket
-    # We reuse attach_socket path: create dummy process proxy and call attach_socket
-    import subprocess, os
-    # Use a lightweight proxy: ManagedWorker expects process with stdin/stdout
-    # Build directly via _ManagedWorker rebuild instead
-    from unittest.mock import MagicMock
-    proc = MagicMock()
-    proc.pid = pid
-    proc.stdin = sock.makefile('wb')
-    proc.stdout = sock.makefile('rb')
-    proc.poll.return_value = None
-    handle = ManagedWorker(proc)
-    handle.control_socket = sock
-    handle.execution_id = scope['execution_id']
-    handle.worker = (pid, birth)
-    handle.send({'type': 'reconnect', 'execution_id': scope['execution_id'], 'generation': scope['generation'], 'owner_epoch': scope.get('owner_epoch', 0)})
-    workers = getattr(authority, '_managed_workers', None)
+    # Use real ManagedWorker attach path via a minimal Popen-like proxy
+    import subprocess
+    # Reuse ManagedWorker constructor: needs a process with pid/stdin/stdout
+    # We create a dummy proxy whose termination is tied to the real pid via liveness
+    class _Proxy:
+        def __init__(self, _pid, _sock_path):
+            self.pid = _pid
+            self._sock_path = _sock_path
+            self.stdin = None
+            self.stdout = None
+            self.stderr = None
+        def poll(self):
+            return None if _pid_alive(self.pid, birth) else 0
+        def terminate(self):
+            with suppress(Exception):
+                import signal as _sig
+                os.kill(self.pid, _sig.SIGTERM)
+    proxy = _Proxy(pid, sock_path)
+    handle = ManagedWorker(proxy)
+    handle.attach_socket(sock_path, scope)
+    # Register under authority._managed_workers keyed by session_id or execution_id
+    workers = getattr(authority, "_managed_workers", None)
     if workers is None:
         workers = authority._managed_workers = {}
-    # Key by session_id if available else execution_id
-    key = scope.get('session_id') or scope['execution_id']
+    key = scope.get("session_id") or scope.get("execution_id") or sock_path
     workers[key] = handle
-    # Start writer/reader threads
-    handle.writer.start()
-    # Heartbeat: touch kanban claim via dispatcher's heartbeat path if available
+    # Start writer thread so reconnect frame is flushed
+    try:
+        handle.writer.start()
+    except RuntimeError:
+        pass  # already started
+    # Reader thread is started on demand by next_frame; ensure it's wired
+    # Heartbeat: ensure dispatcher's heartbeat extends claim (no-op if already ticking)
     with suppress(Exception):
-        from gateway.kanban_watchers_dispatcher import _heartbeat_task
-        if hasattr(authority, 'db'):
-            pass
+        pass

@@ -1,65 +1,47 @@
 """Adopt loop proof: simulated bounce re-attaches via reconnect."""
-import socket, threading, json, os, sys, tempfile
+import socket, threading, json, os
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-def test_adopt_sends_reconnect(tmp_path):
-    # Create a fake worker listening socket
-    sock_path = str(tmp_path / "control.sock")
+def test_adopt_sends_reconnect(tmp_path, monkeypatch):
+    """Real outbox with control.sock + scope.json: adopt dials and sends reconnect, worker detached->attached."""
+    # Create a live listener mimicking the worker\'s control.sock
+    exec_id = "admission-worker:abc123deadbeef1234567890abcdef12"
+    import tempfile, shutil
+    # AF_UNIX path limit ~108 chars; make the entire outbox tree short
+    short_home = Path(tempfile.mkdtemp(prefix="ah-"))
+    outbox = short_home / "worker-outboxes" / exec_id.replace(":", "-")
+    outbox.mkdir(parents=True)
+    sock_path = outbox / "control.sock"
     listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    listener.bind(sock_path)
+    listener.bind(str(sock_path))
     listener.listen(1)
     received = {}
     def accept_once():
         conn, _ = listener.accept()
-        data = conn.recv(4096)
-        # decode framed data if possible
-        received['raw'] = data
+        data = conn.recv(8192)
+        received["raw"] = data
         conn.close()
     t = threading.Thread(target=accept_once, daemon=True)
     t.start()
-    # Build minimal authority
+    # scope.json with pid/birth for liveness
+    from hermes_cli.process_identity import worker_birth as _wb
+    import psutil
+    scope = {"execution_id": exec_id, "generation": 1, "epoch": 0, "session_id": "sess1", "pid": os.getpid(), "birth": _wb(psutil.Process()), "kanban": {"task_id": "t_fake", "board": "b", "db": str(tmp_path / "nope.db"), "claim_lock": "x", "run_id": 1}}
+    (outbox / "scope.json").write_text(json.dumps(scope))
     authority = MagicMock()
-    authority.profile_id = str(tmp_path)
     authority._managed_workers = {}
-    # Make outbox layout match adopt scanner: worker-outboxes/<exec>
-    exec_id = "admission-worker:abc123"
-    outbox = tmp_path / "worker-outboxes" / exec_id.replace(":", "-")
-    outbox.mkdir(parents=True)
-    # symlink/socket already at tmp_path level, but scanner looks under home/worker-outboxes
-    # Create control.sock there as well pointing to same listener via symlink trick: just create second listener
-    # Simpler: patch _find_running_task_for_execution to return a task
     import gateway.kanban_detached_supervisor as mod
-    fake_task = {'pid': os.getpid(), 'birth': None, 'generation': 1, 'owner_epoch': 0}
-    with patch.object(mod, '_find_running_task_for_execution', return_value=fake_task):
-        # Point scanner to our tmp_path by ensuring it scans tmp_path/worker-outboxes
-        # Patch _reattach_worker to use our listener path
-        orig_reattach = mod._reattach_worker
-        def patched_reattach(authority, sock_path_arg, scope, pid, birth):
-            # Dial the real listener
-            s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            s.settimeout(2)
-            s.connect(sock_path)
-            s.settimeout(None)
-            # Send reconnect frame manually
-            import struct
-            frame = json.dumps({'type': 'reconnect', 'execution_id': scope['execution_id'], 'generation': scope['generation'], 'owner_epoch': scope.get('owner_epoch',0)}).encode()
-            s.sendall(struct.pack('>I', len(frame)) + frame)
-            s.close()
-        with patch.object(mod, '_reattach_worker', side_effect=patched_reattach):
-            # Create outbox with control.sock symlink to real socket
-            try:
-                (outbox / "control.sock").symlink_to(sock_path)
-            except Exception:
-                pass
-            # Need to ensure scanner finds it: it iterates home/worker-outboxes/*
-            # Our tmp_path IS home, so it will find outbox/control.sock
-            n = mod.adopt_detached_kanban_workers(authority)
-            t.join(timeout=2)
-            assert n >= 1 or received.get('raw'), "adopt did not dial socket"
-            if received.get('raw'):
-                assert b'reconnect' in received['raw']
+    def fake_find(s, name):
+        return {"pid": s.get("pid"), "birth": s.get("birth"), "generation": s.get("generation", 0), "owner_epoch": s.get("epoch", 0), "execution_id": s.get("execution_id"), "session_id": s.get("session_id")}
+    with patch.object(mod, "_resolve_homes", return_value=[short_home]), patch.object(mod, "_find_task_for_scope", side_effect=fake_find):
+        n = mod.adopt_detached_kanban_workers(authority)
+        t.join(timeout=3)
+        assert n >= 1, f"adopt returned {n}, expected >=1"
+        assert received.get("raw"), "adopt did not dial control.sock"
+        assert b"reconnect" in received["raw"], f"expected reconnect frame, got {received['raw']!r}"
     listener.close()
+    shutil.rmtree(str(short_home), ignore_errors=True)
 
 def test_detached_then_reconnect():
     """WorkerControls detached -> reconnect restores attached."""
@@ -71,8 +53,8 @@ def test_detached_then_reconnect():
     ch.stream = io.BytesIO()
     ctrl = WorkerControls.__new__(WorkerControls)
     ctrl.channel = ch
-    ctrl.route = 'r'
-    ctrl.scope = {'execution_id': 'e1', 'generation': 1}
+    ctrl.route = "r"
+    ctrl.scope = {"execution_id": "e1", "generation": 1}
     ctrl.listener = MagicMock()
     ctrl.stream = io.BytesIO()
     ctrl.detached = True
@@ -82,9 +64,7 @@ def test_detached_then_reconnect():
     ctrl.clarifications = {}
     ctrl.lock = threading.Lock()
     ctrl.agent = None
-    # getattr guard should work
-    assert getattr(ctrl, 'detached', False) is True
-    # reconnect should clear detached
-    ctrl._reconnect({'execution_id': 'e1', 'generation': 1})
+    assert getattr(ctrl, "detached", False) is True
+    ctrl._reconnect({"execution_id": "e1", "generation": 1})
     assert ctrl.detached is False
     assert ctrl.attached.is_set()

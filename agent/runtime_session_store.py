@@ -14,8 +14,10 @@ import logging
 import os
 from pathlib import Path
 import queue
+import random
 import sys
 import threading
+import time
 from hermes_dir_acl import make_user_dir
 
 logger = logging.getLogger(__name__)
@@ -45,6 +47,20 @@ def apply_row_annotations(messages, annotations):
 
 class WorkerPersistenceError(RuntimeError):
     pass
+
+
+# A gateway gap (restart, stall) is ridden out for this long before the turn gives up as host loss.
+WORKER_PERSIST_RETRY_BUDGET_S = 180
+_RETRYABLE_PERSISTENCE_ERRORS = frozenset({'worker_receipt_timeout', 'owner_unavailable'})
+
+
+def _is_retryable_persistence_error(exc):
+    """Owner-gap errors only (spec 6.1); every guard/outbox error latches immediately."""
+    if isinstance(exc, (ConnectionRefusedError, TimeoutError, ConnectionError)):
+        return True
+    if type(exc).__name__ == 'ConnectionClosed':
+        return True
+    return str(exc) in _RETRYABLE_PERSISTENCE_ERRORS
 
 
 def _caller_summary(limit=8):
@@ -333,10 +349,23 @@ class RuntimeSessionStore(RuntimeSessionCompressionMixin, RuntimeSessionLifecycl
     def retry_pending(self):
         with self.lock:
             results = []
+            deadline = time.monotonic() + WORKER_PERSIST_RETRY_BUDGET_S
+            delay = 0.5
             try:
                 while self.journal['pending']:
                     entry = self.journal['pending'][0]
-                    result = self.rpc('worker.persist', **self.scope, **entry)
+                    try:
+                        result = self.rpc('worker.persist', **self.scope, **entry)
+                    except Exception as exc:
+                        if not _is_retryable_persistence_error(exc):
+                            raise
+                        # The entry stays pending and is resent unchanged: the owner dedups on sequence.
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            raise WorkerPersistenceError('host_lost') from exc
+                        time.sleep(min(remaining, delay * random.uniform(0.5, 1.5)))
+                        delay = min(delay * 2, 15.0)
+                        continue
                     candidate = dict(self.journal, pending=self.journal['pending'][1:])
                     candidate = self._compression_receipt_journal(candidate, result)
                     self._save(candidate)

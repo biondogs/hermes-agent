@@ -36,3 +36,12 @@ Forced restart (AC4a): wall 15.03s (seconds, not minutes; kanban workers exclude
 - Synthetic detached worker (real control.sock/scope.json/DB/ManagedWorker.attach_socket path) — not a full gateway-dispatch agent turn (would need full gateway boot)
 - Holder is sleep 1000, not a real GatewayRunner — proves detached semantics but not full gateway restart
 - ss -x ESTAB not visible for AF_UNIX (kernel); functional proof is successful dial + reconnect frame
+
+## Re-verification 2026-11-17T01:30 (t_658dcefc cycle 2)
+- Own suite 11/11 PASS (test_durable_workers_v2 9/9 + test_detached_adopt 2/2) at 7f05e38b1b
+- D1-D6 fixes frozen; D5 mechanism (AF_UNIX reconnect + scope.json + pid+birth + ManagedWorker.attach_socket) proven
+- AC3/AC4a full GatewayRunner drill: scaffold ready (/tmp/hermes-drill-3f + mock 127.0.0.1:49191 sk-drill) but
+  runner dispatch (GatewayRunner boot + throwaway kanban card via dispatch path + systemd-run --user --unit
+  hermes-gateway-drill-3f bounce + journal Adopted + ESTAB peer == new runner pid + wall->MainPID seconds)
+  requires hermes-estate-twin or live-host GatewayRunner harness not available in scratch workspace.
+  Prior attempt blocked as capability/transient; reviewer to verify in twin.

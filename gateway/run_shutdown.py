@@ -1518,6 +1518,13 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         """
         return self._restart_wait_cron_counts()["restart_safe"]
 
+    def _kanban_detached_count(self) -> int:
+        """Managed kanban workers holding a control socket: they outlive this process and re-admit to
+        the next gateway, so the restart wait must not hold for them."""
+        from gateway.session_managed_worker import get_kanban_detached_counts
+        authority = getattr(self, "_session_authority", None)
+        return get_kanban_detached_counts(authority)["detached"]
+
     def _wedged_chat_agent_count(self) -> int:
         """Running chat agents with no activity for ``agent.gateway_timeout`` (0 when disabled);
         an unreadable activity summary means "not wedged".
@@ -1561,7 +1568,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             + self._active_deferred_agent_worker_count()
         )
         return (
-            max(0, non_cron - self._wedged_chat_agent_count())
+            max(0, non_cron - self._wedged_chat_agent_count() - self._kanban_detached_count())
             + self._restart_wait_cron_counts()["awaitable"]
         )
 

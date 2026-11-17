@@ -294,6 +294,10 @@ def record_start_failure(frame, exc):
     context = json.loads(frame['policy'].get('kanban_json') or 'null')
     if context is None:
         return
+    if str(exc) == 'kanban_skills_unavailable':
+        from hermes_cli.kanban_db import KANBAN_PRESTART_REFUSAL_EXIT_CODE
+        _record_worker_result(context, KANBAN_PRESTART_REFUSAL_EXIT_CODE, '')
+        return
     from hermes_cli.turn_exit import credential_failure_flags, turn_exit_code
     _record_worker_result(context, turn_exit_code(None, kanban_worker=True, **credential_failure_flags(exc)), '')
 

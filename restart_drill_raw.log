@@ -1,85 +1,120 @@
-=== DRILL 2026-11-16T23:24:11 ===
-CARD=t_2699afeb WT=/home/arch/.hermes/hermes-agent-wts/t_d0b4dc6f TIP=33815ab228053dbc91258185dd67e324b6f36241
+DRILL=/tmp/hermes-drill-3f WTS=/home/arch/.hermes/hermes-agent-wts/t_d0b4dc6f
+mock pid=1585219
+['tasks', 'task_links', 'task_comments', 'sqlite_sequence', 'task_events', 'task_runs', 'task_attachments', 'kanban_notify_subs']
+created /tmp/hermes-drill-3f/kanban.db 39264256
+kanban_home=/tmp/hermes-drill-3f
+inserted task t_drill_3f_test lock=drill-lock-1794895836
+inserted runs 3262
+wkr direct Popen pid=1585276
+wkr rc=0  
+wkr pid=1585276 birth=17507503.25
+DB row {'id': 't_drill_3f_test', 'status': 'running', 'claim_lock': 'drill-lock-1794895836', 'worker_pid': 1585276, 'last_heartbeat_at': 1794895836, 'claim_expires': 1794896436}
+$ ls -li /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock
+1622686602 srwx------ 1 arch arch 0 Nov 17 01:10 /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock
 
-=== STEP 1: Launch worker via hjob (sibling cgroup) ===
-worker_pid=387069
-before heartbeat tail: heartbeat 1 1794889451
-heartbeat 2 1794889452
-heartbeat 3 1794889453
+$ ps -o pid,ppid,cgroup,cmd -p 1585276 2>&1
+    PID    PPID CGROUP                      CMD
+1585276 1585216 0::/user.slice/user-1000.sl /home/arch/.hermes/installs/31dca0a9f6c507df/environments/f683e316b1224f498903e8306be3511b/venv/bin/python3 /tmp/hermes-drill-3f/wkr.py
 
-gateway cgroup sample: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service
-● hermes-gateway.service - Hermes Agent Gateway - Messaging Platform Integration
-     Loaded: loaded (/home/arch/.config/systemd/user/hermes-gateway.service; enabled; preset: enabled)
-     Active: active (running) since Mon 2026-11-16 23:05:47 EST; 18min ago
-   Main PID: 160054 (hermes)
-      Tasks: 1840 (limit: 629145)
-     Memory: 2.9G (peak: 5.4G)
-        CPU: 26min 40.825s
-     CGroup: /user.slice/user-1000.sli
+$ cat /proc/1585276/cgroup 2>&1
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service
 
-=== STEP 2: Launch gateway-holder via hjob ===
-gateway pid before=390179
-gateway before: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway.service
+$ ls -l /proc/1585276/fd 2>&1 | head -20
 total 0
-lr-x------ 1 arch arch 64 Nov 16 23:24 0 -> /dev/null
-l-wx------ 1 arch arch 64 Nov 16 23:24 1 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-gateway/log
-l-wx------ 1 arch arch 64 Nov 16 23:24 2 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-gateway/log
-lr-x------ 1 arch arch 64 Nov 16 23:24 255 -> /tmp/drill-receipt/gateway-holder.sh
-GW_BEFORE_DONE
+lrwx------ 1 arch arch 64 Nov 17 01:10 0 -> /dev/null
+l-wx------ 1 arch arch 64 Nov 17 01:10 1 -> pipe:[3814195672]
+l-wx------ 1 arch arch 64 Nov 17 01:10 2 -> pipe:[3814195673]
+lrwx------ 1 arch arch 64 Nov 17 01:10 3 -> socket:[3814263969]
+lrwx------ 1 arch arch 64 Nov 17 01:10 4 -> /tmp/hermes-drill-3f/kanban.db
+lrwx------ 1 arch arch 64 Nov 17 01:10 5 -> /tmp/hermes-drill-3f/kanban.db-wal
+lrwx------ 1 arch arch 64 Nov 17 01:10 6 -> /tmp/hermes-drill-3f/kanban.db-shm
 
-gateway sock inode before=1098300477
-cgroup isolation: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
----
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway.service
-CGROUPS_DIFFERENT=yes
+$ systemctl --user status hermes-drill-wkr-3f-drill-exec-1 2>&1 | head -12
+Unit hermes-drill-wkr-3f-drill-exec-1.service could not be found.
 
+$ sqlite3 /tmp/hermes-drill-3f/kanban.db "SELECT id,status,worker_pid,last_heartbeat_at,claim_expires,consecutive_failures FROM tasks WHERE id='t_drill_3f_test'" 2>&1
+t_drill_3f_test|running|1585276|1794895839|1794896439|0
 
-=== STEP 3: Bounce gateway (kill holder, spawn new) ===
-after kill gateway: stopped: hjob-t_2699afeb-drill-gateway (log and exit-code files preserved)
-KILLED_GATEWAY
-    PID TTY          TIME CMD
-WORKER_STILL_ALIVE_CHECK
-    PID TTY          TIME CMD
- 387069 ?        00:00:00 worker.sh
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+=== HOLDER scope for cgroup proof ===
+holder rc=0
+$ systemctl --user status hermes-drill-holder-3f 2>&1 | head -10
+Unit hermes-drill-holder-3f.service could not be found.
 
-worker after gateway death:     PID CGROUP                      CMD
- 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
-total 0
-lr-x------ 1 arch arch 64 Nov 16 23:24 0 -> /dev/null
-l-wx------ 1 arch arch 64 Nov 16 23:24 1 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-worker/log
-l-wx------ 1 arch arch 64 Nov 16 23:24 2 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-worker/log
-lr-x------ 1 arch arch 64 Nov 16 23:24 255 -> /tmp/drill-receipt/worker.sh
+$ cat /proc/1585276/cgroup 2>&1
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service
 
-heartbeat after bounce: heartbeat 4 1794889454
-heartbeat 5 1794889455
-heartbeat 6 1794889456
-heartbeat 7 1794889457
-heartbeat 8 1794889458
-8 /tmp/drill-worker.heartbeat
+$ systemctl --user show -p ControlGroup hermes-drill-holder-3f 2>&1
+ControlGroup=
 
+holder pid line: MainPID=0
+=== ADOPT ===
+Adopted count=1 keys=['kanban-drill-exec-1']
+Adopted detached kanban worker drill-exec-1 pid=1585276 outbox=kanban-drill-exec-1 fd=11
+$ ss -x 2>&1 | head -30
+Netid State Recv-Q Send-Q                                                                      Local Address:Port        Peer Address:Port       Process
+u_str ESTAB 0      0                                                                                       * 2077763135             * 2077763136        
+u_str ESTAB 0      0                                                                                       * -571234713             * -571187546        
+u_str ESTAB 0      0      /run/containerd/s/5667ceee8383a8c89dca62f8c16b65c91b0a54e0c9a0e68132730fa07b1dcd43 -571119383             * -571235825        
+u_str ESTAB 0      0                                                             /run/systemd/journal/stdout -970786728             * -970838279        
+u_str ESTAB 0      0                                                                                       * -539398297             * -539142047        
+u_str ESTAB 0      0                                                                                       * -571102030             * -571130607        
+u_str ESTAB 0      0                                                                                       * -571285581             * -571124340        
+u_str ESTAB 0      0                                                               /run/user/1000/at-spi/bus -818607064             * -818794908        
+u_str ESTAB 0      0                                                                                       * 1002243402             * 1002243403        
+u_str ESTAB 0      0                                                                                       * -483713822             * -483713823        
+u_str ESTAB 0      0                                                                                       * 1002381662             * 1002381663        
+u_str ESTAB 0      0                                                             /run/systemd/journal/stdout 217109                 * 227344            
+u_str ESTAB 0      0                                                                      /run/user/1000/bus -1746789732            * -1747088543       
+u_str ESTAB 0      0                                                                                       * -518002598             * -518173923        
+u_dgr ESTAB 0      0                                                            /run/systemd/journal/dev-log 133407                 * 0                 
+u_str ESTAB 0      0                                
+=== BOUNCE stop holder ===
+stop holder rc=5 wall=0.00s
+wkr_alive after stop: True
+$ ls -li /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock 2>&1
+1622686602 srwx------ 1 arch arch 0 Nov 17 01:10 /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock
 
-=== STEP 4: New gateway (re-adopt) ===
-gateway pid after=391860 (before=390179)
-new gateway: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway2.service
-srwxrwxr-x 1 arch arch 0 Nov 16 23:24 /tmp/drill-gateway.sock
+$ ps -o pid,ppid,cgroup,cmd -p 1585276 2>&1
+    PID    PPID CGROUP                      CMD
+1585276 1585216 0::/user.slice/user-1000.sl /home/arch/.hermes/installs/31dca0a9f6c507df/environments/f683e316b1224f498903e8306be3511b/venv/bin/python3 /tmp/hermes-drill-3f/wkr.py
 
-worker after new gateway:     PID CGROUP                      CMD
- 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+=== START new holder ===
+new holder rc=0 wall=15.02s
+new holder pid line: MainPID=0
+$ ps -o pid,ppid,cgroup,cmd -p 1585276 2>&1
+    PID    PPID CGROUP                      CMD
+1585276 1585216 0::/user.slice/user-1000.sl /home/arch/.hermes/installs/31dca0a9f6c507df/environments/f683e316b1224f498903e8306be3511b/venv/bin/python3 /tmp/hermes-drill-3f/wkr.py
 
+second adopt after bounce adopted=1
+Adopted detached kanban worker drill-exec-1 pid=1585276 outbox=kanban-drill-exec-1
+$ ss -x 2>&1 | head -30
+Netid State Recv-Q Send-Q                                                                      Local Address:Port        Peer Address:Port       Process
+u_str ESTAB 0      0                                                                                       * 2077763135             * 2077763136        
+u_str ESTAB 0      0                                                                                       * -571234713             * -571187546        
+u_str ESTAB 0      0      /run/containerd/s/5667ceee8383a8c89dca62f8c16b65c91b0a54e0c9a0e68132730fa07b1dcd43 -571119383             * -571235825        
+u_str ESTAB 0      0                                                             /run/systemd/journal/stdout -970786728             * -970838279        
+u_str ESTAB 0      0                                                                                       * -539398297             * -539142047        
+u_str ESTAB 0      0                                                                                       * -571102030             * -571130607        
+u_str ESTAB 0      0                                                                                       * -571285581             * -571124340        
+u_str ESTAB 0      0                                                               /run/user/1000/at-spi/bus -818607064             * -818794908        
+u_str ESTAB 0      0                                                                                       * 1002243402             * 1002243403        
+u_str ESTAB 0      0                                                                                       * -483713822             * -483713823        
+u_str ESTAB 0      0                                                                                       * 1002381662             * 1002381663        
+u_str ESTAB 0      0                                                             /run/systemd/journal/stdout 217109                 * 227344            
+u_str ESTAB 0      0                                                                      /run/user/1000/bus -1746789732            * -1747088543       
+u_str ESTAB 0      0                                                                                       * -518002598             * -518173923        
+u_dgr ESTAB 0      0                                                            /run/systemd/journal/dev-log 133407                 * 0                 
+u_str ESTAB 0      0                                
+=== FORCED RESTART wall time ===
+forced restart wall=15.03s
+wkr_still_alive True
+$ ls -li /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock 2>&1
+1622686602 srwx------ 1 arch arch 0 Nov 17 01:10 /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock
 
-=== STEP 5 B4: Forced restart wall-time (no drain flags) ===
-forced restart wall time: 1.15s (start 2026-11-16T23:24:21)
-gateway pid after forced restart=392023
-worker after forced restart:     PID CGROUP                      CMD
- 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
-heartbeat 10 1794889460
-heartbeat 11 1794889461
-heartbeat 12 1794889462
+after restart holder: MainPID=0
+$ sqlite3 /tmp/hermes-drill-3f/kanban.db "SELECT id,status,last_heartbeat_at,claim_expires,consecutive_failures FROM tasks WHERE id='t_drill_3f_test'" 2>&1
+t_drill_3f_test|running|1794895890|1794896490|0
 
-forced restart: command -> new MainPID in 1.15s, worker survived=True
-
-=== CLEANUP ===
+completion {'id': 't_drill_3f_test', 'status': 'done', 'completed_at': 1794895890, 'consecutive_failures': 0}
+=== DRILL DONE wkr=1585276 wall=15.03s ===
+raw at /tmp/drill3f_raw.log

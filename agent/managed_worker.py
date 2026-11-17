@@ -147,15 +147,25 @@ class WorkerChannel:
     def __init__(self, stream):
         self.stream = stream
         self.lock = threading.Lock()
+        self.controls = None
 
     def send(self, kind, **payload):
         data = encode_frame({'type': kind, **payload})
         with self.lock:
-            self.stream.write(data)
-            self.stream.flush()
+            try:
+                self.stream.write(data)
+                self.stream.flush()
+            except OSError:
+                # No owner to hear it: a detached worker keeps working (spec 2.4); the owner's
+                # receipts, not these progress frames, are the record.
+                if self.controls is None or kind in ('result', 'finished'):
+                    raise
 
 
 _INTERRUPTED = object()
+# The owner went away mid-turn (gateway restart): pending clarifications resolve as a timeout, not a cancel.
+_DETACHED = object()
+CONTROL_ACCEPT_SECONDS = 10
 # The owner's control pipe closing under a live worker means the owner died (a closing owner
 # signals the worker itself). The agent is interrupted at once; cooperative tools get this long.
 ORPHAN_GRACE_SECONDS = 10
@@ -175,8 +185,14 @@ def _die_with_owner():
 
 
 class WorkerControls:
-    def __init__(self, channel, route):
+    def __init__(self, channel, route, scope=None, listener=None, stream=None):
         self.channel, self.route = channel, route
+        self.scope, self.listener = scope, listener
+        self.stream = stream if stream is not None else sys.stdin.buffer
+        # Set while no owner is attached; ``attached`` is what a result frame waits on.
+        self.detached = False
+        self.attached = threading.Event()
+        self.attached.set()
         self.agent = None
         self.stopped = threading.Event()
         self.finish = threading.Event()
@@ -196,35 +212,79 @@ class WorkerControls:
                 state['event'].set()
 
     def read(self):
-        from tools.approval import resolve_gateway_approval
-        try:
-            while True:
-                frame = read_frame(sys.stdin.buffer)
-                if frame == {'type': 'stop'}:
-                    self.stop()
-                    continue
-                if frame == {'type': 'finish'}:
-                    self.finish.set()
+        while True:
+            try:
+                if self._pump():
                     return
-                if (set(frame) != {'type', 'prompt_id', 'value'} or frame['type'] not in {'approval', 'clarify'}
-                        or not isinstance(frame['prompt_id'], str) or not isinstance(frame['value'], str)
-                        or len(frame['value']) > 16384):
+            except ValueError:
+                self.stop()
+                self.finish.set()
+                return
+            except (EOFError, OSError):
+                # The owner is gone, not the work: keep the agent running (spec 2.4) until a new
+                # owner re-admits through the control socket. Stop/max_runtime reach it by pid.
+                self._detach()
+                if self.listener is None or not self._reaccept():
+                    return
+
+    def _detach(self):
+        with self.lock:
+            self.detached = True
+            self.attached.clear()
+            for state in self.clarifications.values():
+                if state['answer'] is None:
+                    state['answer'] = _DETACHED
+                    state['event'].set()
+
+    def _reaccept(self):
+        while True:
+            try:
+                conn, _ = self.listener.accept()
+            except OSError:
+                return False
+            self.stream = conn.makefile('rb')
+            with self.channel.lock:
+                with contextlib.suppress(OSError):
+                    self.channel.stream.close()
+                self.channel.stream = conn.makefile('wb', buffering=0)
+            return True
+
+    def _reconnect(self, frame):
+        scope = self.scope or {}
+        if (frame.get('execution_id') != scope.get('execution_id')
+                or frame.get('generation') != scope.get('generation')):
+            raise ValueError('invalid_managed_control')
+        self.detached = False
+        self.attached.set()
+
+    def _pump(self):
+        """Read control frames until finish (True); EOF/OSError propagate to ``read``."""
+        from tools.approval import resolve_gateway_approval
+        while True:
+            frame = read_frame(self.stream)
+            if frame == {'type': 'stop'}:
+                self.stop()
+                continue
+            if frame == {'type': 'finish'}:
+                self.finish.set()
+                return True
+            if frame.get('type') == 'reconnect':
+                self._reconnect(frame)
+                continue
+            if (set(frame) != {'type', 'prompt_id', 'value'} or frame['type'] not in {'approval', 'clarify'}
+                    or not isinstance(frame['prompt_id'], str) or not isinstance(frame['value'], str)
+                    or len(frame['value']) > 16384):
+                raise ValueError('invalid_managed_control')
+            if frame['type'] == 'approval':
+                if frame['value'] not in {'once', 'deny', 'session', 'always'}:
                     raise ValueError('invalid_managed_control')
-                if frame['type'] == 'approval':
-                    if frame['value'] not in {'once', 'deny', 'session', 'always'}:
-                        raise ValueError('invalid_managed_control')
-                    resolve_gateway_approval(self.route, frame['value'], request_id=frame['prompt_id'])
-                else:
-                    with self.lock:
-                        state = self.clarifications.get(frame['prompt_id'])
-                        if state is not None:
-                            state['answer'] = frame['value']
-                            state['event'].set()
-        except (EOFError, OSError, ValueError) as exc:
-            self.stop()
-            self.finish.set()
-            if not isinstance(exc, ValueError):
-                _die_with_owner()
+                resolve_gateway_approval(self.route, frame['value'], request_id=frame['prompt_id'])
+            else:
+                with self.lock:
+                    state = self.clarifications.get(frame['prompt_id'])
+                    if state is not None:
+                        state['answer'] = frame['value']
+                        state['event'].set()
 
     def approval(self, data):
         from tools.approval import ack_gateway_approval
@@ -240,6 +300,8 @@ class WorkerControls:
         from gateway.session_finite import finite_clarify_reply, finite_turn_required
         if finite_turn_required() is True:
             return finite_clarify_reply()
+        if self.detached:
+            return {'answers': {}, 'outcome': 'timed_out'}
         answers = {}
         reply = {'answers': answers, 'outcome': 'submitted'}
         for entry in questions:
@@ -247,7 +309,7 @@ class WorkerControls:
             if answer is _INTERRUPTED:
                 reply['outcome'] = 'cancelled'
                 break
-            if answer is None:
+            if answer is None or answer is _DETACHED:
                 reply['outcome'] = 'timed_out'
                 break
             answers[entry['qid']] = answer.strip() or None
@@ -262,6 +324,8 @@ class WorkerControls:
         with self.lock:
             if self.stopped.is_set() or len(self.clarifications) >= 16:
                 return _INTERRUPTED
+            if self.detached:
+                return _DETACHED
             self.clarifications[prompt_id] = state
         try:
             self.channel.send('clarify', prompt_id=prompt_id, question=question,
@@ -331,7 +395,7 @@ def execute(frame, channel):
     # The owner RPC below imports gateway/config modules (hermes_cli.config, providers,
     # hermes_cli.plugins) transitively; the policy must already be frozen when they load.
     bind_worker_policy(frame)
-    from agent.runtime_session_store import RuntimeSessionStore, WorkerRPC
+    from agent.runtime_session_store import RuntimeSessionStore, WorkerPersistenceError, WorkerRPC
     scope = dict(frame['scope'])
     rpc = WorkerRPC(frame['home'])
     adopted = rpc('worker.adopt', **{k: v for k, v in scope.items() if k != 'epoch'})
@@ -356,7 +420,24 @@ def execute(frame, channel):
     os.environ['HERMES_GATEWAY_SESSION'] = '1'
     from gateway.session_worker_construct import checkpoint_agent_kwargs, construct_kwargs, routing_agent_kwargs
     construct = {'ephemeral_system_prompt': policy.skills_prompt, **construct_kwargs(frame)}
-    controls = WorkerControls(channel, frame['route'])
+    listener = _bind_control_socket(frame['home'], scope['execution_id'])
+    listener_path = listener.getsockname() if listener is not None else None
+    if listener is not None:
+        channel.send('control_socket', path=listener_path)
+        listener.settimeout(CONTROL_ACCEPT_SECONDS)
+        try:
+            conn, _ = listener.accept()
+        except OSError:
+            conn = None  # nobody dialed: the stdin pipe stays the control channel
+        listener.settimeout(None)
+    else:
+        conn = None
+    controls = WorkerControls(channel, frame['route'], scope=scope, listener=listener if conn else None,
+                              stream=conn.makefile('rb') if conn else None)
+    channel.controls = controls
+    if conn is not None:
+        with channel.lock:
+            channel.stream = conn.makefile('wb', buffering=0)
     register_gateway_notify(frame['route'], controls.approval)
     agent = None
     try:
@@ -411,6 +492,10 @@ def execute(frame, channel):
             store.flush_token_counts()
             if result.get('final_response') is None and (result.get('interrupted') or result.get('failed')):
                 result['final_response'] = ''
+            # A result sent into a dead owner link would be lost: wait for re-admission (bounded).
+            from agent.runtime_session_store import WORKER_PERSIST_RETRY_BUDGET_S
+            if not controls.attached.wait(WORKER_PERSIST_RETRY_BUDGET_S):
+                raise WorkerPersistenceError('host_lost')
             channel.send('result', result=result_frame(result))
             if not controls.finish.wait(30):
                 raise ValueError('managed_finish_timeout')
@@ -425,6 +510,68 @@ def execute(frame, channel):
         finally:
             with contextlib.suppress(Exception):  # a failing socket close never replaces the turn's outcome
                 rpc.close()
+            if listener is not None:
+                with contextlib.suppress(OSError):
+                    listener.close()
+                    os.unlink(listener_path)
+
+
+class PrestartRefusal(RuntimeError):
+    """The attempt cannot start (kanban_skills_unavailable); the process exits 77."""
+
+
+def _bind_control_socket(home, execution_id):
+    """Listening AF_UNIX socket inside the 0700 outbox, or None (no AF_UNIX, path too long): the
+    stdin pipe then stays the control channel and the worker dies with its owner's restart."""
+    import socket
+    if not hasattr(socket, 'AF_UNIX'):
+        return None
+    directory = outbox_dir(home, execution_id)
+    path = directory / 'control.sock'
+    try:
+        directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+        with contextlib.suppress(FileNotFoundError):
+            path.unlink()
+        listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        try:
+            listener.bind(str(path))
+            os.chmod(path, 0o600)
+            listener.listen(1)
+        except OSError:
+            listener.close()
+            raise
+    except OSError:
+        return None
+    return listener
+
+
+def _append_exit_trailer(task_id, board, code):
+    """The durable no-owner exit record: the dispatcher's log scan reads it with the gateway down."""
+    from hermes_cli.kanban_db import worker_log_path
+    from hermes_cli.quiet_single_query import KANBAN_WORKER_EXIT_TRAILER
+    path = worker_log_path(task_id, board=board)
+    with contextlib.suppress(OSError):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open('a', encoding='utf-8') as log:
+            log.write(f'\n{KANBAN_WORKER_EXIT_TRAILER}{code}\n')
+
+
+def _exit_code_for(exc, frame):
+    """74 host loss / 77 prestart refusal, trailered into the per-task log; else 1."""
+    from agent.runtime_session_store import WorkerPersistenceError
+    from hermes_cli.kanban_db import KANBAN_HOST_LOSS_EXIT_CODE, KANBAN_PRESTART_REFUSAL_EXIT_CODE
+    if isinstance(exc, WorkerPersistenceError) and str(exc) == 'host_lost':
+        code, marker = KANBAN_HOST_LOSS_EXIT_CODE, 'KANBAN_HOST_LOSS'
+    elif isinstance(exc, PrestartRefusal):
+        code, marker = KANBAN_PRESTART_REFUSAL_EXIT_CODE, 'KANBAN_PRESTART_REFUSAL'
+    else:
+        return 1
+    context = json.loads(((frame or {}).get('policy') or {}).get('kanban_json') or 'null')
+    if context is None:
+        return 1
+    print(marker, file=sys.stderr)
+    _append_exit_trailer(context['task_id'], context['board'], code)
+    return code
 
 
 def _construct_agent(frame, factory, policy, **kwargs):
@@ -436,6 +583,8 @@ def _construct_agent(frame, factory, policy, **kwargs):
     except Exception as exc:
         from gateway.session_kanban import record_start_failure
         record_start_failure(frame, exc)
+        if str(exc) == 'kanban_skills_unavailable':
+            raise PrestartRefusal(str(exc)) from exc
         raise
 
 
@@ -458,17 +607,20 @@ def main():
     if not logger.handlers:
         logger.addHandler(logging.StreamHandler(sys.stderr))
     logger.propagate = False
+    frame = None
     try:
         channel.send('hello', **hello())
         frame = validate_bootstrap(read_frame(sys.stdin.buffer))
         execute(frame, channel)
-    except Exception:
+    except Exception as exc:
         # Runtime exceptions can contain credentials; the owner gets no raw traceback.
         logger.exception('managed worker failed')
-        channel.send('error', reason='managed_worker_failed')
-        return 1
+        with contextlib.suppress(OSError):
+            channel.send('error', reason='managed_worker_failed')
+        return _exit_code_for(exc, frame)
     finally:
-        channel.stream.close()
+        with contextlib.suppress(OSError):
+            channel.stream.close()
     return 0
 
 

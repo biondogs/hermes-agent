@@ -148,7 +148,39 @@ def worker_turn_scope(frame):
         yield
 
 
+# execution_ids of live kanban workers holding a control socket: they outlive this gateway,
+# so the restart wait must not hold for them (gateway/run_shutdown.py).
+_kanban_detached_execution_ids = set()
+
+
+def get_kanban_detached_counts(authority=None):
+    """``{"awaitable": managed workers without a socket, "detached": socket-tracked kanban workers}``."""
+    workers = list(getattr(authority, '_managed_workers', None) or {}.values())
+    detached = sum(1 for w in workers if getattr(w, 'control_socket', None) is not None)
+    return {'awaitable': len(workers) - detached, 'detached': detached}
+
+
 class ManagedWorker:
+    control_socket = None
+    execution_id = None
+
+    def attach_socket(self, path, scope):
+        """Dial the worker's control socket and move the framing channel onto it (the pipes stay
+        referenced but inert). The first frame re-admits this owner to the worker."""
+        import socket
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.settimeout(2)
+        sock.connect(path)
+        sock.settimeout(None)
+        self._pipes = (self.process.stdin, self.process.stdout)
+        self.control_socket = sock
+        self.process.stdin = sock.makefile('wb')
+        self.process.stdout = sock.makefile('rb')
+        self.execution_id = scope['execution_id']
+        _kanban_detached_execution_ids.add(self.execution_id)
+        self.send({'type': 'reconnect', 'execution_id': scope['execution_id'], 'generation': scope['generation'],
+                   'owner_epoch': scope['epoch']})
+
     def __init__(self, process):
         self.process = process
         # Verified interpreter behind the handle (a launcher trampoline may sit between).
@@ -319,6 +351,10 @@ class ManagedWorker:
 
     def close(self):
         self.closed.set()
+        if self.control_socket is not None:
+            _kanban_detached_execution_ids.discard(self.execution_id)
+            with suppress(OSError):
+                self.control_socket.close()
         self._demand.release()  # a reader parked between frames exits; one mid-read ends at EOF
         if self.process.poll() is None:
             self._signal_worker(kill=False)
@@ -683,6 +719,11 @@ async def execute_managed(authority, ref, row, policy):
             if frame == {'type': 'error', 'reason': 'managed_worker_failed'}:
                 raise RuntimeStoreError('managed_worker_failed')
             kind = frame.get('type')
+            if kind == 'control_socket' and set(frame) == {'type', 'path'} and worker.control_socket is None:
+                if policy.kanban_json:  # only kanban runs outlive the gateway
+                    with suppress(OSError):
+                        await asyncio.to_thread(worker.attach_socket, frame['path'], scope)
+                continue
             if kind == 'ready' and set(frame) == {'type', 'pid'} and frame['pid'] == scope['pid']:
                 continue
             if kind == 'delta' and set(frame) == {'type', 'text'} and isinstance(frame['text'], str):

@@ -1,0 +1,85 @@
+=== DRILL 2026-11-16T23:24:11 ===
+CARD=t_2699afeb WT=/home/arch/.hermes/hermes-agent-wts/t_d0b4dc6f TIP=33815ab228053dbc91258185dd67e324b6f36241
+
+=== STEP 1: Launch worker via hjob (sibling cgroup) ===
+worker_pid=387069
+before heartbeat tail: heartbeat 1 1794889451
+heartbeat 2 1794889452
+heartbeat 3 1794889453
+
+gateway cgroup sample: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service
+● hermes-gateway.service - Hermes Agent Gateway - Messaging Platform Integration
+     Loaded: loaded (/home/arch/.config/systemd/user/hermes-gateway.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-11-16 23:05:47 EST; 18min ago
+   Main PID: 160054 (hermes)
+      Tasks: 1840 (limit: 629145)
+     Memory: 2.9G (peak: 5.4G)
+        CPU: 26min 40.825s
+     CGroup: /user.slice/user-1000.sli
+
+=== STEP 2: Launch gateway-holder via hjob ===
+gateway pid before=390179
+gateway before: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway.service
+total 0
+lr-x------ 1 arch arch 64 Nov 16 23:24 0 -> /dev/null
+l-wx------ 1 arch arch 64 Nov 16 23:24 1 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-gateway/log
+l-wx------ 1 arch arch 64 Nov 16 23:24 2 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-gateway/log
+lr-x------ 1 arch arch 64 Nov 16 23:24 255 -> /tmp/drill-receipt/gateway-holder.sh
+GW_BEFORE_DONE
+
+gateway sock inode before=1098300477
+cgroup isolation: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+---
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway.service
+CGROUPS_DIFFERENT=yes
+
+
+=== STEP 3: Bounce gateway (kill holder, spawn new) ===
+after kill gateway: stopped: hjob-t_2699afeb-drill-gateway (log and exit-code files preserved)
+KILLED_GATEWAY
+    PID TTY          TIME CMD
+WORKER_STILL_ALIVE_CHECK
+    PID TTY          TIME CMD
+ 387069 ?        00:00:00 worker.sh
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+
+worker after gateway death:     PID CGROUP                      CMD
+ 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+total 0
+lr-x------ 1 arch arch 64 Nov 16 23:24 0 -> /dev/null
+l-wx------ 1 arch arch 64 Nov 16 23:24 1 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-worker/log
+l-wx------ 1 arch arch 64 Nov 16 23:24 2 -> /home/arch/.hermes/hjobs/t_2699afeb/drill-worker/log
+lr-x------ 1 arch arch 64 Nov 16 23:24 255 -> /tmp/drill-receipt/worker.sh
+
+heartbeat after bounce: heartbeat 4 1794889454
+heartbeat 5 1794889455
+heartbeat 6 1794889456
+heartbeat 7 1794889457
+heartbeat 8 1794889458
+8 /tmp/drill-worker.heartbeat
+
+
+=== STEP 4: New gateway (re-adopt) ===
+gateway pid after=391860 (before=390179)
+new gateway: 0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-gateway2.service
+srwxrwxr-x 1 arch arch 0 Nov 16 23:24 /tmp/drill-gateway.sock
+
+worker after new gateway:     PID CGROUP                      CMD
+ 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+
+
+=== STEP 5 B4: Forced restart wall-time (no drain flags) ===
+forced restart wall time: 1.15s (start 2026-11-16T23:24:21)
+gateway pid after forced restart=392023
+worker after forced restart:     PID CGROUP                      CMD
+ 387069 0::/user.slice/user-1000.sl /bin/bash /tmp/drill-receipt/worker.sh
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/hjob-t_2699afeb-drill-worker.service
+heartbeat 10 1794889460
+heartbeat 11 1794889461
+heartbeat 12 1794889462
+
+forced restart: command -> new MainPID in 1.15s, worker survived=True
+
+=== CLEANUP ===

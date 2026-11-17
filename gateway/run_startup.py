@@ -1618,6 +1618,16 @@ class GatewayStartupMixin:
         # Auto-resume restart-interrupted sessions (ledger-answered ones were cleared above); a failed
         # auto-resume stays visible on the next user message.
         self._schedule_resume_pending_sessions()
+        # Re-adopt detached kanban workers before first dispatch tick (spec §4)
+        try:
+            from gateway.kanban_detached_supervisor import adopt_detached_kanban_workers
+            from gateway.run import _profile_runtime_scope
+            from hermes_constants import get_hermes_home
+            # adopt runs under profile scope so HERMES_HOME resolution matches worker outboxes
+            adopt_detached_kanban_workers(self)
+        except Exception:
+            import logging as _lg
+            _lg.getLogger(__name__).debug("detached kanban adopt failed", exc_info=True)
         await self._finish_startup_restore()
         from gateway.run_runtime import recover_gateway_native_sessions
         await recover_gateway_native_sessions(self)

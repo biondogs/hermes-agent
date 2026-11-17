@@ -223,8 +223,11 @@ class WorkerControls:
             except (EOFError, OSError):
                 # The owner is gone, not the work: keep the agent running (spec 2.4) until a new
                 # owner re-admits through the control socket. Stop/max_runtime reach it by pid.
+                if getattr(self, "listener", None) is None:
+                    _die_with_owner()
+                    return
                 self._detach()
-                if self.listener is None or not self._reaccept():
+                if not self._reaccept():
                     return
 
     def _detach(self):
@@ -300,7 +303,7 @@ class WorkerControls:
         from gateway.session_finite import finite_clarify_reply, finite_turn_required
         if finite_turn_required() is True:
             return finite_clarify_reply()
-        if self.detached:
+        if getattr(self, "detached", False):
             return {'answers': {}, 'outcome': 'timed_out'}
         answers = {}
         reply = {'answers': answers, 'outcome': 'submitted'}
@@ -324,7 +327,7 @@ class WorkerControls:
         with self.lock:
             if self.stopped.is_set() or len(self.clarifications) >= 16:
                 return _INTERRUPTED
-            if self.detached:
+            if getattr(self, "detached", False):
                 return _DETACHED
             self.clarifications[prompt_id] = state
         try:

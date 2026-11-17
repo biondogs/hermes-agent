@@ -17,9 +17,25 @@ class _Chan:
         pass
 
 
-def _controls(stream):
+def _controls(stream, attachable=False):
+    listener = None
+    if attachable:
+        import socket as _sock
+        listener = _sock.socket(_sock.AF_UNIX, _sock.SOCK_STREAM)
+        listener.settimeout(0.05)
+        import tempfile, os
+        _tmp = tempfile.mktemp()
+        try:
+            listener.bind(_tmp)
+            listener.listen(1)
+        except OSError:
+            pass
+        try:
+            os.unlink(_tmp)
+        except OSError:
+            pass
     c = mw.WorkerControls.__new__(mw.WorkerControls)
-    c.channel, c.route, c.scope, c.listener, c.stream = _Chan(), "r", {"execution_id": "e", "generation": 1}, None, stream
+    c.channel, c.route, c.scope, c.listener, c.stream = _Chan(), "r", {"execution_id": "e", "generation": 1}, listener, stream
     c.detached, c.attached = False, threading.Event()
     c.attached.set()
     c.agent, c.stopped, c.finish = None, threading.Event(), threading.Event()
@@ -28,7 +44,7 @@ def _controls(stream):
 
 
 def test_owner_eof_detaches_without_dying_or_stopping():
-    c = _controls(io.BytesIO(b""))
+    c = _controls(io.BytesIO(b""), attachable=True)
     state = {"event": threading.Event(), "answer": None}
     c.clarifications["p"] = state
     with mock.patch.object(mw, "_die_with_owner") as die:
@@ -41,6 +57,14 @@ def test_owner_eof_detaches_without_dying_or_stopping():
         "outcome": "timed_out",
     }
 
+
+
+
+def test_non_detachable_worker_dies_with_owner():
+    c = _controls(io.BytesIO(b""))
+    with mock.patch.object(mw, "_die_with_owner") as die:
+        c.read()
+    die.assert_called_once()
 
 def test_reconnect_by_new_owner_readmits_and_stop_still_works():
     from agent.managed_worker import encode_frame

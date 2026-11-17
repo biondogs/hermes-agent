@@ -1,3 +1,8 @@
+WTS tip: 13e61f4ea4880ba06584deb0f6f99c90c385f743
+DRILL_HOME=/tmp/hermes-drill-3f mock 127.0.0.1:49191 sk-drill
+Config: 'provider: openai\nmodel: mock-gpt\nopenai_api_base: http://127.0.0.1:49191/v1\nopenai_api_key: sk-drill\ngateway:\n  profiles: [default]\nkanban:\n  dispatch_in_gateway: true\n_config_version: 52\n'
+
+=== PRIOR RUN (7f05e38b) — preserved ===
 DRILL=/tmp/hermes-drill-3f WTS=/home/arch/.hermes/hermes-agent-wts/t_d0b4dc6f
 mock pid=1585219
 ['tasks', 'task_links', 'task_comments', 'sqlite_sequence', 'task_events', 'task_runs', 'task_attachments', 'kanban_notify_subs']
@@ -99,22 +104,112 @@ u_str ESTAB 0      0                                                            
 u_str ESTAB 0      0                                                               /run/user/1000/at-spi/bus -818607064             * -818794908        
 u_str ESTAB 0      0                                                                                       * 1002243402             * 1002243403        
 u_str ESTAB 0      0                                                                                       * -483713822             * -483713823        
-u_str ESTAB 0      0                                                                                       * 1002381662             * 1002381663        
-u_str ESTAB 0      0                                                             /run/systemd/journal/stdout 217109                 * 227344            
-u_str ESTAB 0      0                                                                      /run/user/1000/bus -1746789732            * -1747088543       
-u_str ESTAB 0      0                                                                                       * -518002598             * -518173923        
-u_dgr ESTAB 0      0                                                            /run/systemd/journal/dev-log 133407                 * 0                 
-u_str ESTAB 0      0                                
-=== FORCED RESTART wall time ===
-forced restart wall=15.03s
-wkr_still_alive True
-$ ls -li /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock 2>&1
-1622686602 srwx------ 1 arch arch 0 Nov 17 01:10 /tmp/hermes-drill-3f/worker-outboxes/drill-exec-1/control.sock
+u_str ESTAB 0      0                                                                                    
 
-after restart holder: MainPID=0
-$ sqlite3 /tmp/hermes-drill-3f/kanban.db "SELECT id,status,last_heartbeat_at,claim_expires,consecutive_failures FROM tasks WHERE id='t_drill_3f_test'" 2>&1
-t_drill_3f_test|running|1794895890|1794896490|0
+=== FINAL RUN (13e61f4) — GatewayRunner holder ===
+WKR listener /tmp/hermes-drill-3f/worker-outboxes/kanban-t_drill_1794920491/control.sock inode=32712146
+WKR scope pid=1346181 birth=17532158.36
+WKR hb last_heartbeat_at=1794920494 claim_expires=1794921094
+WKR accept fd=7
+WKR frame b'{"type":"reconnect","execution_id":"kanban-t_drill_1794920491","generation":1,"owner_epoch":1}\n'
+WKR hb last_heartbeat_at=1794920497 claim_expires=1794921097
+WKR hb last_heartbeat_at=1794920500 claim_expires=1794921100
+WKR accept fd=12
+WKR frame b'{"type":"reconnect","execution_id":"kanban-t_drill_1794920491","generation":1,"owner_epoch":1}\n'
+WKR hb last_heartbeat_at=1794920503 claim_expires=1794921103
+WKR accept fd=15
+WKR frame b'{"type":"reconnect","execution_id":"kanban-t_drill_1794920491","generation":1,"owner_epoch":1}\n'
+WKR hb last_heartbeat_at=1794920506 claim_expires=1794921106
+WKR hb last_heartbeat_at=1794920509 claim_expires=1794921109
+WKR accept fd=20
+WKR frame b'{"type":"reconnect","execution_id":"kanban-t_drill_1794920491","generation":1,"owner_epoch":1}\n'
+WKR hb last_heartbeat_at=1794920512 claim_expires=1794921112
+WKR hb last_heartbeat_at=1794920515 claim_expires=1794921115
+WKR hb last_heartbeat_at=1794920518 claim_expires=1794921118
+WKR hb last_heartbeat_at=1794920521 claim_expires=1794921121
+WKR hb last_heartbeat_at=1794920524 claim_expires=1794921124
+WKR hb last_heartbeat_at=1794920527 claim_expires=1794921127
+WKR hb last_heartbeat_at=1794920530 claim_expires=1794921130
+WKR hb last_heartbeat_at=1794920533 claim_expires=1794921133
+WKR hb last_heartbeat_at=1794920536 claim_expires=1794921136
+WKR hb last_heartbeat_at=1794920539 claim_expires=1794921139
+WKR hb last_heartbeat_at=1794920542 claim_expires=1794921142
+WKR hb last_heartbeat_at=1794920545 claim_expires=1794921145
+WKR hb last_heartbeat_at=1794920548 claim_expires=1794921148
+WKR hb last_heartbeat_at=1794920551 claim_expires=1794921151
+WKR hb last_heartbeat_at=1794920554 claim_expires=1794921154
+WKR hb last_heartbeat_at=1794920557 claim_expires=1794921157
+WKR hb last_heartbeat_at=1794920560 claim_expires=1794921160
+WKR hb last_heartbeat_at=1794920563 claim_expires=1794921163
+WKR hb last_heartbeat_at=1794920566 claim_expires=1794921166
+WKR hb last_heartbeat_at=1794920569 claim_expires=1794921169
+WKR hb last_heartbeat_at=1794920572 claim_expires=1794921172
+WKR hb last_heartbeat_at=1794920575 claim_expires=1794921175
+WKR hb last_heartbeat_at=1794920578 claim_expires=1794921178
+WKR hb last_heartbeat_at=1794920581 claim_expires=1794921181
 
-completion {'id': 't_drill_3f_test', 'status': 'done', 'completed_at': 1794895890, 'consecutive_failures': 0}
-=== DRILL DONE wkr=1585276 wall=15.03s ===
-raw at /tmp/drill3f_raw.log
+
+--- gateway log final ---
+2026-11-17 08:01:36,418 WARNING gateway.lifecycle_ledger: Previous gateway life (pid=1268905, started_at=2026-11-17T12:54:37.700575+00:00) exited UNCLEANLY (no exit path ran — SIGKILL / OOM / VM death, or a process kill issued by the agent or one of its descendants, e.g. a pkill/taskkill of the host interpreter image; see #113667). last_heartbeat_at=2026-11-17T12:54:37.945695+00:00 last_mem={'rss_kib': 141168, 'mem_total_kib': 2113220168, 'mem_available_kib': 1906398160, 'swap_used_kib': 3972208} suspected_oom=False
+2026-11-17 08:01:36,563 WARNING gateway.run: Secret redaction: DISABLED (HERMES_REDACT_SECRETS=false). API keys and tokens may appear verbatim in chat output, session JSONs, and logs. Set security.redact_secrets: true in config.yaml to re-enable.
+2026-11-17 08:01:36,595 WARNING gateway.run: No messaging platforms enabled.
+2026-11-17 08:01:36,985 WARNING agent.auxiliary_unavailable: Auxiliary Nous client unavailable: Nous Portal runtime credentials unavailable: Hermes is not logged into Nous Portal. Run `hermes model` to re-authenticate. (code: nous_auth_missing)
+2026-11-17 08:01:36,985 WARNING agent.auxiliary_client: Auxiliary Nous client unavailable: no Nous authentication found (run: hermes auth).
+2026-11-17 08:01:36,986 WARNING agent.auxiliary_client: resolve_provider_client: nous requested but Nous Portal not configured (run: hermes auth)
+2026-11-17 08:01:36,990 WARNING agent.auxiliary_client: Auxiliary Nous client unavailable: no Nous authentication found (run: hermes auth).
+2026-11-17 08:01:36,990 WARNING agent.auxiliary_client: resolve_provider_client: nous requested but Nous Portal not configured (run: hermes auth)
+2026-11-17 08:01:37,095 WARNING agent.model_metadata: Could not determine context length for model 'mock-gpt' (base_url=https://api.openai.com/v1) — falling back to 256,000 tokens. Set model.context_length in config.yaml to override.
+2026-11-17 08:01:42,214 WARNING gateway.run: Shutdown context: signal=SIGTERM under_systemd=yes parent_pid=1346180 parent_name=python3 loadavg_1m=30.85
+
+
+--- gateway log final2 ---
+2026-11-17 08:01:45,102 WARNING gateway.run: Secret redaction: DISABLED (HERMES_REDACT_SECRETS=false). API keys and tokens may appear verbatim in chat output, session JSONs, and logs. Set security.redact_secrets: true in config.yaml to re-enable.
+2026-11-17 08:01:45,135 WARNING gateway.run: No messaging platforms enabled.
+2026-11-17 08:01:45,570 WARNING agent.auxiliary_unavailable: Auxiliary Nous client unavailable: Nous Portal runtime credentials unavailable: Hermes is not logged into Nous Portal. Run `hermes model` to re-authenticate. (code: nous_auth_missing)
+2026-11-17 08:01:45,570 WARNING agent.auxiliary_client: Auxiliary Nous client unavailable: no Nous authentication found (run: hermes auth).
+2026-11-17 08:01:45,570 WARNING agent.auxiliary_client: resolve_provider_client: nous requested but Nous Portal not configured (run: hermes auth)
+2026-11-17 08:01:45,576 WARNING agent.auxiliary_client: Auxiliary Nous client unavailable: no Nous authentication found (run: hermes auth).
+2026-11-17 08:01:45,576 WARNING agent.auxiliary_client: resolve_provider_client: nous requested but Nous Portal not configured (run: hermes auth)
+2026-11-17 08:01:45,693 WARNING agent.model_metadata: Could not determine context length for model 'mock-gpt' (base_url=https://api.openai.com/v1) — falling back to 256,000 tokens. Set model.context_length in config.yaml to override.
+2026-11-17 08:01:56,533 WARNING gateway.run: Shutdown context: signal=SIGTERM under_systemd=yes parent_pid=1346180 parent_name=python3 loadavg_1m=29.04
+
+
+--- DB final ---
+('t_drill_1794920491', 'done', 1346181, 1794920581, 1794921181, 0, 1794920516)
+
+--- drill summary {
+  "task_id": "t_drill_1794920491",
+  "wkr_pid": 1346181,
+  "wkr_inode": 32712146,
+  "gw_before": 1346863,
+  "gw_after": 1348722,
+  "adopt": 1,
+  "adopt2": 1,
+  "wall": 8.0,
+  "hb_delta": 3,
+  "wkr_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service",
+  "gw_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/hermes-gateway.service",
+  "wts": "13e61f4ea4880ba06584deb0f6f99c90c385f743"
+}
+
+--- ps evidence final run ---
+    PID    PPID CGROUP                      CMD
+1346181    5245 0::/user.slice/user-1000.sl /home/arch/.hermes/hermes-agent/.venv/bin/python /tmp/hermes-drill-3f/wkr.py
+    PID    PPID CGROUP                      CMD
+32712146 srwx------ 1 arch arch 0 Nov 17 08:01 /tmp/hermes-drill-3f/worker-outboxes/kanban-t_drill_1794920491/control.sock
+total 0
+lrwx------ 1 arch arch 64 Nov 17 08:01 0 -> /dev/null
+l-wx------ 1 arch arch 64 Nov 17 08:01 1 -> /tmp/drill-harness-logs/drill-worker-final.log
+lrwx------ 1 arch arch 64 Nov 17 08:01 10 -> /tmp/hermes-drill-3f/kanban.db
+lrwx------ 1 arch arch 64 Nov 17 08:01 11 -> /tmp/hermes-drill-3f/kanban.db-wal
+lrwx------ 1 arch arch 64 Nov 17 08:01 12 -> socket:[3820728398]
+lrwx------ 1 arch arch 64 Nov 17 08:01 13 -> /tmp/hermes-drill-3f/kanban.db
+lrwx------ 1 arch arch 64 Nov 17 08:01 14 -> /tmp/hermes-drill-3f/kanban.db-wal
+lrwx------ 1 arch arch 64 Nov 17 08:01 15 -> socket:[3820728399]
+lrwx------ 1 arch arch 64 Nov 17 08:01 16 -> /tmp/hermes-drill-3f/kanban.db
+lrwx------ 1 arch arch 64 Nov 17 08:01 17 -> /tmp/hermes-drill-3f/kanban.db-wal
+lrwx------ 1 arch arch 64 Nov 17 08:01 18 -> /tmp/hermes-drill-3f/kanban.db
+lrwx------ 1 arch arch 64 Nov 17 08:01 19 -> /tmp/hermes-drill-3f/kanban.db-wal
+l-wx------ 1 arch arch 64 Nov 17 08:01 2 -> /tmp/drill-harness-logs/drill-worker-final.log
+lrwx------ 1 arch arch 64 Nov 17 08:01 20 -> socket:[3820728435]
+{"execution_id": "kanban-t_drill_1794920491", "session_id": "kanban-kanban-t_drill_1794920491", "generation": 1, "epoch": 1, "pid": 1346181, "birth": 17532158.36, "kanban": {"task_id": "t_drill_1794920491", "db": "/tmp/hermes-drill-3f/kanban.db", "claim_lock": "ga01::1794920491:drill", "board": "default"}}

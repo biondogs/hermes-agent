@@ -2,7 +2,12 @@
 import asyncio
 import hashlib
 import json
+import time
 import uuid
+
+# How long a cron firer keeps reconnecting to observe an already-admitted fire after the gateway
+# connection drops (stalls are 20-60 s, graceful restarts ~10-15 s).
+RESUME_WINDOW_S = 180.0
 
 
 class CronExecutionUnknown(RuntimeError):
@@ -104,6 +109,9 @@ def run_canonical_job(job, *, extra_prompt=None, cancel_event=None, execution_id
                 raise
         record['receipt'] = receipt
         save()
+        return await poll(call, receipt)
+
+    async def poll(call, receipt):
         delay, progress = .1, None
         while True:
             if cancel_event is not None and cancel_event.is_set():
@@ -125,8 +133,28 @@ def run_canonical_job(job, *, extra_prompt=None, cancel_event=None, execution_id
             delay = min(delay * 2, 2.0)
 
     async def remote():
-        async with connect_gateway() as client:
-            return await observe(lambda op, data: client.rpc('cron.' + op, **data))
+        # A transport drop AFTER the owner admitted the fire (receipt recorded) does not make the
+        # fire unknown: the owner keeps running it. Reconnect and resume observing the same receipt
+        # for a bounded window, so a brief gateway stall/restart is not reported as a failure.
+        # Owner refusals (GatewayRPCError) and drops before admission keep their old handling.
+        from hermes_cli.gateway_client import GatewayRPCError
+        deadline = time.monotonic() + RESUME_WINDOW_S
+        backoff, first = 1.0, True
+        while True:
+            try:
+                async with connect_gateway() as client:
+                    call = lambda op, data: client.rpc('cron.' + op, **data)
+                    if first:
+                        first = False
+                        return await observe(call)
+                    return await poll(call, record['receipt'])
+            except (GatewayRPCError, CronExecutionUnknown):
+                raise
+            except Exception:
+                if record.get('receipt') is None or time.monotonic() >= deadline:
+                    raise
+                await asyncio.sleep(backoff)
+                backoff = min(backoff * 2, 15.0)
 
     try:
         if owner is not None:

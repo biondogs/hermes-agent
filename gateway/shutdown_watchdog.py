@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Extra leash beyond ``agent.restart_drain_timeout`` so a slow-but-progressing drain survives.
 # Matches the issue #66892 suggested hardening.
 DEFAULT_SHUTDOWN_WATCHDOG_GRACE_S = 60.0
-DEFAULT_HEARTBEAT_INTERVAL_S = 30.0
+DEFAULT_HEARTBEAT_INTERVAL_S = 15.0  # 20 s stall-watch threshold needs slack: at 30 s the file is above threshold 10 s/cycle even healthy (ADR-GATEWAY-STALL-FIX)
 DEFAULT_LOOP_FLOOR_TIMER_INTERVAL_S = 5.0
 DEFAULT_LOOP_WATCHDOG_INTERVAL_S = 30.0
 DEFAULT_LOOP_WATCHDOG_TIMEOUT_S = 10.0

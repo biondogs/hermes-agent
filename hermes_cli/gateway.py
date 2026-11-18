@@ -306,7 +306,7 @@ def _wait_for_pid_exit(pid: int, timeout: float, *, on_progress=None) -> bool:
 # --- Wedged-gateway detection + bounded escalation ---------------------------
 # A gateway whose asyncio loop is stalled cannot handle SIGTERM/SIGUSR1, so the drain wait burns
 # its full budget and `hermes update` can deadlock. Two witnesses classify the loop BEFORE any
-# drain wait: the heartbeat file ``state/gateway.heartbeat`` (rewritten every 30s on a thread, so
+# drain wait: the heartbeat file ``state/gateway.heartbeat`` (rewritten every 15s on a thread, so
 # staleness alone is not proof) and the loop-tick socket ``state/gateway.loop-tick.<pid>.sock``
 # answered by the loop itself; the payload records whether the socket is armed (``loop_tick_socket``).
 # ``alive``: socket answered, or fresh file not contradicted -> normal graceful drain. ``wedged``:
@@ -320,7 +320,7 @@ def _wait_for_pid_exit(pid: int, timeout: float, *, on_progress=None) -> bool:
 # is stalled (e.g. an in-loop compression pass, #72707) cannot process SIGTERM/SIGUSR1 shutdown: the drain
 # wait then burns the full drain budget (180s by default), warns "still running after 180.0s — restart may
 # fail", and `hermes update` can deadlock behind it. The loop publishes a liveness signal precisely for this
-# case: an asyncio task rewrites ``state/gateway.heartbeat`` every 30s (#66892), so a frozen loop stops
+# case: an asyncio task rewrites ``state/gateway.heartbeat`` every 15s (#66892), so a frozen loop stops
 # refreshing the file while a busy-but-alive loop keeps refreshing it. Since #90502 the heartbeat write runs
 # on a thread (a stalling filesystem must not be able to block the loop the watchdog watches), which costs
 # the file its status as *proof*: a stalled write or a saturated executor can age the file while the loop
@@ -348,7 +348,7 @@ GATEWAY_LOOP_ALIVE = "alive"
 GATEWAY_LOOP_WEDGED = "wedged"
 GATEWAY_LOOP_UNKNOWN = "unknown"
 
-# 3 missed 30s beats (gateway.shutdown_watchdog.DEFAULT_HEARTBEAT_INTERVAL_S): decisive, not one slow write.
+# 6 missed 15s beats (gateway.shutdown_watchdog.DEFAULT_HEARTBEAT_INTERVAL_S): decisive, not one slow write.
 DEFAULT_LOOP_LIVENESS_STALE_AFTER_S = 90.0
 
 # Sentinel for "the producer never wrote the witness flag" (legacy payload).
@@ -437,7 +437,7 @@ def probe_gateway_loop_liveness(
     - the loop-tick socket (``state/gateway.loop-tick.<pid>.sock``): answered by the gateway loop itself, so
     a reply is direct proof that the loop is dispatching. It is never refreshed by the heartbeat executor
     thread and never stalled by a filesystem that is slow to fsync. - the heartbeat file
-    (``state/gateway.heartbeat``): rewritten every 30s on a thread since #90502, so freshness alone is no
+    (``state/gateway.heartbeat``): rewritten every 15s on a thread since #90502, so freshness alone is no
     longer proof of loop schedulability — a stalled write (measured at 112.6s max on the incident box) or a
     saturated executor can age the file while the loop runs, and a write can land after the loop froze.
     """

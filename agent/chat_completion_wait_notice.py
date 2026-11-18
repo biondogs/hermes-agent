@@ -1,6 +1,6 @@
 """Operator-facing wait notice for long provider silences (#92550).
 
-The 30s heartbeat is gateway liveness, not a warning. Once a request has been
+The 15s heartbeat is gateway liveness, not a warning. Once a request has been
 silent past the notice threshold this module decides WHAT the status line says
 (neutral: which phase of the wait we are in, which watchdog would reconnect and
 when) and WHETHER to rewrite it: once when the silence starts, again only when

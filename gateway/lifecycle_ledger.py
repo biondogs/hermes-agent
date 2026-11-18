@@ -63,7 +63,7 @@ def _proc_fields(path: str, wanted: dict[str, str]) -> dict[str, int]:
 
 def sample_memory() -> dict[str, Any]:
     """Cheap /proc snapshot (KiB): own RSS + MemTotal/MemAvailable + swap used.  Linux-only
-    (``{}`` elsewhere), never raises; the 30s heartbeat embeds it so OOM cycles are classifiable."""
+    (``{}`` elsewhere), never raises; the 15s heartbeat embeds it so OOM cycles are classifiable."""
     sample = _proc_fields("/proc/self/status", {"VmRSS": "rss_kib"})
     mem = _proc_fields("/proc/meminfo", {"MemTotal": "mem_total_kib", "MemAvailable": "mem_available_kib",
                                          "SwapTotal": "SwapTotal", "SwapFree": "SwapFree"})

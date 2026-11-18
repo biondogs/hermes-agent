@@ -222,7 +222,7 @@ class GatewayRuntimeInitMixin:
         self._recent_voice_transcripts: Dict[tuple, List[tuple[float, str]]] = {}
         # Background tasks kept referenced so they are not garbage-collected mid-execution.
         self._background_tasks: set = set()
-        # Event-loop liveness heartbeat: rewritten every 30s while the loop dispatches; supervisors use
+        # Event-loop liveness heartbeat: rewritten every 15s while the loop dispatches; supervisors use
         # the file mtime / updated_at to tell "process alive" from "loop frozen".
         # See #66892.
         self._gateway_started_at: float = time.time()

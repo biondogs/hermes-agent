@@ -980,6 +980,7 @@ def test_s12_boot_custody_no_settle_and_receipt_resolves():
             fake_auth_authority.db = fake_db
             fake_auth_authority.sessions = fake_auth.sessions
             fake_auth_authority.profile_id = "test"
+            fake_auth_authority.epoch = 1
             # stub authorize to no-op
             fake_auth_authority.authorize = lambda *a, **kw: None
             from gateway.session_contract import SessionRef
@@ -1010,3 +1011,114 @@ def test_unattended_unknown_target_session_id():
     out2 = _unattended_unknown(rows, exclude_execution_ids={"exec-2"})
     assert len(out2) == 1 and out2[0]["admission_id"] == "a1"
 
+
+def test_s12_fenced_unknown_receipt_resolves_to_started():
+    """v17 S-12 fence-vs-adoption: fenced status='unknown' must resolve to non-unknown when scope pid is live."""
+    import tempfile, json as _js, os, socket, threading, time
+    from pathlib import Path as _P
+    from unittest.mock import patch as _patch
+    import tests.home_io_guard as _guard
+    _orig_guard = _guard.HomeIOGuard.check
+    _guard.HomeIOGuard.check = lambda *a, **kw: None
+    with tempfile.TemporaryDirectory() as td:
+        td = _P(td)
+        live_pid = os.getpid()
+        from hermes_cli.process_identity import worker_birth as _wb
+        import psutil
+        birth = _wb(psutil.Process(live_pid))
+        session_id = "local-dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        admission_id = "adm-fenced-unknown-001"
+        execution_id = "exec-fenced-001"
+        outbox = td / "worker-outboxes" / "adm-fenced"
+        outbox.mkdir(parents=True)
+        scope = {"session_id": session_id, "execution_id": execution_id, "admission_id": admission_id, "generation": 1, "epoch": 1, "pid": live_pid, "birth": birth, "kanban": {"task_id": "task-fenced", "board": "test", "db": str(td / "kanban.db"), "claim_lock": "lockF", "run_id": "runF"}}
+        (outbox / "scope.json").write_text(_js.dumps(scope))
+        sock_path = outbox / "control.sock"
+        srv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        srv.bind(str(sock_path))
+        srv.listen(1)
+        def accept_and_hold():
+            try:
+                srv.settimeout(3)
+                conn, _ = srv.accept()
+                conn.settimeout(2)
+                try:
+                    data = conn.recv(4096)
+                except Exception:
+                    pass
+                time.sleep(0.5)
+                conn.close()
+            except Exception:
+                pass
+        th = threading.Thread(target=accept_and_hold, daemon=True)
+        th.start()
+        import sqlite3
+        db_path = td / "kanban.db"
+        conn = sqlite3.connect(str(db_path))
+        conn.execute("CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, status TEXT, claim_lock TEXT)")
+        conn.execute("CREATE TABLE IF NOT EXISTS task_runs (id TEXT PRIMARY KEY, worker_pid INTEGER, worker_started_at TEXT)")
+        conn.execute("INSERT OR REPLACE INTO tasks VALUES (?,?,?)", ("task-fenced", "running", "lockF"))
+        conn.execute("INSERT OR REPLACE INTO task_runs VALUES (?,?,?)", ("runF", live_pid, birth))
+        conn.commit(); conn.close()
+        auth_db_path = td / "sessions.db"
+        conn2 = sqlite3.connect(str(auth_db_path))
+        import json as _js3
+        conn2.executescript("""
+        CREATE TABLE IF NOT EXISTS session_admissions (
+            seq INTEGER PRIMARY KEY AUTOINCREMENT,
+            admission_id TEXT NOT NULL UNIQUE,
+            request_id TEXT NOT NULL,
+            principal_id TEXT NOT NULL,
+            target_session_id TEXT NOT NULL,
+            lineage_json TEXT NOT NULL,
+            payload_json TEXT NOT NULL,
+            payload_digest TEXT NOT NULL,
+            intent TEXT NOT NULL,
+            status TEXT NOT NULL,
+            outcome TEXT,
+            owner_epoch INTEGER,
+            generation INTEGER
+        );
+        """)
+        # CRITICAL: fenced shape status='unknown' (not 'started')
+        conn2.execute("INSERT OR REPLACE INTO session_admissions(admission_id, request_id, principal_id, target_session_id, lineage_json, payload_json, payload_digest, intent, status, owner_epoch, generation) VALUES (?,?,?,?,?,?,?,?,?,?,?)", (admission_id, "reqF", "kanban_card_v1", session_id, _js3.dumps([session_id]), "{}", "digF", "queue", "unknown", 0, 1))
+        conn2.commit(); conn2.close()
+        class FakeDB:
+            def __init__(self, path): self.db_path = str(path)
+            def _read_ctx(self):
+                import contextlib
+                @contextlib.contextmanager
+                def ctx():
+                    c = sqlite3.connect(self.db_path)
+                    c.row_factory = sqlite3.Row
+                    try:
+                        yield c
+                    finally:
+                        c.close()
+                return ctx()
+        fake_db = FakeDB(auth_db_path)
+        import types
+        fake_auth = types.SimpleNamespace(_managed_workers={}, db=fake_db, sessions={}, profile_id="test", epoch=1)
+        with _patch("hermes_constants.get_hermes_home", return_value=td), _patch("gateway.kanban_detached_supervisor._resolve_homes", return_value=[td]):
+            from gateway.kanban_detached_supervisor import adopt_detached_kanban_workers
+            n = adopt_detached_kanban_workers(fake_auth)
+            assert n >= 1, f"adopt should succeed, got {n}"
+            assert session_id in fake_auth.sessions, "LiveSession must be created"
+            import asyncio as _aio
+            from gateway.session_authority import SessionAuthority as _SA
+            fake_auth_authority = _SA.__new__(_SA)
+            fake_auth_authority.db = fake_db
+            fake_auth_authority.sessions = fake_auth.sessions
+            fake_auth_authority.profile_id = "test"
+            fake_auth_authority.epoch = 1
+            fake_auth_authority.authorize = lambda *a, **kw: None
+            from gateway.session_contract import SessionRef
+            ref = SessionRef("test", session_id)
+            actor = types.SimpleNamespace(subject="kanban_card_v1", capabilities=["session:submit"])
+            receipt = _aio.run(fake_auth_authority.receipt(actor, ref, admission_id))
+            assert receipt is not None, "receipt must resolve"
+            # v17-fence-vs-adoption marker: must NOT be unknown
+            assert getattr(receipt, "status", None) != "unknown", f"fenced unknown must resolve to non-unknown, got {receipt}"
+        srv.close()
+        time.sleep(0.2)
+    _guard.HomeIOGuard.check = _orig_guard

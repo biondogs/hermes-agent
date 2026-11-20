@@ -118,12 +118,30 @@ def _replay_admission_for_scope(authority, scope):
         pass
 
 def _ensure_live_session_for_admission(authority, session_id, admission_id, scope, row=None):
-    """Create LiveSession entry if absent and seed settling with admission row."""
+    """Create LiveSession entry if absent and seed settling with admission row.
+
+    v17: never seed a fenced-unknown row for a live adopted worker — synthesize
+    status:'started' when the DB row was epoch-fenced (RECHECK fence-vs-adoption).
+    """  # v17-fence-vs-adoption
+    def _normalize_row(r):
+        if r is None:
+            return None
+        try:
+            status = r.get("status") if isinstance(r, dict) else r["status"]
+        except Exception:
+            return r
+        if status == "unknown":
+            # Fenced shape: worker is live (caller already verified pid_alive), so synthesize started
+            nr = dict(r) if isinstance(r, dict) else {k: r[k] for k in r.keys()}
+            nr["status"] = "started"
+            return nr
+        return r
     try:
+        normalized = _normalize_row(row)
         if session_id in authority.sessions:
             live = authority.sessions[session_id]
-            if row is not None and admission_id not in live.settling:
-                live.settling[admission_id] = row
+            if normalized is not None and admission_id not in live.settling:
+                live.settling[admission_id] = normalized
             return
         # Create minimal LiveSession — same shape as authority init expects
         from gateway.session_authority import LiveSession
@@ -132,8 +150,8 @@ def _ensure_live_session_for_admission(authority, session_id, admission_id, scop
         live = LiveSession(source=scope.get("kanban", {}).get("task_id", session_id), route=session_id)
         # Ensure lock exists (LiveSession.__post_init__ already did)
         authority.sessions[session_id] = live
-        if row is not None:
-            live.settling[admission_id] = row
+        if normalized is not None:
+            live.settling[admission_id] = normalized
         else:
             # Synthetic row for receipt path
             synth = {"admission_id": admission_id, "target_session_id": session_id, "status": "started", "generation": scope.get("generation", 0), "principal_id": "kanban_card_v1", "payload": {}}

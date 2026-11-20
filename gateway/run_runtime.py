@@ -351,6 +351,9 @@ def stop_authority_turns(authority, *, in_process=False, reason=None):
     from gateway.run import _AGENT_PENDING_SENTINEL
     running = getattr(authority.runner, '_running_agents', {})
     for sid, live in list(authority.sessions.items()):
+        # S-6: detached kanban sessions survive gateway stop — never interrupt them
+        if getattr(getattr(authority, '_managed_workers', {}).get(sid), 'control_socket', None) is not None:
+            continue
         generation = live.event_stream.execution.get('execution_generation')
         if generation is None or sid in workers or sid in getattr(authority, '_managed_spawning', {}):
             continue

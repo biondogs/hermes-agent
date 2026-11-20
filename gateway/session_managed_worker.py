@@ -310,7 +310,7 @@ class ManagedWorker:
             stopper.cancel()
             arrived.cancel()
 
-    def interrupt(self):
+    def interrupt(self, *args, **kwargs):
         self.control({'type': 'stop'})
 
     def respond(self, kind, prompt_id, value):

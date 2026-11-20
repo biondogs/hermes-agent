@@ -1475,7 +1475,7 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
                 dead.event_payload["gateway_restart"] = True
             # S-2: persist death during gateway restart (exit 1 with 1012/service-restart note) is also
             # gateway_restart, not a counted failure (worker died because owner went away mid-persist).
-            if dead.code == 1 and ("1012" in _note or "service restart" in _note.lower() or "couldn't save" in _note.lower()):
+            if dead.code == 1 and ("1012" in _note or "service restart" in _note.lower() or "couldn't save" in _note.lower() or "owner admission settled interrupted" in _note):
                 dead.failure_class = "gateway_restart"
                 dead.event_payload["failure_class"] = "gateway_restart"
                 dead.event_payload["gateway_restart"] = True

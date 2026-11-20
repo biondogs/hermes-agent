@@ -1228,7 +1228,9 @@ class SessionAuthority:
                         # An automation turn nobody is waiting on settles interrupted (GW-10); only a
                         # person's lost turn keeps the FIFO paused for them to resolve.
                         from gateway.session_unattended_unknown import settle_unattended_unknown
-                        if await settle_unattended_unknown(self, ref):
+                        _eids2 = {getattr(w, 'execution_id', None) for w in getattr(self, '_managed_workers', {}).values() if getattr(w, 'control_socket', None) is not None}
+                        _eids2.discard(None)
+                        if await settle_unattended_unknown(self, ref, exclude_execution_ids=_eids2):
                             continue
                     if exc.reason == 'admission_conflict':
                         # A verdict on the head alone (its route or binding moved under it) that every drain
@@ -1297,7 +1299,9 @@ class SessionAuthority:
             # An automation turn nobody waits on settles here, at the exit that fenced it (GW-10),
             # so the followers already queued run in this drain; a person's turn still pauses.
             from gateway.session_unattended_unknown import settle_unattended_unknown
-            if await settle_unattended_unknown(self, ref):
+            _detached_eids = {getattr(w, 'execution_id', None) for w in getattr(self, '_managed_workers', {}).values() if getattr(w, 'control_socket', None) is not None}
+            _detached_eids.discard(None)
+            if await settle_unattended_unknown(self, ref, exclude_execution_ids=_detached_eids):
                 return None, 'settled_unknown'
             self._pause(ref, 'unknown_execution')
             raise
@@ -1455,7 +1459,30 @@ async def initialize_session_authority(runner, *, profile_id, instance_id, db=No
     await asyncio.to_thread(recover_session_inputs, db, epoch=epoch)
     # A lost automation turn has nobody to resolve it: it settles interrupted before any FIFO runs.
     from gateway.session_unattended_unknown import settle_recovered_unattended
-    await asyncio.to_thread(settle_recovered_unattended, db, epoch)
+    # Detached kanban workers survive restart — exclude their executions from boot settlement
+    try:
+        from gateway.session_managed_worker import _kanban_detached_execution_ids as _kdeids
+        _boot_exclude = set(_kdeids)
+    except ImportError:
+        _boot_exclude = None
+    # Also scan worker-outboxes on disk (in-memory set is empty at boot)
+    try:
+        from hermes_constants import get_hermes_home as _ghh
+        from pathlib import Path as _P
+        _home = _P(_ghh()) if callable(_ghh) else None
+        if _home:
+            import json as _js
+            for _scope_file in (_home / 'worker-outboxes').glob('*/scope.json'):
+                try:
+                    _scope = _js.loads(_scope_file.read_text())
+                    _eid = _scope.get('execution_id')
+                    if _eid:
+                        _boot_exclude = (_boot_exclude or set()) | {_eid}
+                except Exception:
+                    pass
+    except Exception:
+        pass
+    await asyncio.to_thread(settle_recovered_unattended, db, epoch, _boot_exclude)
     await asyncio.to_thread(backfill_legacy_session_owners, db)
     await asyncio.to_thread(backfill_compression_created_sources, db)
     from gateway.session_local_recovery import release_handed_off_receipts

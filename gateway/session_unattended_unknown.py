@@ -34,11 +34,14 @@ def is_unattended(row) -> bool:
             or 'automation' in native or 'webhook_delivery' in native)
 
 
-def _unattended_unknown(rows):
-    return [row for row in rows if row['status'] == 'unknown' and is_unattended(row)]
+def _unattended_unknown(rows, exclude_execution_ids=None):
+    out = [row for row in rows if row['status'] == 'unknown' and is_unattended(row)]
+    if exclude_execution_ids:
+        out = [r for r in out if r.get('execution_id') not in exclude_execution_ids]
+    return out
 
 
-def settle_recovered_unattended(db, epoch) -> int:
+def settle_recovered_unattended(db, epoch, exclude_execution_ids=None) -> int:
     """Boot recovery, right after ``recover_session_inputs`` fenced lost turns ``unknown`` and before
     any FIFO is scheduled: settle every unattended one. Synchronous; runs off the owner loop."""
     from agent.turn_failure_copy import AUTOMATION_INTERRUPTED_NOTICE
@@ -49,7 +52,7 @@ def settle_recovered_unattended(db, epoch) -> int:
         rows = [_row(r) for r in conn.execute(
             "SELECT * FROM session_admissions WHERE status='unknown' ORDER BY seq").fetchall()]
     settled = 0
-    for row in _unattended_unknown(rows):
+    for row in _unattended_unknown(rows, exclude_execution_ids):
         try:
             resolve_unknown_session_input(
                 db, epoch=epoch, admission_id=row['admission_id'], generation=row['generation'],
@@ -64,7 +67,7 @@ def settle_recovered_unattended(db, epoch) -> int:
     return settled
 
 
-async def settle_unattended_unknown(authority, ref) -> bool:
+async def settle_unattended_unknown(authority, ref, exclude_execution_ids=None) -> bool:
     """The drain found an ``unknown`` head (fenced in this owner, e.g. a lost managed worker):
     settle the unattended ones through the owner's resolution. True when any settled, so the
     drain re-reads its FIFO instead of pausing; a person's ``unknown`` row still pauses it."""
@@ -74,7 +77,7 @@ async def settle_unattended_unknown(authority, ref) -> bool:
     from hermes_state_runtime import RuntimeStoreError, list_session_admissions
     rows = await asyncio.to_thread(list_session_admissions, authority.db, session_id=ref.session_id)
     settled = False
-    for row in _unattended_unknown(rows):
+    for row in _unattended_unknown(rows, exclude_execution_ids):
         try:
             await authority.resolve_unknown_as_owner(ref, row['admission_id'], row['generation'],
                                                      notice=AUTOMATION_INTERRUPTED_NOTICE)

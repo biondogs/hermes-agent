@@ -354,12 +354,20 @@ class ManagedWorker:
         return self.control_socket is not None
 
     def close(self, detach=False):
-        # S-7: detached kanban workers are never signalled; only close the in-owner fd.
+        # S-7/S-8/S-9: detached kanban workers are never signalled; only close the in-owner fd
+        # and unblock channel threads so the gateway can exit (S-9).
         if detach or self._should_detach():
             self.closed.set()
             if self.control_socket is not None:
                 with suppress(OSError):
                     self.control_socket.close()
+            # Unblock reader blocked on socket makefile read: close the makefile too
+            # so the daemon reader exits instead of hanging the shutdown tail.
+            for _attr in ('stdin', 'stdout'):
+                try:
+                    getattr(self.process, _attr).close()
+                except Exception:
+                    pass
             self._demand.release()
             return
         self.closed.set()
@@ -612,8 +620,18 @@ def _stopped_before_spawn(authority, ref, row):
     return True
 
 
+def _is_kanban_execution(policy):
+    """Any kanban-bound execution, regardless of control_socket state."""
+    return bool(getattr(policy, 'kanban_json', None))
+
+
 def _is_detached_kanban_execution(policy, worker):
-    return bool(getattr(policy, 'kanban_json', None)) and getattr(worker, 'control_socket', None) is not None
+    return _is_kanban_execution(policy) and getattr(worker, 'control_socket', None) is not None
+
+
+def _is_kanban_bound_execution(policy, scope):
+    """Kanban execution with a committed admission scope — must never be fenced."""
+    return _is_kanban_execution(policy) and scope is not None
 
 def _record_lost_attempt(authority, policy, exc, reason, scope):
     """Start the board disposition (``worker_lost``) for a lost Kanban card attempt; the task, or None.
@@ -761,8 +779,11 @@ async def execute_managed(authority, ref, row, policy):
             kind = frame.get('type')
             if kind == 'control_socket' and set(frame) == {'type', 'path'} and worker.control_socket is None:
                 if policy.kanban_json:  # only kanban runs outlive the gateway
-                    with suppress(OSError):
+                    try:
                         await asyncio.to_thread(worker.attach_socket, frame['path'], scope)
+                    except OSError as _attach_exc:
+                        import logging as _log2
+                        _log2.getLogger(__name__).warning('Kanban control socket attach failed for %s: %s', scope.get('execution_id'), _attach_exc)
                 continue
             if kind == 'ready' and set(frame) == {'type', 'pid'} and frame['pid'] == scope['pid']:
                 continue
@@ -795,7 +816,9 @@ async def execute_managed(authority, ref, row, policy):
         import logging
         reason = exc.reason if isinstance(exc, RuntimeStoreError) else type(exc).__name__
         logging.getLogger(__name__).warning('Managed worker lost: %s', reason)
-        # S-7: detached kanban worker outlives gateway — never fence admission, never record loss.
+        # S-7/S-8: kanban execution with bound scope outlives gateway — never fence admission, never record loss.
+        if _is_kanban_bound_execution(policy, scope):
+            raise
         if _is_detached_kanban_execution(policy, worker):
             raise
         if scope is None:
@@ -821,8 +844,21 @@ async def execute_managed(authority, ref, row, policy):
         # committed unknown row deliberately pauses every accepted follower.
         raise ManagedExecutionUnknown('managed_worker_unknown') from exc
     finally:
-        workers.pop(ref.session_id, None)
-        if _is_detached_kanban_execution(policy, worker):
-            await asyncio.to_thread(worker.close, True)
+        # S-8b: keep kanban bound workers visible to every shutdown/successor sweep
+        # (settle + F2 exclusion). Do not pop from tracking without transferring custody.
+        try:
+            _w = worker  # noqa: F821 — defined in try block; may be absent on early failure
+        except NameError:
+            pass
         else:
-            await asyncio.to_thread(worker.close)
+            if _is_kanban_bound_execution(policy, scope):
+                try:
+                    await asyncio.to_thread(_w.close, True)
+                except Exception:
+                    pass
+            else:
+                workers.pop(ref.session_id, None)
+                if _is_detached_kanban_execution(policy, _w):
+                    await asyncio.to_thread(_w.close, True)
+                else:
+                    await asyncio.to_thread(_w.close)

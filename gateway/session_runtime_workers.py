@@ -13,11 +13,18 @@ def executing_sessions(authority):
 
 
 def uncounted_runtime_work(runner):
-    """Count claims absent from the ordinary agent map, including pre-bootstrap managed turns."""
+    """Count claims absent from the ordinary agent map, including pre-bootstrap managed turns.
+
+    Detached kanban workers (control_socket set) outlive the gateway and must not
+    block SessionDB close or inflate the deferred-worker hang check (S-8/S-9).
+    """
     running = getattr(runner, '_running_agents', {})
     authorities = all_authorities(runner)
-    managed = sum(not worker.closed.is_set() for authority in authorities
-                  for worker in getattr(authority, '_managed_workers', {}).values())
+    managed = sum(
+        not worker.closed.is_set()
+        and getattr(worker, 'control_socket', None) is None
+        for authority in authorities
+        for worker in getattr(authority, '_managed_workers', {}).values())
     return (managed + sum(live.route not in running and sid not in getattr(authority, '_managed_workers', {})
                 for authority in authorities for sid, live, _ in executing_sessions(authority))
             + sum(len(mutation_tasks(authority)) + len(side_agents(authority)) for authority in authorities))

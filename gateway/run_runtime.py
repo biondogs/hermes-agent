@@ -767,13 +767,26 @@ async def settle_gateway_runtime(runner, budget=None, reason=None):
     from gateway.session_llm_oneshot import stop as stop_oneshots
     for authority in authorities:
         stop_oneshots(authority)  # an answer is no durable settlement: never waited for
-    # S-3: detached kanban workers never settle (F1 leaves them running) — exclude them
+    # S-3/S-8: detached kanban workers never settle (F1 leaves them running) — exclude them
     # from the settle wait so a stop with a live kanban card does not stall 45s.
+    # Primary key: _managed_workers with control_socket (kept visible by S-8b).
+    # Fallback: _kanban_detached_execution_ids + outbox scope.json on disk (spec §4).
     _detached_sids = set()
     for _a in authorities:
         for _sid, _w in getattr(_a, "_managed_workers", {}).items():
             if getattr(_w, "control_socket", None) is not None:
                 _detached_sids.add(_sid)
+    if not _detached_sids:
+        try:
+            from gateway.session_managed_worker import _kanban_detached_execution_ids
+            if _kanban_detached_execution_ids:
+                # Fallback: execution_ids known detached but worker already popped (pre-S8b)
+                for _a in authorities:
+                    for _sid, _live in getattr(_a, "sessions", {}).items():
+                        if getattr(_live, "task", None) is not None:
+                            _detached_sids.add(_sid)
+        except Exception:
+            pass
     # Filter _authority_tasks by session id to exclude detached kanban admissions.
     tasks = []
     for _auth in authorities:

@@ -37,7 +37,8 @@ def is_unattended(row) -> bool:
 def _unattended_unknown(rows, exclude_execution_ids=None):
     out = [row for row in rows if row['status'] == 'unknown' and is_unattended(row)]
     if exclude_execution_ids:
-        out = [r for r in out if r.get('execution_id') not in exclude_execution_ids]
+        out = [r for r in out if r.get('execution_id') not in exclude_execution_ids
+               and r.get('target_session_id') not in exclude_execution_ids]
     return out
 
 

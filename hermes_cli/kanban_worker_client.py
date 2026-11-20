@@ -121,8 +121,6 @@ def _restartable(exc):
         # running"); the next dial reaches the winner, so the worker waits out OWNER_WAIT_S, not exits.
         # The real discovery carries state "inaccessible" (gateway_runtime.py:448 -> gateway_client.py:353).
         # absent: owner gap — old gateway released gateway.lock mid-teardown, successor not yet up.
-        if exc.state == 'absent':
-            return True
         return (exc.state in _TRANSIENT_OWNER_STATES or exc.reason_code in _RESTART_CONTROL_REASONS
                 or (exc.state == 'inaccessible' and exc.reason_code == 'runtime_exited'))
     return True

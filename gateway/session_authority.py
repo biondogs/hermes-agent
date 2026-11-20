@@ -1466,18 +1466,35 @@ async def initialize_session_authority(runner, *, profile_id, instance_id, db=No
     except ImportError:
         _boot_exclude = None
     # Also scan worker-outboxes on disk (in-memory set is empty at boot)
+    # S-12 custody-transfer: exclude live detached kanban workers' admissions
+    # from settle. An outbox with live control.sock + live pid is a surviving
+    # worker whose admission must be re-admitted, not settled.
     try:
         from hermes_constants import get_hermes_home as _ghh
         from pathlib import Path as _P
         _home = _P(_ghh()) if callable(_ghh) else None
         if _home:
             import json as _js
+            import os as _os
             for _scope_file in (_home / 'worker-outboxes').glob('*/scope.json'):
                 try:
                     _scope = _js.loads(_scope_file.read_text())
+                    # execution_id exclusion (original)
                     _eid = _scope.get('execution_id')
                     if _eid:
                         _boot_exclude = (_boot_exclude or set()) | {_eid}
+                    # S-12: also exclude by target_session_id when outbox is live
+                    _sid = _scope.get('session_id')
+                    _ctrl = _scope_file.parent / 'control.sock'
+                    _pid = _scope.get('pid')
+                    if _sid and _ctrl.exists() and _pid:
+                        try:
+                            _os.kill(int(_pid), 0)
+                            _boot_exclude = (_boot_exclude or set()) | {_sid}
+                            # also add admission-level key if we can map it
+                            # The admission's execution_id == scope execution_id already covered
+                        except Exception:
+                            pass
                 except Exception:
                     pass
     except Exception:

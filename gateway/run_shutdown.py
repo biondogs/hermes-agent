@@ -1832,10 +1832,42 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                     except Exception:
                         pass
                     if kanban_task_ids or _kanban_sids:
+                        # S-10: candidates = in-memory + processes.json rows with live pids
+                        # worker-spawned bg rows never appear in gateway in-memory registry
+                        def _load_checkpoint_rows():
+                            try:
+                                from pathlib import Path as _CP
+                                from hermes_constants import get_hermes_home as _GH
+                                import json as _J, os as _O
+                                _cp = _CP(_GH()) / "processes.json"
+                                if not _cp.exists():
+                                    return []
+                                rows = _J.loads(_cp.read_text())
+                                out = []
+                                for r in rows:
+                                    pid = r.get("pid")
+                                    if not pid:
+                                        continue
+                                    try:
+                                        _O.kill(int(pid), 0)
+                                    except Exception:
+                                        continue
+                                    out.append(r)
+                                return out
+                            except Exception:
+                                return []
+                        _ckpt_rows = _load_checkpoint_rows()
                         with process_registry._lock:
                             _candidates = (*process_registry._running.values(), *process_registry._finished.values())
                             _matched = []
                             for s in _candidates:
+                                # skip stale/dead pids — must be live
+                                if s.pid:
+                                    try:
+                                        import os as _O2
+                                        _O2.kill(int(s.pid), 0)
+                                    except Exception:
+                                        continue
                                 if s.owner_task_id in kanban_task_ids:
                                     _matched.append(s.id)
                                 elif s.parent_session_id in _kanban_sids:
@@ -1844,6 +1876,19 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                     _matched.append(s.id)
                                 elif s.session_key in _kanban_sids:
                                     _matched.append(s.id)
+                            # also match checkpoint rows
+                            for r in _ckpt_for_kill:
+                                rid = r.get("session_id")
+                                if rid in exclude_ids or rid in _matched:
+                                    continue
+                                if r.get("owner_task_id") in kanban_task_ids:
+                                    _matched.append(rid)
+                                elif r.get("parent_session_id") in _kanban_sids:
+                                    _matched.append(rid)
+                                elif any(str(r.get("session_key","")).endswith(sid) for sid in _kanban_sids):
+                                    _matched.append(rid)
+                                elif r.get("session_key") in _kanban_sids:
+                                    _matched.append(rid)
                             exclude_ids = frozenset(_matched)
                         if exclude_ids:
                             # include pid receipts for the S-10 acceptance
@@ -1852,6 +1897,9 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                 for s in _candidates:
                                     if s.id in exclude_ids and s.pid:
                                         _pids.append(str(s.pid))
+                            for r in _ckpt_for_kill:
+                                if r.get("session_id") in exclude_ids and r.get("pid"):
+                                    _pids.append(str(r["pid"]))
                             _pid_str = f" pids={','.join(_pids)}" if _pids else ""
                             logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)%s", phase, len(exclude_ids), len(kanban_task_ids | _kanban_sids), _pid_str)
                         else:
@@ -1883,7 +1931,27 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                 logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, 0, len(detached_sids))
                 except Exception:
                     pass
-                return process_registry.kill_all(source="gateway_shutdown", exclude_ids=exclude_ids)
+                killed_via_ckpt = 0
+                # S-10: kill checkpoint-only rows not excluded (canaries)
+                try:
+                    _ckpt_for_kill = _ckpt_rows  # type: ignore[name-defined]
+                except NameError:
+                    _ckpt_for_kill = []
+                if _ckpt_for_kill:
+                    import os as _O3, signal as _S3
+                    for r in _ckpt_for_kill:
+                        if r.get("session_id") in exclude_ids:
+                            continue
+                        pid = r.get("pid")
+                        if not pid:
+                            continue
+                        try:
+                            _O3.kill(int(pid), _S3.SIGTERM)
+                            killed_via_ckpt += 1
+                        except Exception:
+                            pass
+                n = process_registry.kill_all(source="gateway_shutdown", exclude_ids=exclude_ids)
+                return n + killed_via_ckpt
             _count_step(
                 "Shutdown (%s): killed %d tool subprocess(es)",
                 lambda: _kill_tool_procs())
@@ -2365,15 +2433,45 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             _persist_done.set()
             _persist_watchdog.cancel()
         if not os.environ.get("PYTEST_CURRENT_TEST"):
+            # Route through the single exit funnel for correct bookkeeping.
+            # Flush stdio/log, stamp lifecycle, release locks — then hard-exit.
             try:
                 sys.stdout.flush()
                 sys.stderr.flush()
             except Exception:
                 pass
+            try:
+                from hermes_logging import drain_log_queue as _dlq
+                _dlq(timeout=1.0)
+            except Exception:
+                pass
             code = getattr(self, "_exit_code", None)
             if code is None:
                 code = 1 if getattr(self, "_signal_initiated_shutdown", False) and not getattr(self, "_restart_requested", False) else 0
-            os._exit(int(code) if isinstance(code, int) else 0)
+            code = int(code) if isinstance(code, int) else 0
+            # Mark clean when code==0 (plain stop/restart), crash only on non-zero
+            try:
+                from gateway.lifecycle_ledger import mark_exited as _me
+                _me(code, reason="graceful_shutdown")
+            except Exception:
+                pass
+            try:
+                from hermes_cli.observability.shared_metrics_process import stamp_exit as _se
+                _se("clean" if code == 0 else "unclean")
+            except Exception:
+                pass
+            try:
+                from hermes_cli.observability.shared_metrics_process import flush_before_hard_exit as _fbh
+                _fbh()
+            except Exception:
+                pass
+            try:
+                from gateway.status import remove_pid_file as _rpf, release_gateway_runtime_lock as _rgrl
+                _rpf()
+                _rgrl()
+            except Exception:
+                pass
+            os._exit(code)
 
     def _shutdown_watchdog_snapshot(self, ctx: GatewayShutdownMixin._StopContext) -> dict:
         """State dumped by the thread-based shutdown watchdog when teardown hangs."""

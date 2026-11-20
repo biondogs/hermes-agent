@@ -1122,3 +1122,64 @@ def test_s12_fenced_unknown_receipt_resolves_to_started():
         srv.close()
         time.sleep(0.2)
     _guard.HomeIOGuard.check = _orig_guard
+
+def test_v18_runner_shaped_authority_serving_resolution():
+    """v18 discriminator (a): runner-shaped authority must seed serving authority; bare id via prefix."""
+    from gateway.kanban_detached_supervisor import _bare_admission_id, _resolve_serving_authority, _replay_admission_for_scope
+    import types
+    from unittest.mock import patch as _patch
+    from pathlib import Path as _P
+    assert _bare_admission_id("admission-worker:abc123") == "abc123"
+    assert _bare_admission_id("abc123") == "abc123"
+    class FakeAuth:
+        def __init__(self): self.sessions={}; self.db=object(); self.profile_id="homeA"
+    serving = FakeAuth()
+    class Registry:
+        def for_home(self, home): return serving
+    runner = types.SimpleNamespace(session_authorities=Registry())
+    assert _resolve_serving_authority(runner, _P("/tmp/homeA")) is serving
+    assert _resolve_serving_authority(serving, _P("/tmp/homeA")) is serving
+    # replay with bare prefix, mocked DB row
+    bare="bare-v18-a-001"; sess="local-v18-sess-a"
+    scope={"session_id": sess, "execution_id": f"admission-worker:{bare}", "generation":1}
+    assert "admission_id" not in scope
+    row={"admission_id": bare, "target_session_id": sess, "status": "unknown", "generation":1}
+    with _patch("gateway.kanban_detached_supervisor.get_session_admission", create=True):
+        pass
+    # patch where supervisor imports: hermes_state_runtime.get_session_admission
+    import gateway.kanban_detached_supervisor as mod
+    orig_import = mod.__dict__.get("_gsa", None)
+    # directly test with mocked fetch: patch hermes_state_runtime module
+    import sys, types as _types
+    fake_hsr = _types.ModuleType("hermes_state_runtime")
+    fake_hsr.get_session_admission = lambda db, admission_id=None, **kw: row if admission_id==bare else None
+    sys.modules["hermes_state_runtime"] = fake_hsr
+    try:
+        serving.sessions={}
+        _replay_admission_for_scope(serving, scope)
+        assert sess in serving.sessions, "LiveSession must be created"
+        settling = serving.sessions[sess].settling
+        assert bare in settling, f"must seed under bare id, got {list(settling.keys())}"
+        assert settling[bare]["status"] == "started", f"fenced unknown must normalize to started, got {settling[bare]}"
+    finally:
+        sys.modules.pop("hermes_state_runtime", None)
+
+def test_v18_real_scope_shape_bare_admission_id():
+    """v18 discriminator (b): real scope shape no admission_id key, bare lookup."""
+    from gateway.kanban_detached_supervisor import _bare_admission_id, _replay_admission_for_scope
+    import types, sys
+    assert _bare_admission_id("admission-worker:xyz") == "xyz"
+    bare="bare-v18-b-002"; sess="local-v18-sess-b"
+    scope={"session_id": sess, "execution_id": f"admission-worker:{bare}", "generation": 1}
+    row={"admission_id": bare, "target_session_id": sess, "status": "unknown", "generation":1}
+    fake_hsr = types.ModuleType("hermes_state_runtime")
+    fake_hsr.get_session_admission = lambda db, admission_id=None, **kw: row if admission_id==bare else None
+    sys.modules["hermes_state_runtime"] = fake_hsr
+    try:
+        fake_auth=types.SimpleNamespace(db=object(), sessions={}, profile_id="test", epoch=1, _managed_workers={})
+        _replay_admission_for_scope(fake_auth, scope)
+        assert sess in fake_auth.sessions
+        assert bare in fake_auth.sessions[sess].settling
+        assert fake_auth.sessions[sess].settling[bare]["status"] == "started"
+    finally:
+        sys.modules.pop("hermes_state_runtime", None)

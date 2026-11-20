@@ -29,6 +29,39 @@ def _resolve_homes():
     except Exception:
         return []
 
+def _bare_admission_id(raw: str) -> str:
+    if isinstance(raw, str) and raw.startswith("admission-worker:"):
+        return raw.split(":", 1)[1]
+    return raw
+
+def _resolve_serving_authority(runner_or_authority, home):
+    """Return SessionAuthority for home; runner has session_authorities registry, authority has .sessions/.db."""
+    # Already a serving authority
+    if hasattr(runner_or_authority, "sessions") and hasattr(runner_or_authority, "db"):
+        return runner_or_authority
+    # Treat as runner with registry
+    try:
+        reg = getattr(runner_or_authority, "session_authorities", None)
+        if reg is not None:
+            auth = reg.for_home(home) if hasattr(reg, "for_home") else None
+            if auth is not None:
+                return auth
+            # fallback: first serving
+            try:
+                from gateway.session_authorities import all_authorities
+                auths = all_authorities(runner_or_authority)
+                if auths:
+                    return auths[0]
+            except Exception:
+                pass
+        # No registry but has single authority
+        single = getattr(runner_or_authority, "session_authority", None)
+        if single is not None:
+            return single
+    except Exception:
+        pass
+    return runner_or_authority
+
 def adopt_detached_kanban_workers(authority):
     """Enumerate running kanban tasks with outbox control.sock, verify liveness,
     dial socket, send reconnect, rebuild ManagedWorker handles. Returns adopted count."""
@@ -76,9 +109,11 @@ def adopt_detached_kanban_workers(authority):
                 logger.info("Kanban adopt: skip outbox=%s reason=pid_not_alive pid=%s", entry.name, pid)
                 continue
             try:
-                _reattach_worker(authority, str(sock_path), scope, pid, birth)
+                # resolve per-home serving authority (runner facade vs direct authority)
+                serving = _resolve_serving_authority(authority, home)
+                _reattach_worker(serving, str(sock_path), scope, pid, birth)
                 # Also replay admission into session authority so prompt.receipt resolves
-                _replay_admission_for_scope(authority, scope)
+                _replay_admission_for_scope(serving, scope)
                 adopted += 1
                 logger.info("Adopted detached kanban worker %s pid=%s outbox=%s", execution_id, pid, entry.name)
             except Exception as exc:
@@ -97,7 +132,8 @@ def _replay_admission_for_scope(authority, scope):
     seed the admission into settling so receipt returns without requiring a DB write.
     """
     try:
-        admission_id = scope.get("admission_id") or scope.get("execution_id")
+        raw_aid = scope.get("admission_id") or scope.get("execution_id")
+        admission_id = _bare_admission_id(raw_aid) if raw_aid else None
         session_id = scope.get("session_id")
         if not admission_id or not session_id:
             return
@@ -144,10 +180,15 @@ def _ensure_live_session_for_admission(authority, session_id, admission_id, scop
                 live.settling[admission_id] = normalized
             return
         # Create minimal LiveSession — same shape as authority init expects
-        from gateway.session_authority import LiveSession
-        from gateway.session_events import SessionEvents
-        import asyncio
-        live = LiveSession(source=scope.get("kanban", {}).get("task_id", session_id), route=session_id)
+        try:
+            from gateway.session_authority import LiveSession
+            live = LiveSession(source=scope.get("kanban", {}).get("task_id", session_id), route=session_id)
+        except Exception:
+            import types as _t
+            live = _t.SimpleNamespace(source=scope.get("kanban", {}).get("task_id", session_id), route=session_id, settling={}, subscribers={}, event_stream=None)
+            import asyncio as _aio
+            live.mutation_lock = _aio.Lock()
+            live.claim_gate = _aio.Lock()
         # Ensure lock exists (LiveSession.__post_init__ already did)
         authority.sessions[session_id] = live
         if normalized is not None:

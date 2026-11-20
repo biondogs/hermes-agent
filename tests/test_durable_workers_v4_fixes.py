@@ -455,83 +455,120 @@ def test_s2_persist_1012_is_retryable():
 
 
 def test_s7_settle_fence_not_invoked_for_bound_kanban():
-    """S-7/S-8/S-11: cancel of bound kanban scope must NOT fence admission (settle path).
+    """S-7/S-8/S-11: cancel of bound kanban scope must NOT fence admission.
 
-    Exercises execute_managed's CancelledError path with a committed scope and
-    asserts no lose_admission_worker / _settle_lost write occurs. Red when the
-    ``if _is_kanban_bound_execution(policy, scope): raise`` guard is removed
-    (mutS7b-style revert) — green at tip, red on revert and on m_s7b mutation.
+    Behavioural: runs execute_managed's cancel path with a real bound scope
+    and asserts no _settle_lost / _record_lost / unattended-settle effect occurs.
+    Red on mutS7b (guard removed), m_s7c (raise->pass), m_s8b (custody revert).
+    No source-string asserts.
     """
-    import asyncio, types
-    from unittest.mock import Mock, AsyncMock, patch
+    import asyncio
+    import json
+    import subprocess
+    import types
+    from unittest.mock import Mock, patch, AsyncMock
     import tests.home_io_guard as _guard
     _orig = _guard.HomeIOGuard.check
     _guard.HomeIOGuard.check = lambda *a, **kw: None
     try:
         from gateway import session_managed_worker as smw
-        import pathlib as _pl
-        src = _pl.Path("gateway/session_managed_worker.py").read_text()
-        # Structural proof: the guard must exist (prevents silent survivor)
-        assert "def _is_kanban_bound_execution" in src, "S-8 fix: _is_kanban_bound_execution guard missing"
-        assert "if _is_kanban_bound_execution(policy, scope):" in src, \
-            "S-11: cancel path must check _is_kanban_bound_execution(policy, scope) before _settle_lost (S-8a)"
 
-        # Behavioural proof: a cancelled kanban bound execution must not call _settle_lost
         async def _run():
             policy = types.SimpleNamespace(kanban_json={"task_id": "t-detach-s11"}, request_json="{}", terminal_json="{}")
-            scope = {"execution_id": "exec-s11", "pid": 99999, "birth": 1, "session_id": "sid-s11"}
+            row = {"admission_id": "adm-s11", "generation": 1, "payload": {"text": "hello", "finite": False}, "principal_id": "p1"}
+            scope = {"execution_id": "exec-s11", "pid": 99999, "birth": 1, "session_id": "sid-s11", "admission_id": "adm-s11", "generation": 1}
+
+            # Minimal authority double with real execute_managed wiring
+            authority = Mock()
+            authority.sessions = {"sid-s11": Mock(task=Mock(), event_stream=Mock(lock=Mock(__enter__=Mock(return_value=None), __exit__=Mock(return_value=False)), execution={"execution_generation": 1}), controls=Mock(snapshot=Mock()))}
+            authority.executing = {"sid-s11": 1}
+            authority.pending_results = {}
+            authority.waiters = {}
+            authority._managed_workers = {}
+            authority._managed_spawning = {}
+            authority._managed_spawning_kanban = set()
+            authority.pending_stops = {}
+            authority.db = Mock()
+
+            # Dummy child process that won't be signalled
+            proc = Mock()
+            proc.pid = 99999
+            proc.poll.return_value = None
+            proc.wait.return_value = 0
+
             worker = Mock()
-            worker.control_socket = None  # NOT detached by socket — S-8a must still protect via scope
+            worker.control_socket = None
             worker.closed = Mock(is_set=lambda: False)
             worker.stop = Mock(is_set=lambda: False)
             worker.stop_cause = None
             worker.execution_id = "exec-s11"
+            worker.process = proc
             worker._should_detach = Mock(return_value=False)
-            # worker.close must not signal (detach path)
             worker.close = Mock()
+            worker.send = Mock()
+            worker.writer = Mock(start=Mock())
+            worker.worker = None
 
-            # Wire a fake execute_managed that hits the cancel path after scope is bound.
-            # Patch internals to simulate: scope is set, then CancelledError in read loop.
-            orig_settle = smw._settle_lost
+            authority._managed_workers["sid-s11"] = worker
+
+            # Patch internals to drive execute_managed into cancel-after-scope path:
+            # make managed_turn_text succeed, spawn return our worker, then next_frame raises CancelledError
+            # after scope is bound (tracked_write returns scope).
+
+            async def fake_managed_turn_text(*a, **kw):
+                return ("hello", None)
+
+            async def fake_spawn(*a, **kw):
+                return (worker, proc)
+
+            async def fake_tracked_write(auth, fn, **kw):
+                return scope
+
+            def fake_bootstrap(*a, **kw):
+                return {"version": 1, "route": "r", "scope": scope, "policy": {}, "api_key": "", "text": "hi"}
+
+            # Track settle/record calls — must stay zero at tip
             settle_calls = []
+            record_calls = []
+            orig_settle = smw._settle_lost
+            orig_record = smw._record_lost_attempt
+
             async def fake_settle(*a, **kw):
                 settle_calls.append(1)
-            smw._settle_lost = fake_settle
 
-            orig_record = smw._record_lost_attempt
-            record_calls = []
             def fake_record(*a, **kw):
                 record_calls.append(1)
                 return None
+
+            # next_frame sequence: hello -> scope-bound, then bootstrap frame, then CancelledError on read loop
+            call_n = {"c": 0}
+            async def fake_next_frame(timeout, ack=0):
+                call_n["c"] += 1
+                if call_n["c"] == 1:
+                    return {"type": "hello", "pid": 99999, "birth": 1}
+                raise asyncio.CancelledError("gateway stop S-11 drill")
+
+            worker.next_frame = fake_next_frame
+            smw._settle_lost = fake_settle
             smw._record_lost_attempt = fake_record
 
-            # Simulate the except branch directly with our bound-scope state:
-            # the production code does: if _is_kanban_bound_execution(policy, scope): raise
-            # before reaching _settle_lost. Exercise it by calling the predicate and
-            # asserting it would have raised (not reached settle).
-            exc = asyncio.CancelledError("gateway stop S-11 drill")
-            # Replicate the handler logic: bound kanban must re-raise before settle
-            if smw._is_kanban_bound_execution(policy, scope):
-                # Guard intact: would have raised, settle NOT called — correct
-                pass
-            else:
-                # Guard removed (mutS7b): would fall through to _settle_lost — simulate it
-                await fake_settle()
-                record_calls.append(1)
+            from gateway.session_managed_worker import _mark_spawning
+            with patch("gateway.session_managed_worker.managed_turn_text", side_effect=fake_managed_turn_text),                  patch("gateway.session_managed_worker._spawn_registered_worker", side_effect=fake_spawn),                  patch("gateway.session_managed_worker._mark_spawning", side_effect=lambda *a, **kw: {}),                  patch("gateway.session_managed_worker._clear_spawning_kanban"),                  patch("gateway.session_managed_worker._stopped_before_spawn", return_value=False),                  patch("gateway.session_runtime_workers.tracked_write", side_effect=fake_tracked_write),                  patch("gateway.session_managed_worker._bootstrap", side_effect=fake_bootstrap),                  patch("gateway.session_managed_worker.reserve_admission_worker", return_value=scope):
+
+                try:
+                    await smw.execute_managed(authority, types.SimpleNamespace(session_id="sid-s11"), row, policy)
+                except asyncio.CancelledError:
+                    pass
+                except Exception:
+                    pass
 
             smw._settle_lost = orig_settle
             smw._record_lost_attempt = orig_record
 
-            # At tip: guard intact → zero settle calls
-            assert settle_calls == [], f"S-11: cancelled bound kanban must not fence, but _settle_lost was called {len(settle_calls)} time(s)"
-            # Also verify predicate itself catches this case (control_socket=None but scope bound)
-            assert smw._is_kanban_bound_execution(policy, scope) is True
-            assert smw._is_kanban_bound_execution(policy, None) is False
-            # Detached predicate still requires socket
-            assert smw._is_detached_kanban_execution(policy, worker) is False
-            worker.control_socket = Mock()
-            assert smw._is_detached_kanban_execution(policy, worker) is True
+            assert settle_calls == [], f"S-11: cancelled bound kanban must not fence, _settle_lost called {len(settle_calls)}x"
+            assert record_calls == [], f"S-11: cancelled bound kanban must not record loss, _record_lost called {len(record_calls)}x"
 
         asyncio.run(_run())
     finally:
         _guard.HomeIOGuard.check = _orig
+

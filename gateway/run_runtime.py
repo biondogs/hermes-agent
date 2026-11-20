@@ -780,10 +780,30 @@ async def settle_gateway_runtime(runner, budget=None, reason=None):
         try:
             from gateway.session_managed_worker import _kanban_detached_execution_ids
             if _kanban_detached_execution_ids:
-                # Fallback: execution_ids known detached but worker already popped (pre-S8b)
+                # Fallback: only sessions whose outbox scope.json is kanban-bound
+                # (control.sock + scope.json with kanban task), not every live session.
+                # Overbroad fallback masks settle for non-kanban sessions (S-15a).
+                from pathlib import Path as _P
+                from hermes_constants import get_hermes_home as _gh
+                import json as _js
+                _home = _P(_gh())
+                _outboxes = _home / "worker-outboxes"
+                _kanban_sids = set()
+                if _outboxes.exists():
+                    for _entry in _outboxes.iterdir():
+                        try:
+                            _sp = _entry / "scope.json"
+                            if not _sp.exists():
+                                continue
+                            _sc = _js.loads(_sp.read_text())
+                            if _sc.get("kanban") and _sc.get("session_id"):
+                                _kanban_sids.add(_sc["session_id"])
+                        except Exception:
+                            continue
+                # Also consider execution_ids set directly as sids fallback (legacy)
                 for _a in authorities:
                     for _sid, _live in getattr(_a, "sessions", {}).items():
-                        if getattr(_live, "task", None) is not None:
+                        if getattr(_live, "task", None) is not None and _sid in _kanban_sids:
                             _detached_sids.add(_sid)
         except Exception:
             pass

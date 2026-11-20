@@ -354,21 +354,37 @@ class ManagedWorker:
         return self.control_socket is not None
 
     def close(self, detach=False):
-        # S-7/S-8/S-9: detached kanban workers are never signalled; only close the in-owner fd
-        # and unblock channel threads so the gateway can exit (S-9).
+        # S-7/S-8/S-9/S-12: detached kanban workers are never signalled; unblock
+        # only the gateway-side channel so the worker's control channel survives.
+        # Never close worker.process.stdin/stdout pipes blindly — EOF kills the
+        # worker (its control channel) and it self-exits 1 (S-12). Close only the
+        # gateway-held socket makefile/fd; the reader is daemonized and will exit
+        # on socket close/EOF without blocking gateway shutdown (S-13).
         if detach or self._should_detach():
             self.closed.set()
             if self.control_socket is not None:
+                # Close the gateway-side makefiles (created in attach_socket) then socket.
+                for _attr in ('stdin', 'stdout'):
+                    try:
+                        mf = getattr(self.process, _attr, None)
+                        if mf is not None:
+                            mf.close()
+                    except Exception:
+                        pass
                 with suppress(OSError):
                     self.control_socket.close()
-            # Unblock reader blocked on socket makefile read: close the makefile too
-            # so the daemon reader exits instead of hanging the shutdown tail.
-            for _attr in ('stdin', 'stdout'):
+                # Restore original pipe handles so later non-detach close doesn't double-close socket.
                 try:
-                    getattr(self.process, _attr).close()
+                    pipes = getattr(self, '_pipes', None)
+                    if pipes is not None:
+                        self.process.stdin, self.process.stdout = pipes
                 except Exception:
                     pass
-            self._demand.release()
+            # Unblock reader demand; do NOT close original pipes when no socket exists
+            # (scope-bound but pre-attach detach would otherwise EOF the worker before
+            # it establishes its listener and cause _die_with_owner).
+            with suppress(Exception):
+                self._demand.release()
             return
         self.closed.set()
         if self.control_socket is not None:
@@ -813,14 +829,14 @@ async def execute_managed(authority, ref, row, policy):
                 return accepted['final_response']
             raise RuntimeStoreError('invalid_worker_frame')
     except (Exception, asyncio.CancelledError) as exc:
-        import logging
-        reason = exc.reason if isinstance(exc, RuntimeStoreError) else type(exc).__name__
-        logging.getLogger(__name__).warning('Managed worker lost: %s', reason)
-        # S-7/S-8: kanban execution with bound scope outlives gateway — never fence admission, never record loss.
+        # S-7/S-8/S-12: kanban execution with bound scope outlives gateway — never fence, never log as lost.
         if _is_kanban_bound_execution(policy, scope):
             raise
         if _is_detached_kanban_execution(policy, worker):
             raise
+        import logging
+        reason = exc.reason if isinstance(exc, RuntimeStoreError) else type(exc).__name__
+        logging.getLogger(__name__).warning('Managed worker lost: %s', reason)
         if scope is None:
             if isinstance(exc, asyncio.CancelledError) or (
                     isinstance(exc, RuntimeStoreError) and exc.reason == 'managed_worker_stopped'):
@@ -844,14 +860,21 @@ async def execute_managed(authority, ref, row, policy):
         # committed unknown row deliberately pauses every accepted follower.
         raise ManagedExecutionUnknown('managed_worker_unknown') from exc
     finally:
-        # S-8b: keep kanban bound workers visible to every shutdown/successor sweep
-        # (settle + F2 exclusion). Do not pop from tracking without transferring custody.
+        # S-8b/S-15b: keep kanban bound workers visible to shutdown/successor sweeps only
+        # while live (detach/cancel path). On NORMAL completion the turn settled and the
+        # worker is done — pop it to avoid leaking dead entries.
         try:
             _w = worker  # noqa: F821 — defined in try block; may be absent on early failure
         except NameError:
             pass
         else:
-            if _is_kanban_bound_execution(policy, scope):
+            # Normal completion: admission settled into pending_results -> worker done, pop it.
+            _normal_done = False
+            try:
+                _normal_done = bool(scope is not None and row.get('admission_id') in getattr(authority, 'pending_results', {}))
+            except Exception:
+                pass
+            if _is_kanban_bound_execution(policy, scope) and not _normal_done:
                 try:
                     await asyncio.to_thread(_w.close, True)
                 except Exception:
@@ -860,5 +883,11 @@ async def execute_managed(authority, ref, row, policy):
                 workers.pop(ref.session_id, None)
                 if _is_detached_kanban_execution(policy, _w):
                     await asyncio.to_thread(_w.close, True)
+                elif _is_kanban_bound_execution(policy, scope):
+                    # Normal kanban completion: already popped above, close without detach kill
+                    try:
+                        await asyncio.to_thread(_w.close)
+                    except Exception:
+                        pass
                 else:
                     await asyncio.to_thread(_w.close)

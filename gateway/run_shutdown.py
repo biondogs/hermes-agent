@@ -1773,12 +1773,58 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             def _kill_tool_procs():
                 exclude_ids = frozenset()
                 try:
-                    from gateway.run_runtime import _authorities as _auths
                     detached_sids = set()
-                    for _a in _auths(None):
+                    # Primary: via run_runtime registry (needs runner); fallback to global registries
+                    _auths_found = []
+                    try:
+                        from gateway.run_runtime import _authorities as _auths
+                        # Try bound runner instance if available via GatewayRunner
+                        _runner = None
+                        try:
+                            from gateway.run import GatewayRunner as _GR
+                            # Search for live runner via weak registry or session_authorities globals
+                            import gc as _gc
+                            for _obj in _gc.get_objects():
+                                if isinstance(_obj, _GR):
+                                    _runner = _obj
+                                    break
+                        except Exception:
+                            pass
+                        if _runner is not None:
+                            _auths_found = list(_auths(_runner))
+                        else:
+                            _auths_found = list(_auths(None))
+                    except Exception:
+                        pass
+                    if not _auths_found:
+                        # Fallback: scan session_authorities registries directly
+                        try:
+                            from gateway.session_authorities import all_authorities as _all_a
+                            # all_authorities needs runner; try hermes_state_registry for any SessionDB's runner hint
+                            import gc as _gc2
+                            from gateway.run import GatewayRunner as _GR2
+                            for _obj in _gc2.get_objects():
+                                if isinstance(_obj, _GR2):
+                                    _auths_found = list(_all_a(_obj))
+                                    if _auths_found:
+                                        break
+                        except Exception:
+                            pass
+                    for _a in _auths_found:
                         for _sid, _w in getattr(_a, "_managed_workers", {}).items():
                             if getattr(_w, "control_socket", None) is not None:
                                 detached_sids.add(_sid)
+                    # Ultimate fallback: _kanban_detached_execution_ids implies detached kanban is live
+                    # even if authority lookup failed (e.g. test doubles without runner wiring).
+                    if not detached_sids:
+                        try:
+                            from gateway.session_managed_worker import _kanban_detached_execution_ids as _kdet
+                            if _kdet:
+                                # Cannot map execution_ids to sids without authority; skip tool kill exclusion
+                                # rather than over-excluding. S-15a narrowing applies.
+                                pass
+                        except Exception:
+                            pass
                     if detached_sids:
                         with process_registry._lock:
                             exclude_ids = frozenset(

@@ -781,13 +781,14 @@ class SessionAuthority:
     async def receipt(self, actor, ref, admission_id):
         self.authorize(actor, ref, 'session:submit')
         row = get_session_admission(self.db, admission_id=admission_id)
-        if row is None or row['target_session_id'] != ref.session_id:
-            # S-12 fallback: adopted detached kanban workers seed LiveSession.settling
+        # S-12: if row is missing/mismatched OR is unknown but we have a live adopted settlement, resolve via settling
+        if row is None or row['target_session_id'] != ref.session_id or row.get('status') == 'unknown':
             try:
                 live_fb = self.sessions.get(ref.session_id)
                 if live_fb is not None and admission_id in getattr(live_fb, 'settling', {}):
+                    # Adopted detached kanban worker seeded this admission — trust LiveSession truth
                     row = live_fb.settling[admission_id]
-                else:
+                elif row is None or row['target_session_id'] != ref.session_id:
                     raise RuntimeStoreError('not_found')
             except RuntimeStoreError:
                 raise

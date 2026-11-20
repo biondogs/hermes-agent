@@ -1831,31 +1831,31 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                     continue
                     except Exception:
                         pass
-                        # S-10: processes.json - enumerate unconditionally
-                        # worker-spawned bg rows never appear in gateway in-memory registry
-                        def _load_checkpoint_rows():
-                            try:
-                                from pathlib import Path as _CP
-                                from hermes_constants import get_hermes_home as _GH
-                                import json as _J, os as _O
-                                _cp = _CP(_GH()) / "processes.json"
-                                if not _cp.exists():
-                                    return []
-                                rows = _J.loads(_cp.read_text())
-                                out = []
-                                for r in rows:
-                                    pid = r.get("pid")
-                                    if not pid:
-                                        continue
-                                    try:
-                                        _O.kill(int(pid), 0)
-                                    except Exception:
-                                        continue
-                                    out.append(r)
-                                return out
-                            except Exception:
+                    # S-10: processes.json - enumerate unconditionally
+                    # worker-spawned bg rows never appear in gateway in-memory registry
+                    def _load_checkpoint_rows():
+                        try:
+                            from pathlib import Path as _CP
+                            from hermes_constants import get_hermes_home as _GH
+                            import json as _J, os as _O
+                            _cp = _CP(_GH()) / "processes.json"
+                            if not _cp.exists():
                                 return []
-                        _ckpt_rows = _load_checkpoint_rows()
+                            rows = _J.loads(_cp.read_text())
+                            out = []
+                            for r in rows:
+                                pid = r.get("pid")
+                                if not pid:
+                                    continue
+                                try:
+                                    _O.kill(int(pid), 0)
+                                except Exception:
+                                    continue
+                                out.append(r)
+                            return out
+                        except Exception:
+                            return []
+                    _ckpt_rows = _load_checkpoint_rows()
                     if kanban_task_ids or _kanban_sids:
                         with process_registry._lock:
                             _candidates = (*process_registry._running.values(), *process_registry._finished.values())

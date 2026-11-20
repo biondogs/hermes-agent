@@ -143,12 +143,22 @@ def _ensure_live_session_for_admission(authority, session_id, admission_id, scop
 
 
 def _find_task_for_scope(scope, outbox_name):
-    """Resolve running kanban task for this outbox via DB + claim lock, or fall back to scope.json pid."""
-    # Primary: look up DB by scope kanban context
+    """Resolve running kanban task for this outbox via DB + claim lock, or fall back to scope.json pid.
+
+    Scope.json pid (+birth) is the liveness/adoption truth — it is the actual worker pid.
+    DB task_runs.worker_pid is the spawn-wrapper pid and may be dead even while the worker lives,
+    so it is at most a fallback candidate.
+    """
+    # Primary liveness truth: scope.json pid (+birth)
+    scope_pid = scope.get("pid")
+    scope_birth = scope.get("birth")
+    scope_info = None
+    if scope_pid:
+        scope_info = {"pid": scope_pid, "birth": scope_birth, "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+    # Also resolve DB task status for admission gating, but do NOT prefer DB pid over scope pid
     kanban_ctx = scope.get("kanban")
     if kanban_ctx and isinstance(kanban_ctx, dict):
         task_id = kanban_ctx.get("task_id")
-        board = kanban_ctx.get("board")
         claim_lock = kanban_ctx.get("claim_lock")
         db_path = kanban_ctx.get("db")
         if task_id and db_path:
@@ -159,19 +169,22 @@ def _find_task_for_scope(scope, outbox_name):
                     conn.row_factory = sqlite3.Row
                     row = conn.execute("SELECT status, claim_lock FROM tasks WHERE id=?", (task_id,)).fetchone()
                     if row and row["status"] == "running" and (claim_lock is None or row["claim_lock"] == claim_lock):
-                        # also check liveness via task_runs
+                        # Task is still running — prefer scope pid if live, else try DB pid as fallback
+                        if scope_info and _pid_alive(scope_info["pid"], scope_info["birth"]):
+                            return scope_info
                         run_id = kanban_ctx.get("run_id")
                         if run_id:
                             r2 = conn.execute("SELECT worker_pid, worker_started_at FROM task_runs WHERE id=?", (run_id,)).fetchone()
-                            if r2:
+                            if r2 and r2["worker_pid"] and _pid_alive(r2["worker_pid"], r2["worker_started_at"]):
                                 return {"pid": r2["worker_pid"], "birth": r2["worker_started_at"], "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
-                        # fallback to scope pid
-                        return {"pid": scope.get("pid"), "birth": scope.get("birth"), "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+                        # DB pid also dead or missing — return scope_info even if liveness check failed
+                        # (caller will re-check and skip with pid_not_alive if truly dead)
+                        if scope_info:
+                            return scope_info
             except Exception:
                 pass
-    # Fallback: scope.json directly carries pid/birth for liveness check
-    if scope.get("pid"):
-        return {"pid": scope.get("pid"), "birth": scope.get("birth"), "generation": scope.get("generation", 0), "owner_epoch": scope.get("epoch", 0), "execution_id": scope.get("execution_id"), "session_id": scope.get("session_id")}
+    if scope_info:
+        return scope_info
     return None
 
 def _pid_alive(pid, birth):

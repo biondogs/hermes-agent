@@ -803,16 +803,19 @@ def test_s10a_processes_json_only_receipt():
             killed.append(sid)
             return {"status": "killed"}
         process_registry.kill_process = fake_kill
-        # capture log for receipt
+        # capture log for receipt (patch logger.info — handler-based capture is fragile under pytest caplog)
         import io
         records = []
-        class Cap(logging.Handler):
-            def emit(self, r): records.append(r.getMessage())
-        h = Cap()
         import logging as _lg
-        lg = _lg.getLogger("gateway.run_shutdown")
-        lg.addHandler(h)
-        lg.setLevel(logging.INFO)
+        import gateway.run_shutdown as _rs
+        orig_info = _rs.logger.info
+        def _cap_info(msg, *a, **kw):
+            try:
+                records.append(msg % a if a else msg)
+            except Exception:
+                records.append(str(msg))
+            return orig_info(msg, *a, **kw)
+        _rs.logger.info = _cap_info
         try:
             with _patch("hermes_constants.get_hermes_home", return_value=td):
                 rr._authorities = lambda x: []
@@ -822,7 +825,7 @@ def test_s10a_processes_json_only_receipt():
                 assert "excluding" in msgs.lower(), f"missing excluding receipt, msgs={msgs}"
                 assert str(live_pid) in msgs, f"receipt must name live pid {live_pid}, msgs={msgs}"
         finally:
-            lg.removeHandler(h)
+            _rs.logger.info = orig_info
             process_registry.kill_process = orig_kill
             rr._authorities = orig_auth
 
@@ -866,6 +869,9 @@ def test_s12_boot_custody_no_settle_and_receipt_resolves():
     from pathlib import Path as _P
     from unittest.mock import patch as _patch
     import asyncio
+    import tests.home_io_guard as _guard
+    _orig_guard = _guard.HomeIOGuard.check
+    _guard.HomeIOGuard.check = lambda *a, **kw: None
     # create live outbox + control.sock listener
     with tempfile.TemporaryDirectory() as td:
         td = _P(td)
@@ -917,8 +923,25 @@ def test_s12_boot_custody_no_settle_and_receipt_resolves():
         # use authority DB — create temp sqlite with session_admissions table
         auth_db_path = td / "sessions.db"
         conn2 = sqlite3.connect(str(auth_db_path))
-        conn2.execute("CREATE TABLE IF NOT EXISTS session_admissions (admission_id TEXT PRIMARY KEY, target_session_id TEXT, status TEXT, generation INTEGER, principal_id TEXT, payload TEXT, epoch INTEGER)")
-        conn2.execute("INSERT OR REPLACE INTO session_admissions VALUES (?,?,?,?,?,?,?)", (admission_id, session_id, "started", 1, "kanban_card_v1", "{}", 1))
+        import json as _js3
+        conn2.executescript("""
+        CREATE TABLE IF NOT EXISTS session_admissions (
+            seq INTEGER PRIMARY KEY AUTOINCREMENT,
+            admission_id TEXT NOT NULL UNIQUE,
+            request_id TEXT NOT NULL,
+            principal_id TEXT NOT NULL,
+            target_session_id TEXT NOT NULL,
+            lineage_json TEXT NOT NULL,
+            payload_json TEXT NOT NULL,
+            payload_digest TEXT NOT NULL,
+            intent TEXT NOT NULL,
+            status TEXT NOT NULL,
+            outcome TEXT,
+            owner_epoch INTEGER,
+            generation INTEGER
+        );
+        """)
+        conn2.execute("INSERT OR REPLACE INTO session_admissions(admission_id, request_id, principal_id, target_session_id, lineage_json, payload_json, payload_digest, intent, status, owner_epoch, generation) VALUES (?,?,?,?,?,?,?,?,?,?,?)", (admission_id, "req1", "kanban_card_v1", session_id, _js3.dumps([session_id]), "{}", "dig1", "queue", "started", 1, 1))
         conn2.commit(); conn2.close()
         # Now simulate successor boot: create authority with that DB
         # Use a minimal db wrapper with db_path + _read_ctx
@@ -943,7 +966,7 @@ def test_s12_boot_custody_no_settle_and_receipt_resolves():
         # need instance_id for begin epoch etc — but we are testing settle_recovered directly
         # Instead test the full flow via adopt_detached_kanban_workers
         fake_auth = types.SimpleNamespace(_managed_workers={}, db=fake_db, sessions={}, profile_id="test", epoch=1)
-        with _patch("hermes_constants.get_hermes_home", return_value=td):
+        with _patch("hermes_constants.get_hermes_home", return_value=td), _patch("gateway.kanban_detached_supervisor._resolve_homes", return_value=[td]):
             from gateway.kanban_detached_supervisor import adopt_detached_kanban_workers
             n = adopt_detached_kanban_workers(fake_auth)
             assert n >= 1, f"adopt should succeed, got {n}"
@@ -966,18 +989,19 @@ def test_s12_boot_custody_no_settle_and_receipt_resolves():
             assert receipt is not None, "receipt must resolve for adopted admission"
             # also ensure S-12 exclusion: boot settle would skip this admission
             from gateway.session_unattended_unknown import _unattended_unknown
-            rows = [{"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": execution_id, "target_session_id": session_id, "admission_id": admission_id, "generation": 1}]
+            rows = [{"status": "unknown", "principal_id": "p1", "payload": {"kanban_card_v1": True}, "execution_id": execution_id, "target_session_id": session_id, "admission_id": admission_id, "generation": 1}]
             filtered = _unattended_unknown(rows, exclude_execution_ids={execution_id, session_id})
             assert len(filtered) == 0, "excluded admission must not be in unattended_unknown"
         srv.close()
         time.sleep(0.2)
+    _guard.HomeIOGuard.check = _orig_guard
 
 def test_unattended_unknown_target_session_id():
     """S-12: _unattended_unknown must filter by BOTH execution_id and target_session_id."""
     from gateway.session_unattended_unknown import _unattended_unknown
     rows = [
-        {"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": "exec-1", "target_session_id": "sess-1", "admission_id": "a1", "generation": 0},
-        {"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": "exec-2", "target_session_id": "sess-2", "admission_id": "a2", "generation": 0},
+        {"status": "unknown", "principal_id": "p1", "payload": {"kanban_card_v1": True}, "execution_id": "exec-1", "target_session_id": "sess-1", "admission_id": "a1", "generation": 0},
+        {"status": "unknown", "principal_id": "p1", "payload": {"kanban_card_v1": True}, "execution_id": "exec-2", "target_session_id": "sess-2", "admission_id": "a2", "generation": 0},
     ]
     # exclude by target_session_id only
     out = _unattended_unknown(rows, exclude_execution_ids={"sess-1"})

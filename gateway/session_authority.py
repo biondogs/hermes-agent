@@ -782,7 +782,17 @@ class SessionAuthority:
         self.authorize(actor, ref, 'session:submit')
         row = get_session_admission(self.db, admission_id=admission_id)
         if row is None or row['target_session_id'] != ref.session_id:
-            raise RuntimeStoreError('not_found')
+            # S-12 fallback: adopted detached kanban workers seed LiveSession.settling
+            try:
+                live_fb = self.sessions.get(ref.session_id)
+                if live_fb is not None and admission_id in getattr(live_fb, 'settling', {}):
+                    row = live_fb.settling[admission_id]
+                else:
+                    raise RuntimeStoreError('not_found')
+            except RuntimeStoreError:
+                raise
+            except Exception:
+                raise RuntimeStoreError('not_found')
         from gateway.owner_identity import same_owner
         if not same_owner(row['principal_id'], actor.subject) and 'session:control' not in actor.capabilities:
             raise RuntimeStoreError('permission_denied')

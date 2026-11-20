@@ -1831,8 +1831,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                     continue
                     except Exception:
                         pass
-                    if kanban_task_ids or _kanban_sids:
-                        # S-10: candidates = in-memory + processes.json rows with live pids
+                        # S-10: processes.json - enumerate unconditionally
                         # worker-spawned bg rows never appear in gateway in-memory registry
                         def _load_checkpoint_rows():
                             try:
@@ -1857,6 +1856,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                             except Exception:
                                 return []
                         _ckpt_rows = _load_checkpoint_rows()
+                    if kanban_task_ids or _kanban_sids:
                         with process_registry._lock:
                             _candidates = (*process_registry._running.values(), *process_registry._finished.values())
                             _matched = []
@@ -1890,7 +1890,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                 for s in _candidates:
                                     if s.id in exclude_ids and s.pid:
                                         _pids.append(str(s.pid))
-                            for r in _ckpt_for_kill:
+                            for r in _ckpt_rows:
                                 if r.get("session_id") in exclude_ids and r.get("pid"):
                                     _pids.append(str(r["pid"]))
                             _pid_str = f" pids={','.join(_pids)}" if _pids else ""

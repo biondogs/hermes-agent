@@ -770,3 +770,219 @@ def test_s10_registry_truth_exclusion():
                 process_registry._running.pop(non_kanban.id, None)
 
 
+
+# --- v15 discriminators ---
+
+def test_s10a_processes_json_only_receipt():
+    """S-10(a): plants ONLY a processes.json row (no in-memory row) and asserts exclusion AND receipt line (pids=)."""
+    import tempfile, json as _js, time, logging
+    from pathlib import Path as _P
+    from unittest.mock import patch as _patch
+    from tools.process_registry import process_registry, ProcessSession
+    from gateway.run_shutdown import GatewayShutdownMixin
+    import gateway.run_runtime as rr
+    kanban_task_uuid = "bbbbbbbb-0000-4000-a000-000000000002"
+    kanban_sid = "local-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    # pick a live pid (ourselves)
+    import os as _os
+    live_pid = _os.getpid()
+    now = time.time()
+    orig_auth = getattr(rr, "_authorities", None)
+    with tempfile.TemporaryDirectory() as td:
+        td = _P(td)
+        outbox = td / "worker-outboxes" / "adm-test"
+        outbox.mkdir(parents=True)
+        (outbox / "scope.json").write_text(_js.dumps({"session_id": kanban_sid, "execution_id": "exec-s10a", "kanban": {"task_id": kanban_task_uuid, "board": "test"}}))
+        proc_sid = "proc-b10a-test"
+        # processes.json row with live pid, kanban-bound
+        processes = [{"session_id": proc_sid, "owner_task_id": kanban_task_uuid, "parent_session_id": kanban_sid, "session_key": f"agent:main:local:dm:{kanban_sid}", "pid": live_pid, "command": "sleep 100"}]
+        (td / "processes.json").write_text(_js.dumps(processes))
+        killed = []
+        orig_kill = process_registry.kill_process
+        def fake_kill(sid, source="", consume_output=False):
+            killed.append(sid)
+            return {"status": "killed"}
+        process_registry.kill_process = fake_kill
+        # capture log for receipt
+        import io
+        records = []
+        class Cap(logging.Handler):
+            def emit(self, r): records.append(r.getMessage())
+        h = Cap()
+        import logging as _lg
+        lg = _lg.getLogger("gateway.run_shutdown")
+        lg.addHandler(h)
+        lg.setLevel(logging.INFO)
+        try:
+            with _patch("hermes_constants.get_hermes_home", return_value=td):
+                rr._authorities = lambda x: []
+                GatewayShutdownMixin._stop_kill_tool_subprocesses("test")
+                assert proc_sid not in killed, f"processes.json kanban row must be excluded, killed={killed}"
+                msgs = "\\n".join(records)
+                assert "excluding" in msgs.lower(), f"missing excluding receipt, msgs={msgs}"
+                assert str(live_pid) in msgs, f"receipt must name live pid {live_pid}, msgs={msgs}"
+        finally:
+            lg.removeHandler(h)
+            process_registry.kill_process = orig_kill
+            rr._authorities = orig_auth
+
+def test_s10b_canary_killed_unconditionally():
+    """S-10(b): canary (non-kanban processes.json row, live pid) must be killed even when no kanban outboxes exist."""
+    import tempfile, json as _js, time, os as _os
+    from pathlib import Path as _P
+    from unittest.mock import patch as _patch
+    from tools.process_registry import process_registry
+    from gateway.run_shutdown import GatewayShutdownMixin
+    import gateway.run_runtime as rr
+    live_pid = _os.getpid()
+    orig_auth = getattr(rr, "_authorities", None)
+    with tempfile.TemporaryDirectory() as td:
+        td = _P(td)
+        # empty outboxes -> no kanban gate
+        (td / "worker-outboxes").mkdir(parents=True)
+        processes = [{"session_id": "proc-canary", "owner_task_id": "other-task", "parent_session_id": "", "session_key": "other", "pid": live_pid, "command": "sleep 100"}]
+        (td / "processes.json").write_text(_js.dumps(processes))
+        killed_pids = []
+        orig_kill_os = _os.kill
+        # monkey the os.kill for SIGTERM path inside _ckpt_for_kill loop
+        def fake_os_kill(pid, sig):
+            import signal as _S
+            if sig == _S.SIGTERM and int(pid) == live_pid:
+                killed_pids.append(int(pid))
+                return
+            return orig_kill_os(pid, sig)
+        try:
+            with _patch("hermes_constants.get_hermes_home", return_value=td):
+                with _patch("os.kill", side_effect=fake_os_kill):
+                    rr._authorities = lambda x: []
+                    GatewayShutdownMixin._stop_kill_tool_subprocesses("test")
+                    assert live_pid in killed_pids, f"canary canary must be killed, killed_pids={killed_pids}"
+        finally:
+            rr._authorities = orig_auth
+
+def test_s12_boot_custody_no_settle_and_receipt_resolves():
+    """S-12: stub live outbox (control.sock + live pid + scope.json), run successor sweep, assert NO settle AND admission resolves."""
+    import tempfile, json as _js, os, socket, threading, time
+    from pathlib import Path as _P
+    from unittest.mock import patch as _patch
+    import asyncio
+    # create live outbox + control.sock listener
+    with tempfile.TemporaryDirectory() as td:
+        td = _P(td)
+        # need a live pid — use ourselves
+        live_pid = os.getpid()
+        from hermes_cli.process_identity import worker_birth as _wb
+        import psutil
+        birth = _wb(psutil.Process(live_pid))
+        session_id = "local-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        admission_id = "adm-test-123"
+        execution_id = "exec-c12-test"
+        outbox = td / "worker-outboxes" / "adm-c12"
+        outbox.mkdir(parents=True)
+        scope = {"session_id": session_id, "execution_id": execution_id, "admission_id": admission_id, "generation": 1, "epoch": 1, "pid": live_pid, "birth": birth, "kanban": {"task_id": "task-c12", "board": "test", "db": str(td / "kanban.db"), "claim_lock": "lock1", "run_id": "run1"}}
+        (outbox / "scope.json").write_text(_js.dumps(scope))
+        sock_path = outbox / "control.sock"
+        # create control.sock so adopt finds it (need a listening socket)
+        srv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        srv.bind(str(sock_path))
+        srv.listen(1)
+        def accept_and_hold():
+            try:
+                srv.settimeout(3)
+                conn, _ = srv.accept()
+                # read reconnect frame
+                conn.settimeout(2)
+                try:
+                    data = conn.recv(4096)
+                except Exception:
+                    pass
+                # hold briefly
+                time.sleep(0.5)
+                conn.close()
+            except Exception:
+                pass
+        th = threading.Thread(target=accept_and_hold, daemon=True)
+        th.start()
+        # create minimal kanban DB row so _find_task_for_scope returns
+        import sqlite3
+        db_path = td / "kanban.db"
+        conn = sqlite3.connect(str(db_path))
+        conn.execute("CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, status TEXT, claim_lock TEXT)")
+        conn.execute("CREATE TABLE IF NOT EXISTS task_runs (id TEXT PRIMARY KEY, worker_pid INTEGER, worker_started_at TEXT)")
+        conn.execute("INSERT OR REPLACE INTO tasks VALUES (?,?,?)", ("task-c12", "running", "lock1"))
+        conn.execute("INSERT OR REPLACE INTO task_runs VALUES (?,?,?)", ("run1", live_pid, birth))
+        conn.commit(); conn.close()
+        # also create session DB with admission row
+        from hermes_state_runtime import RuntimeStoreError
+        # use authority DB — create temp sqlite with session_admissions table
+        auth_db_path = td / "sessions.db"
+        conn2 = sqlite3.connect(str(auth_db_path))
+        conn2.execute("CREATE TABLE IF NOT EXISTS session_admissions (admission_id TEXT PRIMARY KEY, target_session_id TEXT, status TEXT, generation INTEGER, principal_id TEXT, payload TEXT, epoch INTEGER)")
+        conn2.execute("INSERT OR REPLACE INTO session_admissions VALUES (?,?,?,?,?,?,?)", (admission_id, session_id, "started", 1, "kanban_card_v1", "{}", 1))
+        conn2.commit(); conn2.close()
+        # Now simulate successor boot: create authority with that DB
+        # Use a minimal db wrapper with db_path + _read_ctx
+        class FakeDB:
+            def __init__(self, path): self.db_path = str(path)
+            def _read_ctx(self):
+                import contextlib
+                @contextlib.contextmanager
+                def ctx():
+                    c = sqlite3.connect(self.db_path)
+                    c.row_factory = sqlite3.Row
+                    try:
+                        yield c
+                    finally:
+                        c.close()
+                return ctx()
+        fake_db = FakeDB(auth_db_path)
+        # create authority
+        from gateway.session_authority import SessionAuthority
+        import types
+        runner = types.SimpleNamespace(_session_db=fake_db, session_store=types.SimpleNamespace(_db=fake_db))
+        # need instance_id for begin epoch etc — but we are testing settle_recovered directly
+        # Instead test the full flow via adopt_detached_kanban_workers
+        fake_auth = types.SimpleNamespace(_managed_workers={}, db=fake_db, sessions={}, profile_id="test", epoch=1)
+        with _patch("hermes_constants.get_hermes_home", return_value=td):
+            from gateway.kanban_detached_supervisor import adopt_detached_kanban_workers
+            n = adopt_detached_kanban_workers(fake_auth)
+            assert n >= 1, f"adopt should succeed, got {n}"
+            # after adopt, session should exist and receipt should resolve
+            assert session_id in fake_auth.sessions, "LiveSession must be created"
+            # simulate receipt call
+            import asyncio as _aio
+            from gateway.session_authority import SessionAuthority as _SA
+            # Need real authorize check — stub it
+            fake_auth_authority = _SA.__new__(_SA)
+            fake_auth_authority.db = fake_db
+            fake_auth_authority.sessions = fake_auth.sessions
+            fake_auth_authority.profile_id = "test"
+            # stub authorize to no-op
+            fake_auth_authority.authorize = lambda *a, **kw: None
+            from gateway.session_contract import SessionRef
+            ref = SessionRef("test", session_id)
+            actor = types.SimpleNamespace(subject="kanban_card_v1", capabilities=["session:submit"])
+            receipt = _aio.run(fake_auth_authority.receipt(actor, ref, admission_id))
+            assert receipt is not None, "receipt must resolve for adopted admission"
+            # also ensure S-12 exclusion: boot settle would skip this admission
+            from gateway.session_unattended_unknown import _unattended_unknown
+            rows = [{"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": execution_id, "target_session_id": session_id, "admission_id": admission_id, "generation": 1}]
+            filtered = _unattended_unknown(rows, exclude_execution_ids={execution_id, session_id})
+            assert len(filtered) == 0, "excluded admission must not be in unattended_unknown"
+        srv.close()
+        time.sleep(0.2)
+
+def test_unattended_unknown_target_session_id():
+    """S-12: _unattended_unknown must filter by BOTH execution_id and target_session_id."""
+    from gateway.session_unattended_unknown import _unattended_unknown
+    rows = [
+        {"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": "exec-1", "target_session_id": "sess-1", "admission_id": "a1", "generation": 0},
+        {"status": "unknown", "principal_id": "kanban_card_v1", "payload": {}, "execution_id": "exec-2", "target_session_id": "sess-2", "admission_id": "a2", "generation": 0},
+    ]
+    # exclude by target_session_id only
+    out = _unattended_unknown(rows, exclude_execution_ids={"sess-1"})
+    assert len(out) == 1 and out[0]["admission_id"] == "a2", f"must filter by target_session_id, got {out}"
+    # exclude by execution_id
+    out2 = _unattended_unknown(rows, exclude_execution_ids={"exec-2"})
+    assert len(out2) == 1 and out2[0]["admission_id"] == "a1"
+

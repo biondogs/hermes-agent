@@ -349,7 +349,19 @@ class ManagedWorker:
                 pass
         (self.process.kill if kill else self.process.terminate)()
 
-    def close(self):
+    def _should_detach(self):
+        """Detached kanban worker: outlives gateway, never signalled on stop."""
+        return self.control_socket is not None
+
+    def close(self, detach=False):
+        # S-7: detached kanban workers are never signalled; only close the in-owner fd.
+        if detach or self._should_detach():
+            self.closed.set()
+            if self.control_socket is not None:
+                with suppress(OSError):
+                    self.control_socket.close()
+            self._demand.release()
+            return
         self.closed.set()
         if self.control_socket is not None:
             _kanban_detached_execution_ids.discard(self.execution_id)
@@ -600,6 +612,9 @@ def _stopped_before_spawn(authority, ref, row):
     return True
 
 
+def _is_detached_kanban_execution(policy, worker):
+    return bool(getattr(policy, 'kanban_json', None)) and getattr(worker, 'control_socket', None) is not None
+
 def _record_lost_attempt(authority, policy, exc, reason, scope):
     """Start the board disposition (``worker_lost``) for a lost Kanban card attempt; the task, or None.
 
@@ -780,6 +795,9 @@ async def execute_managed(authority, ref, row, policy):
         import logging
         reason = exc.reason if isinstance(exc, RuntimeStoreError) else type(exc).__name__
         logging.getLogger(__name__).warning('Managed worker lost: %s', reason)
+        # S-7: detached kanban worker outlives gateway — never fence admission, never record loss.
+        if _is_detached_kanban_execution(policy, worker):
+            raise
         if scope is None:
             if isinstance(exc, asyncio.CancelledError) or (
                     isinstance(exc, RuntimeStoreError) and exc.reason == 'managed_worker_stopped'):
@@ -804,4 +822,7 @@ async def execute_managed(authority, ref, row, policy):
         raise ManagedExecutionUnknown('managed_worker_unknown') from exc
     finally:
         workers.pop(ref.session_id, None)
-        await asyncio.to_thread(worker.close)
+        if _is_detached_kanban_execution(policy, worker):
+            await asyncio.to_thread(worker.close, True)
+        else:
+            await asyncio.to_thread(worker.close)

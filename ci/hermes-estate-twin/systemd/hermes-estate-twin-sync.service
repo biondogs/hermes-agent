@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/local/projects/software-co/ci/hermes-estate-twin/sync/sync.sh
+ExecStart=/local/projects/software-co-twin-harness/ci/hermes-estate-twin/sync/sync.sh
 StandardOutput=journal
 StandardError=journal
 # No secrets in logs — sync.sh logs key names only, never values

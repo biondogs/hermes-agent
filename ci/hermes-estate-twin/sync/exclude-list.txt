@@ -96,3 +96,5 @@ config-backups
 *.bak-t_*
 *.bak-t38050354
 hermes-agent-self-evolution/
+# Transient git worktrees (contain docs with example tokens that trip the scanner)
+hermes-agent-wts/

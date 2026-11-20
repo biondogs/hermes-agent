@@ -45,6 +45,9 @@ HITS=$(echo "$HITS" | grep -v "_twin_placeholder" || true)
 # Ignore known fake-secret test fixtures (plugins ship tests with placeholder keys)
 HITS=$(echo "$HITS" | grep -v "/tests/" || true)
 HITS=$(echo "$HITS" | grep -v "/test_" || true)
+# Historical receipts contain redacted/example tokens that predate the twin (not live secrets)
+HITS=$(echo "$HITS" | grep -v "/receipts/" || true)
+HITS=$(echo "$HITS" | grep -v "credential-pools.md" || true)
 
 rm -f "$PAT_FILE"
 

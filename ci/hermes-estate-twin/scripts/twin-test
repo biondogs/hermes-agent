@@ -15,15 +15,28 @@ if ! docker ps --format '{{.Names}}' | grep -qx "hermes-estate-twin"; then
   sleep 3
 fi
 
-# Default: run hermes-agent test suite; pass custom args through
+# Default: run hermes-agent test suite; pass custom args through.
+# The twin sits on an internal:true network, so run_tests.sh's own
+# run-in-hermes-env path (stages pinned uv from GitHub) cannot work there.
+# When offline, hand run_tests.sh the image's baked interpreter via
+# HERMES_PYTHON: it then skips uv staging and runs its hermetic per-file
+# runner offline (card t_42ab1cec; docs/CI-CONTAINERS-GUIDANCE.md §5a).
+# NOTE: this tests the twin checkout's WORK TREE as it stands (other cards may
+# have edited it). To test a specific ref, use scripts/twin-clone-test.
 if [ $# -eq 0 ]; then
   docker exec hermes-estate-twin bash -c '
     set -e
     cd /opt/twin/hermes-agent
+    echo "twin-test: surface=in-twin host=$(hostname) interpreter=/usr/bin/python3 head=$(git rev-parse HEAD) dirty_files=$(git status --porcelain | wc -l)"
     if [ -f scripts/run_tests.sh ]; then
-      bash scripts/run_tests.sh 2>&1 | tail -40
+      if getent hosts github.com >/dev/null 2>&1; then
+        bash scripts/run_tests.sh 2>&1 | tail -40
+      else
+        echo "twin-test: offline (internal network) -> HERMES_PYTHON=/usr/bin/python3 run_tests.sh (no uv staging)"
+        env -u HERMES_HOME HERMES_PYTHON=/usr/bin/python3 bash scripts/run_tests.sh 2>&1 | tail -40
+      fi
     else
-      python -m pytest tests/ -x -q 2>&1 | tail -40
+      /usr/bin/python3 -m pytest tests/ -x -q 2>&1 | tail -40
     fi
   '
 else

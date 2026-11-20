@@ -1,7 +1,7 @@
 ---
 name: ci-standing-containers
 description: "Use when building, testing, or verifying anything Hermes-shaped on the software-co board — agent source, plugins, tools, porting/rebasing hotfixes, profile/SOUL/config regression, bug reproduction. Carries the decision rule (fresh-upstream vs estate-twin), the two container command surfaces, and the pinned-tag test-receipt requirement. Never build or test against the live estate."
-version: 1.0.0
+version: 1.1.0
 author: kanban-board-architect
 license: MIT
 metadata:
@@ -40,6 +40,45 @@ Every "tested" claim in a card or completion metadata pins: the container
 (`hermes-upstream` or `hermes-estate-twin`), plus the image tag + sha (dated tag, or
 `:fresh` + the STATUS.md upstream sha) or the twin's sync timestamp. Cards that name
 no container are not compliant with the intake rule — say so in review.
+
+## Twin runs are offline: never fall back to the host (guidance §5a)
+
+The twin's network is internal-only, so a checkout's `scripts/run_tests.sh` dies
+staging uv from GitHub, and the twin checkout's `.venv` points at a host path.
+That is not a licence to run on the host. Use the image's baked interpreter:
+
+- **A specific ref (the usual case):**
+  `~/.hermes/scripts/hjob start <card> --name <run> -- /local/projects/software-co/ci/hermes-estate-twin/scripts/twin-clone-test --repo <git dir> --ref <rev> --out <durable dir> --name <run> -- <test paths>`
+  It builds an isolated repo in the container's `/tmp` (twin object store via
+  alternates, plus a pack of whatever the twin lacks; the twin work tree is never
+  touched), checks that imports resolve to it, and runs
+  `HERMES_PYTHON=/usr/bin/python3 scripts/run_tests.sh` (`--raw` = one
+  `/usr/bin/python3 -m pytest` process). The host repo is only read, and lazy
+  fetches are blocked. If the script is not on disk at that path, take it from
+  `master`:
+  `git -C /local/projects/software-co show master:ci/hermes-estate-twin/scripts/twin-clone-test > "$TMPDIR/twin-clone-test"; chmod +x "$TMPDIR/twin-clone-test"`.
+- **The twin checkout as synced:** `twin-test` (it does the same
+  `HERMES_PYTHON` hand-off offline).
+- **Twin broken or stale:** fix or re-sync it, or block the card. A stale sync
+  is fine for code-only tests of an imported ref; keep the `STALE` flag in the
+  receipt.
+
+## Receipt labeling: what may be called a "twin" run (guidance §6a)
+
+- A receipt may say *twin* only if its log shows it ran in the container: the
+  `=== TWIN-RECEIPT v1 ===` header from `twin-clone-test` (image sha, sync stamp,
+  `hostname=hermes-estate-twin`, `/home/arch` absent, `interpreter: /usr/bin/python3`,
+  `import_check: PASS`), or else the in-container interpreter, rootdir and
+  hostname in the log, plus the quoted image sha and sync stamp. A bare `-q`
+  tail proves nothing about where it ran.
+- Any `/home/arch/...` interpreter or rootdir in the log (e.g.
+  `/home/arch/.hermes/hermes-agent/.venv/bin/python3`) means a **host run**.
+  Label it `surface: host (isolated clone <path>, interpreter <path>)`. It is
+  acceptable only as narrow, env-independent evidence (the R27c precedent), it
+  never carries a twin pin, and it never satisfies a twin requirement.
+- Reviewers: a twin claim without the header or container markers is a finding
+  ("receipt not container-verifiable"). The fix is to re-run through
+  `twin-clone-test`, not to relabel.
 
 ## Where the rest lives
 

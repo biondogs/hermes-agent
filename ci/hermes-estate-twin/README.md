@@ -46,7 +46,10 @@ ci/hermes-estate-twin/
     hermes-estate-twin-sync.timer   — hourly
   scripts/
     twin-shell            — open a shell in the twin container
-    twin-test             — run estate test suite inside twin
+    twin-test             — run the twin checkout's test suite inside twin
+                            (offline: hands run_tests.sh HERMES_PYTHON=/usr/bin/python3)
+    twin-clone-test       — test a specific ref in an isolated in-twin repo,
+                            offline, with a self-identifying TWIN-RECEIPT log
     twin-rebase-check     — dry-run rebase of hotfixes onto upstream ref
     sync-now              — manual sync trigger (wraps sync.sh)
     probe-isolation.sh    — network-isolation probe
@@ -146,6 +149,29 @@ systemctl --user status hermes-estate-twin-sync.timer
 ```
 
 Long steps inside the twin use `hjob` (estate long-job rule G-29).
+
+## Running tests offline in the twin (card t_42ab1cec)
+
+The twin has no route to GitHub, so a checkout's `scripts/run_tests.sh` dies
+when it tries to stage uv (`run-in-hermes-env`), and the twin checkout's
+`.venv` symlinks to a host path. Never fall back to the host. Use the image's
+baked interpreter instead:
+
+```bash
+# a specific ref (preferred): isolated repo in the container's /tmp, twin work tree untouched
+~/.hermes/scripts/hjob start <card> --name <run> -- \
+  ./scripts/twin-clone-test --repo <git dir> --ref <rev> --out <dir> --name <run> -- tests/<file>.py
+# the twin checkout as synced
+./scripts/twin-test
+```
+
+Both run `HERMES_PYTHON=/usr/bin/python3 scripts/run_tests.sh` (the repo's own
+hermetic per-file runner, no uv staging); `twin-clone-test --raw` runs one
+`/usr/bin/python3 -m pytest` process instead. A test receipt may be called a
+"twin" run only if its log shows that it ran in the container (the
+`TWIN-RECEIPT v1` header, or the in-container interpreter/rootdir/hostname). A
+log showing `/home/arch/...` paths is a host run and must be labeled as one. The
+full rule is in `docs/CI-CONTAINERS-GUIDANCE.md` §5a/§6a.
 
 ## Teardown
 

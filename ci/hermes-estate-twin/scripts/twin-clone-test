@@ -1,0 +1,204 @@
+#!/bin/bash
+# twin-clone-test — run a hermes-agent ref's tests GENUINELY INSIDE the
+# hermes-estate-twin container, offline, and write a self-identifying receipt.
+#
+# Card t_42ab1cec (twin receipt hygiene). Doctrine: docs/CI-CONTAINERS-GUIDANCE.md
+# §5a (offline in-twin run surface) + §6a (receipt labeling rule).
+#
+# Why this exists: the twin is on an `internal: true` network. A checkout's own
+# scripts/run_tests.sh re-executes under scripts/run-in-hermes-env, which tries
+# to stage a pinned uv from GitHub and dies offline. Workers then fell back to
+# running pytest on the HOST (live venv) and labeled those runs "twin". This
+# script is the sanctioned offline surface instead:
+#
+#   1. host:      resolve <ref> in <repo> (read-only: rev-parse, rev-list,
+#                 pack-objects --stdout; no refs or files written in <repo>)
+#   2. host:      pack only the objects the twin's object store lacks
+#   3. container: fresh repo in /tmp/twinrun-<id> borrowing the twin object store
+#                 via alternates (no clone transport, no object copy, no refs);
+#                 the twin checkout work tree is never used; index the pack,
+#                 check out <ref> detached
+#   4. container: run the tests with the image's baked system python
+#                 (/usr/bin/python3, twin-runtime deps baked in dist-packages):
+#                 default  = HERMES_PYTHON=/usr/bin/python3 scripts/run_tests.sh
+#                            (the repo's canonical per-file hermetic runner; the
+#                            HERMES_PYTHON branch skips uv staging entirely)
+#                 --raw    = /usr/bin/python3 -m pytest (one process, e.g. co-runs)
+#   5. the log starts with a TWIN-RECEIPT header produced INSIDE the container
+#      (hostname, /.dockerenv, no /home/arch, sys.executable, import origin)
+#      plus the host-side pins (image sha, twin sync stamp); copied back to host.
+#
+# Usage:
+#   twin-clone-test --repo <git dir> --ref <rev> [--out <host dir>] [--name <label>]
+#                   [--raw] [--keep] [--max-sync-age-h <N>] [--require-fresh] [--timeout <s>]
+#                   [-- <args for run_tests.sh, or for pytest with --raw>]
+#
+# Long runs (> ~10 s, i.e. nearly all) go through hjob (G-29):
+#   ~/.hermes/scripts/hjob start <card> --name <n> -- <path>/twin-clone-test --repo ... --ref ... -- tests/x.py
+#
+# Exit code = the test runner's exit code (124 = --timeout hit); 2/3/4 = usage/preflight/
+# transport errors. Stopping the hjob unit does NOT stop the in-container run:
+# use the stop_early command printed in the receipt header (or let --timeout fire).
+set -euo pipefail
+
+CONTAINER="${TWIN_CONTAINER:-hermes-estate-twin}"
+REPO="" REF="" OUT="" NAME="" RAW=0 KEEP=0 MAX_AGE_H=2 REQUIRE_FRESH=0 TIMEOUT=7200
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --repo) REPO="$2"; shift 2 ;;
+    --ref) REF="$2"; shift 2 ;;
+    --out) OUT="$2"; shift 2 ;;
+    --name) NAME="$2"; shift 2 ;;
+    --raw) RAW=1; shift ;;
+    --keep) KEEP=1; shift ;;
+    --max-sync-age-h) MAX_AGE_H="$2"; shift 2 ;;
+    --require-fresh) REQUIRE_FRESH=1; shift ;;
+    --timeout) TIMEOUT="$2"; shift 2 ;;
+    --) shift; break ;;
+    -h|--help) sed -n '2,41p' "$0"; exit 0 ;;
+    *) echo "twin-clone-test: unknown option $1 (test args go after --)" >&2; exit 2 ;;
+  esac
+done
+[ -n "$REPO" ] && [ -n "$REF" ] || { echo "twin-clone-test: --repo and --ref are required" >&2; exit 2; }
+
+# Host-side git is strictly read-only. protocol.allow=never forbids every
+# transport, so a partial (promisor) clone such as the live checkout can never
+# lazy-fetch objects into its store while we walk it; missing promisor objects
+# are skipped (--missing=allow-promisor) and surface as an honest checkout
+# failure (exit 4) in the container instead.
+hgit() { git -c protocol.allow=never -C "$REPO" "$@"; }
+SHA="$(hgit rev-parse --verify --quiet "$REF^{commit}")" \
+  || { echo "twin-clone-test: cannot resolve $REF in $REPO" >&2; exit 2; }
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-${SHA:0:10}-$$"
+NAME="${NAME:-twinrun-$RUN_ID}"
+OUT="${OUT:-${TMPDIR:-/tmp}/twin-clone-test}"
+mkdir -p "$OUT"
+LOG="$OUT/$NAME.log"
+STAGE="$(mktemp -d "${TMPDIR:-/tmp}/twin-clone-test.XXXXXX")"
+trap 'rm -rf "$STAGE"' EXIT
+
+# ── preflight: container, image pin, twin sync stamp ───────────────────────
+STATE="$(docker inspect -f '{{.State.Status}}' "$CONTAINER" 2>/dev/null || true)"
+[ "$STATE" = running ] || { echo "twin-clone-test: container $CONTAINER not running (state: ${STATE:-absent}) — start the twin, never fall back to the host" >&2; exit 3; }
+IMAGE_SHA="$(docker inspect -f '{{.Image}}' "$CONTAINER")"
+IMAGE_TAG="$(docker inspect -f '{{.Config.Image}}' "$CONTAINER")"
+NETWORK="$(docker inspect -f '{{.HostConfig.NetworkMode}}' "$CONTAINER")"
+TWIN_DIR="$(docker inspect -f '{{index .Config.Labels "com.docker.compose.project.working_dir"}}' "$CONTAINER" 2>/dev/null || true)"
+STATUS_JSON="${TWIN_DIR:+$TWIN_DIR/twin-root/STATUS.json}"
+if [ -n "$STATUS_JSON" ] && [ -f "${TWIN_DIR}/twin-root/.quarantined" ]; then
+  echo "twin-clone-test: twin is QUARANTINED (scanner hit) — fix scrub/scan first, never bypass" >&2; exit 3
+fi
+SYNC_TS="unknown" SYNC_OVERALL="unknown" SYNC_LIVE_SHA="unknown"
+if [ -n "$STATUS_JSON" ] && [ -f "$STATUS_JSON" ]; then
+  SYNC_TS="$(jq -r '.timestamp // "unknown"' "$STATUS_JSON")"
+  SYNC_OVERALL="$(jq -r '.overall // "unknown"' "$STATUS_JSON")"
+  SYNC_LIVE_SHA="$(jq -r '.live.sha // "unknown"' "$STATUS_JSON")"
+fi
+SYNC_AGE_H="unknown" SYNC_FRESH="unknown"
+if [ "$SYNC_TS" != unknown ]; then
+  SYNC_AGE_H=$(( ( $(date -u +%s) - $(date -u -d "$SYNC_TS" +%s) ) / 3600 ))
+  if [ "$SYNC_AGE_H" -le "$MAX_AGE_H" ]; then SYNC_FRESH=fresh; else SYNC_FRESH="STALE(>${MAX_AGE_H}h)"; fi
+fi
+if [ "$REQUIRE_FRESH" = 1 ] && [ "$SYNC_FRESH" != fresh ]; then
+  echo "twin-clone-test: twin sync stamp $SYNC_TS is $SYNC_FRESH and --require-fresh is set — run make sync first" >&2; exit 3
+fi
+
+# ── transport: pack only what the twin's object store lacks ────────────────
+CT_DIR="/tmp/twinrun-$RUN_ID"
+docker exec "$CONTAINER" mkdir -p "$CT_DIR"
+# Always clean up the container side too (normal exit, failure, or an hjob
+# stop's SIGTERM): stop the in-container run, then drop its /tmp dir.
+ct_cleanup() {
+  rm -rf "$STAGE"
+  if [ "$KEEP" = 0 ]; then
+    docker exec "$CONTAINER" bash -c '[ -f "$1/pid" ] && kill "$(cat "$1/pid")" 2>/dev/null; rm -rf "$1"' _ "$CT_DIR" || true
+  fi
+}
+trap ct_cleanup EXIT
+trap 'exit 143' TERM INT
+if docker exec "$CONTAINER" git -c safe.directory='*' -C /opt/twin/hermes-agent cat-file -e "$SHA^{commit}" 2>/dev/null; then
+  PACK_NOTE="ref already in twin object store; no pack"
+  PACK=""
+else
+  # Boundary = host ref tips the twin already has. Existence is checked in the
+  # container (the twin store is a full clone, cheap misses); never ask the host
+  # about twin-only objects (a partial clone burns CPU on every miss).
+  hgit for-each-ref --format='%(objectname)' | sort -u \
+    | docker exec -i "$CONTAINER" git -c safe.directory='*' -C /opt/twin/hermes-agent \
+        cat-file --batch-check='%(objectname) %(objecttype)' \
+    | awk '$2=="commit"{print "^"$1}' > "$STAGE/negs"
+  { echo "$SHA"; cat "$STAGE/negs"; } \
+    | hgit rev-list --objects --missing=allow-promisor --stdin \
+    | hgit pack-objects --missing=allow-promisor --stdout -q > "$STAGE/ref.pack"
+  PACK="$STAGE/ref.pack"
+  PACK_NOTE="pack $(stat -c %s "$PACK") bytes, boundary $(wc -l < "$STAGE/negs") shared ref tips"
+  docker cp -q "$PACK" "$CONTAINER:$CT_DIR/ref.pack"
+fi
+
+# ── in-container runner (header is produced INSIDE the container) ──────────
+if [ "$RAW" = 1 ]; then MODE=raw-pytest; else MODE=run_tests.sh; fi
+cat > "$STAGE/inner.sh" <<'INNER'
+#!/bin/bash
+set -uo pipefail
+CT_DIR="$1"; SHA="$2"; MODE="$3"; TIMEOUT="$4"; shift 4
+# The bind-mounted twin store is owned by the host uid: trust it for this run
+# only, via a run-private global gitconfig (never the container-wide one;
+# GIT_CONFIG_GLOBAL also survives into git child processes).
+printf '[safe]\n\tdirectory = *\n' > "$CT_DIR/gitconfig"
+export GIT_CONFIG_GLOBAL="$CT_DIR/gitconfig"
+cd "$CT_DIR"
+# Isolated repo that borrows the twin's object store through alternates: no
+# clone transport, no object copy (the twin store is ~26 GB), no refs, and the
+# twin checkout's work tree is never touched.
+git init -q repo || exit 4
+echo /opt/twin/hermes-agent/.git/objects > repo/.git/objects/info/alternates
+if [ -f ref.pack ]; then git -C repo index-pack --stdin < ref.pack >/dev/null || exit 4; fi
+git -C repo -c advice.detachedHead=false checkout -q --detach "$SHA" || exit 4
+cd repo
+[ "$(git rev-parse HEAD)" = "$SHA" ] || { echo "clone HEAD mismatch" >&2; exit 4; }
+PY=/usr/bin/python3
+IMPORT_ORIGIN="$($PY -c 'import hermes_cli,os;print(os.path.dirname(hermes_cli.__file__))' 2>&1)"
+echo "surface: in-twin (container) — runner executed inside $(hostname)"
+echo "container_markers: hostname=$(hostname) dockerenv=$([ -f /.dockerenv ] && echo present || echo ABSENT) home_arch=$([ -e /home/arch ] && echo PRESENT-NOT-TWIN || echo absent) uid=$(id -un)"
+echo "interpreter: $($PY -c 'import sys;print(sys.executable)') ($($PY -V 2>&1)); pytest $($PY -c 'import pytest;print(pytest.__version__)')"
+echo "clone: $(pwd) @ $(git rev-parse HEAD) (isolated repo, objects via alternates -> /opt/twin/hermes-agent/.git/objects; twin work tree unused)"
+echo "import_origin: hermes_cli -> $IMPORT_ORIGIN"
+case "$IMPORT_ORIGIN" in "$(pwd)"/*) echo "import_check: PASS (resolves to the clone)";;
+  *) echo "import_check: FAIL (does not resolve to the clone) — refusing to run"; exit 4;; esac
+echo "twin_config_mtime: $(stat -c %y /opt/twin/hermes-home/config.yaml 2>/dev/null || echo n/a)"
+echo "mode: $MODE   timeout_s: $TIMEOUT   stop_early: docker exec <container> bash -c 'kill \$(cat $CT_DIR/pid)'"
+echo "args: $*"
+echo "started_utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo "=== END TWIN-RECEIPT HEADER ==="
+if [ "$MODE" = raw-pytest ]; then
+  timeout --kill-after=30 "$TIMEOUT" env TZ=UTC LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONHASHSEED=0 HOME=/root PATH="$PATH" HERMES_HOME="$CT_DIR/hermes-home" \
+    $PY -m pytest "$@" &
+else
+  # HERMES_PYTHON with pytest => run_tests.sh skips run-in-hermes-env/uv staging
+  # and runs its own hermetic env -i per-file runner with the baked interpreter.
+  timeout --kill-after=30 "$TIMEOUT" env -u HERMES_HOME HERMES_PYTHON=$PY bash scripts/run_tests.sh "$@" &
+fi
+echo $! > "$CT_DIR/pid"; wait $!; rc=$?
+[ "$rc" = 124 ] && echo "TIMEOUT after ${TIMEOUT}s"
+echo "=== TWIN-RECEIPT FOOTER === exit_code: $rc finished_utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+exit $rc
+INNER
+docker cp -q "$STAGE/inner.sh" "$CONTAINER:$CT_DIR/inner.sh"
+
+{
+  echo "=== TWIN-RECEIPT v1 (twin-clone-test, card t_42ab1cec doctrine) ==="
+  echo "container: $CONTAINER  image: $IMAGE_TAG  image_sha: $IMAGE_SHA  network: $NETWORK"
+  echo "twin_sync_stamp: $SYNC_TS (overall=$SYNC_OVERALL, live_sha_at_sync=$SYNC_LIVE_SHA, age_h=$SYNC_AGE_H, $SYNC_FRESH)"
+  echo "ref: $REF -> $SHA  (from host repo $REPO, read-only)"
+  echo "transport: $PACK_NOTE"
+} > "$LOG"
+
+set +e
+docker exec "$CONTAINER" bash "$CT_DIR/inner.sh" "$CT_DIR" "$SHA" "$MODE" "$TIMEOUT" "$@" >> "$LOG" 2>&1
+RC=$?
+set -e
+if [ "$KEEP" = 1 ]; then echo "kept: $CONTAINER:$CT_DIR" >> "$LOG"; fi   # else ct_cleanup (EXIT trap) removes it
+
+echo "twin-clone-test: exit=$RC log=$LOG"
+grep -E '^(=+ .*(passed|failed|error).* =+|[0-9]+ (passed|failed).*)$' "$LOG" | tail -3 || true
+exit $RC

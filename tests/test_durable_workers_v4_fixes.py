@@ -652,3 +652,121 @@ def test_s15b_kanban_custody_pop_on_completion_keep_on_cancel():
     assert out == "cancelled"
     assert sid in authority._managed_workers
 
+
+def test_s12_absent_state_is_restartable():
+    """S-12: GatewayAbsent with state 'absent' must be restartable (not exit 1).
+    Discriminator for m_s12nas: reverting absent→non-restartable makes this red."""
+    import pathlib
+    # Check via source + direct import with guard bypass
+    import tests.home_io_guard as _guard
+    _orig = _guard.HomeIOGuard.check
+    _guard.HomeIOGuard.check = lambda *a, **kw: None
+    try:
+        from hermes_cli.kanban_worker_client import _restartable, _TRANSIENT_OWNER_STATES
+        from hermes_cli.gateway_client import GatewayUnavailableError
+        assert 'absent' in _TRANSIENT_OWNER_STATES, "absent must be in TRANSIENT_OWNER_STATES"
+        for reason in (None, 'not_ready', 'runtime_exited', 'whatever'):
+            exc = GatewayUnavailableError(f"Gateway absent: {reason}", state='absent', reason_code=reason)
+            assert _restartable(exc) is True, f"absent/{reason} must be restartable, got False"
+    finally:
+        _guard.HomeIOGuard.check = _orig
+
+
+def test_s12_worker_never_ensures_gateway():
+    """S-12: Kanban worker must use connect_gateway(ensure=False), never auto-start.
+    Discriminator for m_s12nas: reverting ensure=False → ensure=True makes this red."""
+    import pathlib
+    src = pathlib.Path("hermes_cli/kanban_worker_client.py").read_text()
+    assert "connect_gateway(ensure=False)" in src, "worker must use ensure=False"
+    # must not have a bare ensure=True or no-ensure (defaults to True) in the worker path
+    # count ensures: only ensure=False should appear for connect_gateway in this file
+    import re
+    ensures = re.findall(r'connect_gateway\(.*?ensure\s*=\s*(True|False)', src)
+    assert all(v == 'False' for v in ensures), f"all connect_gateway ensure must be False, got {ensures}"
+    assert len(ensures) >= 1, "must have at least one connect_gateway(ensure=False)"
+
+
+def test_s10_registry_truth_exclusion():
+    """S-10: Exclusion must be derived from registry/processes.json rows bound to kanban,
+    not just from in-memory _managed_workers with control_socket.
+    Discriminator for m_s10fb: removing disk-fallback block makes this red."""
+    import pathlib, tempfile, json as _js, os
+    from unittest.mock import patch as _patch
+    from tools.process_registry import process_registry, ProcessSession
+    from gateway.run_shutdown import GatewayShutdownMixin
+    import time
+    import gateway.run_runtime as rr
+    import inspect
+    # Verify the source does NOT have `if not detached_sids:` guarding the disk scan
+    src = pathlib.Path("gateway/run_shutdown.py").read_text()
+    # The disk scan must NOT be gated by `if not <something>:` — it must always run
+    # Check that the new registry-truth path exists
+    assert "kanban_task_ids" in src, "S-10 fix must derive kanban_task_ids from disk/registry"
+    assert "owner_task_id in kanban_task_ids" in src, "must match registry rows by owner_task_id"
+    # Behavioural: plant a kanban-bound registry row and verify it's excluded from kill
+    orig_auth = getattr(rr, "_authorities", None)
+    kanban_task_uuid = "aaaaaaaa-0000-4000-a000-000000000001"
+    kanban_sid = "local-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    now = time.time()
+    reg = ProcessSession(id="reg-s10-test", command="sleep 100", task_id=kanban_task_uuid,
+                         owner_task_id=kanban_task_uuid, session_key=f"agent:main:local:dm:{kanban_sid}",
+                         pid=999991, started_at=now)
+    reg.parent_session_id = kanban_sid
+    reg.exited = False
+    with process_registry._lock:
+        process_registry._running[reg.id] = reg
+    # Create a fake disk scope that makes this task_id known as kanban
+    with tempfile.TemporaryDirectory() as td:
+        from pathlib import Path as _P
+        outbox = _P(td) / "worker-outboxes" / "admission-worker-test"
+        outbox.mkdir(parents=True)
+        (outbox / "scope.json").write_text(_js.dumps({
+            "session_id": kanban_sid, "execution_id": "exec-s10",
+            "kanban": {"task_id": kanban_task_uuid, "board": "test"}
+        }))
+        killed = []
+        orig_kill = process_registry.kill_process
+        def fake_kill(sid, source="", consume_output=False):
+            killed.append(sid)
+            return {"status": "killed"}
+        process_registry.kill_process = fake_kill
+        try:
+            with _patch("hermes_constants.get_hermes_home", return_value=_P(td)):
+                rr._authorities = lambda x: []
+                GatewayShutdownMixin._stop_kill_tool_subprocesses("test")
+                assert "reg-s10-test" not in killed, f"kanban-bound registry row must be excluded, killed={killed}"
+        finally:
+            process_registry.kill_process = orig_kill
+            rr._authorities = orig_auth
+            with process_registry._lock:
+                process_registry._running.pop(reg.id, None)
+    # Also verify non-kanban row IS killed (the canary must die)
+    non_kanban = ProcessSession(id="reg-s10-canary", command="sleep 100", task_id="other-task",
+                                owner_task_id="other-task", session_key="other-session",
+                                pid=999992, started_at=now)
+    non_kanban.parent_session_id = ""
+    non_kanban.exited = False
+    with process_registry._lock:
+        process_registry._running[non_kanban.id] = non_kanban
+    with tempfile.TemporaryDirectory() as td2:
+        from pathlib import Path as _P2
+        outbox2 = _P2(td2) / "worker-outboxes" / "admission-worker-test2"
+        outbox2.mkdir(parents=True)
+        (outbox2 / "scope.json").write_text(_js.dumps({
+            "session_id": "other-sid", "execution_id": "exec-other",
+            "kanban": {"task_id": kanban_task_uuid, "board": "test"}
+        }))
+        killed2 = []
+        process_registry.kill_process = lambda sid, source="", consume_output=False: (killed2.append(sid), {"status": "killed"})[1]
+        try:
+            with _patch("hermes_constants.get_hermes_home", return_value=_P2(td2)):
+                rr._authorities = lambda x: []
+                GatewayShutdownMixin._stop_kill_tool_subprocesses("test")
+                assert "reg-s10-canary" in killed2, f"non-kanban canary must be killed, killed={killed2}"
+        finally:
+            process_registry.kill_process = orig_kill
+            rr._authorities = orig_auth
+            with process_registry._lock:
+                process_registry._running.pop(non_kanban.id, None)
+
+

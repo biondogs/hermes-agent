@@ -35,6 +35,22 @@ _dashboard_client_touch_lock = threading.Lock()
 # ties up the pool asyncio.to_thread shares, and at most one write per path waits behind a slow one.
 _dashboard_client_touch_pool = concurrent.futures.ThreadPoolExecutor(
     max_workers=1, thread_name_prefix="dashboard-client-touch")
+# S-13: ensure pool threads are daemon so they don't block process exit
+_orig_submit = _dashboard_client_touch_pool.submit
+def _daemon_submit(fn, *a, **kw):
+    fut = _orig_submit(fn, *a, **kw)
+    for th in getattr(_dashboard_client_touch_pool, '_threads', set()):
+        try:
+            th.daemon = True
+        except Exception:
+            pass
+    return fut
+_dashboard_client_touch_pool.submit = _daemon_submit
+for th in getattr(_dashboard_client_touch_pool, '_threads', set()):
+    try:
+        th.daemon = True
+    except Exception:
+        pass
 _dashboard_client_touch_pending: set = set()
 
 

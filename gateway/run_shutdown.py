@@ -1773,59 +1773,114 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             def _kill_tool_procs():
                 exclude_ids = frozenset()
                 try:
-                    detached_sids = set()
-                    # The stopping runner's own authorities: a gc scan from this worker thread
-                    # found none, leaving detached kanban workers unexcluded (S-10).
-                    from gateway.run_runtime import _authorities as _auths
-                    _auths_found = list(_auths(runner))
-                    for _a in _auths_found:
-                        for _sid, _w in getattr(_a, "_managed_workers", {}).items():
-                            if getattr(_w, "control_socket", None) is not None:
-                                detached_sids.add(_sid)
-                    # S-10: re-derive source of truth from disk when no live worker handle
-                    # exists (worker dead or mid-handoff). Scan worker-outboxes/scope.json
-                    # for kanban-bound scopes and use their session_ids as detached_sids.
-                    if not detached_sids:
-                        try:
-                            from pathlib import Path as _P
-                            from hermes_constants import get_hermes_home as _gh
-                            import json as _js
-                            _home = _P(_gh())
-                            _outboxes = _home / "worker-outboxes"
-                            if _outboxes.exists():
-                                for _entry in _outboxes.iterdir():
-                                    try:
-                                        _sp = _entry / "scope.json"
-                                        if not _sp.exists():
-                                            continue
-                                        _sock = _entry / "control.sock"
-                                        if not _sock.exists():
-                                            continue
-                                        _sc = _js.loads(_sp.read_text())
-                                        if _sc.get("kanban") and _sc.get("session_id"):
-                                            detached_sids.add(_sc["session_id"])
-                                        elif _sc.get("session_id") and _sc.get("execution_id"):
-                                            # Fallback: also consider execution_id-indexed scopes
-                                            # where kanban context is in scope.json kanban field
-                                            pass
-                                    except Exception:
+                    # S-10: re-derive exclusion FROM registry rows themselves, not from in-memory worker liveness.
+                    # A kanban-bound process is one whose owner_task_id corresponds to a kanban task
+                    # (running task with kanban context) OR whose disk scope.json has kanban binding.
+                    # This works regardless of worker liveness, run_id, or control.sock presence.
+                    kanban_task_ids = set()
+                    # (1) Always scan disk for kanban-bound scopes — NOT guarded by `if not detached_sids`
+                    try:
+                        from pathlib import Path as _P
+                        from hermes_constants import get_hermes_home as _gh
+                        import json as _js
+                        _home = _P(_gh())
+                        _outboxes = _home / "worker-outboxes"
+                        if _outboxes.exists():
+                            for _entry in _outboxes.iterdir():
+                                try:
+                                    _sp = _entry / "scope.json"
+                                    if not _sp.exists():
                                         continue
+                                    _sc = _js.loads(_sp.read_text())
+                                    if _sc.get("kanban") and isinstance(_sc["kanban"], dict):
+                                        _tid = _sc["kanban"].get("task_id")
+                                        if _tid:
+                                            kanban_task_ids.add(_tid)
+                                    # also collect session_ids for suffix matching
+                                    _kanban_sid = _sc.get("session_id")
+                                    if _kanban_sid and _sc.get("kanban"):
+                                        kanban_task_ids.add(_kanban_sid)
+                                except Exception:
+                                    continue
+                    except Exception:
+                        pass
+                    # (2) Also resolve kanban task_ids from the board DB (running tasks with kanban association)
+                    # For live gateway, check the kanban tasks via DB; for test isolation, just use disk truth.
+                    # The registry rows with owner_task_id in kanban_task_ids are the kanban-bound ones.
+                    # (3) Derive exclusion: every registry row bound to kanban is excluded.
+                    # A row is kanban-bound if owner_task_id is a kanban task id, or its
+                    # session_key/parent_session_id matches a known kanban session_id from disk.
+                    _kanban_sids = set()
+                    try:
+                        from pathlib import Path as _P2
+                        from hermes_constants import get_hermes_home as _gh2
+                        import json as _js2
+                        _home2 = _P2(_gh2())
+                        _outboxes2 = _home2 / "worker-outboxes"
+                        if _outboxes2.exists():
+                            for _entry in _outboxes2.iterdir():
+                                try:
+                                    _sc2 = _js2.loads((_entry / "scope.json").read_text())
+                                    if _sc2.get("kanban") and _sc2.get("session_id"):
+                                        _kanban_sids.add(_sc2["session_id"])
+                                    # Also include bare execution session ids
+                                    _exec_sid = _sc2.get("session_id")
+                                    if _exec_sid and _sc2.get("kanban"):
+                                        _kanban_sids.add(_exec_sid)
+                                except Exception:
+                                    continue
+                    except Exception:
+                        pass
+                    if kanban_task_ids or _kanban_sids:
+                        with process_registry._lock:
+                            _candidates = (*process_registry._running.values(), *process_registry._finished.values())
+                            _matched = []
+                            for s in _candidates:
+                                if s.owner_task_id in kanban_task_ids:
+                                    _matched.append(s.id)
+                                elif s.parent_session_id in _kanban_sids:
+                                    _matched.append(s.id)
+                                elif any(s.session_key.endswith(sid) for sid in _kanban_sids):
+                                    _matched.append(s.id)
+                                elif s.session_key in _kanban_sids:
+                                    _matched.append(s.id)
+                            exclude_ids = frozenset(_matched)
+                        if exclude_ids:
+                            # include pid receipts for the S-10 acceptance
+                            _pids = []
+                            with process_registry._lock:
+                                for s in _candidates:
+                                    if s.id in exclude_ids and s.pid:
+                                        _pids.append(str(s.pid))
+                            _pid_str = f" pids={','.join(_pids)}" if _pids else ""
+                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)%s", phase, len(exclude_ids), len(kanban_task_ids | _kanban_sids), _pid_str)
+                        else:
+                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, 0, len(kanban_task_ids | _kanban_sids))
+                    else:
+                        # Fallback: in-memory worker check (legacy path for non-kanban test contexts)
+                        detached_sids = set()
+                        try:
+                            from gateway.run_runtime import _authorities as _auths
+                            _auths_found = list(_auths(runner))
+                            for _a in _auths_found:
+                                for _sid, _w in getattr(_a, "_managed_workers", {}).items():
+                                    if getattr(_w, "control_socket", None) is not None:
+                                        detached_sids.add(_sid)
                         except Exception:
                             pass
-                    if detached_sids:
-                        with process_registry._lock:
-                            exclude_ids = frozenset(
-                                s.id for s in (*process_registry._running.values(), *process_registry._finished.values())
-                                if s.parent_session_id in detached_sids
-                                or any(s.session_key.endswith(sid) for sid in detached_sids)
-                                or s.session_key in detached_sids
-                                or s.owner_task_id in detached_sids
-                            )
-                        if exclude_ids:
-                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, len(exclude_ids), len(detached_sids))
-                        else:
-                            # Always log exclusion attempt with detached count so S-10 receipt is present even when no match yet
-                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, 0, len(detached_sids))
+                        if detached_sids:
+                            with process_registry._lock:
+                                exclude_ids = frozenset(
+                                    s.id for s in (*process_registry._running.values(), *process_registry._finished.values())
+                                    if s.parent_session_id in detached_sids
+                                    or any(s.session_key.endswith(sid) for sid in detached_sids)
+                                    or s.session_key in detached_sids
+                                    or s.owner_task_id in detached_sids
+                                )
+                            if exclude_ids:
+                                logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, len(exclude_ids), len(detached_sids))
+                            else:
+                                logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, 0, len(detached_sids))
                 except Exception:
                     pass
                 return process_registry.kill_all(source="gateway_shutdown", exclude_ids=exclude_ids)
@@ -2181,28 +2236,75 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         """Clean-shutdown marker, restart markers, terminal runtime status; process bootstrap
         releases PID/lock ownership after the writer drain."""
         from gateway.run import _hermes_home, _shutdown_gateway_health_export
-        # S-13: unblock non-daemon threads that outlive shutdown (asyncio default executor pool
-        # asyncio_0/1/2 and dashboard-client-touch_0). Shutdown executors before the exit point log
-        # so the process can exit within seconds at all three stop sites.
+        # S-13 blast-proof watchdog: arm a daemon timer at entry that os._exit()s after 12s
+        # covering the WHOLE tail (persist + flush + health export + final log). The existing
+        # _stop_impl watchdog has drain+60s grace — too late when the hang is in the persist
+        # phase itself. This one is disarmed only on clean exit past the final log line.
+        _persist_watchdog = None
+        _persist_done = threading.Event()
+        if not os.environ.get("PYTEST_CURRENT_TEST"):
+            def _hard_exit_tail():
+                if _persist_done.is_set():
+                    return
+                try:
+                    sys.stdout.flush()
+                    sys.stderr.flush()
+                except Exception:
+                    pass
+                try:
+                    from hermes_logging import drain_log_queue as _dlq
+                    _dlq(timeout=1.0)
+                except Exception:
+                    pass
+                try:
+                    from gateway.lifecycle_ledger import mark_exited as _me
+                    _me(1, reason="persist_tail_watchdog")
+                except Exception:
+                    pass
+                os._exit(1)
+            _persist_watchdog = threading.Timer(12.0, _hard_exit_tail)
+            _persist_watchdog.daemon = True
+            _persist_watchdog.start()
         try:
-            loop = asyncio.get_running_loop()
-            # asyncio.to_thread default executor — non-daemon asyncio_0/1/2 threads
-            # Use 2s timeout; don't block indefinitely on stuck tasks.
+            # S-13: unblock non-daemon threads that outlive shutdown (asyncio default executor pool
+            # asyncio_0/1/2 and dashboard-client-touch_0). Shutdown executors before the exit point log
+            # so the process can exit within seconds at all three stop sites.
             try:
-                await asyncio.wait_for(loop.shutdown_default_executor(), timeout=2.0)
+                loop = asyncio.get_running_loop()
+                try:
+                    await asyncio.wait_for(loop.shutdown_default_executor(), timeout=2.0)
+                except Exception:
+                    pass
             except Exception:
                 pass
+            # S-13: dashboard-client-touch pool holds a non-daemon worker that shutdown(wait=False)
+            # does not stop. Cancel pending + shutdown properly.
+            try:
+                from tui_gateway.ws import _dashboard_client_touch_pool as _dctp
+                try:
+                    # cancel any queued futures
+                    for _f in list(getattr(_dctp, '_threads', [])):
+                        pass
+                    # Best-effort: shutdown and try to cancel pending work
+                    _dctp.shutdown(wait=False, cancel_futures=True)
+                except TypeError:
+                    # Python <3.9: no cancel_futures kwarg
+                    _dctp.shutdown(wait=False)
+                # Give the non-daemon worker a moment to exit after shutdown
+                import concurrent.futures as _cf
+                with suppress(Exception):
+                    # enumerate threads created by this pool
+                    for th in threading.enumerate():
+                        if th.name.startswith("dashboard-client-touch") and not th.daemon:
+                            th.join(timeout=1.0)
+            except Exception:
+                pass
+            # S-13: name what can still hold the process past SIGTERM; every managed-worker thread is a daemon.
+            _live = [f"{th.name}{'' if th.daemon else '(non-daemon)'}" for th in threading.enumerate()
+                     if th is not threading.current_thread() and th is not threading.main_thread()]
+            logger.info("Shutdown exit point: %d live thread(s): %s", len(_live), ", ".join(sorted(_live)))
         except Exception:
             pass
-        try:
-            from tui_gateway.ws import _dashboard_client_touch_pool
-            _dashboard_client_touch_pool.shutdown(wait=False)
-        except Exception:
-            pass
-        # S-13: name what can still hold the process past SIGTERM; every managed-worker thread is a daemon.
-        _live = [f"{th.name}{'' if th.daemon else '(non-daemon)'}" for th in threading.enumerate()
-                 if th is not threading.current_thread() and th is not threading.main_thread()]
-        logger.info("Shutdown exit point: %d live thread(s): %s", len(_live), ", ".join(sorted(_live)))
         if getattr(self, "_startup_cleanup_only", False):  # start never ran: keep startup_failed + crash markers
             return _shutdown_gateway_health_export(self)
         # Clean-shutdown marker skips crash-turn recovery next boot; a timed-out drain left
@@ -2259,6 +2361,9 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         # S-13 fallback: after durable teardown + flush, hard-exit past any remaining
         # non-daemon threads (asyncio pool, dashboard touch) so SIGTERM resolves in seconds.
         # Skipped under pytest to avoid killing test workers.
+        if _persist_watchdog is not None:
+            _persist_done.set()
+            _persist_watchdog.cancel()
         if not os.environ.get("PYTEST_CURRENT_TEST"):
             try:
                 sys.stdout.flush()

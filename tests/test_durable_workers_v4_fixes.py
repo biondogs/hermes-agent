@@ -553,7 +553,14 @@ def test_s7_settle_fence_not_invoked_for_bound_kanban():
             smw._record_lost_attempt = fake_record
 
             from gateway.session_managed_worker import _mark_spawning
-            with patch("gateway.session_managed_worker.managed_turn_text", side_effect=fake_managed_turn_text),                  patch("gateway.session_managed_worker._spawn_registered_worker", side_effect=fake_spawn),                  patch("gateway.session_managed_worker._mark_spawning", side_effect=lambda *a, **kw: {}),                  patch("gateway.session_managed_worker._clear_spawning_kanban"),                  patch("gateway.session_managed_worker._stopped_before_spawn", return_value=False),                  patch("gateway.session_runtime_workers.tracked_write", side_effect=fake_tracked_write),                  patch("gateway.session_managed_worker._bootstrap", side_effect=fake_bootstrap),                  patch("gateway.session_managed_worker.reserve_admission_worker", return_value=scope):
+            with patch("gateway.session_context_refs.managed_turn_text", side_effect=fake_managed_turn_text), \
+                    patch("gateway.session_managed_worker._spawn_registered_worker", side_effect=fake_spawn), \
+                    patch("gateway.session_managed_worker._mark_spawning", side_effect=lambda *a, **kw: {}), \
+                    patch("gateway.session_managed_worker._clear_spawning_kanban"), \
+                    patch("gateway.session_managed_worker._stopped_before_spawn", return_value=False), \
+                    patch("gateway.session_runtime_workers.tracked_write", side_effect=fake_tracked_write), \
+                    patch("gateway.session_managed_worker._bootstrap", side_effect=fake_bootstrap), \
+                    patch("gateway.session_managed_worker.reserve_admission_worker", return_value=scope):
 
                 try:
                     await smw.execute_managed(authority, types.SimpleNamespace(session_id="sid-s11"), row, policy)
@@ -571,4 +578,77 @@ def test_s7_settle_fence_not_invoked_for_bound_kanban():
         asyncio.run(_run())
     finally:
         _guard.HomeIOGuard.check = _orig
+
+
+def _run_kanban_execute(frames):
+    """Drive execute_managed for a bound kanban scope through *frames*; returns (authority, sid, outcome)."""
+    import asyncio
+    import types
+    from unittest.mock import MagicMock, Mock, patch
+    from gateway import session_managed_worker as smw
+
+    sid = "sid-s15b"
+    scope = {"execution_id": "exec-s15b", "pid": 99999, "birth": 1, "session_id": sid,
+             "admission_id": "adm-s15b", "generation": 1, "secret": "s"}
+    row = {"admission_id": "adm-s15b", "generation": 1, "principal_id": "p1", "payload": {"text": "hi"}}
+    policy = types.SimpleNamespace(kanban_json={"task_id": "t-s15b"})
+    authority = MagicMock()
+    authority.executing = {sid: 1}
+    authority.pending_results = {}
+    authority._managed_workers = {}
+    authority._managed_spawning = {}
+    worker = MagicMock()
+    worker.control_socket = None
+    worker.stop.is_set.return_value = False
+    worker.stop_cause = None
+    seq = iter(frames)
+
+    async def next_frame(timeout, ack=0):
+        try:
+            return next(seq)
+        except StopIteration:
+            raise asyncio.CancelledError("gateway stop")
+
+    worker.next_frame = next_frame
+
+    async def spawn(*a, **kw):
+        authority._managed_workers[sid] = worker
+        return worker, Mock(pid=99999)
+
+    async def tracked(auth, fn, **kw):
+        return scope
+
+    async def turn_text(*a, **kw):
+        return "hi", None
+
+    async def run():
+        with patch("gateway.session_context_refs.managed_turn_text", side_effect=turn_text), \
+                patch.object(smw, "_spawn_registered_worker", side_effect=spawn), \
+                patch.object(smw, "_mark_spawning", side_effect=lambda *a, **kw: {}), \
+                patch.object(smw, "_stopped_before_spawn", return_value=False), \
+                patch.object(smw, "_bootstrap", return_value={"api_key": ""}), \
+                patch.object(smw, "_prompt_frame", return_value=False), \
+                patch.object(smw, "publish_worker_tool_event", return_value=False), \
+                patch.object(smw, "accept_result", return_value=({"final_response": "ok"}, {})), \
+                patch.object(smw, "_settled_session_usage", return_value={}), \
+                patch("gateway.session_runtime_workers.tracked_write", side_effect=tracked), \
+                patch.object(smw, "reserve_admission_worker", return_value=scope):
+            try:
+                return await smw.execute_managed(authority, types.SimpleNamespace(session_id=sid), row, policy)
+            except asyncio.CancelledError:
+                return "cancelled"
+
+    return authority, sid, asyncio.run(run())
+
+
+def test_s15b_kanban_custody_pop_on_completion_keep_on_cancel():
+    """Normal completion pops the kanban worker from _managed_workers; a cancel keeps it visible."""
+    frames = [{"type": "hello"}, {"type": "result", "result": {}}, {"type": "finished"}]
+    authority, sid, out = _run_kanban_execute(frames)
+    assert out == "ok"
+    assert sid not in authority._managed_workers
+
+    authority, sid, out = _run_kanban_execute([{"type": "hello"}])
+    assert out == "cancelled"
+    assert sid in authority._managed_workers
 

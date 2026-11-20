@@ -117,7 +117,10 @@ def _restartable(exc):
     if isinstance(exc, GatewayRPCError):
         return str(exc) in _TRANSIENT_RPC_REASONS
     if isinstance(exc, GatewayUnavailableError):
-        return exc.state in _TRANSIENT_OWNER_STATES or exc.reason_code in _RESTART_CONTROL_REASONS
+        # runtime_exited: a restarting owner's replacement lost the start race ("A gateway is already
+        # running"); the next dial reaches the winner, so the worker waits out OWNER_WAIT_S, not exits.
+        return (exc.state in _TRANSIENT_OWNER_STATES or exc.reason_code in _RESTART_CONTROL_REASONS
+                or (exc.state == 'runtime_exited' and exc.reason_code == 'runtime_exited'))
     return True
 
 

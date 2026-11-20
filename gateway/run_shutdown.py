@@ -1746,7 +1746,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             return None
 
     @staticmethod
-    def _stop_kill_tool_subprocesses(phase: str) -> list:
+    def _stop_kill_tool_subprocesses(phase: str, runner: Any = None) -> list:
         """Kill tool subprocesses + terminal envs + browsers; returns cron job IDs marked interrupted.
 
         Called twice: after a drain timeout (reclaim children before systemd SIGKILLs) and as a final
@@ -1774,57 +1774,14 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                 exclude_ids = frozenset()
                 try:
                     detached_sids = set()
-                    # Primary: via run_runtime registry (needs runner); fallback to global registries
-                    _auths_found = []
-                    try:
-                        from gateway.run_runtime import _authorities as _auths
-                        # Try bound runner instance if available via GatewayRunner
-                        _runner = None
-                        try:
-                            from gateway.run import GatewayRunner as _GR
-                            # Search for live runner via weak registry or session_authorities globals
-                            import gc as _gc
-                            for _obj in _gc.get_objects():
-                                if isinstance(_obj, _GR):
-                                    _runner = _obj
-                                    break
-                        except Exception:
-                            pass
-                        if _runner is not None:
-                            _auths_found = list(_auths(_runner))
-                        else:
-                            _auths_found = list(_auths(None))
-                    except Exception:
-                        pass
-                    if not _auths_found:
-                        # Fallback: scan session_authorities registries directly
-                        try:
-                            from gateway.session_authorities import all_authorities as _all_a
-                            # all_authorities needs runner; try hermes_state_registry for any SessionDB's runner hint
-                            import gc as _gc2
-                            from gateway.run import GatewayRunner as _GR2
-                            for _obj in _gc2.get_objects():
-                                if isinstance(_obj, _GR2):
-                                    _auths_found = list(_all_a(_obj))
-                                    if _auths_found:
-                                        break
-                        except Exception:
-                            pass
+                    # The stopping runner's own authorities: a gc scan from this worker thread
+                    # found none, leaving detached kanban workers unexcluded (S-10).
+                    from gateway.run_runtime import _authorities as _auths
+                    _auths_found = list(_auths(runner))
                     for _a in _auths_found:
                         for _sid, _w in getattr(_a, "_managed_workers", {}).items():
                             if getattr(_w, "control_socket", None) is not None:
                                 detached_sids.add(_sid)
-                    # Ultimate fallback: _kanban_detached_execution_ids implies detached kanban is live
-                    # even if authority lookup failed (e.g. test doubles without runner wiring).
-                    if not detached_sids:
-                        try:
-                            from gateway.session_managed_worker import _kanban_detached_execution_ids as _kdet
-                            if _kdet:
-                                # Cannot map execution_ids to sids without authority; skip tool kill exclusion
-                                # rather than over-excluding. S-15a narrowing applies.
-                                pass
-                        except Exception:
-                            pass
                     if detached_sids:
                         with process_registry._lock:
                             exclude_ids = frozenset(
@@ -1883,7 +1840,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         return _marked_cron_jobs
 
     @staticmethod
-    async def _stop_kill_tool_subprocesses_off_loop(phase: str) -> list:
+    async def _stop_kill_tool_subprocesses_off_loop(phase: str, runner: Any = None) -> list:
         """Run _stop_kill_tool_subprocesses in a worker thread; returns cron job IDs marked interrupted.
 
         ``kill_all`` fans out into per-target ``kill_process`` calls that do blocking work
@@ -1897,7 +1854,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         watchdog remains the hard backstop.
         """
         return await asyncio.to_thread(
-            GatewayShutdownMixin._stop_kill_tool_subprocesses, phase
+            GatewayShutdownMixin._stop_kill_tool_subprocesses, phase, runner
         )
 
     async def _stop_begin_teardown(self, ctx: GatewayShutdownMixin._StopContext) -> None:
@@ -2013,7 +1970,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             logger.debug("Re-signaled interrupt for work still live at settle-window exit")
         # Kill tool subprocesses NOW: deferring past adapter/DB teardown risks the systemd cgroup SIGKILL.
         # Off-loop: the sweep does blocking kills that must not monopolize the event loop (#116327).
-        _interrupted_cron_jobs = await GatewayRunner._stop_kill_tool_subprocesses_off_loop("post-interrupt")
+        _interrupted_cron_jobs = await GatewayRunner._stop_kill_tool_subprocesses_off_loop("post-interrupt", self)
         logger.info("Shutdown phase: post-interrupt tool kill done at +%.2fs", ctx.elapsed())
         # Last window with the transport up (the cron worker's own notice arrives after teardown).
         with _log_suppressed(logging.DEBUG, "Cron interrupt notification failed: %s"):
@@ -2094,7 +2051,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         self._shutdown_event.set()
         # Global catch-all subprocess kill (safe to repeat) for the graceful path and late respawns.
         # Off-loop: same blocking sweep as the post-interrupt kill (#116327).
-        await GatewayRunner._stop_kill_tool_subprocesses_off_loop("final-cleanup")
+        await GatewayRunner._stop_kill_tool_subprocesses_off_loop("final-cleanup", self)
         logger.info("Shutdown phase: final-cleanup tool kill done at +%.2fs", ctx.elapsed())
         # Reap the auxiliary-client cache: clients bound to dead worker-thread loops leak httpx transports.
         def _reap_aux_clients() -> None:
@@ -2191,6 +2148,10 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         """Clean-shutdown marker, restart markers, terminal runtime status; process bootstrap
         releases PID/lock ownership after the writer drain."""
         from gateway.run import _hermes_home, _shutdown_gateway_health_export
+        # S-13: name what can still hold the process past SIGTERM; every managed-worker thread is a daemon.
+        _live = [f"{th.name}{'' if th.daemon else '(non-daemon)'}" for th in threading.enumerate()
+                 if th is not threading.current_thread() and th is not threading.main_thread()]
+        logger.info("Shutdown exit point: %d live thread(s): %s", len(_live), ", ".join(sorted(_live)))
         if getattr(self, "_startup_cleanup_only", False):  # start never ran: keep startup_failed + crash markers
             return _shutdown_gateway_health_export(self)
         # Clean-shutdown marker skips crash-turn recovery next boot; a timed-out drain left

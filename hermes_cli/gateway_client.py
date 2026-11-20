@@ -316,7 +316,7 @@ def outside_restart_wait():
 
 
 @asynccontextmanager
-async def connect_gateway(endpoint=None, subject=None, *, max_size=8 * 1024 * 1024):
+async def connect_gateway(endpoint=None, subject=None, *, max_size=8 * 1024 * 1024, ensure: bool = True):
     """Attach to this home's owner. ``endpoint``: an already-discovered ready owner to dial as-is
     (maintenance that must never start a gateway); default ensures one, starting it if needed.
     ``subject``: mint the ticket for this principal (the caller's authenticated dashboard user)
@@ -345,9 +345,15 @@ async def connect_gateway(endpoint=None, subject=None, *, max_size=8 * 1024 * 10
     else:
         # A per-task overlay home is served by the profile its symlinked lock names (#138949).
         home = gateway_profile_home(get_hermes_home())
-        # A client's own start: the daemon it may launch ends itself once idle (no client, adapter,
-        # cron/kanban work or admission), and the next client starts a fresh one.
-        result = await asyncio.to_thread(ensure_gateway_runtime, home, idle_exit=True)
+        if ensure:
+            # A client's own start: the daemon it may launch ends itself once idle (no client, adapter,
+            # cron/kanban work or admission), and the next client starts a fresh one.
+            result = await asyncio.to_thread(ensure_gateway_runtime, home, idle_exit=True)
+        else:
+            # Kanban workers must NOT auto-start a gateway: bounded reconnect window (OWNER_WAIT_S)
+            # redials without spawns and attaches to the next owner. Discovery only.
+            from hermes_cli.gateway_runtime import discover_gateway_endpoint
+            result = await asyncio.to_thread(discover_gateway_endpoint, home)
         if not attachable(result) or (_REFUSE_RESTART_WAIT.get() and result.state != "ready"):
             detail = getattr(result, "detail", None)
             if result.reason_code == "runtime_exited" and detail:

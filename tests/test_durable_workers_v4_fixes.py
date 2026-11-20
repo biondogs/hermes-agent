@@ -628,7 +628,7 @@ def _run_kanban_execute(frames):
                 patch.object(smw, "_stopped_before_spawn", return_value=False), \
                 patch.object(smw, "_bootstrap", return_value={"api_key": ""}), \
                 patch.object(smw, "_prompt_frame", return_value=False), \
-                patch.object(smw, "publish_worker_tool_event", return_value=False), \
+                patch("gateway.run_turn_progress.publish_worker_tool_event", return_value=False), \
                 patch.object(smw, "accept_result", return_value=({"final_response": "ok"}, {})), \
                 patch.object(smw, "_settled_session_usage", return_value={}), \
                 patch("gateway.session_runtime_workers.tracked_write", side_effect=tracked), \

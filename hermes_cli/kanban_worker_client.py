@@ -31,7 +31,7 @@ _TRANSIENT_RPC_REASONS = frozenset({'runtime_draining', 'runtime_retired'})
 # stale instance. Unsafe nodes or peers, a refused authorization, a bad pointer or a failed start
 # stay final.
 _RESTART_CONTROL_REASONS = frozenset({'invalid_control_peer', 'incomplete_control_response',
-                                      'invalid_control_response'})
+                                      'invalid_control_response', 'runtime_exited'})
 # Past the board lock wait: the owner's session setup and receipt before and after the write.
 ADMISSION_ANSWER_MARGIN_S = 60.0
 
@@ -75,7 +75,7 @@ async def run(params, board_db):
             # waits for the NEXT owner, and a worker polling its receipt inside the wait keeps the
             # turn it waits on alive, holding `hermes update` until restart_after_turn_timeout.
             with outside_restart_wait():
-                async with connect_gateway() as client:
+                async with connect_gateway(ensure=False) as client:
                     # kanban.run subscribes this socket to the card's session, but only receipts
                     # matter here: discard the turn's events, or they fill the client's bounded
                     # queue and its reader stops, with the next receipt behind it.
@@ -119,8 +119,9 @@ def _restartable(exc):
     if isinstance(exc, GatewayUnavailableError):
         # runtime_exited: a restarting owner's replacement lost the start race ("A gateway is already
         # running"); the next dial reaches the winner, so the worker waits out OWNER_WAIT_S, not exits.
+        # The real discovery carries state "inaccessible" (gateway_runtime.py:448 -> gateway_client.py:353).
         return (exc.state in _TRANSIENT_OWNER_STATES or exc.reason_code in _RESTART_CONTROL_REASONS
-                or (exc.state == 'runtime_exited' and exc.reason_code == 'runtime_exited'))
+                or (exc.state == 'inaccessible' and exc.reason_code == 'runtime_exited'))
     return True
 
 

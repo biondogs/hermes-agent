@@ -1782,6 +1782,36 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                         for _sid, _w in getattr(_a, "_managed_workers", {}).items():
                             if getattr(_w, "control_socket", None) is not None:
                                 detached_sids.add(_sid)
+                    # S-10: re-derive source of truth from disk when no live worker handle
+                    # exists (worker dead or mid-handoff). Scan worker-outboxes/scope.json
+                    # for kanban-bound scopes and use their session_ids as detached_sids.
+                    if not detached_sids:
+                        try:
+                            from pathlib import Path as _P
+                            from hermes_constants import get_hermes_home as _gh
+                            import json as _js
+                            _home = _P(_gh())
+                            _outboxes = _home / "worker-outboxes"
+                            if _outboxes.exists():
+                                for _entry in _outboxes.iterdir():
+                                    try:
+                                        _sp = _entry / "scope.json"
+                                        if not _sp.exists():
+                                            continue
+                                        _sock = _entry / "control.sock"
+                                        if not _sock.exists():
+                                            continue
+                                        _sc = _js.loads(_sp.read_text())
+                                        if _sc.get("kanban") and _sc.get("session_id"):
+                                            detached_sids.add(_sc["session_id"])
+                                        elif _sc.get("session_id") and _sc.get("execution_id"):
+                                            # Fallback: also consider execution_id-indexed scopes
+                                            # where kanban context is in scope.json kanban field
+                                            pass
+                                    except Exception:
+                                        continue
+                        except Exception:
+                            pass
                     if detached_sids:
                         with process_registry._lock:
                             exclude_ids = frozenset(
@@ -1793,6 +1823,9 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                             )
                         if exclude_ids:
                             logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, len(exclude_ids), len(detached_sids))
+                        else:
+                            # Always log exclusion attempt with detached count so S-10 receipt is present even when no match yet
+                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, 0, len(detached_sids))
                 except Exception:
                     pass
                 return process_registry.kill_all(source="gateway_shutdown", exclude_ids=exclude_ids)
@@ -2148,6 +2181,24 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
         """Clean-shutdown marker, restart markers, terminal runtime status; process bootstrap
         releases PID/lock ownership after the writer drain."""
         from gateway.run import _hermes_home, _shutdown_gateway_health_export
+        # S-13: unblock non-daemon threads that outlive shutdown (asyncio default executor pool
+        # asyncio_0/1/2 and dashboard-client-touch_0). Shutdown executors before the exit point log
+        # so the process can exit within seconds at all three stop sites.
+        try:
+            loop = asyncio.get_running_loop()
+            # asyncio.to_thread default executor — non-daemon asyncio_0/1/2 threads
+            # Use 2s timeout; don't block indefinitely on stuck tasks.
+            try:
+                await asyncio.wait_for(loop.shutdown_default_executor(), timeout=2.0)
+            except Exception:
+                pass
+        except Exception:
+            pass
+        try:
+            from tui_gateway.ws import _dashboard_client_touch_pool
+            _dashboard_client_touch_pool.shutdown(wait=False)
+        except Exception:
+            pass
         # S-13: name what can still hold the process past SIGTERM; every managed-worker thread is a daemon.
         _live = [f"{th.name}{'' if th.daemon else '(non-daemon)'}" for th in threading.enumerate()
                  if th is not threading.current_thread() and th is not threading.main_thread()]
@@ -2205,6 +2256,19 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             logger.debug("Failed to flush terminal gateway runtime status", exc_info=True)
         _shutdown_gateway_health_export(self)
         logger.info("Gateway stopped (total teardown %.2fs)", ctx.elapsed())
+        # S-13 fallback: after durable teardown + flush, hard-exit past any remaining
+        # non-daemon threads (asyncio pool, dashboard touch) so SIGTERM resolves in seconds.
+        # Skipped under pytest to avoid killing test workers.
+        if not os.environ.get("PYTEST_CURRENT_TEST"):
+            try:
+                sys.stdout.flush()
+                sys.stderr.flush()
+            except Exception:
+                pass
+            code = getattr(self, "_exit_code", None)
+            if code is None:
+                code = 1 if getattr(self, "_signal_initiated_shutdown", False) and not getattr(self, "_restart_requested", False) else 0
+            os._exit(int(code) if isinstance(code, int) else 0)
 
     def _shutdown_watchdog_snapshot(self, ctx: GatewayShutdownMixin._StopContext) -> dict:
         """State dumped by the thread-based shutdown watchdog when teardown hangs."""

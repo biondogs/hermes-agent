@@ -1765,25 +1765,29 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             from tools.process_registry import process_registry
             # Host shutdown: kill even persist_on_release jobs or they become
             # PPID=1 orphans (#41225/#46778); an explicit source reaches them.
+            # F2: exclude detached kanban workers' tool subprocesses (spawn site:
+            # tools/terminal_tool_background.py:_spawn -> tools/process_registry.py:spawn_local/spawn_via_env
+            # where owner_task_id == managed session id). Collect registry s.id for sessions owned by detached workers.
             def _kill_tool_procs():
-                # F2: exclude detached kanban workers tool subprocesses from the global sweep
+                exclude_ids = frozenset()
                 try:
                     from gateway.run_runtime import _authorities as _auths
-                    # best-effort: collect detached session ids to exclude
-                    exclude = set()
+                    detached_sids = set()
                     for _a in _auths(None):
-                        for _w in getattr(_a, "_managed_workers", {}).values():
+                        for _sid, _w in getattr(_a, "_managed_workers", {}).items():
                             if getattr(_w, "control_socket", None) is not None:
-                                # worker session id is key in _managed_workers
-                                for _sid, _ww in getattr(_a, "_managed_workers", {}).items():
-                                    if _ww is _w:
-                                        exclude.add(_sid)
-                    if exclude:
-                        logger.info("Shutdown (%s): excluding %d detached kanban session(s) from tool kill", phase, len(exclude))
+                                detached_sids.add(_sid)
+                    if detached_sids:
+                        with process_registry._lock:
+                            exclude_ids = frozenset(
+                                s.id for s in (*process_registry._running.values(), *process_registry._finished.values())
+                                if s.owner_task_id in detached_sids or s.session_key in detached_sids
+                            )
+                        if exclude_ids:
+                            logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, len(exclude_ids), len(detached_sids))
                 except Exception:
                     pass
-                # Spawn site: tools/process_registry.py:process_registry.kill_all — gateway/run_shutdown.py:1749
-                return process_registry.kill_all(source="gateway_shutdown")
+                return process_registry.kill_all(source="gateway_shutdown", exclude_ids=exclude_ids)
             _count_step(
                 "Shutdown (%s): killed %d tool subprocess(es)",
                 lambda: _kill_tool_procs())

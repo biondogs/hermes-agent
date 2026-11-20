@@ -561,7 +561,7 @@ def _compression_ancestors(db, session_id):
     return ancestors[::-1]
 
 
-def _mark_spawning(authority, ref, row):
+def _mark_spawning(authority, ref, row, kanban=False):
     """Mark the generation pre-worker: until the worker registers, a gateway stop has nothing to
     signal, so it latches for this generation instead (#134889 GW-22). Set before ``@`` expansion,
     which may await the network, so a Stop there is never lost."""
@@ -569,10 +569,10 @@ def _mark_spawning(authority, ref, row):
     if spawning is None:
         spawning = authority._managed_spawning = {}
     spawning[ref.session_id] = row.get('generation')
-    # Track kanban-detached spawning so stop path doesn't latch it (F5).
-    # The kanban tag is set by execute_managed after managed_turn_text resolves policy.
     if not hasattr(authority, '_managed_spawning_kanban'):
         authority._managed_spawning_kanban = set()
+    if kanban:
+        authority._managed_spawning_kanban.add(ref.session_id)
     return spawning
 
 def _mark_spawning_kanban(authority, session_id):
@@ -683,7 +683,7 @@ async def execute_managed(authority, ref, row, policy):
     from gateway.run_turn_progress import publish_worker_tool_event
     # This route never passes the inbound prepare step, so the worker would read ``@`` tokens as typed.
     from gateway.session_context_refs import managed_turn_text, refused_turn_result
-    _mark_spawning(authority, ref, row)
+    _mark_spawning(authority, ref, row, kanban=bool(getattr(policy, 'kanban_json', None)))
     try:
         text, refusal = await managed_turn_text(authority, row, policy)
     except BaseException:

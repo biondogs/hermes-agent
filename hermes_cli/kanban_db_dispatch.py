@@ -1323,8 +1323,13 @@ def _classify_dead_worker(
 
 
 def _is_host_restart_exit(code, error_text):
-    """Exit 130 (SIGINT) whose note says admission interrupted is a host restart."""
+    """Exit 130 (SIGINT) whose note says admission interrupted is a gateway restart (not a host crash)."""
     return code == 130 and "owner admission settled interrupted" in (error_text or "")
+
+
+def _is_gateway_restart(dead) -> bool:
+    """True for gateway-restart interruption (exit 130 + interrupted note), which must never count."""
+    return dead.failure_class == "gateway_restart" or dead.event_payload.get("gateway_restart")
 
 
 def _classify_dead_worker_exit(
@@ -1462,13 +1467,12 @@ def _reclaim_dead_workers(conn: sqlite3.Connection, board: Optional[str] = None)
             exit_code = managed_run_exit_code(conn, row["id"], pid, row["claim_lock"])
             dead = _classify_dead_worker(pid, row["claim_lock"], exit_code, task_id=row["id"], board=board)
             apply_attempt_note(conn, row["id"], pid, dead)
-            # F4: admission settled interrupted -> host_restart (never counted)
+            # F4: admission settled interrupted -> gateway_restart (never counted, distinct from host_restart)
             _note = dead.event_payload.get("attempt_note") or ""
-            if "owner admission settled interrupted" in _note:
-                dead.failure_class = "host_restart"
-                dead.host_crash = True
-                dead.event_payload["failure_class"] = "host_restart"
-                dead.event_payload["host_restart"] = True
+            if _is_host_restart_exit(dead.code, _note) or "owner admission settled interrupted" in _note:
+                dead.failure_class = "gateway_restart"
+                dead.event_payload["failure_class"] = "gateway_restart"
+                dead.event_payload["gateway_restart"] = True
             retry_status = _kb._retry_status_for_run(conn, row["id"])
             dead.event_payload["retry_status"] = retry_status
             cur = conn.execute(
@@ -1547,7 +1551,7 @@ def _account_crashes(conn: sqlite3.Connection, crash_details: list) -> list[str]
         fp = _error_fingerprint(dead.error_text)
         fp_counts[fp] = fp_counts.get(fp, 0) + 1
     for tid, pid, claimer, dead in crash_details:
-        if dead.event_payload.get("host_restart") or dead.failure_class == "host_restart":
+        if _is_gateway_restart(dead):
             continue
         error_text = dead.error_text
         if dead.host_crash:

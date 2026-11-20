@@ -1183,3 +1183,115 @@ def test_v18_real_scope_shape_bare_admission_id():
         assert fake_auth.sessions[sess].settling[bare]["status"] == "started"
     finally:
         sys.modules.pop("hermes_state_runtime", None)
+
+# ─── v20 discriminators: epoch-refresh (a), classification (b), wiring (c) ───
+
+def test_v20_epoch_refresh_on_adopt():
+    """v20 (a) epoch-refresh/adopt handshake: reconnect frame with new owner_epoch
+    must update the worker's RuntimeSessionStore epoch so next persist succeeds."""
+    from agent.managed_worker import WorkerControls, WorkerChannel
+    import types, io, threading
+    # Minimal worker controls with a fake store
+    class FakeStore:
+        def __init__(self):
+            self.scope = {'execution_id': 'admission-worker:epochtst', 'generation': 1, 'epoch': 1, 'session_id': 'local-epoch-sess'}
+            self.adopt_calls = []
+        def adopt(self, epoch):
+            self.adopt_calls.append(epoch)
+            self.scope['epoch'] = epoch
+    store = FakeStore()
+    agent = types.SimpleNamespace(_session_db=store)
+    scope = store.scope  # shared dict
+    channel = types.SimpleNamespace(lock=threading.Lock(), stream=io.BytesIO())
+    controls = WorkerControls.__new__(WorkerControls)
+    controls.channel = channel
+    controls.route = 'test-route'
+    controls.scope = scope
+    controls.listener = None
+    controls.stream = None
+    controls.detached = True
+    controls.attached = threading.Event()
+    controls.agent = agent
+    controls.clarifications = {}
+    controls.lock = threading.Lock()
+    controls.stopped = threading.Event()
+    controls.finish = threading.Event()
+    # Simulate reconnect with new epoch
+    frame = {'type': 'reconnect', 'execution_id': 'admission-worker:epochtst', 'generation': 1, 'owner_epoch': 2}
+    controls._reconnect(frame)
+    assert scope['epoch'] == 2, f"scope epoch must be refreshed to 2, got {scope['epoch']}"
+    assert store.adopt_calls == [2], f"store.adopt must be called with 2, got {store.adopt_calls}"
+    assert not controls.detached
+    assert controls.attached.is_set()
+
+def test_v20_stale_epoch_not_provider_failure():
+    """v20 (b) classification: stale_epoch WorkerPersistenceError must NOT route
+    to provider-failure retry path."""
+    from agent.kanban_turn_recovery import should_recover_turn
+    import os
+    os.environ['HERMES_KANBAN_TASK'] = 't_test_v20b'
+    os.environ['HERMES_KANBAN_TURN_RECOVERY'] = '3'
+    try:
+        # A turn that failed with stale_epoch persistence error should not be retried
+        result = {
+            'failed': True, 'failure_retryable': True,
+            'failure_reason': 'session_persistence_failed:stale_epoch',
+            'error': 'stale_epoch', 'turn_exit_reason': 'session_persistence_failed',
+        }
+        assert should_recover_turn(result, attempt=0, task_id='t_test_v20b') is False, \
+            "stale_epoch persist failure must NOT be retried as provider failure"
+        # Normal provider failure should still be retryable
+        result2 = {
+            'failed': True, 'failure_retryable': True,
+            'failure_reason': 'timeout', 'error': 'timeout',
+        }
+        assert should_recover_turn(result2, attempt=0, task_id='t_test_v20b') is True, \
+            "normal provider timeout must still be retryable"
+    finally:
+        os.environ.pop('HERMES_KANBAN_TASK', None)
+        os.environ.pop('HERMES_KANBAN_TURN_RECOVERY', None)
+
+def test_v20_adopt_wiring_serving_authority():
+    """v20 (c) wiring survivor: adopt_detached_kanban_workers with runner facade
+    must operate on the SERVING authority (reattach+replay), not the runner."""
+    import types, json, tempfile, os as _os
+    from pathlib import Path as _P
+    from unittest.mock import patch as _patch
+    import gateway.kanban_detached_supervisor as mod
+    # Two authorities: runner facade vs serving
+    serving_calls = {'reattach': [], 'replay': []}
+    orig_reattach = mod._reattach_worker
+    orig_replay = mod._replay_admission_for_scope
+    def fake_reattach(auth, sock_path, scope, pid, birth):
+        serving_calls['reattach'].append(id(auth))
+    def fake_replay(auth, scope):
+        serving_calls['replay'].append(id(auth))
+    mod._reattach_worker = fake_reattach
+    mod._replay_admission_for_scope = fake_replay
+    try:
+        serving = types.SimpleNamespace(sessions={}, db=object(), profile_id="homeW", _managed_workers={}, epoch=5)
+        runner = types.SimpleNamespace(session_authorities=types.SimpleNamespace(for_home=lambda h: serving))
+        # Create a fake outbox with live pid
+        import tempfile as _tf
+        with _tf.TemporaryDirectory() as td:
+            td = _P(td)
+            outbox = td / 'worker-outboxes' / 'admission-worker-wiringtest'
+            outbox.mkdir(parents=True)
+            scope_doc = {
+                'execution_id': 'admission-worker:wiringtest', 'session_id': 'local-wiring-sess',
+                'generation': 1, 'epoch': 1, 'pid': _os.getpid(),
+                'kanban': {'task_id': 't_wiring', 'db': '/tmp/fake.db', 'claim_lock': 'lock1', 'run_id': 1},
+            }
+            (outbox / 'scope.json').write_text(json.dumps(scope_doc))
+            (outbox / 'control.sock').write_text('')  # exists check
+            # Mock _find_task_for_scope to return live pid, _pid_alive true
+            with _patch.object(mod, '_find_task_for_scope', return_value={'pid': _os.getpid(), 'birth': scope_doc.get('birth'), 'generation': 1, 'owner_epoch': 1, 'execution_id': 'admission-worker:wiringtest', 'session_id': 'local-wiring-sess'}), \
+                 _patch.object(mod, '_pid_alive', return_value=True), \
+                 _patch.object(mod, '_resolve_homes', return_value=[td]):
+                n = mod.adopt_detached_kanban_workers(runner)
+                assert n == 1, f"adopt should succeed with runner facade, got {n}"
+                assert serving_calls['reattach'] == [id(serving)], f"reattach must target serving authority, got {serving_calls['reattach']} vs serving {id(serving)} runner {id(runner)}"
+                assert serving_calls['replay'] == [id(serving)], f"replay must target serving authority"
+    finally:
+        mod._reattach_worker = orig_reattach
+        mod._replay_admission_for_scope = orig_replay

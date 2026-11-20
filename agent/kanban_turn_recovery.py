@@ -77,6 +77,11 @@ _NON_RECOVERABLE_REASONS = frozenset({
 #: recording ``outcome="timed_out"`` for an out-of-budget kanban worker (#87096).
 _TERMINAL_TURN_EXIT_PREFIXES = ("max_iterations_reached",)
 
+# Persistence failures that must NOT be retried as provider failures: the
+# adopted worker's stale_epoch is an epoch-refresh problem, not a transient
+# provider outage. Retrying the turn without fixing the epoch just exits 1.
+_PERSISTENCE_NON_RETRYABLE_SUBSTRINGS = ("stale_epoch", "stale_generation")
+
 _OFF_VALUES = frozenset({"0", "false", "no", "off"})
 
 
@@ -163,6 +168,12 @@ def should_recover_turn(result: Any, *, attempt: int, task_id: Optional[str] = N
         return False
     if str(result.get("failure_reason") or "") in _NON_RECOVERABLE_REASONS:
         return False
+    # Persist-layer stale_epoch is not a provider failure — don't retry the turn
+    # in place; the epoch-refresh path handles it (or the worker exits honestly).
+    fr = str(result.get("failure_reason") or "") + str(result.get("error") or "")
+    for substr in _PERSISTENCE_NON_RETRYABLE_SUBSTRINGS:
+        if substr in fr:
+            return False
     return True
 
 

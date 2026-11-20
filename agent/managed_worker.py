@@ -257,6 +257,19 @@ class WorkerControls:
         if (frame.get('execution_id') != scope.get('execution_id')
                 or frame.get('generation') != scope.get('generation')):
             raise ValueError('invalid_managed_control')
+        # Epoch refresh on adopt: successor gateway re-arms session epoch before
+        # adopting this live worker; the reconnect frame carries the new owner_epoch
+        # so the worker's RuntimeSessionStore can persist under the new epoch.
+        new_epoch = frame.get('owner_epoch')
+        if isinstance(new_epoch, int) and new_epoch != scope.get('epoch'):
+            scope['epoch'] = new_epoch
+            agent = getattr(self, 'agent', None)
+            store = getattr(agent, '_session_db', None) if agent is not None else None
+            if store is not None and hasattr(store, 'adopt'):
+                try:
+                    store.adopt(new_epoch)
+                except Exception:
+                    pass
         self.detached = False
         self.attached.set()
 

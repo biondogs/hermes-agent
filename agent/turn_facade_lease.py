@@ -237,6 +237,39 @@ class DurableTurnLease:
         except Exception as exc:
             if self.stop.is_set():
                 return False
+            # Adopted-worker stale-epoch: successor gateway bumped the epoch and
+            # adopted this live worker; the reconnect frame carries the new epoch.
+            # Refresh the store epoch from the shared scope and retry once before
+            # treating this as a lease loss.
+            if 'stale_epoch' in str(exc):
+                try:
+                    agent = getattr(self, 'agent', None)
+                    store = getattr(agent, '_session_db', None) if agent is not None else None
+                    scope = getattr(store, 'scope', None) if store is not None else None
+                    if scope is not None and isinstance(scope.get('epoch'), int):
+                        if store is not None and hasattr(store, 'adopt'):
+                            try:
+                                store.adopt(scope['epoch'])
+                            except Exception:
+                                pass
+                        # Retry with refreshed epoch
+                        try:
+                            if self.db.refresh_session_turn_lease(
+                                self._current_session_id(), self.holder, ttl_seconds=LEASE_TTL_SECONDS,
+                                patience_s=min(_REFRESH_WRITE_PATIENCE_S, patience),
+                            ):
+                                self._authority_deadline = started + LEASE_TTL_SECONDS
+                                return None
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+                logger.warning(
+                    "Session turn lease refresh stale_epoch — adopted worker epoch refresh attempted: %s",
+                    self._current_session_id(), exc_info=True,
+                )
+                # Don't hard-interrupt on stale_epoch; let the next tick retry
+                return None
             from hermes_state_errors import is_sqlite_lock_error
 
             if is_sqlite_lock_error(exc):

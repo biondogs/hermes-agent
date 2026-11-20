@@ -60,7 +60,13 @@ def _is_retryable_persistence_error(exc):
         return True
     if type(exc).__name__ == 'ConnectionClosed':
         return True
-    return str(exc) in _RETRYABLE_PERSISTENCE_ERRORS
+    msg = str(exc)
+    if msg in _RETRYABLE_PERSISTENCE_ERRORS:
+        return True
+    # Gateway restart surfaces as ws 1012 "service restart" / "received 1012" — retryable gap.
+    if '1012' in msg or 'service restart' in msg.lower():
+        return True
+    return False
 
 
 def _caller_summary(limit=8):

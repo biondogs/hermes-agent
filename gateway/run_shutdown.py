@@ -1766,8 +1766,10 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             # Host shutdown: kill even persist_on_release jobs or they become
             # PPID=1 orphans (#41225/#46778); an explicit source reaches them.
             # F2: exclude detached kanban workers' tool subprocesses (spawn site:
-            # tools/terminal_tool_background.py:_spawn -> tools/process_registry.py:spawn_local/spawn_via_env
-            # where owner_task_id == managed session id). Collect registry s.id for sessions owned by detached workers.
+            # tools/terminal_tool_background.py:_spawn -> tools/process_registry.py:spawn_local/spawn_via_env).
+            # Production tool sessions carry parent_session_id == bare admission sid and
+            # session_key == "agent:main:local:dm:<sid>" (prefixed); owner_task_id is the
+            # kanban task UUID, never the sid. Match on parent_session_id / session_key suffix.
             def _kill_tool_procs():
                 exclude_ids = frozenset()
                 try:
@@ -1781,7 +1783,10 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                         with process_registry._lock:
                             exclude_ids = frozenset(
                                 s.id for s in (*process_registry._running.values(), *process_registry._finished.values())
-                                if s.owner_task_id in detached_sids or s.session_key in detached_sids
+                                if s.parent_session_id in detached_sids
+                                or any(s.session_key.endswith(sid) for sid in detached_sids)
+                                or s.session_key in detached_sids
+                                or s.owner_task_id in detached_sids
                             )
                         if exclude_ids:
                             logger.info("Shutdown (%s): excluding %d detached kanban tool session(s) from tool kill (%d workers)", phase, len(exclude_ids), len(detached_sids))

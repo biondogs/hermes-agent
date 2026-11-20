@@ -764,7 +764,25 @@ async def settle_gateway_runtime(runner, budget=None, reason=None):
     from gateway.session_llm_oneshot import stop as stop_oneshots
     for authority in authorities:
         stop_oneshots(authority)  # an answer is no durable settlement: never waited for
-    tasks = [task for authority in authorities for task in _authority_tasks(authority)]
+    # S-3: detached kanban workers never settle (F1 leaves them running) — exclude them
+    # from the settle wait so a stop with a live kanban card does not stall 45s.
+    _detached_sids = set()
+    for _a in authorities:
+        for _sid, _w in getattr(_a, "_managed_workers", {}).items():
+            if getattr(_w, "control_socket", None) is not None:
+                _detached_sids.add(_sid)
+    # Filter _authority_tasks by session id to exclude detached kanban admissions.
+    tasks = []
+    for _auth in authorities:
+        for _sid, _live in getattr(_auth, "sessions", {}).items():
+            if _sid in _detached_sids:
+                continue
+            if getattr(_live, "task", None) is not None:
+                tasks.append(_live.task)
+        tasks.extend(getattr(_auth, '_bot_receipt_tasks', ()))
+        from gateway.session_runtime_workers import mutation_tasks
+        tasks.extend(mutation_tasks(_auth))
+    tasks = list(dict.fromkeys(tasks))
     wait = TURN_SETTLE_SECONDS if budget is None else max(0.0, min(TURN_SETTLE_SECONDS,
                                                                    budget - STOP_TAIL_RESERVE_SECONDS))
     deadline = asyncio.get_running_loop().time() + wait

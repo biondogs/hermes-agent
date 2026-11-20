@@ -330,6 +330,12 @@ def stop_authority_turns(authority, *, in_process=False, reason=None):
     for worker in list(workers.values()):
         if worker.closed.is_set() or (getattr(worker, 'stop', None) is not None and worker.stop.is_set()):
             continue
+        # F1: detached kanban workers survive gateway restart — never interrupt
+        # them; the new gateway adopts via kanban_detached_supervisor. The
+        # control_socket attr is set at session_managed_worker.py:176 when the
+        # worker's scope is bound.
+        if getattr(worker, 'control_socket', None) is not None:
+            continue
         worker.stop_cause = reason
         try:
             worker.control({'type': 'stop'})
@@ -363,10 +369,18 @@ def _stop_spawning_managed(authority, workers, reason):
     """A managed turn whose worker is still being spawned has nothing to signal yet: latch the
     Stop for its generation (``adopt_agent`` delivers it to the worker, which is never
     bootstrapped) and, for a gateway restart/shutdown, the cause its pre-bootstrap interrupted
-    result carries (#134889 GW-22). A user's Stop latched first keeps no cause."""
+    result carries (#134889 GW-22). A user's Stop latched first keeps no cause.
+
+    Detached kanban workers in bootstrap must NOT be latched — they are
+    adopted by the next gateway (F5 bootstrap window fix). They are tracked
+    in ``_managed_spawning_kanban`` set by _mark_spawning.
+    """
     stopped = 0
+    kanban_spawning = getattr(authority, '_managed_spawning_kanban', set())
     for sid, generation in list(getattr(authority, '_managed_spawning', {}).items()):
         if sid in workers:
+            continue
+        if sid in kanban_spawning:
             continue
         stops = authority.pending_stops
         if reason and stops.get(sid) != generation:

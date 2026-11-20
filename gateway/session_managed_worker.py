@@ -569,7 +569,22 @@ def _mark_spawning(authority, ref, row):
     if spawning is None:
         spawning = authority._managed_spawning = {}
     spawning[ref.session_id] = row.get('generation')
+    # Track kanban-detached spawning so stop path doesn't latch it (F5).
+    # The kanban tag is set by execute_managed after managed_turn_text resolves policy.
+    if not hasattr(authority, '_managed_spawning_kanban'):
+        authority._managed_spawning_kanban = set()
     return spawning
+
+def _mark_spawning_kanban(authority, session_id):
+    if not hasattr(authority, '_managed_spawning_kanban'):
+        authority._managed_spawning_kanban = set()
+    authority._managed_spawning_kanban.add(session_id)
+
+def _clear_spawning_kanban(authority, session_id):
+    try:
+        authority._managed_spawning_kanban.discard(session_id)
+    except Exception:
+        pass
 
 
 def _stopped_before_spawn(authority, ref, row):
@@ -673,14 +688,24 @@ async def execute_managed(authority, ref, row, policy):
         text, refusal = await managed_turn_text(authority, row, policy)
     except BaseException:
         authority._managed_spawning.pop(ref.session_id, None)
+        _clear_spawning_kanban(authority, ref.session_id)
         raise
     if refusal is not None:
         authority._managed_spawning.pop(ref.session_id, None)
+        _clear_spawning_kanban(authority, ref.session_id)
         authority.pending_results[row['admission_id']] = {'result': refused_turn_result(row, refusal), 'usage': {}}
         return refusal
     if _stopped_before_spawn(authority, ref, row):
+        _clear_spawning_kanban(authority, ref.session_id)
         return ''
+    # F5: tag kanban detached spawning so shutdown doesn't latch it
+    try:
+        if getattr(policy, 'kanban_json', None):
+            _mark_spawning_kanban(authority, ref.session_id)
+    except Exception:
+        pass
     spawned = await _spawn_registered_worker(authority, ref, row)
+    _clear_spawning_kanban(authority, ref.session_id)
     if spawned is None:
         return ''
     worker, process = spawned

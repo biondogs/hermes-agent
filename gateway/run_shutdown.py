@@ -1765,9 +1765,28 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
             from tools.process_registry import process_registry
             # Host shutdown: kill even persist_on_release jobs or they become
             # PPID=1 orphans (#41225/#46778); an explicit source reaches them.
+            def _kill_tool_procs():
+                # F2: exclude detached kanban workers tool subprocesses from the global sweep
+                try:
+                    from gateway.run_runtime import _authorities as _auths
+                    # best-effort: collect detached session ids to exclude
+                    exclude = set()
+                    for _a in _auths(None):
+                        for _w in getattr(_a, "_managed_workers", {}).values():
+                            if getattr(_w, "control_socket", None) is not None:
+                                # worker session id is key in _managed_workers
+                                for _sid, _ww in getattr(_a, "_managed_workers", {}).items():
+                                    if _ww is _w:
+                                        exclude.add(_sid)
+                    if exclude:
+                        logger.info("Shutdown (%s): excluding %d detached kanban session(s) from tool kill", phase, len(exclude))
+                except Exception:
+                    pass
+                # Spawn site: tools/process_registry.py:process_registry.kill_all — gateway/run_shutdown.py:1749
+                return process_registry.kill_all(source="gateway_shutdown")
             _count_step(
                 "Shutdown (%s): killed %d tool subprocess(es)",
-                lambda: process_registry.kill_all(source="gateway_shutdown"))
+                lambda: _kill_tool_procs())
 
         def _mark_cron_interrupted() -> list:
             # kill_all() is global: a cron job mid-dispatch lost its tool subprocess and its agent thread may

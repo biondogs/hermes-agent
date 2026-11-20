@@ -1861,13 +1861,6 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                             _candidates = (*process_registry._running.values(), *process_registry._finished.values())
                             _matched = []
                             for s in _candidates:
-                                # skip stale/dead pids — must be live
-                                if s.pid:
-                                    try:
-                                        import os as _O2
-                                        _O2.kill(int(s.pid), 0)
-                                    except Exception:
-                                        continue
                                 if s.owner_task_id in kanban_task_ids:
                                     _matched.append(s.id)
                                 elif s.parent_session_id in _kanban_sids:
@@ -1877,7 +1870,7 @@ class GatewayShutdownMixin(GatewaySessionEndMixin):
                                 elif s.session_key in _kanban_sids:
                                     _matched.append(s.id)
                             # also match checkpoint rows
-                            for r in _ckpt_for_kill:
+                            for r in _ckpt_rows:
                                 rid = r.get("session_id")
                                 if rid in exclude_ids or rid in _matched:
                                     continue

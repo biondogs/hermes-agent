@@ -20,23 +20,56 @@ log() { echo "[$(ts)] $*" | tee -a "$LOG" >&2; }
 log "=== twin sync start ==="
 
 # --- 1. hermes-agent checkout (git, includes all branches + hotfix commits) ---
+# FIX 2026-11-06 (BR-5): live checkout is a promisor/partial clone (origin.promisor=true,
+# partialclonefilter=blob:none). Direct `git fetch` from twin against the live path can
+# trigger a promisor fetch to GitHub (upload-pack) which failed 2026-11-05 with
+# "could not fetch 0bdfa9b137... from promisor remote". Least-invasive hardening:
+# host-side `git bundle create --all` materializes exactly the objects live already has
+# (no network), written to twin-root on the host bind-mount; twin then `git fetch`
+# from that bundle file — a local file URL, never hitting the promisor remote. Falls
+# back to direct fetch if bundle creation fails. Bundle file is reused as host-side
+# sync path for treatment branches (twin has no egress, ADR-0001 internal:true).
 log "sync: hermes-agent checkout"
+BUNDLE="$TWIN_ROOT/.sync-bundle.bundle"
+BUNDLE_OK="false"
+if git -C "$LIVE_AGENT" bundle create "$BUNDLE" --all 2>&1 | tail -3 | while read -r l; do log "  bundle create: $l"; done; then
+  if git -C "$LIVE_AGENT" bundle verify "$BUNDLE" 2>&1 | tail -2 | while read -r l; do log "  bundle verify: $l"; done; then
+    BUNDLE_OK="true"
+    log "  bundle ready: $BUNDLE (avoids promisor fetch)"
+  fi
+fi
 if [ ! -d "$TWIN_ROOT/hermes-agent/.git" ]; then
-  git clone --no-hardlinks "$LIVE_AGENT" "$TWIN_ROOT/hermes-agent" 2>&1 | tail -3 | while read -r l; do log "  clone: $l"; done
+  if [ "$BUNDLE_OK" = "true" ]; then
+    git clone --no-hardlinks "$BUNDLE" "$TWIN_ROOT/hermes-agent" 2>&1 | tail -3 | while read -r l; do log "  clone from bundle: $l"; done
+    git -C "$TWIN_ROOT/hermes-agent" remote set-url origin "$LIVE_AGENT" 2>/dev/null || true
+    git -C "$TWIN_ROOT/hermes-agent" remote add bundle "$BUNDLE" 2>/dev/null || git -C "$TWIN_ROOT/hermes-agent" remote set-url bundle "$BUNDLE" 2>/dev/null || true
+  else
+    git clone --no-hardlinks "$LIVE_AGENT" "$TWIN_ROOT/hermes-agent" 2>&1 | tail -3 | while read -r l; do log "  clone: $l"; done
+  fi
 else
   git -C "$TWIN_ROOT/hermes-agent" remote set-url origin "$LIVE_AGENT" 2>/dev/null || true
-  git -C "$TWIN_ROOT/hermes-agent" fetch origin --prune 2>&1 | tail -5 | while read -r l; do log "  fetch: $l"; done
+  if [ "$BUNDLE_OK" = "true" ]; then
+    git -C "$TWIN_ROOT/hermes-agent" remote add bundle "$BUNDLE" 2>/dev/null || git -C "$TWIN_ROOT/hermes-agent" remote set-url bundle "$BUNDLE" 2>/dev/null || true
+    git -C "$TWIN_ROOT/hermes-agent" fetch bundle --prune 2>&1 | tail -5 | while read -r l; do log "  fetch bundle: $l"; done || log "  bundle fetch failed, trying origin"
+    # Also fetch from origin as fallback for any refs bundle missed (shouldn't happen with --all)
+    git -C "$TWIN_ROOT/hermes-agent" fetch origin --prune 2>&1 | tail -5 | while read -r l; do log "  fetch origin: $l"; done || true
+  else
+    git -C "$TWIN_ROOT/hermes-agent" fetch origin --prune 2>&1 | tail -5 | while read -r l; do log "  fetch: $l"; done
+  fi
 fi
 # Checkout the exact live HEAD (detached or branch)
 LIVE_SHA=$(git -C "$LIVE_AGENT" rev-parse HEAD)
 LIVE_BRANCH=$(git -C "$LIVE_AGENT" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "HEAD")
 log "  live HEAD: $LIVE_SHA ($LIVE_BRANCH)"
-git -C "$TWIN_ROOT/hermes-agent" fetch origin "+refs/heads/*:refs/remotes/origin/*" 2>&1 | tail -2 | while read -r l; do log "  fetch branches: $l"; done || true
-# Ensure all live branches are present locally
-git -C "$LIVE_AGENT" for-each-ref --format='%(refname)' refs/heads/ | while read -r ref; do
-  branch="${ref#refs/heads/}"
-  git -C "$TWIN_ROOT/hermes-agent" fetch origin "$branch:$branch" 2>&1 | tail -1 | while read -r l; do log "  fetch branch $branch: $l"; done || true
-done
+if [ "$BUNDLE_OK" = "true" ]; then
+  git -C "$TWIN_ROOT/hermes-agent" fetch bundle "+refs/heads/*:refs/heads/*" 2>&1 | tail -2 | while read -r l; do log "  fetch branches from bundle: $l"; done || true
+else
+  git -C "$TWIN_ROOT/hermes-agent" fetch origin "+refs/heads/*:refs/remotes/origin/*" 2>&1 | tail -2 | while read -r l; do log "  fetch branches: $l"; done || true
+  git -C "$LIVE_AGENT" for-each-ref --format='%(refname)' refs/heads/ | while read -r ref; do
+    branch="${ref#refs/heads/}"
+    git -C "$TWIN_ROOT/hermes-agent" fetch origin "$branch:$branch" 2>&1 | tail -1 | while read -r l; do log "  fetch branch $branch: $l"; done || true
+  done
+fi
 git -C "$TWIN_ROOT/hermes-agent" checkout --force "$LIVE_SHA" 2>&1 | tail -2 | while read -r l; do log "  checkout: $l"; done
 
 # --- 2. hermes-estate repo ---

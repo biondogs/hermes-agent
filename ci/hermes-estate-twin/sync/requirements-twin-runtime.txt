@@ -1,0 +1,57 @@
+# hermes-agent runtime deps baked into hermes-estate-twin
+# Generated from twin-root/hermes-agent/pyproject.toml at pinned SHA c9c08d962f866aff0933ad5e1fe39dcc971106b2
+# Build-time only: twin network is internal:true, so deps must be pre-baked.
+# Marker 'python_version >= 3.14' stripped so deps install on the twin's Python 3.13
+# (Debian trixie base). All other markers preserved; pip skips non-linux deps.
+# Total: 46 direct deps from pyproject [project.dependencies] effective on linux x86_64.
+# This file is authoritative; see DESIGN-v4-prep.md §5 item 1.
+openai==2.54.0
+certifi==2026.10.19
+truststore==0.10.5
+python-dotenv==1.2.4
+fire==0.7.1
+httpx[socks]==0.28.1
+rich==14.3.4
+tenacity==9.2.1
+tomli-w==1.2.0
+ruamel.yaml==0.18.16
+ruamel.yaml.clib==0.2.15; platform_python_implementation == 'CPython' and (sys_platform == 'darwin' or (sys_platform == 'linux' and platform_machine in 'x86_64 aarch64 i686') or (sys_platform == 'win32' and platform_machine in 'AMD64 x86'))
+requests==2.34.2
+jinja2==3.1.6
+firecrawl-anydoc==0.2.4
+pydantic==2.14.1
+prompt_toolkit==3.0.53
+croniter==6.2.4
+snowballstemmer==3.1.1
+packaging==26.3
+Markdown==3.11.2
+PyJWT[crypto]==2.15.1
+urllib3>=2.8.0,<3
+cryptography==50.0.2
+tzdata==2025.3; sys_platform == 'win32'
+psutil==7.2.2; sys_platform != 'android'
+psutil @ git+https://github.com/giampaolo/psutil.git@380bd2b59c67b0e1b04bbf3a90b11744f4f96644; sys_platform == 'android'
+websockets==15.0.1
+browser-harness==0.1.13
+pathspec==1.1.1
+fastapi>=0.104.0,<1
+uvicorn>=0.31.0,<1
+httptools>=0.6.3,<0.9
+watchfiles>=0.20,<2
+python-multipart>=0.0.9,<1
+ptyprocess>=0.7.0,<1; sys_platform != 'win32'
+pywinpty>=3.0.5,<4; sys_platform == 'win32'
+pywin32>=306,<312; sys_platform == 'win32'
+winrt-windows-applicationmodel>=3.2.1,<4; sys_platform == 'win32'
+winrt-windows-foundation>=3.2.1,<4; sys_platform == 'win32'
+winrt-windows-foundation-collections>=3.2.1,<4; sys_platform == 'win32'
+winrt-windows-services-store>=3.2.1,<4; sys_platform == 'win32'
+# Pillow pinned to 12.3.0 for twin: browser-harness 0.1.13 pins pillow==12.3.0, and pip
+# (unlike uv) cannot apply the [tool.uv] override that forces 13.0.0 in the live
+# estate. 12.3.0 satisfies the twin's image/browser tests; the GHSA fixes in 13
+# are not load-bearing for the board-rooms pilot. See pyproject.toml comment.
+Pillow==12.3.0
+pillow-heif>=1.4.0,<2
+resvg-py==0.5.0
+concurrent-log-handler==0.9.30; sys_platform == 'win32'
+nemo-relay>=0.11,<0.12; ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64' and 'android' not in platform_release) or (sys_platform == 'linux' and platform_machine == 'aarch64' and 'android' not in platform_release) or (sys_platform == 'win32' and platform_machine == 'AMD64') or (sys_platform == 'win32' and platform_machine == 'ARM64'))

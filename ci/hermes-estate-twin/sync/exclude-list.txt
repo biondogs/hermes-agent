@@ -98,3 +98,7 @@ config-backups
 hermes-agent-self-evolution/
 # Transient git worktrees (contain docs with example tokens that trip the scanner)
 hermes-agent-wts/
+# Detached-supervisor worker outboxes — ephemeral holder secrets + pidns strings
+# that false-positive the Telegram-token scan pattern (e.g. "4026531836:turn=local-...")
+# Introduced with durable-workers; not needed in twin (t_a7286c3c quarantine Nov 20 22:05)
+worker-outboxes/

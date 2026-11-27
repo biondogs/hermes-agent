@@ -133,6 +133,9 @@ class Handler(BaseHTTPRequestHandler):
         elif parsed.path == "/_test/fixtures":
             with FIXTURES_LOCK:
                 self._json(200, {"fixtures": FIXTURES, "default": DEFAULT_ANSWER})
+        elif parsed.path in ("/api/tags", "/api/version") or parsed.path.endswith("/props") or parsed.path.endswith("/version") or parsed.path.endswith("/health") or "models" in parsed.path:
+            # LiteLLM/Ollama preflight probes — answer benignly so hermes worker proceeds to chat
+            self._json(200, {"object": "list", "data": [{"id": "mock-model", "object": "model"}]})
         else:
             self._json(404, {"error": {"message": f"not found: {parsed.path}", "type": "not_found"}})
 

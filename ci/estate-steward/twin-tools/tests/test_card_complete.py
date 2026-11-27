@@ -315,7 +315,6 @@ class TestHermesWorkerViaMockModel(unittest.TestCase):
         if not hermes_src:
             return {"ok": False, "reason": "no hermes source found", "stderr": ""}
         # Create ephemeral HERMES_HOME with profile pointing at mock-model
-        import shutil, yaml
         # We write config.yaml without yaml lib - manual
         with tempfile.TemporaryDirectory() as home_dir:
             prof_dir = os.path.join(home_dir, "profiles", profile_name)

@@ -49,12 +49,10 @@ def match_fixture(messages: list) -> dict | None:
         if m.get("role") == "user":
             c = m.get("content", "")
             if isinstance(c, list):
-                # content can be list of parts
                 c = " ".join(p.get("text", "") if isinstance(p, dict) else str(p) for p in c)
             last_user = str(c)
             break
     if not last_user and messages:
-        # fallback: last message content
         c = messages[-1].get("content", "")
         if isinstance(c, list):
             c = " ".join(p.get("text", "") if isinstance(p, dict) else str(p) for p in c)
@@ -65,6 +63,9 @@ def match_fixture(messages: list) -> dict | None:
 
     for key, spec in fixtures.items():
         if key.lower() in last_user.lower():
+            if spec.get("_once"):
+                with FIXTURES_LOCK:
+                    FIXTURES.pop(key, None)
             return spec
     return None
 

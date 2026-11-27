@@ -1,0 +1,21 @@
+{
+  "hello mock": {
+    "content": "Hello from mock-model! Fixture matched: hello mock"
+  },
+  "tool test": {
+    "content": "",
+    "tool_calls": [
+      {
+        "id": "call_mock_1",
+        "type": "function",
+        "function": {
+          "name": "kanban_complete",
+          "arguments": "{\"summary\": \"done via mock tool call\"}"
+        }
+      }
+    ]
+  },
+  "card ready": {
+    "content": "The card is ready to be completed. All checks pass."
+  }
+}

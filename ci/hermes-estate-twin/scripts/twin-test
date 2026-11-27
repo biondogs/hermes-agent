@@ -39,6 +39,40 @@ if [ $# -eq 0 ]; then
       /usr/bin/python3 -m pytest tests/ -x -q 2>&1 | tail -40
     fi
   '
+  echo "=== twin-test: twin-tools suite ===" >&2
+  docker exec hermes-estate-twin bash -c '
+    set -e
+    if [ -d /opt/twin-tools/tests ]; then
+      echo "Running twin-tools tests inside twin..."
+      python3 -m unittest discover -s /opt/twin-tools/tests -v 2>&1 | tail -30
+    else
+      echo "No twin-tools tests found at /opt/twin-tools/tests"
+    fi
+  '
+  echo "=== twin-test: mock-model + fake-telegram probe ===" >&2
+  docker exec hermes-estate-twin bash -c '
+    echo "Checking mock-model at http://mock-model:8080/health..."
+    python3 -c "
+import urllib.request, json
+for url in [\"http://mock-model:8080/health\", \"http://fake-telegram:8081/health\"]:
+    try:
+        with urllib.request.urlopen(url, timeout=3) as r:
+            print(f\"  OK {url}: {r.read().decode()[:80]}\")
+    except Exception as e:
+        print(f\"  FAIL {url}: {e}\")
+"
+  '
+  # Regression guard for twin-eval.sh early-exit typo class (R1 item 1)
+  echo "=== twin-test: twin-eval.sh smoke test ===" >&2
+  TMPHOME=$(mktemp -d)
+  if HOME="$TMPHOME" bash "$TWIN_DIR/scripts/twin-eval.sh" 2>&1 | grep -q "skipped: key not provisioned"; then
+    echo "  PASS twin-eval.sh missing-key smoke test"
+  else
+    echo "  FAIL twin-eval.sh missing-key smoke test"
+    rm -rf "$TMPHOME"
+    exit 1
+  fi
+  rm -rf "$TMPHOME"
 else
   docker exec hermes-estate-twin bash -c "cd /opt/twin/hermes-agent && $*"
 fi
